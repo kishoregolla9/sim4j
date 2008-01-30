@@ -17,6 +17,19 @@ public class Node
   @Override
   public boolean equals(Object obj)
   {
-    return obj == this || obj instanceof Node && ((Node) obj).getId() == this.getId();
+    return obj == this || obj instanceof Node
+        && ((Node) obj).getId() == this.getId();
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return m_id;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "Node " + getId();
   }
 }

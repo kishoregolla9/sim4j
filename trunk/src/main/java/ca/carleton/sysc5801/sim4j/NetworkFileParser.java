@@ -45,20 +45,21 @@ public class NetworkFileParser
     {
       BufferedReader reader = new BufferedReader(new FileReader(m_file));
       String line = reader.readLine();
-      int numLinks = Integer.parseInt(line.trim());
-      Network network = new Network(numLinks);
-      for (int i = 0; i < numLinks; i++)
+      int numNodes = Integer.parseInt(line.trim());
+      Network network = new Network(numNodes * 3);
+      while ((line = reader.readLine()) != null)
       {
-        line = reader.readLine();
         if (line == null)
         {
-          throw new NetworkException("Invalid file: could not find " + i + "th link definition");
+          throw new NetworkException(
+              "Invalid file: could not find next link definition");
         }
 
-        String[] split = line.split("\\s+");
+        String[] split = line.trim().split("\\s+");
         Link link =
-            new Link(new Node(Integer.parseInt(split[0])), new Node(Integer.parseInt(split[1])), Integer
-                .parseInt(split[2]), Integer.parseInt(split[3]));
+            new Link(new Node(Integer.parseInt(split[0])), new Node(Integer
+                .parseInt(split[1])), Double.parseDouble(split[2]), Double
+                .parseDouble(split[3]));
 
         network.addLink(link);
 
