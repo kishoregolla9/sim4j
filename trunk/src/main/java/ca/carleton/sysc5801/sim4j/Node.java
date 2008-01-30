@@ -1,8 +1,12 @@
 package ca.carleton.sysc5801.sim4j;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class Node
 {
   private final int m_id;
+  private final Collection<Link> m_links = new HashSet<Link>();
 
   Node(int id)
   {
@@ -12,6 +16,16 @@ public class Node
   public int getId()
   {
     return m_id;
+  }
+
+  public void addLink(Link link)
+  {
+    m_links.add(link);
+  }
+
+  public Collection<Link> getLinks()
+  {
+    return m_links;
   }
 
   @Override
