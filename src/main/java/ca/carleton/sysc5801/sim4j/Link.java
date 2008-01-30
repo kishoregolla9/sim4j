@@ -9,6 +9,8 @@ public class Link
 
   public Link(Node i, Node j, double capacity, double km)
   {
+    i.addLink(this);
+    j.addLink(this);
     m_start = i;
     m_end = j;
     m_capacity = capacity;
