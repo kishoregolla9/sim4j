@@ -9,12 +9,12 @@ public class Link
 
   public Link(Node i, Node j, double capacity, double km)
   {
-    i.addLink(this);
-    j.addLink(this);
     m_start = i;
     m_end = j;
     m_capacity = capacity;
     m_lengthInKm = km;
+    i.addLink(this);
+    j.addLink(this);
   }
 
   public Node getStart()
@@ -40,7 +40,8 @@ public class Link
   @Override
   public String toString()
   {
-    return super.toString();
+    return "Link: " + getStart() + " to " + getEnd() + "\t" + getLengthInKm()
+        + "km\t" + getCapacity() + "bps";
   }
 
   @Override
@@ -59,4 +60,14 @@ public class Link
         && that.getCapacity() == this.getCapacity()
         && that.getLengthInKm() == this.getLengthInKm();
   }
+
+  public Node getOther(Node node)
+  {
+    if (node.equals(getStart()))
+    {
+      return getEnd();
+    }
+    return getStart();
+  }
+
 }
