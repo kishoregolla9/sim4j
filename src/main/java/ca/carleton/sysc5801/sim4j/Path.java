@@ -1,5 +1,6 @@
 package ca.carleton.sysc5801.sim4j;
 
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 
 public class Path
@@ -49,8 +50,10 @@ public class Path
       result.append(",");
       node = link.getOther(node);
     }
+    result.deleteCharAt(result.length() - 1);
     result.append(") C=");
-    result.append(getMetric(m_function));
+    result.append(DecimalFormat.getNumberInstance().format(
+        getMetric(m_function)));
     return result.toString();
 
   }

@@ -15,13 +15,14 @@ public class Dijikstra
     m_network = network;
   }
 
-  public void run()
+  public Map<Node, Map<Node, Path>> run()
   {
     Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
     for (Node startNode : m_network.getNodes())
     {
-      getShortestPaths(startNode);
+      paths.put(startNode, getShortestPaths(startNode));
     }
+    return paths;
 
   }
 
@@ -71,6 +72,11 @@ public class Dijikstra
       temporary.put(node, Double.POSITIVE_INFINITY);
     }
     temporary.put(startNode, 0d);
+
+    for (Node node : m_network.getNodes())
+    {
+      predecessor.put(node, new Path(startNode, FUNCTION));
+    }
 
     Path path = new Path(startNode, FUNCTION);
     path.addLink(new Link(startNode, startNode, 0, 0));
