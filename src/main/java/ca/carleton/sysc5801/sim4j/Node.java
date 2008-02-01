@@ -1,5 +1,6 @@
 package ca.carleton.sysc5801.sim4j;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -26,6 +27,23 @@ public class Node
   public Collection<Link> getLinks()
   {
     return m_links;
+  }
+
+  public Collection<Node> getNeighbors()
+  {
+    Collection<Node> result = new ArrayList<Node>(getLinks().size());
+    for (Link link : getLinks())
+    {
+      if (link.getStart().equals(this))
+      {
+        result.add(link.getEnd());
+      }
+      else
+      {
+        result.add(link.getStart());
+      }
+    }
+    return result;
   }
 
   @Override

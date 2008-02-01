@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <table border="1">
@@ -28,6 +30,7 @@ import java.io.IOException;
 public class NetworkFileParser
 {
   private final File m_file;
+  private final Map<Integer, Node> m_nodes = new HashMap<Integer, Node>();
 
   NetworkFileParser(File file)
   {
@@ -57,7 +60,7 @@ public class NetworkFileParser
 
         String[] split = line.trim().split("\\s+");
         Link link =
-            new Link(new Node(Integer.parseInt(split[0])), new Node(Integer
+            new Link(getNode(Integer.parseInt(split[0])), getNode(Integer
                 .parseInt(split[1])), Double.parseDouble(split[2]), Double
                 .parseDouble(split[3]));
 
@@ -72,6 +75,18 @@ public class NetworkFileParser
     {
       return null;
     }
+  }
+
+  private Node getNode(int id)
+  {
+    Node node = m_nodes.get(id);
+    if (node == null)
+    {
+      node = new Node(id);
+      m_nodes.put(id, node);
+    }
+    return node;
+
   }
 
 }
