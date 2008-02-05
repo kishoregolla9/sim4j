@@ -52,11 +52,16 @@ public class Node
   {
     if (packet.getDestination().equals(this))
     {
-      System.out.println("Received packet from: " + packet.getSource());
+      System.out.println(toString() + " received packet from: "
+          + packet.getSource());
+      Simulation.recievedPacket(packet);
     }
     else
     {
-      m_packetQueue.offer(packet);
+      if (!m_packetQueue.offer(packet))
+      {
+        Simulation.droppedPacket();
+      }
     }
   }
 
@@ -125,7 +130,13 @@ public class Node
     @Override
     public void process(Packet packet)
     {
-      Link link = getLink(packet.getNextStop());
+      Node nextStop = packet.getNextStop();
+      Link link = getLink(nextStop);
+      if (link == null)
+      {
+        throw new RuntimeException("No link to " + nextStop + " from "
+            + getId());
+      }
       link.send(packet);
     }
   }
