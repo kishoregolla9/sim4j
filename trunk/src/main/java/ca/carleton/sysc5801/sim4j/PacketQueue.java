@@ -10,7 +10,7 @@ class PacketQueue
   private final double m_capacity;
   private final double m_delay;
 
-  private int m_current = 0;
+  private double m_current = 0d;
   private final LinkedList<PacketQueue.PropogatingPacket> m_packets =
       new LinkedList<PacketQueue.PropogatingPacket>();
   private final PacketProcessor m_processor;

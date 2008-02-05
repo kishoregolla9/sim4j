@@ -7,8 +7,7 @@ import java.util.Map;
 
 public class Dijikstra
 {
-  private static final double TIME_INCREMENT = 0.000005d;
-  private static final int PACKET_SIZE = 1500;
+
   private static final DijikstraMetricFunction FUNCTION =
       new DijikstraMetricFunction();
   private final Network m_network;
@@ -113,33 +112,14 @@ public class Dijikstra
   {
     Network network = calculateShortestPaths();
 
-    for (Node src : network.getNodes())
-    {
-      for (Node dest : network.getNodes())
-      {
-        src.sendPacket(new Packet(src, dest, PACKET_SIZE));
-      }
-    }
-
-    for (double time = 0; time < 60; time += TIME_INCREMENT)
-    {
-      for (Link link : network.getLinks())
-      {
-        link.tick(TIME_INCREMENT);
-      }
-
-      for (Node node : network.getNodes())
-      {
-        node.tick(TIME_INCREMENT);
-      }
-    }
+    Simulation.simulate(network);
 
   }
 
   private static Network calculateShortestPaths() throws NetworkException
   {
     NetworkFileParser parser =
-        new NetworkFileParser(new File("src/main/resources/ARPA.txt"));
+        new NetworkFileParser(new File("src/main/resources/small.txt"));
     Dijikstra dijikstra = new Dijikstra(parser.getNetwork());
     long start = System.nanoTime();
     Map<Node, Map<Node, Path>> paths = dijikstra.run();
@@ -154,6 +134,7 @@ public class Dijikstra
       {
         Path path = map.get(node);
         metricSum += path.getMetric(FUNCTION);
+        startNode.setRoute(node, path);
         totalCount++;
         System.out.println("\t" + node + ": " + path);
       }
