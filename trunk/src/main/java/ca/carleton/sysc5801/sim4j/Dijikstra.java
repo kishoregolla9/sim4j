@@ -1,11 +1,14 @@
 package ca.carleton.sysc5801.sim4j;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Dijikstra
 {
+  private static final double TIME_INCREMENT = 0.000005d;
+  private static final int PACKET_SIZE = 1500;
   private static final DijikstraMetricFunction FUNCTION =
       new DijikstraMetricFunction();
   private final Network m_network;
@@ -108,8 +111,59 @@ public class Dijikstra
 
   public static void main(String[] args) throws NetworkException
   {
-    NetworkFileParser parser = new NetworkFileParser(new File(args[0]));
-    new Dijikstra(parser.getNetwork());
+    Network network = calculateShortestPaths();
+
+    for (Node src : network.getNodes())
+    {
+      for (Node dest : network.getNodes())
+      {
+        src.sendPacket(new Packet(src, dest, PACKET_SIZE));
+      }
+    }
+
+    for (double time = 0; time < 60; time += TIME_INCREMENT)
+    {
+      for (Link link : network.getLinks())
+      {
+        link.tick(TIME_INCREMENT);
+      }
+
+      for (Node node : network.getNodes())
+      {
+        node.tick(TIME_INCREMENT);
+      }
+    }
+
+  }
+
+  private static Network calculateShortestPaths() throws NetworkException
+  {
+    NetworkFileParser parser =
+        new NetworkFileParser(new File("src/main/resources/ARPA.txt"));
+    Dijikstra dijikstra = new Dijikstra(parser.getNetwork());
+    long start = System.nanoTime();
+    Map<Node, Map<Node, Path>> paths = dijikstra.run();
+    long end = System.nanoTime();
+    double metricSum = 0;
+    int totalCount = 0;
+    for (Node startNode : paths.keySet())
+    {
+      System.out.println("Starting at " + startNode + " to...");
+      Map<Node, Path> map = paths.get(startNode);
+      for (Node node : map.keySet())
+      {
+        Path path = map.get(node);
+        metricSum += path.getMetric(FUNCTION);
+        totalCount++;
+        System.out.println("\t" + node + ": " + path);
+      }
+    }
+    double networkMetric = metricSum / totalCount;
+    System.out.println("Network Metric Average: "
+        + DecimalFormat.getNumberInstance().format(networkMetric));
+    System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
+        + " ms");
+    return parser.getNetwork();
   }
 
   static class DijikstraMetricFunction implements MetricFunction

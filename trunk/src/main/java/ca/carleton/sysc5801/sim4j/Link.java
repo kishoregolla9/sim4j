@@ -2,10 +2,12 @@ package ca.carleton.sysc5801.sim4j;
 
 public class Link
 {
+  private static final double DELAY_PER_KM = 0.000005d;
   private final Node m_start;
   private final Node m_end;
   private final double m_capacity;
   private final double m_lengthInKm;
+  private final PacketQueue m_packetQueue;
 
   public Link(Node i, Node j, double capacity, double km)
   {
@@ -15,6 +17,9 @@ public class Link
     m_lengthInKm = km;
     i.addLink(this);
     j.addLink(this);
+
+    m_packetQueue =
+        new PacketQueue(new LinkPacketProcessor(), capacity, km * DELAY_PER_KM);
   }
 
   public Node getStart()
@@ -37,17 +42,32 @@ public class Link
     return m_lengthInKm;
   }
 
-  @Override
-  public String toString()
+  public Node getOther(Node node)
   {
-    return "Link: " + getStart() + " to " + getEnd() + "\t" + getLengthInKm()
-        + "km\t" + getCapacity() + "bps";
+    if (node.equals(getStart()))
+    {
+      return getEnd();
+    }
+    return getStart();
+  }
+
+  public void send(Packet packet)
+  {
+    if (!m_packetQueue.offer(packet))
+    {
+      Simulation.droppedPacket();
+    }
+  }
+
+  public void tick(double timeIncrement)
+  {
+    m_packetQueue.tick(timeIncrement);
   }
 
   @Override
   public int hashCode()
   {
-    return getStart().getId() ^ getEnd().getId();
+    return getStart().getId() | getEnd().getId() << 16;
   }
 
   @Override
@@ -61,13 +81,22 @@ public class Link
         && that.getLengthInKm() == this.getLengthInKm();
   }
 
-  public Node getOther(Node node)
+  @Override
+  public String toString()
   {
-    if (node.equals(getStart()))
+    return "Link: " + getStart() + " to " + getEnd() + "\t" + getLengthInKm()
+        + "km\t" + getCapacity() + "bps";
+  }
+
+  private final class LinkPacketProcessor implements
+      PacketQueue.PacketProcessor
+  {
+    @Override
+    public void process(Packet packet)
     {
-      return getEnd();
+      Node nextStop = packet.getNextStop();
+      nextStop.forward(packet);
     }
-    return getStart();
   }
 
 }

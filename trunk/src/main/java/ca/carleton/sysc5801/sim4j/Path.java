@@ -2,11 +2,12 @@ package ca.carleton.sysc5801.sim4j;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Path
 {
   private final Node m_start;
-  private final LinkedList<Link> m_path = new LinkedList<Link>();
+  private final List<Link> m_path = new LinkedList<Link>();
   private final MetricFunction m_function;
 
   public Path(Node start, MetricFunction function)
@@ -15,7 +16,7 @@ public class Path
     m_function = function;
   }
 
-  public LinkedList<Link> getPath()
+  public List<Link> getPath()
   {
     return m_path;
   }
