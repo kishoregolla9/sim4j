@@ -1,5 +1,7 @@
 package ca.carleton.sysc5801.sim4j;
 
+import java.text.DecimalFormat;
+
 public class Simulation
 {
   private static final double TIME_INCREMENT = 0.000005d;
@@ -13,39 +15,48 @@ public class Simulation
 
   public static void simulate(Network network)
   {
-    int totalPackets = 0;
-    for (Node src : network.getNodes())
+    try
     {
-      for (Node dest : network.getNodes())
+      int totalPackets = 0;
+      for (Node src : network.getNodes())
       {
-        if (!src.equals(dest))
+        for (Node dest : network.getNodes())
         {
-          src.sendPacket(new Packet(src, dest, PACKET_SIZE));
-          totalPackets++;
+          if (!src.equals(dest))
+          {
+            src.sendPacket(new Packet(src, dest, PACKET_SIZE));
+            totalPackets++;
+          }
         }
       }
-    }
 
-    while (Simulation.getReceivedPackets() + Simulation.getDroppedPackets() < totalPackets)
+      while (Simulation.getReceivedPackets() + Simulation.getDroppedPackets() < totalPackets)
+      {
+        for (Link link : network.getLinks())
+        {
+          link.tick(TIME_INCREMENT);
+        }
+
+        for (Node node : network.getNodes())
+        {
+          node.tick(TIME_INCREMENT);
+        }
+        m_simTime += TIME_INCREMENT;
+      }
+
+      System.out.println("Dropped Packets: " + getDroppedPackets());
+      System.out.println("Received Packets: " + getReceivedPackets());
+
+      System.out.println("Average packet travel time: "
+          + (m_totalTravelTime / getReceivedPackets() + "sec")
+          + m_totalTravelTime);
+    }
+    catch (Exception e)
     {
-      for (Link link : network.getLinks())
-      {
-        link.tick(TIME_INCREMENT);
-      }
-
-      for (Node node : network.getNodes())
-      {
-        node.tick(TIME_INCREMENT);
-      }
-      m_simTime += TIME_INCREMENT;
+      System.out.println("Error at time: "
+          + DecimalFormat.getNumberInstance().format(getSimTime()));
+      e.printStackTrace();
     }
-
-    System.out.println("Dropped Packets: " + getDroppedPackets());
-    System.out.println("Received Packets: " + getReceivedPackets());
-
-    System.out.println("Average packet travel time: "
-        + (m_totalTravelTime / getReceivedPackets() + "sec")
-        + m_totalTravelTime);
 
   }
 
