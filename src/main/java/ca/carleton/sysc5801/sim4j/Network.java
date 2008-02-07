@@ -18,8 +18,8 @@ public class Network
   public void addLink(Link link)
   {
     m_links.add(link);
-    m_nodes.add(link.getStart());
-    m_nodes.add(link.getEnd());
+    m_nodes.add(link.getI());
+    m_nodes.add(link.getJ());
   }
 
   public Collection<Link> getLinks()

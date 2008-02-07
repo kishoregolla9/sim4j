@@ -2,34 +2,31 @@ package ca.carleton.sysc5801.sim4j;
 
 public class Link
 {
-  private static final double DELAY_PER_KM = 0.000005d;
-  private final Node m_start;
-  private final Node m_end;
+  private final Node m_i;
+  private final Node m_j;
   private final double m_capacity;
   private final double m_lengthInKm;
-  private final PacketQueue m_packetQueue;
 
-  public Link(Node i, Node j, double capacity, double km)
+  private double m_flow = 0d;
+
+  Link(Node i, Node j, double capacity, double km)
   {
-    m_start = i;
-    m_end = j;
+    m_i = i;
+    m_j = j;
     m_capacity = capacity;
     m_lengthInKm = km;
     i.addLink(this);
     j.addLink(this);
-
-    m_packetQueue =
-        new PacketQueue(new LinkPacketProcessor(), capacity, km * DELAY_PER_KM);
   }
 
-  public Node getStart()
+  public Node getI()
   {
-    return m_start;
+    return m_i;
   }
 
-  public Node getEnd()
+  public Node getJ()
   {
-    return m_end;
+    return m_j;
   }
 
   public double getCapacity()
@@ -44,30 +41,35 @@ public class Link
 
   public Node getOther(Node node)
   {
-    if (node.equals(getStart()))
+    if (node.equals(getI()))
     {
-      return getEnd();
+      return getJ();
     }
-    return getStart();
+    return getI();
   }
 
-  public void send(Packet packet)
+  public void resetFlow()
   {
-    if (!m_packetQueue.offer(packet))
-    {
-      Simulation.droppedPacket();
-    }
+    m_flow = 0d;
   }
 
-  public void tick(double timeIncrement)
+  public void addFlow(double bps)
   {
-    m_packetQueue.tick(timeIncrement);
+    m_flow += bps;
+  }
+
+  /**
+   * @return flow in bits per second
+   */
+  public double getFlow()
+  {
+    return m_flow;
   }
 
   @Override
   public int hashCode()
   {
-    return getStart().getId() | getEnd().getId() << 16;
+    return getI().getId() | getJ().getId() << 16;
   }
 
   @Override
@@ -75,8 +77,8 @@ public class Link
   {
     Link that;
     return obj == this || obj instanceof Link
-        && (that = (Link) obj).getStart().equals(this.getStart())
-        && that.getEnd().equals(this.getEnd())
+        && (that = (Link) obj).getI().equals(this.getI())
+        && that.getJ().equals(this.getJ())
         && that.getCapacity() == this.getCapacity()
         && that.getLengthInKm() == this.getLengthInKm();
   }
@@ -84,19 +86,8 @@ public class Link
   @Override
   public String toString()
   {
-    return "Link: " + getStart() + " to " + getEnd() + "\t" + getLengthInKm()
+    return "Link: " + getI() + " to " + getJ() + "\t" + getLengthInKm()
         + "km\t" + getCapacity() + "bps";
-  }
-
-  private final class LinkPacketProcessor implements
-      PacketQueue.PacketProcessor
-  {
-    @Override
-    public void process(Packet packet)
-    {
-      Node nextStop = packet.getNextStop();
-      nextStop.forward(packet);
-    }
   }
 
 }

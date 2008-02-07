@@ -1,6 +1,8 @@
 package ca.carleton.sysc5801.sim4j;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,17 +17,6 @@ public class Dijikstra
   public Dijikstra(Network network)
   {
     m_network = network;
-  }
-
-  public Map<Node, Map<Node, Path>> run()
-  {
-    Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
-    for (Node startNode : m_network.getNodes())
-    {
-      paths.put(startNode, getShortestPaths(startNode));
-    }
-    return paths;
-
   }
 
   private Map<Node, Path> getShortestPaths(Node startNode)
@@ -69,13 +60,13 @@ public class Dijikstra
   private void init(Node startNode, Map<Node, Double> temporary,
       Map<Node, Double> permanent, Map<Node, Path> predecessor)
   {
-    for (Node node : m_network.getNodes())
+    for (Node node : getNetwork().getNodes())
     {
       temporary.put(node, Double.POSITIVE_INFINITY);
     }
     temporary.put(startNode, 0d);
 
-    for (Node node : m_network.getNodes())
+    for (Node node : getNetwork().getNodes())
     {
       predecessor.put(node, new Path(startNode, FUNCTION));
     }
@@ -108,21 +99,55 @@ public class Dijikstra
     }
   }
 
-  public static void main(String[] args) throws NetworkException
-  {
-    Network network = calculateShortestPaths();
-
-    Simulation.simulate(network);
-
-  }
-
-  private static Network calculateShortestPaths() throws NetworkException
+  public static void main(String[] args) throws NetworkException, IOException
   {
     NetworkFileParser parser =
         new NetworkFileParser(new File("src/main/resources/small.txt"));
-    Dijikstra dijikstra = new Dijikstra(parser.getNetwork());
+    Network network = parser.getNetwork();
+
+    Dijikstra dijikstra = new Dijikstra(network);
+    dijikstra.run();
+  }
+
+  private void run() throws NetworkException, IOException
+  {
+    calculateShortestPaths();
+    calculateAverageDelays();
+  }
+
+  private void calculateAverageDelays() throws IOException
+  {
+    DelayCalculator delayCalculator = new DelayCalculator();
+
+    double increment = 0.025d;
+    double d = 0d;
+    FileWriter file = new FileWriter("networkDelay.csv");
+    file.write("Packets Per Second,Average Delay\n");
+    for (int i = 0; i < 2 / increment; i++)
+    {
+      double delay = delayCalculator.getAverageDelay(getNetwork(), d);
+      d += increment;
+      file.write(d + "," + delay + "\n");
+    }
+
+    file.close();
+  }
+
+  private Network getNetwork()
+  {
+    return m_network;
+  }
+
+  private void calculateShortestPaths() throws NetworkException
+  {
     long start = System.nanoTime();
-    Map<Node, Map<Node, Path>> paths = dijikstra.run();
+
+    Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
+    for (Node startNode : getNetwork().getNodes())
+    {
+      paths.put(startNode, getShortestPaths(startNode));
+    }
+
     long end = System.nanoTime();
     double metricSum = 0;
     int totalCount = 0;
@@ -144,7 +169,6 @@ public class Dijikstra
         + DecimalFormat.getNumberInstance().format(networkMetric));
     System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
         + " ms");
-    return parser.getNetwork();
   }
 
   static class DijikstraMetricFunction implements MetricFunction
