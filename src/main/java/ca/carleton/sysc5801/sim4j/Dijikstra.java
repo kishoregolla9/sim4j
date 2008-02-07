@@ -102,7 +102,7 @@ public class Dijikstra
   public static void main(String[] args) throws NetworkException, IOException
   {
     NetworkFileParser parser =
-        new NetworkFileParser(new File("src/main/resources/small.txt"));
+        new NetworkFileParser(new File("src/main/resources/ARPA.txt"));
     Network network = parser.getNetwork();
 
     Dijikstra dijikstra = new Dijikstra(network);
@@ -120,17 +120,22 @@ public class Dijikstra
     DelayCalculator delayCalculator = new DelayCalculator();
 
     double increment = 0.025d;
-    double d = 0d;
+    int max = 5;
     FileWriter file = new FileWriter("networkDelay.csv");
     file.write("Packets Per Second,Average Delay\n");
-    for (int i = 0; i < 2 / increment; i++)
+    for (double d = 0; d < max; d += increment)
     {
       double delay = delayCalculator.getAverageDelay(getNetwork(), d);
-      d += increment;
       file.write(d + "," + delay + "\n");
     }
-
     file.close();
+
+    for (Link link : getNetwork().getLinks())
+    {
+      double averageDelay = delayCalculator.getAverageDelay(link);
+      System.out.println(link + " -- Average delay: " + averageDelay);
+    }
+
   }
 
   private Network getNetwork()
