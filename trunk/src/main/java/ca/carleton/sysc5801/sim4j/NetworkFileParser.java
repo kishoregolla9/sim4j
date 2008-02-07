@@ -31,6 +31,7 @@ public class NetworkFileParser
 {
   private final File m_file;
   private final Map<Integer, Node> m_nodes = new HashMap<Integer, Node>();
+  private final Map<Node, Link> m_links = new HashMap<Node, Link>();
 
   NetworkFileParser(File file)
   {
@@ -59,10 +60,13 @@ public class NetworkFileParser
         }
 
         String[] split = line.trim().split("\\s+");
-        Link link =
-            new Link(getNode(Integer.parseInt(split[0])), getNode(Integer
-                .parseInt(split[1])), Double.parseDouble(split[2]), Double
-                .parseDouble(split[3]));
+        int i = Integer.parseInt(split[0]);
+        int j = Integer.parseInt(split[1]);
+        Node node1 = i < j ? getNode(i) : getNode(j);
+        Node node2 = i < j ? getNode(j) : getNode(i);
+        double capacity = Double.parseDouble(split[2]);
+        double km = Double.parseDouble(split[3]);
+        Link link = getLink(node1, node2, capacity, km);
 
         network.addLink(link);
 
@@ -75,6 +79,17 @@ public class NetworkFileParser
     {
       return null;
     }
+  }
+
+  private Link getLink(Node i, Node j, double capacity, double km)
+  {
+    Link link = m_links.get(i);
+    if (link == null)
+    {
+      link = new Link(i, j, capacity, km);
+      m_links.put(i, link);
+    }
+    return link;
   }
 
   private Node getNode(int id)

@@ -11,11 +11,8 @@ public class Packet
   private final Node m_destination;
   private Iterator<Node> m_path;
 
-  private final double m_startTime;
-
   Packet(Node source, Node destination, int size)
   {
-    m_startTime = Simulation.getSimTime();
     m_source = source;
     m_destination = destination;
     m_size = size;
@@ -51,11 +48,6 @@ public class Packet
   public Node getDestination()
   {
     return m_destination;
-  }
-
-  public double getStartTime()
-  {
-    return m_startTime;
   }
 
 }

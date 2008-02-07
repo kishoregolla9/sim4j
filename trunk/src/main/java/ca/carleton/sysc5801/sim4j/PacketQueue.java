@@ -7,47 +7,60 @@ import java.util.LinkedList;
 
 class PacketQueue
 {
-  private final double m_capacity;
+  private static final int BITS_PER_BYTE = 8;
+  private final double m_bitRate;
   private final double m_delay;
 
-  private double m_current = 0d;
-  private final LinkedList<PacketQueue.PropogatingPacket> m_packets =
-      new LinkedList<PacketQueue.PropogatingPacket>();
+  private PropogatingPacket m_current = null;
+  private final LinkedList<PropogatingPacket> m_packets =
+      new LinkedList<PropogatingPacket>();
   private final PacketProcessor m_processor;
 
-  PacketQueue(PacketProcessor processor, double capacity, double delay)
+  /**
+   * 
+   * @param processor
+   *          what to do with the packet after complete
+   * @param bitRate
+   * @param delay
+   *          processing delay
+   */
+  PacketQueue(PacketProcessor processor, double bitRate, double delay)
   {
     m_processor = processor;
-    m_capacity = capacity;
+    m_bitRate = bitRate;
     m_delay = delay;
   }
 
-  double getDelay()
+  double getDelay(int packetSize)
   {
-    return m_delay;
+    return m_delay + packetSize * BITS_PER_BYTE / m_bitRate;
   }
 
   boolean offer(Packet packet)
   {
-    if (m_current + packet.getSize() < m_capacity)
+    PropogatingPacket propogatingPacket =
+        new PropogatingPacket(packet, getDelay(packet.getSize()));
+    if (m_current == null)
     {
-      m_current += packet.getSize();
-      m_packets.add(new PacketQueue.PropogatingPacket(packet, getDelay()));
-      return true;
+      m_current = propogatingPacket;
     }
-    return false;
+    else
+    {
+      m_packets.add(propogatingPacket);
+    }
+    return true;
   }
 
   void tick(double seconds)
   {
-    for (PacketQueue.PropogatingPacket waitingPacket : m_packets)
+    if (m_current != null)
     {
-      waitingPacket.timeLeft -= seconds;
-      if (waitingPacket.timeLeft <= 0)
+      m_current.timeLeft -= seconds;
+      if (m_current.timeLeft <= 0)
       {
-        Packet packet = waitingPacket.packet;
-        m_current -= packet.getSize();
+        Packet packet = m_current.packet;
         m_processor.process(packet);
+        m_current = m_packets.get(0);
       }
     }
   }

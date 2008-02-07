@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class NetworkFileParserTest
@@ -12,13 +13,13 @@ public class NetworkFileParserTest
   @Test
   public void testGetNetwork() throws IOException, NetworkException
   {
-    File file = new File("./src/main/resources/small.txt");
+    File file = new File("./src/main/resources/ARPA.txt");
     NetworkFileParser parser = new NetworkFileParser(file);
     Network network = parser.getNetwork();
     Collection<Link> links = network.getLinks();
     Collection<Node> nodes = network.getNodes();
-    // Assert.assertEquals(26, links.size());
-    // Assert.assertEquals(21, nodes.size());
+    Assert.assertEquals(26, links.size());
+    Assert.assertEquals(21, nodes.size());
 
     for (Node next : network.getNodes())
     {

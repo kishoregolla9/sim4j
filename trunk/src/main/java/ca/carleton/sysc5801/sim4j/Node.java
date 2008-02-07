@@ -11,10 +11,6 @@ public class Node
   private final Map<Node, Link> m_links = new HashMap<Node, Link>();
   private final Map<Node, Path> m_routes = new HashMap<Node, Path>();
 
-  /** infinite queue, with 1ms delay */
-  private final PacketQueue m_packetQueue =
-      new PacketQueue(new NodePacketProcessor(), Double.MAX_VALUE, 0.001d);
-
   Node(int id)
   {
     m_id = id;
@@ -30,44 +26,9 @@ public class Node
     m_routes.put(destination, route);
   }
 
-  /**
-   * Send a new packet from this node as the source
-   * 
-   * @param packet
-   */
-  public void sendPacket(Packet packet)
+  public Path getRoute(Node destination)
   {
-    Path path = m_routes.get(packet.getDestination());
-    packet.setPath(path.getPath());
-    forward(packet);
-  }
-
-  /**
-   * Begin processing this packet and forward it to the next node in the
-   * packet's path after the processing delay
-   * 
-   * @param packet
-   */
-  public void forward(Packet packet)
-  {
-    if (packet.getDestination().equals(this))
-    {
-      System.out.println(toString() + " received packet from: "
-          + packet.getSource());
-      Simulation.recievedPacket(packet);
-    }
-    else
-    {
-      if (!m_packetQueue.offer(packet))
-      {
-        Simulation.droppedPacket();
-      }
-    }
-  }
-
-  public void tick(double timeIncrement)
-  {
-    m_packetQueue.tick(timeIncrement);
+    return m_routes.get(destination);
   }
 
   public void addLink(Link link)
@@ -90,13 +51,13 @@ public class Node
     Collection<Node> result = new ArrayList<Node>(getLinks().size());
     for (Link link : getLinks())
     {
-      if (link.getStart().equals(this))
+      if (link.getI().equals(this))
       {
-        result.add(link.getEnd());
+        result.add(link.getJ());
       }
       else
       {
-        result.add(link.getStart());
+        result.add(link.getI());
       }
     }
     return result;
@@ -119,26 +80,6 @@ public class Node
   public String toString()
   {
     return "Node " + getId();
-  }
-
-  private final class NodePacketProcessor implements
-      PacketQueue.PacketProcessor
-  {
-    /**
-     * Forward the packet to the next stop on its path.
-     */
-    @Override
-    public void process(Packet packet)
-    {
-      Node nextStop = packet.getNextStop();
-      Link link = getLink(nextStop);
-      if (link == null)
-      {
-        throw new RuntimeException("No link to " + nextStop + " from "
-            + getId());
-      }
-      link.send(packet);
-    }
   }
 
 }
