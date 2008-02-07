@@ -12,6 +12,7 @@ public class DelayCalculator
     int numNodes = network.getNodes().size();
     double gamma = numNodes * (numNodes - 1) * packetsPerSecond;
 
+    resetFlow(network);
     for (Node node : network.getNodes())
     {
       for (Node destination : network.getNodes())
@@ -36,6 +37,14 @@ public class DelayCalculator
     return totalPackets / gamma;
   }
 
+  private void resetFlow(Network network)
+  {
+    for (Link link : network.getLinks())
+    {
+      link.resetFlow();
+    }
+  }
+
   public double getAverageDelay(Link link)
   {
     double gamma = link.getFlow() / BYTES_PER_PACKET;
@@ -49,14 +58,14 @@ public class DelayCalculator
    */
   private double getAverageNumberOfPackets(Link link)
   {
-    double numberOfPacketsOnLinl =
+    double numberOfPacketsOnLink =
         link.getFlow() / (link.getCapacity() - link.getFlow());
     double propogationDelay = link.getLengthInKm() * DELAY_PER_KM;
     double extraPacketsDueToDelays =
         (propogationDelay + PROCESSING_DELAY) * link.getFlow()
             / BYTES_PER_PACKET;
     double averageNumberOfPackets =
-        numberOfPacketsOnLinl + extraPacketsDueToDelays;
+        numberOfPacketsOnLink + extraPacketsDueToDelays;
     return averageNumberOfPackets;
   }
 }
