@@ -9,7 +9,7 @@ public class Node
 {
   private final int m_id;
   private final Map<Node, Link> m_links = new HashMap<Node, Link>();
-  private final Map<Node, Path> m_routes = new HashMap<Node, Path>();
+  private final Map<Node, Path> m_paths = new HashMap<Node, Path>();
 
   Node(int id)
   {
@@ -21,14 +21,14 @@ public class Node
     return m_id;
   }
 
-  public void setRoute(Node destination, Path route)
+  public void setPath(Node destination, Path path)
   {
-    m_routes.put(destination, route);
+    m_paths.put(destination, path);
   }
 
-  public Path getRoute(Node destination)
+  public Path getPath(Node destination)
   {
-    return m_routes.get(destination);
+    return m_paths.get(destination);
   }
 
   public void addLink(Link link)
@@ -51,13 +51,16 @@ public class Node
     Collection<Node> result = new ArrayList<Node>(getLinks().size());
     for (Link link : getLinks())
     {
-      if (link.getI().equals(this))
+      if (!link.getJ().equals(link.getI()))
       {
-        result.add(link.getJ());
-      }
-      else
-      {
-        result.add(link.getI());
+        if (link.getI().equals(this))
+        {
+          result.add(link.getJ());
+        }
+        else
+        {
+          result.add(link.getI());
+        }
       }
     }
     return result;

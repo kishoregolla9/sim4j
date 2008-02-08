@@ -21,9 +21,14 @@ public class Path
     return m_path;
   }
 
-  public void addLink(Link node)
+  public void addLink(Link link)
   {
-    m_path.add(node);
+    m_path.add(link);
+  }
+
+  public void addLinks(List<Link> links)
+  {
+    m_path.addAll(links);
   }
 
   public double getMetric(MetricFunction function)
@@ -58,4 +63,5 @@ public class Path
     return result.toString();
 
   }
+
 }

@@ -3,7 +3,6 @@ package ca.carleton.sysc5801.sim4j;
 public class DelayCalculator
 {
   private static final int BYTES_PER_PACKET = 1500;
-  private static final int BITS_PER_BYTE = 8;
   private static final double DELAY_PER_KM = 0.000005d; // 5us/km
   private static final double PROCESSING_DELAY = 0.001d; // 1ms
 
@@ -12,21 +11,8 @@ public class DelayCalculator
     int numNodes = network.getNodes().size();
     double gamma = numNodes * (numNodes - 1) * packetsPerSecond;
 
-    resetFlow(network);
-    for (Node node : network.getNodes())
-    {
-      for (Node destination : network.getNodes())
-      {
-        if (!node.equals(destination))
-        {
-          Path path = node.getRoute(destination);
-          for (Link link : path.getPath())
-          {
-            link.addFlow(packetsPerSecond * BYTES_PER_PACKET * BITS_PER_BYTE);
-          }
-        }
-      }
-    }
+    network.resetFlow();
+    network.addFlow(packetsPerSecond, BYTES_PER_PACKET);
 
     double totalPackets = 0d;
     for (Link link : network.getLinks())
@@ -35,14 +21,6 @@ public class DelayCalculator
     }
 
     return totalPackets / gamma;
-  }
-
-  private void resetFlow(Network network)
-  {
-    for (Link link : network.getLinks())
-    {
-      link.resetFlow();
-    }
   }
 
   public double getAverageDelay(Link link)

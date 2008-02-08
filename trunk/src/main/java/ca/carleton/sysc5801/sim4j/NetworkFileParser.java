@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <table border="1">
@@ -31,7 +33,7 @@ public class NetworkFileParser
 {
   private final File m_file;
   private final Map<Integer, Node> m_nodes = new HashMap<Integer, Node>();
-  private final Map<Node, Link> m_links = new HashMap<Node, Link>();
+  private final Set<Link> m_links = new HashSet<Link>();
 
   NetworkFileParser(File file)
   {
@@ -83,13 +85,22 @@ public class NetworkFileParser
 
   private Link getLink(Node i, Node j, double capacity, double km)
   {
-    Link link = m_links.get(i);
-    if (link == null)
+    Link possible = new Link(i, j, capacity, km);
+    if (m_links.contains(possible))
     {
-      link = new Link(i, j, capacity, km);
-      m_links.put(i, link);
+      for (Link link : m_links)
+      {
+        if (link.equals(possible))
+        {
+          return link;
+        }
+      }
     }
-    return link;
+    else
+    {
+      m_links.add(possible);
+    }
+    return possible;
   }
 
   private Node getNode(int id)

@@ -6,6 +6,8 @@ import java.util.HashSet;
 
 public class Network
 {
+  private static final int BITS_PER_BYTE = 8;
+
   private final Collection<Link> m_links;
   private final Collection<Node> m_nodes;
 
@@ -30,6 +32,32 @@ public class Network
   public Collection<Node> getNodes()
   {
     return m_nodes;
+  }
+
+  void addFlow(double packetsPerSecond, int bytesPerPacket)
+  {
+    for (Node node : getNodes())
+    {
+      for (Node destination : getNodes())
+      {
+        if (!node.equals(destination))
+        {
+          Path path = node.getPath(destination);
+          for (Link link : path.getPath())
+          {
+            link.addFlow(packetsPerSecond * bytesPerPacket * BITS_PER_BYTE);
+          }
+        }
+      }
+    }
+  }
+
+  void resetFlow()
+  {
+    for (Link link : getLinks())
+    {
+      link.resetFlow();
+    }
   }
 
 }
