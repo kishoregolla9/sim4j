@@ -1,6 +1,5 @@
 package ca.carleton.sysc5801.sim4j;
 
-import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,18 +47,25 @@ public class Path
   @Override
   public String toString()
   {
-    StringBuilder result = new StringBuilder("(");
+    String cost = Dijikstra.FORMAT.format(getMetric(m_function));
+    StringBuilder result = new StringBuilder("C=");
+    for (int i = 0; i < 4 - cost.indexOf('.'); i++)
+    {
+      result.append(' ');
+    }
+    result.append(cost);
     Node node = m_start;
+    result.append(" (");
     for (Link link : getPath())
     {
       result.append(node.getId());
-      result.append(",");
+      result.append("->");
       node = link.getOther(node);
     }
     result.deleteCharAt(result.length() - 1);
-    result.append(") C=");
-    result.append(DecimalFormat.getNumberInstance().format(
-        getMetric(m_function)));
+    result.deleteCharAt(result.length() - 1);
+    result.append(")");
+
     return result.toString();
 
   }
