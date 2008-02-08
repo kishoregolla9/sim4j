@@ -165,17 +165,17 @@ public class Dijikstra
     network.addFlow();
 
     double increment = 0.0005d;
-    double max = 1.166666d;
+    double max = 1.2d;// 1.166666d;
     FileWriter file = new FileWriter("networkDelay.csv");
     // file.write("Packets Per Second,Average Delay" + sep);
-    for (double d = 1; d < max; d += increment)
+    for (double d = increment; d < max; d += increment)
     {
       double delay = delayCalculator.getAverageDelay(network, d);
       file.write(FORMAT.format(d) + " " + FORMAT.format(delay) + sep);
-      if (d > 1.15)
-      {
-        increment = 0.000001d;
-      }
+      // if (d > 1.15)
+      // {
+      // increment = 0.00001d;
+      // }
     }
     file.close();
 
