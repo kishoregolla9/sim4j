@@ -3,8 +3,10 @@ package ca.carleton.sysc5801.sim4j;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Dijikstra
@@ -20,24 +22,59 @@ public class Dijikstra
   }
 
   private Map<Node, Path> getShortestPaths(Node startNode)
+      throws NetworkException
   {
     // init temporary set to hold all nodes
     // result is the cost to every other node
     Map<Node, Double> temporary = new HashMap<Node, Double>();
     Map<Node, Double> permanent = new HashMap<Node, Double>();
-    Map<Node, Path> predecessor = new HashMap<Node, Path>();
+    Node[] predecessor = new Node[getNetwork().getNodes().size() + 1];
 
     init(startNode, temporary, permanent, predecessor);
-
+    Node minCostNode = startNode;
     while (temporary.size() > 0)
     {
-      Node node = getMinimumCost(temporary);
-      Double metric = temporary.remove(node);
-      permanent.put(node, metric);
-
-      update(temporary, predecessor, node, metric);
+      minCostNode = getMinimumCost(temporary);
+      Double metric = temporary.get(minCostNode);
+      permanent.put(minCostNode, metric);
+      temporary.remove(minCostNode);
+      update(temporary, predecessor, minCostNode, metric);
     }
-    return predecessor;
+    Map<Node, Path> result = new HashMap<Node, Path>();
+
+    for (int id = 1; id <= getNetwork().getNodes().size(); id++)
+    {
+      Path path = new Path(startNode, FUNCTION);
+      Node prev = getNode(id);
+      result.put(prev, path);
+      Node node = predecessor[id];
+      LinkedList<Link> list = new LinkedList<Link>();
+      while (!node.equals(startNode))
+      {
+        list.add(getNode(prev.getId()).getLink(node));
+        prev = node;
+        node = predecessor[prev.getId()];
+      }
+      list.add(getNode(prev.getId()).getLink(node));
+      Collections.reverse(list);
+      path.addLinks(list);
+
+    }
+
+    return result;
+  }
+
+  Node getNode(int id) throws NetworkException
+  {
+    Collection<Node> nodes = getNetwork().getNodes();
+    for (Node node : nodes)
+    {
+      if (node.getId() == id)
+      {
+        return node;
+      }
+    }
+    throw new NetworkException("Node " + id + " not found!");
   }
 
   private Node getMinimumCost(Map<Node, Double> temporary)
@@ -46,10 +83,10 @@ public class Dijikstra
     Node result = null;
     for (Node node : temporary.keySet())
     {
-      Double possible = temporary.get(node);
-      if (!possible.isInfinite() && possible.doubleValue() < min)
+      double possible = temporary.get(node);
+      if (possible < min)
       {
-        min = possible.doubleValue();
+        min = possible;
         result = node;
       }
     }
@@ -58,7 +95,7 @@ public class Dijikstra
   }
 
   private void init(Node startNode, Map<Node, Double> temporary,
-      Map<Node, Double> permanent, Map<Node, Path> predecessor)
+      Map<Node, Double> permanent, Node[] predecessor)
   {
     for (Node node : getNetwork().getNodes())
     {
@@ -66,34 +103,28 @@ public class Dijikstra
     }
     temporary.put(startNode, 0d);
 
-    for (Node node : getNetwork().getNodes())
-    {
-      predecessor.put(node, new Path(startNode, FUNCTION));
-    }
-
     Path path = new Path(startNode, FUNCTION);
     path.addLink(new Link(startNode, startNode, 0, 0));
-    predecessor.put(startNode, path);
+    predecessor[startNode.getId()] = startNode;
   }
 
-  private void update(Map<Node, Double> temporary, Map<Node, Path> predecessor,
-      Node node, Double metric)
+  private void update(Map<Node, Double> temporary, Node[] predecessor, Node i,
+      Double metric)
   {
-    Path path;
-    for (Link link : node.getLinks())
+
+    for (Link link : i.getLinks())
     {
-      Node other = link.getOther(node);
-      if (temporary.containsKey(other))
+      Node j = link.getOther(i);
+      if (temporary.containsKey(j))
       {
         // d(j)
-        double costSoFar = temporary.get(other);
+        double costSoFar = temporary.get(j);
         // d(i) + cij
         double potentialCost = metric + FUNCTION.getMetric(link);
         if (costSoFar > potentialCost)
         {
-          temporary.put(other, potentialCost);
-          path = predecessor.get(other);
-          path.addLink(link);
+          temporary.put(j, potentialCost);
+          predecessor[j.getId()] = i;
         }
       }
     }
@@ -102,7 +133,7 @@ public class Dijikstra
   public static void main(String[] args) throws NetworkException, IOException
   {
     NetworkFileParser parser =
-        new NetworkFileParser(new File("src/main/resources/ARPA.txt"));
+        new NetworkFileParser(new File("src/main/resources/small.txt"));
     Network network = parser.getNetwork();
 
     Dijikstra dijikstra = new Dijikstra(network);
@@ -111,7 +142,12 @@ public class Dijikstra
 
   private void run() throws NetworkException, IOException
   {
+    long start = System.nanoTime();
     calculateShortestPaths();
+    long end = System.nanoTime();
+    System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
+        + " ms");
+
     calculateAverageDelays();
   }
 
@@ -143,37 +179,25 @@ public class Dijikstra
     return m_network;
   }
 
-  private void calculateShortestPaths() throws NetworkException
+  void calculateShortestPaths() throws NetworkException
   {
-    long start = System.nanoTime();
-
     Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
     for (Node startNode : getNetwork().getNodes())
     {
       paths.put(startNode, getShortestPaths(startNode));
     }
 
-    long end = System.nanoTime();
-    double metricSum = 0;
-    int totalCount = 0;
     for (Node startNode : paths.keySet())
     {
       System.out.println("Starting at " + startNode + " to...");
       Map<Node, Path> map = paths.get(startNode);
-      for (Node node : map.keySet())
+      for (Node desination : map.keySet())
       {
-        Path path = map.get(node);
-        metricSum += path.getMetric(FUNCTION);
-        startNode.setRoute(node, path);
-        totalCount++;
-        System.out.println("\t" + node + ": " + path);
+        Path path = map.get(desination);
+        startNode.setPath(desination, path);
+        System.out.println("\t" + desination + ": " + path);
       }
     }
-    double networkMetric = metricSum / totalCount;
-    System.out.println("Network Metric Average: "
-        + DecimalFormat.getNumberInstance().format(networkMetric));
-    System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
-        + " ms");
   }
 
   static class DijikstraMetricFunction implements MetricFunction
