@@ -47,7 +47,7 @@ public class Path
   @Override
   public String toString()
   {
-    String cost = Dijikstra.FORMAT.format(getMetric(m_function));
+    String cost = Project.FORMAT.format(getMetric(m_function));
     StringBuilder result = new StringBuilder("C=");
     for (int i = 0; i < 4 - cost.indexOf('.'); i++)
     {

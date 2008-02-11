@@ -1,9 +1,5 @@
 package ca.carleton.sysc5801.sim4j;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,9 +8,6 @@ import java.util.Map;
 
 public class Dijikstra
 {
-  public static final DecimalFormat FORMAT = new DecimalFormat("#0.00000");
-
-  private static final int BYTES_PER_PACKET = 1500;
 
   private static final DijikstraMetricFunction FUNCTION =
       new DijikstraMetricFunction();
@@ -132,61 +125,6 @@ public class Dijikstra
         }
       }
     }
-  }
-
-  public static void main(String[] args) throws NetworkException, IOException
-  {
-    NetworkFileParser parser =
-        new NetworkFileParser(new File("src/main/resources/ARPA.txt"));
-    Network network = parser.getNetwork();
-
-    Dijikstra dijikstra = new Dijikstra(network);
-    dijikstra.run();
-  }
-
-  private void run() throws NetworkException, IOException
-  {
-    long start = System.nanoTime();
-    calculateShortestPaths();
-    long end = System.nanoTime();
-    System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
-        + " ms");
-    System.out.flush();
-    calculateAverageDelays();
-  }
-
-  private void calculateAverageDelays() throws IOException
-  {
-    DelayCalculator delayCalculator = new DelayCalculator(BYTES_PER_PACKET);
-
-    String sep = System.getProperty("line.separator");
-
-    Network network = getNetwork();
-    network.addFlow();
-
-    double increment = 0.0005d;
-    double max = 1.2d;// 1.166666d;
-    FileWriter file = new FileWriter("networkDelay.csv");
-    // file.write("Packets Per Second,Average Delay" + sep);
-    for (double d = increment; d < max; d += increment)
-    {
-      double delay = delayCalculator.getAverageDelay(network, d);
-      file.write(FORMAT.format(d) + " " + FORMAT.format(delay) + sep);
-      // if (d > 1.15)
-      // {
-      // increment = 0.00001d;
-      // }
-    }
-    file.close();
-
-    for (Link link : network.getLinks())
-    {
-      double averageDelay = delayCalculator.getAverageDelay(link, 1);
-      System.out.println("Link: " + link.getI().getId() + "-"
-          + link.getJ().getId() + " -- Average delay: "
-          + FORMAT.format(averageDelay));
-    }
-
   }
 
   private Network getNetwork()
