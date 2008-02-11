@@ -18,8 +18,14 @@ public class Dijikstra
     m_network = network;
   }
 
-  private Map<Node, Path> getShortestPaths(Node startNode)
-      throws NetworkException
+  /**
+   * 
+   * @param startNode
+   * @return a map of paths starting at the given startNode, to the destination
+   *         that is the key of the map
+   * @throws NetworkException
+   */
+  Map<Node, Path> getShortestPaths(Node startNode) throws NetworkException
   {
     // init temporary set to hold all nodes
     // result is the cost to every other node
@@ -142,13 +148,11 @@ public class Dijikstra
 
     for (Node startNode : paths.keySet())
     {
-      System.out.println("Starting at " + startNode + " to...");
       Map<Node, Path> map = paths.get(startNode);
-      for (Node desination : map.keySet())
+      for (Node destination : map.keySet())
       {
-        Path path = map.get(desination);
-        startNode.setPath(desination, path);
-        System.out.println("\t" + desination + ": " + path);
+        Path path = map.get(destination);
+        startNode.setPath(destination, path);
       }
     }
   }

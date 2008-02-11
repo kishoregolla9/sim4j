@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 public class Project
 {
   public static final DecimalFormat FORMAT = new DecimalFormat("#0.00000");
-  private static final int BYTES_PER_PACKET = 1500;
+  static final int BYTES_PER_PACKET = 1500;
 
   public static void main(String[] args) throws NetworkException, IOException
   {
@@ -20,6 +20,9 @@ public class Project
     project.run(network);
   }
 
+  static final double DELAY_PER_KM = 0.000005d; // 5us/km
+  static final double PROCESSING_DELAY = 0.001d; // 1ms
+
   private void run(Network network) throws NetworkException, IOException
   {
     Dijikstra dijikstra = new Dijikstra(network);
@@ -27,6 +30,17 @@ public class Project
     long start = System.nanoTime();
     dijikstra.calculateShortestPaths();
     long end = System.nanoTime();
+
+    for (Node node : network.getNodes())
+    {
+      System.out.println("Starting at " + node + " to...");
+      for (Node destination : network.getNodes())
+      {
+        Path path = node.getPath(destination);
+        System.out.println("\t" + destination + ": " + path);
+      }
+    }
+
     System.out.println("Dijikstra Execution time: " + (end - start) / 1000000
         + " ms");
     System.out.flush();
