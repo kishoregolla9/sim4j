@@ -16,6 +16,11 @@ public class Node
     m_id = id;
   }
 
+  public Node(Node i)
+  {
+    m_id = i.getId();
+  }
+
   public int getId()
   {
     return m_id;
