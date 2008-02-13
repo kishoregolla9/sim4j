@@ -19,7 +19,7 @@ public class Optimal
     return m_network;
   }
 
-  private void run() throws NetworkException, IOException
+  public void run() throws NetworkException, IOException
   {
     double averageTraffic = 1;
     Dijikstra dijikstra = new Dijikstra(getNetwork());
@@ -44,6 +44,7 @@ public class Optimal
       double networkDelay = getAverageNetworkDelay(averageTraffic, f);
       iterationDifference = prevAverageNetworkDelay - networkDelay;
       prevAverageNetworkDelay = networkDelay;
+      System.out.println("Iteration: " + it + " -- " + networkDelay);
     }
   }
 
