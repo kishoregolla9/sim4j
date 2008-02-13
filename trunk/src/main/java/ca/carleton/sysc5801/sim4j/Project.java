@@ -7,6 +7,10 @@ import java.text.DecimalFormat;
 
 public class Project
 {
+  static final MetricFunction METRIC_FUNCTION = new CapacityMetricFunction();
+  static final double DELAY_PER_KM = 0.000005d; // 5us/km
+  static final double PROCESSING_DELAY = 0.001d; // 1ms
+
   public static final DecimalFormat FORMAT = new DecimalFormat("#0.00000");
   static final int BYTES_PER_PACKET = 1500;
 
@@ -20,15 +24,12 @@ public class Project
     project.run(network);
   }
 
-  static final double DELAY_PER_KM = 0.000005d; // 5us/km
-  static final double PROCESSING_DELAY = 0.001d; // 1ms
-
   private void run(Network network) throws NetworkException, IOException
   {
     Dijikstra dijikstra = new Dijikstra(network);
 
     long start = System.nanoTime();
-    dijikstra.calculateShortestPaths();
+    dijikstra.calculateShortestPaths(METRIC_FUNCTION);
     long end = System.nanoTime();
 
     for (Node node : network.getNodes())
@@ -53,7 +54,7 @@ public class Project
 
     String sep = System.getProperty("line.separator");
 
-    network.addFlow();
+    network.addFlow(1);
 
     double increment = 0.0005d;
     double max = 1.2d;

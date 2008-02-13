@@ -19,6 +19,16 @@ public class Link
     j.addLink(this);
   }
 
+  public Link(Link link)
+  {
+    m_i = new Node(link.getI());
+    m_j = new Node(link.getJ());
+    m_capacity = link.getCapacity();
+    m_lengthInKm = link.getLengthInKm();
+    m_i.addLink(this);
+    m_j.addLink(this);
+  }
+
   public Node getI()
   {
     return m_i;
@@ -53,9 +63,14 @@ public class Link
     m_flow = 0;
   }
 
-  public void incrementFlow()
+  public void incrementFlow(double flow)
   {
-    m_flow++;
+    m_flow += flow;
+  }
+
+  public void multiplyFlow(double factor)
+  {
+    m_flow *= factor;
   }
 
   /**
