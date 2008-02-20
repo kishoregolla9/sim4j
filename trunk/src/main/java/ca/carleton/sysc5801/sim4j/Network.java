@@ -35,13 +35,13 @@ public class Network
 
   void addFlow(double flow)
   {
-    for (Node node : getNodes())
+    for (Node source : getNodes())
     {
       for (Node destination : getNodes())
       {
-        if (!node.equals(destination))
+        if (!source.equals(destination))
         {
-          Path path = node.getPath(destination);
+          Path path = source.getPath(destination);
           for (Link link : path.getPath())
           {
             link.incrementFlow(flow);
@@ -59,7 +59,11 @@ public class Network
       for (Node end : getNodes())
       {
         Link link = start.getLink(end);
-        if (link != null)
+        if (link == null)
+        {
+          result[start.getId() - 1][end.getId() - 1] = Double.NaN;
+        }
+        else
         {
           result[start.getId() - 1][end.getId() - 1] = link.getFlow();
         }

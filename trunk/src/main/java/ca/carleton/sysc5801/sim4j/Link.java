@@ -21,12 +21,8 @@ public class Link
 
   public Link(Link link)
   {
-    m_i = new Node(link.getI());
-    m_j = new Node(link.getJ());
-    m_capacity = link.getCapacity();
-    m_lengthInKm = link.getLengthInKm();
-    m_i.addLink(this);
-    m_j.addLink(this);
+    this(new Node(link.getI()), new Node(link.getJ()), link.getCapacity(), link
+        .getLengthInKm());
   }
 
   public Node getI()
