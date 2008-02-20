@@ -28,6 +28,10 @@ public class DelayCalculator
   {
     double flow = getFlowInBps(link, packetsPerSecond);
     double gamma = flow / m_bytesPerPacket;
+    if (gamma == 0)
+    {
+      return 0;
+    }
     double result = getAverageNumberOfPackets(link, packetsPerSecond) / gamma;
     return result;
   }

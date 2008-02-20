@@ -48,14 +48,16 @@ public class Path
   public String toString()
   {
     String cost = Project.FORMAT.format(getMetric(m_function));
-    StringBuilder result = new StringBuilder("C=");
-    for (int i = 0; i < 4 - cost.indexOf('.'); i++)
-    {
-      result.append(' ');
-    }
-    result.append(cost);
+    StringBuilder result = new StringBuilder();
+    // new StringBuilder("C=");
+    // for (int i = 0; i < 4 - cost.indexOf('.'); i++)
+    // {
+    // result.append(' ');
+    // }
+    // result.append(cost);
+    // result.append(" (");
     Node node = m_start;
-    result.append(" (");
+
     for (Link link : getPath())
     {
       result.append(node.getId());
@@ -64,7 +66,7 @@ public class Path
     }
     result.deleteCharAt(result.length() - 1);
     result.deleteCharAt(result.length() - 1);
-    result.append(")");
+    // result.append(")");
 
     return result.toString();
 

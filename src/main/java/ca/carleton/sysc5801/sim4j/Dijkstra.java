@@ -6,18 +6,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class Dijikstra
+public class Dijkstra
 {
 
   private final Network m_network;
 
-  public Dijikstra(Network network)
+  public Dijkstra(Network network)
   {
     m_network = network;
   }
 
   /**
-   * 
    * @param startNode
    * @return a map of paths starting at the given startNode, to the destination
    *         that is the key of the map
