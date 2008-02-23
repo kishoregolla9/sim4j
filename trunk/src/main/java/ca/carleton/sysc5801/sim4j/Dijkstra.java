@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class Dijkstra
 {
-
   private final Network m_network;
 
   public Dijkstra(Network network)
@@ -22,7 +21,7 @@ public class Dijkstra
    *         that is the key of the map
    * @throws NetworkException
    */
-  Map<Node, Path> getShortestPaths(Node startNode, MetricFunction function)
+  Map<Node, Path> calculate(Node startNode, MetricFunction function)
       throws NetworkException
   {
     // init temporary set to hold all nodes
@@ -135,12 +134,19 @@ public class Dijkstra
     return m_network;
   }
 
-  void calculateShortestPaths(MetricFunction function) throws NetworkException
+  /**
+   * Run Dijkstra with the given metric function. Sets the paths on each node in
+   * the network based on Dijkstra.
+   * 
+   * @param function
+   * @throws NetworkException
+   */
+  void calculate(MetricFunction function) throws NetworkException
   {
     Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
     for (Node startNode : getNetwork().getNodes())
     {
-      paths.put(startNode, getShortestPaths(startNode, function));
+      paths.put(startNode, calculate(startNode, function));
     }
 
     for (Node startNode : paths.keySet())

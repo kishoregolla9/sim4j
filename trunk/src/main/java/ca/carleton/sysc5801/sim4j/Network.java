@@ -65,7 +65,7 @@ public class Network
         }
         else
         {
-          result[start.getId() - 1][end.getId() - 1] = link.getFlow();
+          result[start.getId() - 1][end.getId() - 1] = link.getFlowInBps();
         }
       }
     }
@@ -93,6 +93,12 @@ public class Network
   public Link getLink(int i, int j)
   {
     return getNode(i).getLink(getNode(j));
+  }
+
+  public void setAverageTraffic(double packetsPerSecond)
+  {
+    resetFlow();
+    addFlow(packetsPerSecond);
   }
 
 }

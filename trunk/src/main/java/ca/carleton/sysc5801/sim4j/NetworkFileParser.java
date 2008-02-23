@@ -61,6 +61,11 @@ public class NetworkFileParser
               "Invalid file: could not find next link definition");
         }
 
+        if (line.charAt(0) == '#')
+        {
+          continue;
+        }
+
         String[] split = line.trim().split("\\s+");
         int i = Integer.parseInt(split[0]);
         int j = Integer.parseInt(split[1]);
