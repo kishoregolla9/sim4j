@@ -7,7 +7,7 @@ public class Link
   private final double m_capacity;
   private final double m_lengthInKm;
 
-  private int m_flow = 0;
+  private double m_flow = 0;
 
   Link(Node i, Node j, double capacity, double km)
   {
@@ -56,7 +56,7 @@ public class Link
 
   public void resetFlow()
   {
-    m_flow = 0;
+    m_flow = 0d;
   }
 
   public void incrementFlow(double flow)
@@ -70,11 +70,16 @@ public class Link
   }
 
   /**
-   * @return flow in bits per second
+   * @return flow in packets per second
    */
-  public int getFlow()
+  public double getFlow()
   {
     return m_flow;
+  }
+
+  public double getFlowInBps()
+  {
+    return m_flow * 8 * Project.BYTES_PER_PACKET;
   }
 
   @Override

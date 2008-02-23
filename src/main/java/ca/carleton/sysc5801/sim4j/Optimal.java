@@ -1,6 +1,7 @@
 package ca.carleton.sysc5801.sim4j;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -9,9 +10,7 @@ public class Optimal
   private static final PartialDeriviateMetricFunction PARTIAL_DERIVIATE_METRIC_FUNCTION =
       new PartialDeriviateMetricFunction();
 
-  private final static double DELTA = 0.000001d;
-  private final static double EPSILON = 0.0000001d;
-
+  private final static double DELTA = 0.00000001d;
   private final Network m_network;
 
   public Optimal(Network network)
@@ -24,17 +23,23 @@ public class Optimal
     return m_network;
   }
 
-  public void run() throws NetworkException, IOException
+  public double[][] run() throws NetworkException, IOException
   {
-    double averageTraffic = 1.0d * 1500 * 8;
+    double averageTraffic = 1d;
     Dijkstra dijikstra = new Dijkstra(getNetwork());
-    dijikstra.calculateShortestPaths(Project.METRIC_FUNCTION);
-    getNetwork().resetFlow();
-    getNetwork().addFlow(averageTraffic);
+    dijikstra.calculate(Project.METRIC_FUNCTION);
+
+    getNetwork().setAverageTraffic(averageTraffic);
     double[][] flow = getNetwork().getTrafficFlowVector();
+
+    System.out.println("***Network Delay: "
+        + DelayCalculator.getAverageDelay(getNetwork(), averageTraffic, flow));
+
+    write(flow);
     double networkDelayDifference = 1d;
 
-    double prevNetworkDelay = getAverageNetworkDelay(averageTraffic, flow);
+    double prevNetworkDelay =
+        DelayCalculator.getAverageDelay(getNetwork(), averageTraffic, flow);
 
     System.out.println("Network Delay: " + prevNetworkDelay);
 
@@ -43,24 +48,26 @@ public class Optimal
       // System.out.println("Flow(" + iteration + ")");
       // write(flow);
 
-      dijikstra.calculateShortestPaths(PARTIAL_DERIVIATE_METRIC_FUNCTION);
-      getNetwork().resetFlow();
-      getNetwork().addFlow(averageTraffic);
+      dijikstra.calculate(PARTIAL_DERIVIATE_METRIC_FUNCTION);
+      getNetwork().setAverageTraffic(averageTraffic);
       double[][] v = getNetwork().getTrafficFlowVector();
 
       // System.out.println("V(" + iteration + ")");
       // write(v);
 
-      double alpha = getAlpha(averageTraffic, flow, v);
+      double alpha =
+          getAlpha(new File(Project.getOutputDirectory(), "alpha" + iteration
+              + ".csv"), averageTraffic, flow, v);
 
       flow = getNextFlow(alpha, flow, v);
-      double networkDelay = getAverageNetworkDelay(averageTraffic, flow);
+      double networkDelay =
+          DelayCalculator.getAverageDelay(getNetwork(), averageTraffic, flow);
       networkDelayDifference = Math.abs(prevNetworkDelay - networkDelay);
       prevNetworkDelay = networkDelay;
       System.out.println("Iteration: " + iteration + ": Network Delay "
           + networkDelay + " (Difference: " + networkDelayDifference + ")");
     }
-
+    return flow;
   }
 
   private void write(double[][] flow)
@@ -92,27 +99,45 @@ public class Optimal
 
   }
 
-  private double getAlpha(double averageTraffic, double[][] f, double[][] v)
+  private double getAlpha(File file, double averageTraffic, double[][] f,
+      double[][] v) throws IOException
   {
+    FileWriter out = new FileWriter(file);
     double best = Double.MAX_VALUE;
-    double bestAlpha = 1;
-    for (double alpha = 1; alpha >= 0d; alpha -= 0.001d)
+    double bestAlpha = 0;
+    boolean gettingBetter = true;
+    for (double alpha = 0; alpha <= 1d; alpha += 0.0001d)
     {
       double possible = getAverageNetworkDelay(alpha, averageTraffic, f, v);
-      if (possible < best)
+      out.write(Project.FORMAT.format(alpha));
+      out.write(" ");
+      if (possible >= 0)
+      {
+        out.write(Project.FORMAT.format(possible));
+      }
+      out.write("\r\n");
+      if (possible > 0 && possible < best)
       {
         best = possible;
         bestAlpha = alpha;
-        // System.out.println("!!!BETTER: " + alpha);
+        if (!gettingBetter)
+        {
+          System.out.println("!!!BETTER: alpha=" + Project.FORMAT.format(alpha)
+              + " (delay=" + Project.FORMAT.format(best) + ")");
+          gettingBetter = true;
+        }
       }
-      else
+      else if (gettingBetter)
       {
-        // System.out.println("Not better: " + alpha);
+        System.out.println("Not better: alpha=" + Project.FORMAT.format(alpha)
+            + " (delay=" + Project.FORMAT.format(best) + ")");
+        gettingBetter = false;
       }
     }
 
-    System.out.println("ALPHA: " + bestAlpha);
-
+    System.out.println("ALPHA: " + Project.FORMAT.format(bestAlpha)
+        + " (delay=" + Project.FORMAT.format(best) + ")");
+    out.close();
     return bestAlpha;
   }
 
@@ -120,47 +145,7 @@ public class Optimal
       double[][] f, double[][] v)
   {
     double[][] nextF = getNextFlow(alpha, f, v);
-    return getAverageNetworkDelay(averageTraffic, nextF);
-  }
-
-  private double getAverageNetworkDelay(double averageTraffic, double[][] flow)
-  {
-    double result = 0;
-    for (int i = 0; i < flow.length; i++)
-    {
-      for (int j = 0; j < flow[i].length; j++)
-      {
-        if (i != j)
-        {
-          Link link = getNetwork().getLink(i + 1, j + 1);
-          if (link != null)
-          {
-            double term1;
-            if (flow[i][j] < (1 - EPSILON) * link.getCapacity())
-            {
-              term1 = flow[i][j] / (link.getCapacity() - flow[i][j]);
-            }
-            else
-            {
-              double term1a = flow[i][j] / EPSILON;
-              double term1b = (1 - EPSILON) * link.getCapacity() / EPSILON;
-              term1 = term1a * term1b;
-            }
-
-            double delays =
-                link.getLengthInKm() * Project.DELAY_PER_KM
-                    + Project.PROCESSING_DELAY;
-            double term2 = delays * flow[i][j] / Project.BYTES_PER_PACKET;
-
-            result += term1 + term2;
-          }
-        }
-      }
-    }
-    int numNodes = getNetwork().getNodes().size();
-    double gamma = numNodes * (numNodes - 1) * averageTraffic;
-    result = result / gamma;
-    return result;
+    return DelayCalculator.getAverageDelay(getNetwork(), averageTraffic, nextF);
   }
 
   private double[][] getNextFlow(double alpha, double[][] flow, double[][] v)
@@ -204,14 +189,27 @@ public class Optimal
      */
     private double getLinkMetricVector(Link link)
     {
-      double term1 =
-          link.getCapacity() / Math.pow(link.getCapacity() - link.getFlow(), 2);
+      double term1;
+      if (link.getFlowInBps() < (1 - DelayCalculator.EPSILON)
+          * link.getCapacity())
+      {
+        term1 =
+            link.getCapacity()
+                / Math.pow(link.getCapacity() - link.getFlowInBps(), 2);
+      }
+      else
+      {
+        term1 =
+            (1 - DelayCalculator.EPSILON) * (1 - link.getCapacity())
+                / Math.pow(DelayCalculator.EPSILON, 2);
+      }
       double pij = link.getLengthInKm() * Project.DELAY_PER_KM;
       double ti = Project.PROCESSING_DELAY;
       double term2 = (pij + ti) / Project.BYTES_PER_PACKET;
 
       double result = term1 + term2;
       return result;
+
     }
 
   }
