@@ -5,36 +5,12 @@ package ca.carleton.sysc5801.sim4j;
  */
 public class DelayCalculator
 {
-  private static final int BITS_PER_BYTE = 8;
-  private final int m_bytesPerPacket;
   final static double EPSILON = 0.00001d;
 
-  public DelayCalculator(int bytesPerPacket)
-  {
-    m_bytesPerPacket = bytesPerPacket;
-  }
-
-  public double getAverageDelay(Network network, double packetsPerSecond)
-  {
-    network.setAverageTraffic(1);
-    return getAverageDelay(network, packetsPerSecond, network
-        .getTrafficFlowVector());
-    // double totalPackets = 0d;
-    // for (Link link : network.getLinks())
-    // {
-    // totalPackets += getAverageNumberOfPackets(link, packetsPerSecond);
-    // }
-    //
-    // int numNodes = network.getNodes().size();
-    // double gamma = numNodes * (numNodes - 1) * packetsPerSecond;
-    //
-    // return totalPackets / gamma;
-  }
-
-  public static double getAverageDelay(Network network, double averageTraffic,
+  public static double getAverageDelay(Network network, double dpq,
       double[][] flow)
   {
-    double result = 0;
+    double result = 0d;
     for (int i = 0; i < flow.length; i++)
     {
       for (int j = 0; j < flow[i].length; j++)
@@ -45,23 +21,21 @@ public class DelayCalculator
           if (link != null)
           {
             double term1;
-            double fij = flow[i][j];
+            double fij =
+                flow[i][j] * dpq * 8 * RoutingComparison.BYTES_PER_PACKET;
             if (fij < (1 - EPSILON) * link.getCapacity())
             {
               term1 = fij / (link.getCapacity() - fij);
             }
             else
             {
-              double term1a = fij / EPSILON;
-              double term1b =
-                  (1 - EPSILON) * (1 - link.getCapacity()) / EPSILON;
-              term1 = term1a * term1b;
+              term1 = fij * (1 - EPSILON) * link.getCapacity() / EPSILON;
             }
 
             double delays =
-                link.getLengthInKm() * Project.DELAY_PER_KM
-                    + Project.PROCESSING_DELAY;
-            double term2 = delays * fij / Project.BYTES_PER_PACKET;
+                link.getLengthInKm() * RoutingComparison.DELAY_PER_KM
+                    + RoutingComparison.PROCESSING_DELAY;
+            double term2 = delays * fij / RoutingComparison.BYTES_PER_PACKET;
 
             result += term1 + term2;
           }
@@ -69,7 +43,7 @@ public class DelayCalculator
       }
     }
     int numNodes = network.getNodes().size();
-    double gamma = numNodes * (numNodes - 1) * averageTraffic;
+    double gamma = numNodes * (numNodes - 1) * dpq;
     result = result / gamma;
     return result;
   }
@@ -82,16 +56,17 @@ public class DelayCalculator
    *         propagation and processing delay if there is no flow allocated to
    *         this link)
    */
-  public double getAverageDelay(Link link, double packetsPerSecond)
+  public static double getAverageDelay(Link link, double packetsPerSecond)
   {
     double flow = link.getFlowInBps() * packetsPerSecond;
     if (flow == 0)
     {
-      double propogationDelay = link.getLengthInKm() * Project.DELAY_PER_KM;
-      return propogationDelay + Project.PROCESSING_DELAY;
+      double propogationDelay =
+          link.getLengthInKm() * RoutingComparison.DELAY_PER_KM;
+      return propogationDelay + RoutingComparison.PROCESSING_DELAY;
     }
 
-    double gamma = flow / m_bytesPerPacket;
+    double gamma = flow / RoutingComparison.BYTES_PER_PACKET;
     double result = getAverageNumberOfPackets(link, packetsPerSecond) / gamma;
     return result;
   }
@@ -100,7 +75,8 @@ public class DelayCalculator
    * @param link
    * @return D of Fij
    */
-  private double getAverageNumberOfPackets(Link link, double packetsPerSecond)
+  private static double getAverageNumberOfPackets(Link link,
+      double packetsPerSecond)
   {
     double flow = link.getFlowInBps() * packetsPerSecond;
     double numberOfPacketsOnLink;
@@ -114,9 +90,11 @@ public class DelayCalculator
           flow / EPSILON * (1 - EPSILON) * (1 - link.getCapacity()) / EPSILON;
     }
 
-    double propogationDelay = link.getLengthInKm() * Project.DELAY_PER_KM;
+    double propogationDelay =
+        link.getLengthInKm() * RoutingComparison.DELAY_PER_KM;
     double extraPacketsDueToDelays =
-        (propogationDelay + Project.PROCESSING_DELAY) * flow / m_bytesPerPacket;
+        (propogationDelay + RoutingComparison.PROCESSING_DELAY) * flow
+            / RoutingComparison.BYTES_PER_PACKET;
     double averageNumberOfPackets =
         numberOfPacketsOnLink + extraPacketsDueToDelays;
     return averageNumberOfPackets;

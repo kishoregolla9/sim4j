@@ -6,6 +6,8 @@ package ca.carleton.sysc5801.sim4j;
 class CapacityMetricFunction implements MetricFunction
 {
 
+  private static final long MEGABIT_100 = 100000000L;
+
   @Override
   public double getMetric(Link link)
   {
@@ -13,7 +15,7 @@ class CapacityMetricFunction implements MetricFunction
     {
       return 0;
     }
-    return 100000000 / link.getCapacity();
+    return MEGABIT_100 / link.getCapacity();
   }
 
 }

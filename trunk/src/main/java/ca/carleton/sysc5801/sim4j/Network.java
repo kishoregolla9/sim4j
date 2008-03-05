@@ -65,7 +65,7 @@ public class Network
         }
         else
         {
-          result[start.getId() - 1][end.getId() - 1] = link.getFlowInBps();
+          result[start.getId() - 1][end.getId() - 1] = link.getFlow();
         }
       }
     }
