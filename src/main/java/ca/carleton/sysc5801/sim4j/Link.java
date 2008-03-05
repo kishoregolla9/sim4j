@@ -79,7 +79,7 @@ public class Link
 
   public double getFlowInBps()
   {
-    return m_flow * 8 * Project.BYTES_PER_PACKET;
+    return m_flow * 8 * RoutingComparison.BYTES_PER_PACKET;
   }
 
   @Override

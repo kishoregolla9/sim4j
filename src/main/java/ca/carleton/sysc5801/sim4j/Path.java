@@ -47,15 +47,8 @@ public class Path
   @Override
   public String toString()
   {
-    String cost = Project.FORMAT.format(getMetric(m_function));
+    String cost = RoutingComparison.FORMAT.format(getMetric(m_function));
     StringBuilder result = new StringBuilder();
-    // new StringBuilder("C=");
-    // for (int i = 0; i < 4 - cost.indexOf('.'); i++)
-    // {
-    // result.append(' ');
-    // }
-    // result.append(cost);
-    // result.append(" (");
     Node node = m_start;
 
     for (Link link : getPath())
@@ -64,10 +57,9 @@ public class Path
       result.append("->");
       node = link.getOther(node);
     }
-    result.deleteCharAt(result.length() - 1);
-    result.deleteCharAt(result.length() - 1);
-    // result.append(")");
 
+    result.deleteCharAt(result.length() - 1);
+    result.deleteCharAt(result.length() - 1);
     return result.toString();
 
   }
