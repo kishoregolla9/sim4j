@@ -141,12 +141,14 @@ public class Dijkstra
    * @param function
    * @throws NetworkException
    */
-  void calculate(MetricFunction function) throws NetworkException
+  double[][] calculate(MetricFunction function) throws NetworkException
   {
     Map<Node, Map<Node, Path>> paths = new HashMap<Node, Map<Node, Path>>();
     for (Node startNode : getNetwork().getNodes())
     {
-      paths.put(startNode, calculate(startNode, function));
+      Map<Node, Path> nextPaths = calculate(startNode, function);
+      paths.put(startNode, nextPaths);
+
     }
 
     for (Node startNode : paths.keySet())
@@ -158,6 +160,8 @@ public class Dijkstra
         startNode.setPath(destination, path);
       }
     }
+    getNetwork().setAverageTraffic(1);
+    return getNetwork().getTrafficFlowVector();
   }
 
 }
