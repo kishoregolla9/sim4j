@@ -22,7 +22,7 @@ public class Optimal
     return m_network;
   }
 
-  public double run(double dpq) throws NetworkException, IOException
+  public double[][] run(double dpq) throws NetworkException, IOException
   {
     Dijkstra dijikstra = new Dijkstra(getNetwork());
     double[][] flow =
@@ -59,7 +59,7 @@ public class Optimal
           + RoutingComparison.FORMAT.format(delayDifference) + ")");
     }
     // write(flow);
-    return averageDelay;
+    return flow;
   }
 
   private void write(double[][] flow)
