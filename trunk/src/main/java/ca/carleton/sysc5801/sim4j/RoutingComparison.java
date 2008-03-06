@@ -71,6 +71,10 @@ public class RoutingComparison
     network = getNewNetwork("_noA2");
     run(network, "_noA2");
 
+    System.out.println("********************************");
+    System.out.println("* Output files are in ./target *");
+    System.out.println("********************************");
+
   }
 
   private static void deleteFiles(File dir)
@@ -120,7 +124,9 @@ public class RoutingComparison
     String name = "Optimal" + suffix;
 
     long start = System.nanoTime();
-    double averageNetworkDelay = optimal.run(1d);
+    double[][] flow = optimal.run(1d);
+    double averageNetworkDelay =
+        DelayCalculator.getAverageDelay(network, 1d, flow);
     long end = System.nanoTime();
 
     writeResults(name, network, nanosToMillis(start, end), averageNetworkDelay);
@@ -134,9 +140,9 @@ public class RoutingComparison
     for (double d = 0; d <= MAX; d += INCREMENT)
     {
       optimal = new Optimal(getNewNetwork(suffix));
-      double delay = optimal.run(d == 0 ? START : d);
-      // DelayCalculator.getAverageDelay(network, d, flow);
-      double maxFlowOverCapacity = getMostUsedLink(d, network);
+      flow = optimal.run(d == 0 ? START : d);
+      double delay = DelayCalculator.getAverageDelay(network, d, flow);
+      double maxFlowOverCapacity = getMostUsedLink(d, flow, network);
       file.write(FORMAT.format(d));
       file.write(" " + FORMAT.format(delay));
       file.write(" " + FORMAT.format(maxFlowOverCapacity));
@@ -147,28 +153,28 @@ public class RoutingComparison
 
   }
 
-  public double getMostUsedLink(double dpq, Network network)
+  public double getMostUsedLink(double dpq, double[][] flow, Network network)
   {
     double best = 0d;
 
-    for (Link link : network.getLinks())
-    // for (int i = 0; i < flow.length; i++)
-    // {
-    // for (int j = 0; j < flow.length; j++)
+    // for (Link link : network.getLinks())
+    for (int i = 0; i < flow.length; i++)
     {
-      // Link link = network.getLink(i + 1, j + 1);
-      if (link != null)
+      for (int j = 0; j < flow.length; j++)
       {
-        double value = link.getFlow() / link.getCapacity();
-        // double value =
-        // flow[i][j] * dpq * 8 * RoutingComparison.BYTES_PER_PACKET
-        // / link.getCapacity();
-        if (value > best)
+        Link link = network.getLink(i + 1, j + 1);
+        if (link != null)
         {
-          best = value;
+          // double value = link.getFlow() / link.getCapacity();
+          double value =
+              flow[i][j] * dpq * 8 * RoutingComparison.BYTES_PER_PACKET
+                  / link.getCapacity();
+          if (value > best)
+          {
+            best = value;
+          }
         }
       }
-      // }
     }
     return best;
   }
@@ -200,7 +206,7 @@ public class RoutingComparison
       network.setAverageTraffic(1);
       double[][] flow = network.getTrafficFlowVector();
       double delay = DelayCalculator.getAverageDelay(network, d, flow);
-      double maxFlowOverCapacity = getMostUsedLink(d, network);
+      double maxFlowOverCapacity = getMostUsedLink(d, flow, network);
       file.write(FORMAT.format(d));
       file.write(" " + FORMAT.format(delay));
       file.write(" " + FORMAT.format(maxFlowOverCapacity));
