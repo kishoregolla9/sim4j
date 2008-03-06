@@ -38,7 +38,7 @@ public class RoutingComparison
       new CapacityMetricFunction();
 
   private static final double START = 0.00001d;
-  private static final double INCREMENT = 0.05d;
+  private static final double INCREMENT = 0.025d;
   private static final double MAX = 1.5d;
 
   private static final String TXT = ".txt";
@@ -131,10 +131,10 @@ public class RoutingComparison
     file.write("#AverageTraffic NetworkDelay MaximumLinkUtilization");
     file.write(SEP);
 
-    for (double d = START; d <= MAX; d += INCREMENT)
+    for (double d = 0; d <= MAX; d += INCREMENT)
     {
       optimal = new Optimal(getNewNetwork(suffix));
-      double delay = optimal.run(d);
+      double delay = optimal.run(d == 0 ? START : d);
       // DelayCalculator.getAverageDelay(network, d, flow);
       double maxFlowOverCapacity = getMostUsedLink(d, network);
       file.write(FORMAT.format(d));

@@ -31,6 +31,7 @@ public class Network
   public Collection<Node> getNodes()
   {
     return m_nodes.values();
+
   }
 
   void addFlow(double flow)

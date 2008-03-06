@@ -9,7 +9,7 @@ public class Optimal
   private static final PartialDeriviateMetricFunction PARTIAL_DERIVIATE_METRIC_FUNCTION =
       new PartialDeriviateMetricFunction();
 
-  private final static double DELTA = 0.001d;
+  private final static double DELTA = 0.00001d;
   private final Network m_network;
 
   public Optimal(Network network)
@@ -25,10 +25,8 @@ public class Optimal
   public double run(double dpq) throws NetworkException, IOException
   {
     Dijkstra dijikstra = new Dijkstra(getNetwork());
-    dijikstra.calculate(RoutingComparison.SHORTEST_PATH_METRIC_FUNCTION);
-
-    getNetwork().setAverageTraffic(1);
-    double[][] flow = getNetwork().getTrafficFlowVector();
+    double[][] flow =
+        dijikstra.calculate(RoutingComparison.SHORTEST_PATH_METRIC_FUNCTION);
 
     double averageDelay =
         DelayCalculator.getAverageDelay(getNetwork(), dpq, flow);
@@ -43,9 +41,7 @@ public class Optimal
       // System.out.println("Flow(" + iteration + ")");
       // write(flow);
 
-      dijikstra.calculate(PARTIAL_DERIVIATE_METRIC_FUNCTION);
-      getNetwork().setAverageTraffic(dpq);
-      double[][] v = getNetwork().getTrafficFlowVector();
+      double[][] v = dijikstra.calculate(PARTIAL_DERIVIATE_METRIC_FUNCTION);
 
       // System.out.println("V(" + iteration + ")");
       // write(v);
@@ -130,11 +126,13 @@ public class Optimal
     {
       for (int j = 0; j < flow[i].length; j++)
       {
-        double fij = flow[i][j];
+        double fij = flow[i][j] * 8 * RoutingComparison.BYTES_PER_PACKET;
         if (fij != Double.NaN)
         {
-          double vij = v[i][j];
-          result[i][j] = (1 - alpha) * fij + alpha * vij;
+          double vij = v[i][j] * 8 * RoutingComparison.BYTES_PER_PACKET;
+          result[i][j] =
+              ((1 - alpha) * fij + alpha * vij)
+                  / (8 * RoutingComparison.BYTES_PER_PACKET);
         }
       }
     }

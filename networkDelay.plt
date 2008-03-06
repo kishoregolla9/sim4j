@@ -2,7 +2,7 @@ set term windows
 set xlabel "Average Traffic [Packets Per Second]"
 set ylabel "Average Network Delay [ms]"
 set yrange [0:1.1]
-set xrange [0:1.5]
+set xrange [0:1.6]
 set xtics 0,0.1
 set ytics 0,0.1
 set grid xtics ytics
