@@ -2,9 +2,9 @@ package ca.tatham.network;
 
 public class CShapeFactory
 {
-  public static Node[] getGrid(int size)
+  public static Network getGrid(int size)
   {
-    Node[] network = new Node[size];
+    Node[] network = new Node[size * size];
     double fraction = 0.3d;
     int index = 0;
     for (int i = 0; i < size; i++)
@@ -33,6 +33,6 @@ public class CShapeFactory
         }
       }
     }
-    return network;
+    return new Network(network);
   }
 }
