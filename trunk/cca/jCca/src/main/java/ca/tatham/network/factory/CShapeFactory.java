@@ -3,9 +3,9 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-public class CShapeFactory
+class CShapeFactory implements NetworkShapeFactory
 {
-  public static Network getGrid(int size)
+  public Network getGrid(int size, double radioRange)
   {
     Node[] network = new Node[size * size];
     double fraction = 0.3d;
@@ -16,26 +16,26 @@ public class CShapeFactory
       {
         for (int j = 0; j < size; j++)
         {
-          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j
-              + (Math.random() - 0.5) * 0.4);
+          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j + (Math.random() - 0.5)
+              * 0.4);
           index++;
         }
       } else
       {
         for (int j = 0; j < size * fraction; j++)
         {
-          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j
-              + (Math.random() - 0.5) * 0.4);
+          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j + (Math.random() - 0.5)
+              * 0.4);
           index++;
         }
         for (int j = (int) (size * (1 - fraction)); j < size; j++)
         {
-          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j
-              + (Math.random() - 0.5) * 0.4);
+          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j + (Math.random() - 0.5)
+              * 0.4);
           index++;
         }
       }
     }
-    return new Network(network);
+    return new Network(network, radioRange);
   }
 }

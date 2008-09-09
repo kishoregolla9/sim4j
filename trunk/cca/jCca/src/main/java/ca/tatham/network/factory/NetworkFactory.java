@@ -11,32 +11,46 @@ public class NetworkFactory
     RANDOM, GRID, RANDOM_C_SHAPE, GRID_C_SHAPE, RANDOM_RECTANGLE, GRID_RECTANGLE_20PERCENT_ERROR, RANDOM_L_SHAPE, GRID_L_SHAPE, RANDOM_LOOP, GRID_LOOP
   }
 
-  public static Network getNetwork(NetworkType type, int size, int n)
+  public static Network getNetwork(NetworkType type, int size, int n, double radioRange)
   {
+    Network network;
     switch (type)
     {
     case RANDOM:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case GRID:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case RANDOM_C_SHAPE:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case GRID_C_SHAPE:
-      return CShapeFactory.getGrid(size);
+      network = new CShapeFactory().getGrid(size, radioRange);
+      break;
     case RANDOM_RECTANGLE:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case GRID_RECTANGLE_20PERCENT_ERROR:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case RANDOM_L_SHAPE:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case GRID_L_SHAPE:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case RANDOM_LOOP:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
     case GRID_LOOP:
-      return new Network(new Node[0]);
+      network = new Network(new Node[0], radioRange);
+      break;
+    default:
+      network = new Network(new Node[0], radioRange);
+      break;
     }
 
-    return new Network(new Node[0]);
+    return network;
   }
 }
