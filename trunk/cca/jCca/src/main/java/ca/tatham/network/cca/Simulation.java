@@ -9,7 +9,7 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 import ca.tatham.network.Network;
-import ca.tatham.network.NetworkFactory;
+import ca.tatham.network.factory.NetworkFactory;
 
 public class Simulation extends ApplicationFrame
 {
