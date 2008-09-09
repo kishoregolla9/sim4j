@@ -18,14 +18,15 @@ public class Simulation extends ApplicationFrame
   public Simulation()
   {
     super("CCA Simulation");
-    Network network = NetworkFactory.getNetwork(
-        NetworkFactory.NetworkType.GRID_C_SHAPE, 25, 0);
+    double radioRange = 2.5;
+    Network network = NetworkFactory.getNetwork(NetworkFactory.NetworkType.GRID_C_SHAPE, 25, 0,
+        radioRange);
 
     DefaultXYDataset dataset = new DefaultXYDataset();
     dataset.addSeries("Network", network.getPoints());
 
-    JFreeChart chart = ChartFactory.createScatterPlot("Network", "", "",
-        dataset, PlotOrientation.VERTICAL, false, true, false);
+    JFreeChart chart = ChartFactory.createScatterPlot("Network", "", "", dataset,
+        PlotOrientation.VERTICAL, false, true, false);
     final ChartPanel chartPanel = new ChartPanel(chart);
     chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
     setContentPane(chartPanel);

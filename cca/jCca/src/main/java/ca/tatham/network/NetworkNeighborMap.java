@@ -17,7 +17,7 @@ public class NetworkNeighborMap
     int nxy = x.size() * y.size();
     double[][] z = new double[x.size()][y.size()];
 
-    return d;
+    return z;
   }
 
   public static void permute(List unvisited, List visited)
