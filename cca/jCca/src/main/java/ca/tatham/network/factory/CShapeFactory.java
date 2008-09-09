@@ -1,4 +1,7 @@
-package ca.tatham.network;
+package ca.tatham.network.factory;
+
+import ca.tatham.network.Network;
+import ca.tatham.network.Node;
 
 public class CShapeFactory
 {
