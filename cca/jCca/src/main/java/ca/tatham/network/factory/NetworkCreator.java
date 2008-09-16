@@ -15,27 +15,27 @@ public class NetworkCreator
     GRID, RANDOM
   }
 
-  public static Network getNetwork(NetworkShape shape, double percentError, int size, int n,
+  public static Network getNetwork(NetworkShape shape, double percentError, int size,
       double radioRange)
   {
-    NetworkFactory factory = getNetworkFactory(shape, percentError);
+    NetworkFactory factory = getNetworkFactory(shape, size, percentError);
     return factory.createNetwork(size, radioRange);
   }
 
-  private static NetworkFactory getNetworkFactory(NetworkShape shape, double percentError)
+  private static NetworkFactory getNetworkFactory(NetworkShape shape, int size, double percentError)
   {
     switch (shape)
     {
     case SQUARE:
-      return new SquareNetworkFactory(percentError);
+      return new SquareNetworkFactory(size, percentError);
     case RECTANGLE:
-      return new RectangleNetworkFactory(percentError);
+      return new RectangleNetworkFactory(size, percentError);
     case C:
-      return new CNetworkFactory(percentError);
+      return new CNetworkFactory(size, percentError);
     case L:
-      return new LNetworkFactory(percentError);
+      return new LNetworkFactory(size, percentError);
     case LOOP:
-      return new LoopNetworkFactory(percentError);
+      return new LoopNetworkFactory(size, percentError);
     }
     throw new IllegalArgumentException("Unknown network shape: " + shape);
   }

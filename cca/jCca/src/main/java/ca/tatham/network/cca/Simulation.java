@@ -9,18 +9,20 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 import ca.tatham.network.Network;
-import ca.tatham.network.factory.NetworkFactory;
+import ca.tatham.network.factory.NetworkCreator;
 
 public class Simulation extends ApplicationFrame
 {
   private static final long serialVersionUID = 1069628856981539272L;
 
+  private static final double NODE_PERCENT_ERROR = 100;
+
   public Simulation()
   {
     super("CCA Simulation");
     double radioRange = 2.5;
-    Network network = NetworkFactory.getNetwork(NetworkFactory.NetworkType.GRID_C_SHAPE, 25, 0,
-        radioRange);
+    Network network = NetworkCreator.getNetwork(NetworkCreator.NetworkShape.SQUARE,
+        NODE_PERCENT_ERROR, 25, radioRange);
 
     DefaultXYDataset dataset = new DefaultXYDataset();
     dataset.addSeries("Network", network.getPoints());

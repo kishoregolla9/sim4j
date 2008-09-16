@@ -6,9 +6,9 @@ import ca.tatham.network.Node;
 class CNetworkFactory extends AbstractNetworkFactory
 {
 
-  CNetworkFactory(double percentError)
+  CNetworkFactory(int size, double percentError)
   {
-    super(percentError);
+    super(size, percentError);
   }
 
   @Override

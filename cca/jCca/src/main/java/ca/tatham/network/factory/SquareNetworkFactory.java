@@ -3,12 +3,12 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-public class SquareNetworkFactory extends AbstractNetworkFactory
+class SquareNetworkFactory extends AbstractNetworkFactory
 {
 
-  public SquareNetworkFactory(double percentError)
+  SquareNetworkFactory(int size, double percentError)
   {
-    super(percentError);
+    super(size, percentError);
   }
 
   @Override

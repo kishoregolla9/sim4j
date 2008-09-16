@@ -3,12 +3,12 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-public class LoopNetworkFactory extends AbstractNetworkFactory
+class LoopNetworkFactory extends AbstractNetworkFactory
 {
 
-  public LoopNetworkFactory(double percentError)
+  LoopNetworkFactory(int size, double percentError)
   {
-    super(percentError);
+    super(size, percentError);
   }
 
   @Override
