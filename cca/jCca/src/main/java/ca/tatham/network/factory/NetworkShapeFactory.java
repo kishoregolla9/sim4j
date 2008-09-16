@@ -5,6 +5,8 @@ import ca.tatham.network.Network;
 public interface NetworkShapeFactory
 {
 
-  Network getGrid(int size, double radioRange);
+  Network createNetwork(int size, double radioRange);
+
+  Network getRandom(int size, double radioRange);
 
 }
