@@ -3,9 +3,10 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-class CShapeFactory implements NetworkShapeFactory
+class CNetworkFactory implements NetworkShapeFactory
 {
-  public Network getGrid(int size, double radioRange)
+  @Override
+  public Network createNetwork(int size, double radioRange)
   {
     Node[] network = new Node[size * size];
     double fraction = 0.3d;
@@ -20,7 +21,8 @@ class CShapeFactory implements NetworkShapeFactory
               * 0.4);
           index++;
         }
-      } else
+      }
+      else
       {
         for (int j = 0; j < size * fraction; j++)
         {
@@ -37,5 +39,12 @@ class CShapeFactory implements NetworkShapeFactory
       }
     }
     return new Network(network, radioRange);
+  }
+
+  @Override
+  public Network getRandom(int size, double radioRange)
+  {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
