@@ -3,11 +3,11 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-public class RectangleNetworkFactory extends AbstractNetworkFactory
+class RectangleNetworkFactory extends AbstractNetworkFactory
 {
-  public RectangleNetworkFactory(double percentError)
+  RectangleNetworkFactory(int size, double percentError)
   {
-    super(percentError);
+    super(size, percentError);
   }
 
   @Override

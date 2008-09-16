@@ -7,17 +7,16 @@ import org.apache.commons.math.geometry.Vector3D;
 
 public class Network implements Iterable<Node>
 {
-  private Node[] m_nodes;
-  private double m_radioRange;
+  private final Node[] m_nodes;
+  private final double m_radioRange;
 
   public Network(Node[] nodes, double radioRange)
   {
     m_nodes = nodes;
     m_radioRange = radioRange;
-    initNeighbours(nodes, radioRange);
   }
 
-  private void initNeighbours(Node[] nodes, double radioRange)
+  public void initNeighbours(Node[] nodes, double radioRange)
   {
     int total = 0;
     for (int i = 0; i < nodes.length; i++)
