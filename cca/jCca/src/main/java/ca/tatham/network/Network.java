@@ -14,18 +14,19 @@ public class Network implements Iterable<Node>
   {
     m_nodes = nodes;
     m_radioRange = radioRange;
+    initNeighbours(nodes, radioRange);
   }
 
-  public void initNeighbours(Node[] nodes, double radioRange)
+  private void initNeighbours(Node[] nodes, double radioRange)
   {
-    int total = 0;
+    int totalNeighbours = 0;
     for (int i = 0; i < nodes.length; i++)
     {
       for (int j = 0; j < nodes.length; j++)
       {
         if (i != j)
         {
-          if (nodes[i] != null && nodes[j] != null && distance(nodes[i], nodes[j]) < radioRange)
+          if (nodes[i] != null && nodes[j] != null && distance(nodes[i], nodes[j]) <= radioRange)
           {
             nodes[i].addNeighbour(nodes[j]);
             nodes[j].addNeighbour(nodes[i]);
@@ -34,10 +35,16 @@ public class Network implements Iterable<Node>
       }
       if (nodes[i] != null)
       {
-        total += nodes[i].getNeighbours().size();
+        totalNeighbours += nodes[i].getNeighbours().size();
       }
     }
-    System.out.println("Average connectivity: " + total / nodes.length);
+    System.out.println("Average connectivity (neighbours per node): " + (double) totalNeighbours
+        / nodes.length);
+  }
+
+  public Node[] getNodes()
+  {
+    return m_nodes;
   }
 
   private double distance(Node node1, Node node2)

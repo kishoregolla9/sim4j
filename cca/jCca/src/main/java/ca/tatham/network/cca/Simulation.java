@@ -1,5 +1,7 @@
 package ca.tatham.network.cca;
 
+import java.awt.Dimension;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,7 +17,7 @@ public class Simulation extends ApplicationFrame
 {
   private static final long serialVersionUID = 1069628856981539272L;
 
-  private static final double NODE_PERCENT_ERROR = 100;
+  private static final double NODE_PERCENT_ERROR = 0;
 
   public Simulation()
   {
@@ -30,7 +32,7 @@ public class Simulation extends ApplicationFrame
     JFreeChart chart = ChartFactory.createScatterPlot("Network", "", "", dataset,
         PlotOrientation.VERTICAL, false, true, false);
     final ChartPanel chartPanel = new ChartPanel(chart);
-    chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+    chartPanel.setPreferredSize(new Dimension(500, 270));
     setContentPane(chartPanel);
   }
 
