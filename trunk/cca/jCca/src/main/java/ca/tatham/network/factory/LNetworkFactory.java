@@ -3,8 +3,13 @@ package ca.tatham.network.factory;
 import ca.tatham.network.Network;
 import ca.tatham.network.Node;
 
-public class LNetworkFactory implements NetworkShapeFactory
+public class LNetworkFactory extends AbstractNetworkFactory
 {
+
+  public LNetworkFactory(double percentError)
+  {
+    super(percentError);
+  }
 
   @Override
   public Network createNetwork(int size, double radioRange)
@@ -12,23 +17,21 @@ public class LNetworkFactory implements NetworkShapeFactory
     Node[] network = new Node[size * size];
     double fraction = 0.3d;
     int index = 0;
-    for (int i = 0; i < size; i++)
+    for (int x = 0; x < size; x++)
     {
-      if (i < size * fraction)
+      if (x < size * fraction)
       {
-        for (int j = 0; j < size; j++)
+        for (int y = 0; y < size; y++)
         {
-          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j + (Math.random() - 0.5)
-              * 0.4);
+          network[index] = createNode(x, y);
           index++;
         }
       }
       else
       {
-        for (int j = 0; j < size * fraction; j++)
+        for (int y = 0; y < size * fraction; y++)
         {
-          network[index] = new Node(i + (Math.random() - 0.5) * 0.4, j + (Math.random() - 0.5)
-              * 0.4);
+          network[index] = createNode(x, y);
           index++;
         }
       }
@@ -36,12 +39,4 @@ public class LNetworkFactory implements NetworkShapeFactory
     return new Network(network, radioRange);
 
   }
-
-  @Override
-  public Network getRandom(int size, double radioRange)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }
