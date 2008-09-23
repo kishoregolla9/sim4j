@@ -17,14 +17,14 @@ public class Simulation extends ApplicationFrame
 {
   private static final long serialVersionUID = 1069628856981539272L;
 
-  private static final double NODE_PERCENT_ERROR = 0;
+  private static final double NODE_PERCENT_ERROR = 0.3;
 
   public Simulation()
   {
     super("CCA Simulation");
     double radioRange = 2.5;
-    Network network = NetworkCreator.getNetwork(NetworkCreator.NetworkShape.SQUARE,
-        NODE_PERCENT_ERROR, 25, radioRange);
+    Network network = NetworkCreator.getNetwork(NetworkCreator.NetworkShape.RECTANGLE,
+        NODE_PERCENT_ERROR, 30, radioRange);
 
     DefaultXYDataset dataset = new DefaultXYDataset();
     dataset.addSeries("Network", network.getPoints());
@@ -32,7 +32,7 @@ public class Simulation extends ApplicationFrame
     JFreeChart chart = ChartFactory.createScatterPlot("Network", "", "", dataset,
         PlotOrientation.VERTICAL, false, true, false);
     final ChartPanel chartPanel = new ChartPanel(chart);
-    chartPanel.setPreferredSize(new Dimension(500, 270));
+    chartPanel.setPreferredSize(new Dimension(600, 600));
     setContentPane(chartPanel);
   }
 
