@@ -28,6 +28,6 @@ abstract class AbstractNetworkFactory implements NetworkFactory
   private double gridFudge()
   {
     double random = new GaussianRandomGenerator(new JDKRandomGenerator()).nextNormalizedDouble();
-    return (random - 0.5) * m_percentErrorFromGrid * 2;
+    return random * m_percentErrorFromGrid;
   }
 }
