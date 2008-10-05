@@ -16,23 +16,37 @@ public class NodeTest extends TestCase
     {
       if (!nodes[n].getNeighbours().isEmpty())
       {
-        System.out.println("*** Shorted Distance Matrix for " + nodes[n]);
+        System.out.println("*** Shorted Distance Matrix for " + nodes[n] + " ("
+            + nodes[n].getNeighbours().size() + " neighbours)");
         List<Node> local = nodes[n].getLocalNetwork(2);
         double[][] shortestDistanceMatrix = nodes[n].getShortestDistanceMatrix(local);
+        int v = 0;
         for (int i = 0; i < shortestDistanceMatrix.length; i++)
         {
           for (int j = 0; j < shortestDistanceMatrix[i].length; j++)
           {
-            System.out.println(local.get(i)
+            System.out.println(v++
+                + ": "
+                + local.get(i)
                 + " to "
                 + local.get(j)
                 + ": "
-                + (shortestDistanceMatrix[i][j] == Double.POSITIVE_INFINITY ? "none" : Double
+                + (shortestDistanceMatrix[i][j] == Double.MAX_VALUE ? "none" : Double
                     .toString(shortestDistanceMatrix[i][j])));
           }
         }
+
+        for (int i = 0; i < shortestDistanceMatrix.length; i++)
+        {
+          for (int j = 0; j < shortestDistanceMatrix[i].length; j++)
+          {
+            assertEquals(shortestDistanceMatrix[i][j], shortestDistanceMatrix[j][i]);
+          }
+        }
+
         System.out.println();
       }
     }
+
   }
 }

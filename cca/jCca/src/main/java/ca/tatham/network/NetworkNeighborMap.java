@@ -4,15 +4,12 @@ import java.util.List;
 
 public class NetworkNeighborMap
 {
-  public void getNeighborMap(Network network, double radius)
-  {
-
-  }
-
   public double[][] getFullDistanceMatrix(Network x, Network y)
   {
     if (x.size() != y.size())
+    {
       throw new IllegalArgumentException("Must be same size networks");
+    }
     int p = x.size();
     int nxy = x.size() * y.size();
     double[][] z = new double[x.size()][y.size()];

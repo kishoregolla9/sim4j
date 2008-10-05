@@ -41,7 +41,7 @@ class LoopNetworkFactory extends AbstractNetworkFactory
         }
       }
     }
-    return new Network(network, radioRange);
+    return new Network("Loop", network, radioRange);
 
   }
 

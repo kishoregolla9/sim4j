@@ -36,7 +36,7 @@ class LNetworkFactory extends AbstractNetworkFactory
         }
       }
     }
-    return new Network(network, radioRange);
+    return new Network("L", network, radioRange);
 
   }
 }
