@@ -22,15 +22,22 @@ public class Simulation extends ApplicationFrame
   public Simulation()
   {
     super("CCA Simulation");
-    double radioRange = 2.5;
+    double radioRange = 1.5;
     Network network = NetworkCreator.getNetwork(NetworkCreator.NetworkShape.RECTANGLE,
-        NODE_PERCENT_ERROR, 30, radioRange);
+        NODE_PERCENT_ERROR, 10, radioRange);
+
+    while (network.connectivityCheck(radioRange))
+    {
+      System.out.println("Radio range :  " + radioRange + " OK");
+      radioRange -= 0.1;
+    }
+    System.out.println("Minimum radio range is:  " + radioRange);
 
     DefaultXYDataset dataset = new DefaultXYDataset();
-    dataset.addSeries("Network", network.getPoints());
+    dataset.addSeries("Node", network.getPoints());
 
-    JFreeChart chart = ChartFactory.createScatterPlot("Network", "", "", dataset,
-        PlotOrientation.VERTICAL, false, true, false);
+    JFreeChart chart = ChartFactory.createScatterPlot(network.toString(), "X", "Y", dataset,
+        PlotOrientation.VERTICAL, true, true, false);
     final ChartPanel chartPanel = new ChartPanel(chart);
     chartPanel.setPreferredSize(new Dimension(600, 600));
     setContentPane(chartPanel);

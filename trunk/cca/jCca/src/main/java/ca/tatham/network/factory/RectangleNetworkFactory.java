@@ -23,7 +23,7 @@ class RectangleNetworkFactory extends AbstractNetworkFactory
         index++;
       }
     }
-    return new Network(network, radioRange);
+    return new Network("Rectangle", network, radioRange);
   }
 
 }

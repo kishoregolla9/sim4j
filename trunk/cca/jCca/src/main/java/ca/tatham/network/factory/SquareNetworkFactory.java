@@ -24,6 +24,6 @@ class SquareNetworkFactory extends AbstractNetworkFactory
         index++;
       }
     }
-    return new Network(network, radioRange);
+    return new Network("Square", network, radioRange);
   }
 }

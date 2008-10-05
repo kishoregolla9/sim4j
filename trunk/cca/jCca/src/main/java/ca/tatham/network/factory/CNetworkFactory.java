@@ -42,7 +42,7 @@ class CNetworkFactory extends AbstractNetworkFactory
         }
       }
     }
-    return new Network(network, radioRange);
+    return new Network("C", network, radioRange);
   }
 
 }
