@@ -4,6 +4,19 @@ disp("Debug On Error")
 disp(debug_on_error())
 debug_on_error(1)
 
+%number_of_nets,type,netSize,N,r,step,number_of_levels
+number_of_nets=1;
+type=0;
+netSize=10;
+N=100;
+r=4;
+step=2;
+number_of_levels=3;
+
+disp("sim1.m")
+
+#[cca_rb, mds_rb, CL, cca_rb_middle, mds_rb_middle]=testRun(number_of_nets,type,netSize,N,r,step,number_of_levels)
+
 % Create and display the network (type,size,N)
 %       0:random square
 %       1:grid square with 10% average placement errors
@@ -16,10 +29,10 @@ debug_on_error(1)
 %	8:loop random
 %	9:loop grid with 10% placement error
 %	10:irregular
-[network]=netDeployment(3,10,100)  
+[network]=netDeployment(1,10,10)  
 disp("Plotting the network")
-% plot(network(:,1),network(:,2),'bo')
-% input("Press any key...\n")
+plot(network(:,1),network(:,2),'bo')
+input("Press any key...\n")
 
 % (3)Figure out what set of radio radius and connectivity levels are of interests. 
 % To check if the network is connected for a given a certain r. 
@@ -27,15 +40,15 @@ disp("Plotting the network")
 r=1.2
 [node,connectivity_level]=network_neighborMap(network,r)
 
-% Tell and plot if the network is disconneted at a given r. 
+# Tell and plot if the network is disconneted at a given r. 
 [disconnect]=NetworkConnectivityCheck(network,r) 
-% input("Press any key...\n")
+input("Press any key...\n")
 
 % (4) To prepare for testing across multiple radius levels, can use function
 % This function tells you if the smallest radius "initial_r" would leave the network partitioned. 
 % It also plots for you the network ocnnectivity diagram at the initial_r.
 % [CL_all]=netConLevelsAssignment(network,initial_r,step,numberOflevels)
-[CL_all]=netConLevelsAssignment(network,1.3,0.05,24)
+[CL_all]=netConLevelsAssignment(network,1.3,0.05,5)
 
 % (5)Compute local maps using localMapComputing.m -
 % where option selects range based (option=1) or range free (option=0) method
