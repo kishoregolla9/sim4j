@@ -49,6 +49,8 @@ if any(mode=='d') | (mode~='x' & nx==ny)
     z=x(1:nx,:)-y(1:nx,:);
     if nargin<4
         d=sum(z.*conj(z),2);
+        disp("disteusq: ");
+        disp(d);
     elseif min(size(w))==1
         wv=w(:).';
         d=sum(z.*wv(ones(size(z,1),1),:).*conj(z),2);
@@ -68,7 +70,8 @@ else
             d=sum(z.*conj(z),3);
         else
             nxy=nx*ny;
-            z=reshape(permute(x(:,:,ones(1,ny)),[1 3 2])-permute(y(:,:,ones(1,nx)),[3 1 2]),nxy,p);
+            z=reshape(
+             permute( x(:,:,ones(1,ny)),[1 3 2]) - permute(y(:,:,ones(1,nx)),[3 1 2]), nxy,p);
             if min(size(w))==1
                 wv=w(:).';
                 d=reshape(sum(z.*wv(ones(nxy,1),:).*conj(z),2),nx,ny);
@@ -88,6 +91,10 @@ else
         end
     end
 end
+
+disp("disteusq result: ");
+disp(d);
+
 if any(mode=='s')
     d=sqrt(d);
 end

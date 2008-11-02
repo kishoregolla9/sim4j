@@ -1,5 +1,7 @@
 function [P] = cca(D, P, epochs, Mdist, alpha0, lambda0)
 
+fprintf(2, 'iterating: %d - %d - %d epochs - %d Mdist - alpha0 %d - lambda0 %d',D,P,epochs, Mdist, alpha0, lambda0)
+
 %CCA Projects data vectors using Curvilinear Component Analysis.
 %
 % P = cca(D, P, epochs, [Dist], [alpha0], [lambda0])
@@ -48,36 +50,37 @@ function [P] = cca(D, P, epochs, Mdist, alpha0, lambda0)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Check arguments 
 
-error(nargchk(3, 6, nargin)); % check the number of input arguments
-% tic;  %added by li li to measure performance
-% input data
-if isstruct(D), 
-  if strcmp(D.type,'som_map'), D = D.codebook; else D = D.data; end
-end
-[noc dim] = size(D);
-noc_x_1  = ones(noc, 1); % used frequently
-me = zeros(1,dim); st = zeros(1,dim);
-for i=1:dim,
-  me(i) = mean(D(find(isfinite(D(:,i))),i));
-  st(i) = std(D(find(isfinite(D(:,i))),i));
-end
+    error(nargchk(3, 6, nargin)); % check the number of input arguments
+    % tic;  %added by li li to measure performance
+    % input data
+    if isstruct(D), 
+      if strcmp(D.type,'som_map'), D = D.codebook; else D = D.data; endif
+    endif
+    [noc dim] = size(D);
+    noc_x_1  = ones(noc, 1); % used frequently
+    me = zeros(1,dim); st = zeros(1,dim);
+    for i=1:dim,
+      me(i) = mean(D(find(isfinite(D(:,i))),i));
+      st(i) = std(D(find(isfinite(D(:,i))),i));
+    endfor
 
-% initial projection
-if prod(size(P))==1, 
-%   P = (2*rand(noc,P)-1).*st(noc_x_1,1:P) + me(noc_x_1,1:P); 
-  P =  randn(noc,P); %Li Li: change the above line to generate the initial projection data
-else
-  % replace unknown projections with known values
-  inds = find(isnan(P)); P(inds) = rand(size(inds));
-end
-[dummy odim] = size(P);
-odim_x_1  = ones(odim, 1); % this is used frequently
+    % initial projection
+    if prod(size(P))==1, 
+    %   P = (2*rand(noc,P)-1).*st(noc_x_1,1:P) + me(noc_x_1,1:P); 
+      P =  randn(noc,P); %Li Li: change the above line to generate the initial projection data
+    else
+      % replace unknown projections with known values
+      inds = find(isnan(P)); P(inds) = rand(size(inds));
+    endif
 
-% training length
-train_len = epochs*noc;
+    [dummy odim] = size(P);
+    odim_x_1  = ones(odim, 1); % this is used frequently
 
-% random sample order
-rand('state',sum(100*clock));
+    % training length
+    train_len = epochs*noc;
+
+    % random sample order
+    rand('state',sum(100*clock));
 sample_inds = ceil(noc*rand(train_len,1)); %li - this was
 %the original random sample order which isn't well balanced. not all the
 %points are treated equally.But works fine.
@@ -87,77 +90,87 @@ sample_inds = ceil(noc*rand(train_len,1)); %li - this was
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % mutual distances
-if nargin<4 | isempty(Mdist) | all(isnan(Mdist(:))),
-  fprintf(2, 'computing mutual distances\r');
-  dim_x_1 = ones(dim,1);
-  for i = 1:noc,
-    x = D(i,:); 
-    Diff = D - x(noc_x_1,:);
-    N = isnan(Diff);
-    Diff(find(N)) = 0; 
-    Mdist(:,i) = sqrt((Diff.^2)*dim_x_1);
-    N = find(sum(N')==dim); %mutual distance unknown
-    if ~isempty(N), Mdist(N,i) = NaN; end
-  end
-else
-  % if the distance matrix is output from PDIST function
-  if size(Mdist,1)==1, Mdist = squareform(Mdist); end
-  if size(Mdist,1)~=noc, 
-    error('Mutual distance matrix size and data set size do not match'); 
-  end
-end
+    if nargin<4 | isempty(Mdist) | all(isnan(Mdist(:))),
+      fprintf(2, 'computing mutual distances\r');
+      dim_x_1 = ones(dim,1);
+      for i = 1:noc,
+            x = D(i,:); 
+            Diff = D - x(noc_x_1,:);
+            N = isnan(Diff);
+            Diff(find(N)) = 0; 
+            Mdist(:,i) = sqrt((Diff.^2)*dim_x_1);
+            N = find(sum(N')==dim); %mutual distance unknown
+            if ~isempty(N), Mdist(N,i) = NaN; endif
+      endfor
+    else
+      % if the distance matrix is output from PDIST function
+      if size(Mdist,1)==1, Mdist = squareform(Mdist); endif
+      if size(Mdist,1)~=noc, 
+            error('Mutual distance matrix size and data set size do not match'); 
+      endif
+    endif
 
-% alpha and lambda
-if nargin<5 | isnan(alpha0) | isempty(alpha0), alpha0 = 0.5; end
-alpha = potency_curve(alpha0,alpha0/100,train_len);
+    % alpha and lambda
+    if (nargin<5) 
+	   alpha0 = 0.5 
+    elseif (isempty(alpha0) || isnan(alpha0))
+	   	alpha0 = 0.5; 
+    endif
+    
+    alpha = potency_curve(alpha0,alpha0/100,train_len);
 
-if nargin<6 | isempty(lambda0) | isnan(lambda0), lambda0 = max(st)*3; end
-lambda = potency_curve(lambda0,0.01,train_len);
+    if (nargin<6)
+        lambda0 = max(st)*3
+    elseif (isempty(lambda0) | isnan(lambda0))
+        lambda0 = max(st)*3; 
+    endif
+            
+    lambda = potency_curve(lambda0,0.01,train_len);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Action
 
-k=0; 
-%fprintf(2, 'iterating: %d / %d epochs\r',k,epochs);
-
-for i=1:train_len, 
-  
-  ind = sample_inds(i);     % sample index
-  dx = Mdist(:,ind);        % mutual distances in input space
-  known = find(~isnan(dx)); % known distances
-
-  if ~isempty(known),
-    % sample vector's projection
-    y = P(ind,:);                 
-
-    % distances in output space
-    Dy = P(known,:) - y(noc_x_1(known),:); 
-    dy = sqrt((Dy.^2)*odim_x_1);           
-  
-    % relative effect
-    dy(find(dy==0)) = 1;        % to get rid of div-by-zero's
-    fy = exp(-dy/lambda(i)) .* (dx(known) ./ dy - 1);
-
-    % Note that the function F here is e^(-dy/lambda)) 
-    % instead of the bubble function 1(lambda-dy) used in the 
-    % paper.
-    
-    % Note that here a simplification has been made: the derivatives of the
-    % F function have been ignored in calculating the gradient of error
-    % function w.r.t. to changes in dy.
-    
-    % update
-    P(known,:) = P(known,:) + alpha(i)*fy(:,odim_x_1).*Dy;
-    
-  end
-
-  % track
-  if rem(i,noc)==0, 
-    k=k+1; 
+    k=0; 
     %fprintf(2, 'iterating: %d / %d epochs\r',k,epochs);
-  end
 
-end
+    for i=1:train_len, 
+  
+      ind = sample_inds(i);     % sample index
+      dx = Mdist(:,ind);        % mutual distances in input space
+      known = find(~isnan(dx)); % known distances
+
+      if ~isempty(known),
+            % sample vector's projection
+            y = P(ind,:);                 
+
+            % distances in output space
+            Dy = P(known,:) - y(noc_x_1(known),:); 
+            dy = sqrt((Dy.^2)*odim_x_1);           
+  
+            % relative effect
+            dy(find(dy==0)) = 1;        % to get rid of div-by-zero's
+            fy = exp(-dy/lambda(i)) .* (dx(known) ./ dy - 1);
+
+            % Note that the function F here is e^(-dy/lambda)) 
+            % instead of the bubble function 1(lambda-dy) used in the 
+            % paper.
+    
+            % Note that here a simplification has been made: the derivatives of the
+            % F function have been ignored in calculating the gradient of error
+            % function w.r.t. to changes in dy.
+    
+            % update
+            P(known,:) = P(known,:) + alpha(i)*fy(:,odim_x_1).*Dy;
+    
+      endif
+
+      % track
+      if rem(i,noc)==0, 
+             k=k+1; 
+            %fprintf(2, 'iterating: %d / %d epochs\r',k,epochs);
+      endif
+
+    endfor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% clear up
@@ -175,8 +188,9 @@ end
 %toc; %added by li li to measure performance
 %t1=toc; %added by li li to measure performance
 
-return;
-
+    return;
+	 
+endfunction
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% tips
@@ -212,7 +226,8 @@ function vals = potency_curve(v0,vn,l)
   % somewhere between linear and 1/t
   vals = v0 * (vn/v0).^([0:(l-1)]/(l-1));
 
-
+endfunction
+	 
 function error = cca_error(P,Mdist,lambda)
 
   [noc odim] = size(P);
@@ -232,6 +247,8 @@ function error = cca_error(P,Mdist,lambda)
   end
   error = error/2;
 
+	 
+endfunction
 
 function [] = dydxplot(P,Mdist)
 
@@ -244,7 +261,7 @@ function [] = dydxplot(P,Mdist)
     y = P(i,:);                 
     Dy = P - y(noc_x_1,:);
     Pdist(:,i) = sqrt((Dy.^2)*odim_x_1);
-  end
+  endfor
 
   Pdist = tril(Pdist,-1); 
   inds = find(Pdist > 0); 
@@ -252,6 +269,7 @@ function [] = dydxplot(P,Mdist)
   plot(Pdist(inds),Mdist(inds),'.');
   xlabel('dy'), ylabel('dx')
 
+endfunction
 
 function p = project_point(P,x,dx)
 
@@ -291,7 +309,7 @@ function p = project_point(P,x,dx)
     p(i,:) = y;   
     ready = (norm(step)/norm(y) < eps | i > i_max);
 
-  end
+  endwhile
   fprintf(2,'\n');
      
-  
+endfunction 
