@@ -1,6 +1,6 @@
 function [node]=localMapConnectivityOnly(Network,epochs,r)
 %localMapLocalization computes the local 2 hop map for all its nodes
-%coordinates for each node in the 'Network' using range free method. 
+%coordinates for each node in the 'Network'using range free method. 
 %
 % Network - input deployed network
 % epochs - required number of training cycles

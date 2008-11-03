@@ -37,9 +37,9 @@ for i=1:N
     end
 end
 
-if (disconnect==1)
-    fprintf(2,'Network is not connected.\n');
-end
-
-% use this to plot the newtork connectivity if needed
-gplot(Connectivity, Network,'-o');
+% if (disconnect==1)
+%     fprintf(2,'network not connected\n');
+% end
+            
+% gplot(Connectivity, Network,'-o');% use this to plot the newtork
+% connectivity if needed

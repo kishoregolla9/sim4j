@@ -4,9 +4,9 @@ testRun allows you to generate a set of networks and select a set of radio range
 the networks. Then it computes the localization results using both CCA and MDS methods. It
 only does range-based computing. testRun_rf does the range-free cases for you. 
 
-A step by step way to run the experiments can be done like the following. You can then write
+A step by step way to run the experiements can be done like the following. You can then write
 scripts to do batch computing on set of networks by using these steps. 
-Follow the steps to run CCA localization experiments on one network:
+Follow the steps to run cca localization experiments on one network:
 (1) use [network]=netDeployment(type,size,N) to generate the network of the required 
 size and topology;
 e.g., [network]=netDeployment(1,10,100) for a gird network in a 10x10 area.
@@ -19,7 +19,7 @@ see if the network is connected for a given a certain r. Can use
 [node,connectivity_level]=network_neighborMap(network,r)to check out the average node 
 connectivity level of a given r.
 
-[disconnect]=NetworkConnectivityCheck(network,r) would tell you if the network is disconnected
+[disconnect]=NetworkConnectivityCheck(network,r) would tell you if the network is disconneted
 at a given r. 
 
 These functions kind of do some similar things to check the connectivity levels and to 
@@ -30,7 +30,7 @@ plot the connectivity diagram.
 [CL_all]=netConLevelsAssignment(network,1.3,0.05,24)
 
 This function tells you if the smallest radius "initial_r" would leave the network partitioned. 
-It also plots for you the network connectivity diagram at the initial_r.
+It also plots for you the network ocnnectivity diagram at the initial_r.
 
 Check to see what CL_all you get. 
 
@@ -43,8 +43,8 @@ generates the local maps for "network" at each of the connectivity levels given 
 using range based method and stores the local maps in rb_radiusNet{}. It also calculates the 
 local map computing time.
 
-(6)Select anchor nodes for map patching.  Have a set of scripts and functions for different
-topologies that may be tried. For example, may use [anchor]=anchorNodesSelectionCshape100(network,m,n),
+(6)Select anchor nodes for map patching. have a set of scrips and functions for different
+topolofies that may be tried. FOr example, may use [anchor]=anchorNodesSelectionCshape100(network,m,n),
 or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
 to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
 That often means the area where you want to select an anchor node has no node in it to be selected.

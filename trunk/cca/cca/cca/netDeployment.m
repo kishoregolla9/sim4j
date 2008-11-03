@@ -4,25 +4,17 @@ function [Network]=netDeployment(type,size,N)
 %function netDeployment generates a Network given the number of nodes, the
 %size and the type
 %Network -output coordinates of the nodes deployed
-%type - 0/1/2/3/4/5/6/7/8/9/10 
-%       0:random square
-%       1:grid square with 10% average placement errors
-%       2:C-shape random
-%	3:C-shape grid
-%	4:rectangle random
-%	5:rectangle grid with 10% placement error (length=N, width=size)
-%	6:L-shape random
-%	7:L-shape grid with 10% placement error)
-%	8:loop random
-%	9:loop grid with 10% placement error
-%	10:irregular
-%size - edge size of a square area for deployment. 
-%       e.g., if size=r, then the deployment area is rxr. 
-%       in the rectangle random, size is the width to length (length is taken as 10 unit) ratio
-%N - number of nodes in most cases. 
-%       In square grid, N=sizexsize; in rectangle grid,
-%       Nxsize is the nubmer of nodes where size is the width and N length. in C shape grid,
-%       N is about 79 when size=10; in L-shape grid, N is about 51
+%type - 0/1/2/3/4/5/6/7/8/9/10 (0:random square/1:grid square with 10% average placement 
+%errors/2:C-shape random/3:C-shape grid/4:rectangle random/5:rectangle grid 
+%with 10% placement error (length=N, width=size)/6:L-shape random/7:L-shape grid with 10%
+%placement error)/8:loop random/9:loop grid with 10% placement
+%error/10:irregular
+%size - edge size of a square area for deployment. e.g., if size=r, then
+%the deployment area is rxr. in the rectangle random, size is the width to
+%length (length is taken as 10 unit) ratio
+%N - number of nodes in most cases. In square grid, N=sizexsize; in rectangle grid,
+%Nxsize is the nubmer of nodes where size is the width and N length. in C shape grid,
+%N is about 79 when size=10; in L-shape grid, N is about 51
 
 if (type==0) %random 
     Network=rand(N,2)*size;
