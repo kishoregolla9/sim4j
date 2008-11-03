@@ -23,8 +23,8 @@ for jj=1:sn % for each starting node
     for kk=1:asn % for each anchor set
         disp('++++ Anchor Node ' + kk)
 %       radiusNet{ii}(1).radius=CL_all(1,ii);
-        radiusNet{ii}=mapVitPatch(network,radiusNet{ii},node(jj),anchor(kk,:),radiusNet{ii}(1).radius);
-        radiusNet{ii}(node(jj));
+        radiusNet{ii}=mapVitPatch(network,radiusNet{ii},node(jj),anchor(kk,:),radiusNet{ii}(1).radius)
+        radiusNet{ii}(node(jj))
         A(kk)=(radiusNet{ii}(node(jj)).patched_net_coordinates_error_median(1)+...,
             radiusNet{ii}(node(jj)).patched_net_coordinates_error_median(2))/2
         T(kk)=radiusNet{ii}(node(jj)).map_patchTime;
