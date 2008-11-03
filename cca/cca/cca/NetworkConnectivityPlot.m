@@ -38,7 +38,7 @@ for i=1:N
 end
 
 if (disconnect==1)
-    fprintf(2,'Network is not connected\n');
+    fprintf(2,'network not connected\n');
 end
             
 gplot(Connectivity, Network,'-o');

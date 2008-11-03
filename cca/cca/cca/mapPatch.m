@@ -17,9 +17,12 @@ asn=size(anchor,1); %nubmer of anchor sets for testing
 cl=size(radiusNet,2); %number of radius levels computed
 
 for jj=1:sn % for each starting node
-for ii=1:cl %for each radius level
+  disp('++++ Starting Node ' + jj)
+  for ii=1:cl %for each radius level
+    disp('++++ Radius Level ' + ii)
     for kk=1:asn % for each anchor set
-%         radiusNet{ii}(1).radius=CL_all(1,ii);
+        disp('++++ Anchor Node ' + kk)
+%       radiusNet{ii}(1).radius=CL_all(1,ii);
         radiusNet{ii}=mapVitPatch(network,radiusNet{ii},node(jj),anchor(kk,:),radiusNet{ii}(1).radius);
         radiusNet{ii}(node(jj));
         A(kk)=(radiusNet{ii}(node(jj)).patched_net_coordinates_error_median(1)+...,
@@ -27,15 +30,14 @@ for ii=1:cl %for each radius level
         T(kk)=radiusNet{ii}(node(jj)).map_patchTime;
     end
 
+    allResults(ii,:,jj)=A;
+    patchTime(jj,ii)=median(T')
+    % A=A(1:3);
+    coordinates_median(jj,ii)=median(A')
+    coordinates_median_average(jj,ii)=mean(A')
 
-allResults(ii,:,jj)=A;
-patchTime(jj,ii)=median(T')
-% A=A(1:3);
-coordinates_median(jj,ii)=median(A')
-coordinates_median_average(jj,ii)=mean(A')
-
-clear A;
-clear T;
-end %for ii
+    clear A;
+    clear T;
+  end %for ii
 end %for jj 
 
