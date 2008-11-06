@@ -5,7 +5,7 @@ addpath('cca')
 % disp(debug_on_error())
 % debug_on_error(1)
 
-radioRange=1.3
+radius=1.3
 ranging=0 % range-free
 
 %This directory has files for both MDS and CCA localization. 
@@ -25,28 +25,23 @@ ranging=0 % range-free
 %(2)Can plot(network(:,1),network(:,2),'bo') to see what it looks like. :)
 
 %(3)Figure out what set of radio radius and connectivity levels are of interests. May
-%use NetworkConnectivityPlot(network,radioRange), e.g., NetworkConnectivityPlot(network,1.2), to 
-%see if the network is connected for a given a certain radioRange. Can use 
-[node,connectivity_level]=network_neighborMap(network,radioRange)
+%use NetworkConnectivityPlot(network,radius), e.g., (network,1.2), to 
+%see if the network is connected for a given a certain radius. Can use 
+[node,connectivity_level]=network_neighborMap(network,radius)
 %to check out the average node 
-%connectivity level of a given radioRange.
+%connectivity level of a given radius.
 
-[disconnect]=NetworkConnectivityCheck(network,radioRange) 
+[disconnect]=NetworkConnectivityCheck(network,radius,true) 
 %would tell you if the network is disconnected
-%at a given radioRange. 
+%at a given radius. 
 
 %These functions kind of do some similar things to check the connectivity levels and to 
 %plot the connectivity diagram. 
 
 %(4) To prepare for testing across multiple radius levels, can use function
 %[connectivityLevels]=netConLevelsAssignment(network,initial_r,step,numberOflevels), e.g.,
-[connectivityLevels]=netConLevelsAssignment(network,radioRange,0.05,1)
-
-disp(connectivityLevels)
-
-%This function tells you if the smallest radius "initial_r" would leave the network partitioned. 
-%It also plots for you the network connectivity diagram at the initial_r.
-
+[connectivityLevels]=netConLevelsAssignment(network,radius,0.05,1)
+%This function tells you if the smallest radius "radius" would leave the network partitioned. 
 %Check to see what connectivityLevels you get. 
 
 %(5)Compute local maps using localMapComputing.m -
