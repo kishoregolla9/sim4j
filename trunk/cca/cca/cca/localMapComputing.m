@@ -12,36 +12,35 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 %  localMaps{} - cell of computed local maps for each radius levels given in connectivityLevels;
 %  localMapTimeMean - the average computing time for each local map at each different radius levels as given in connectivityLevels
 
-nn=size(connectivityLevels,2);
-for ii=1:nn
-radius=connectivityLevels(1,ii);
-if option==1 %cca range based
-    localMaps{ii}=vitUpdateLocalMapLocalization(network,100,radius);
-end
-if option==0 %cca range free
-    localMaps{ii}=localMapConnectivityOnly(network,100,radius);
-end
-
-if option==2 %cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
-    localMaps{ii}=localMapConnectivityOnlyGrid(network,100,radius);
-end
-
-if option==3 %range free mds grid
-    localMaps{ii}=MDSLocalMapConnectivityOnlyGrid(network,radius);
-end
+numberOfLevels=size(connectivityLevels,2);
+localMaps=zeros(numberOfLevels);
+for i = 1:numberOfLevels
+  radius=connectivityLevels(1,i);
+  if option==0 %cca range free
+    localMaps{i}=localMapConnectivityOnly(network,100,radius);
+  end
+  if option==1 %cca range based
+    localMaps{i}=vitUpdateLocalMapLocalization(network,100,radius);
+  end
+  if option==2 %cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
+    localMaps{i}=localMapConnectivityOnlyGrid(network,100,radius);
+  end
+  if option==3 %range free mds grid
+    localMaps{i}=MDSLocalMapConnectivityOnlyGrid(network,radius);
+  end
 end
 
 
 %calculate the compute time
-net_size=size(network,1);
-for ii=1:nn
-    computationTime=zeros(net_size,1);
-    for jj=1:net_size
-        computationTime(jj)=localMaps{ii}(jj).local_map_compuTime
+numberOfNodes=size(network,1);
+localMapTimeMean=zeros(numberOfLevels);
+localMapTimeMedian=zeros(numberOfLevels);
+for i=1:numberOfLevels
+    computationTime=zeros(numberOfNodes,1);
+    for j=1:numberOfNodes
+        computationTime(j) = localMaps{i}(j).local_map_compuTime
     end
-    computationTime
-    computationTime'
-    localMapTimeMean(ii)=mean(computationTime');
-    localMapTimeMedian(ii)=median(computationTime');
+    localMapTimeMean(i) = mean(computationTime');
+    localMapTimeMedian(i) = median(computationTime');
     clear computationTime;
 end
