@@ -10,17 +10,18 @@ function [node]=vitUpdateLocalMapLocalization(Network,epochs,r)
 % T - elapsed time for CCA computation
 % C_delta - difference of C_tranform from real coordinates. C_tranform is the 
 % the resulting node coordinates in 2D
-% D_dist_mean - the sum of the mean error between the orginal distance matrix of the input
-% 'Network' and the distance matrix computed from the resulted node
-% coordinates
+%
+% D_dist_mean - the sum of the mean error between the original distance matrix of the input
+% 'Network' and the distance matrix computed from the resulted node coordinates
+%
 % D_coordinates_mean - the mean error between the coordinates of the input
 % 'Network' and the resulted node coordinates
+%
 % D_coordinates_median - the median error between the coordinates of the input
 % 'Network' and the resulted node coordinates
 
-
-% THRESHOLD=0.5; %the max distance error average to be tolerated or we'd fail
-THRESHOLD=5; %used when measurement errors are big
+THRESHOLD=0.5; %the max distance error average to be tolerated or we'd fail
+% THRESHOLD=5; %used when measurement errors are big
 r  %just to display what radius we are computing on the screen. 
 N=size(Network,1);
 D=sqrt(disteusq(Network,Network,'x'));
@@ -41,8 +42,8 @@ D_measure=D_measure.*(1+tmp_sym);
 cl_count=0;
 for i=1:N %compute all the local maps
 %get node_i's neighbor nodes within r;
-[node(i).nh]=find_nh(D,r,i,1);
-cl_count=cl_count+size(node(i).nh,2)-1; %trying to get network connectivity level
+[node(i).neighbors]=find_neighbors(D,r,i,1);
+cl_count=cl_count+size(node(i).neighbors,2)-1; %trying to get network connectivity level
 end
 cl_count=cl_count/N; %network connectivity level
 %D=sqrt(disteusq(Network,Network,'x')); 
@@ -109,14 +110,14 @@ end %compute the shortest hop matrix using Floyed algorithm
 for node_k=1:N
     node_k
     tStart = cputime;
-    while(size(node(node_k).nh,2)==1)%node_k has no connectivity
+    while(size(node(node_k).neighbors,2)==1)%node_k has no connectivity
         node_k=node_k+1;
     end
     %tic;
     h=2;
     
     node(node_k).t_level=t_level;
-    if (size(node(node_k).nh,2)>t_level) 
+    if (size(node(node_k).neighbors,2)>t_level) 
         h=1;
     end
     %added D_measure in the line below on May 8th 
@@ -140,7 +141,7 @@ for node_k=1:N
     node(node_k).local_d_merge=local_d;
     node(node_k).local_distance_deployed=local_distance_deployed;
     node(node_k).local_network=local_network;
-    node(node_k).nh_merge=node_index;
+    node(node_k).neighbors_merge=node_index;
     node(node_k).node_id=node_k;
     node(node_k).radius=r;
 
@@ -362,7 +363,7 @@ end %build the distance matrix for the neighborhood within
 % commented out the ablve two lines on May 8th
 
 
-function [node_index]=find_nh(D,r,i,k)
+function [node_index]=find_neighbors(D,r,i,k)
 %localDist(D,r) takes a distance matrix D and range r to generate for  
 %node 'i' 0<i<size(D) a list that includes the nodes j such that D(i,j)<=kr. 
  

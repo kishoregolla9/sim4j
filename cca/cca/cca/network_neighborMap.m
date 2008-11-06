@@ -6,17 +6,17 @@ N=size(Network,1);
 D=sqrt(disteusq(Network,Network,'x'));
 for i=1:N %compute all the local maps
 %get node_i's neighbor nodes within r;
-[node(i).nh]=find_nh(D,r,i,1);
+[node(i).neighbors]=find_neighbors(D,r,i,1);
 end
 count=0;
 for i=1:N
-    count=count+size(node(i).nh,2)-1;
+    count=count+size(node(i).neighbors,2)-1;
 end
 
 connectivity_level=count/N;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [node_index]=find_nh(D,r,i,k)
+function [node_index]=find_neighbors(D,r,i,k)
 %localDist(D,r) takes a distance matrix D and range r to generate for  
 %node 'i' 0<i<size(D) a list that includes the nodes j such that D(i,j)<=kr. 
  

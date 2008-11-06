@@ -15,8 +15,8 @@ D=sqrt(disteusq(Network,Network,'x'));
 cl_count=0;
 for i=1:N %compute all the local maps
 %get node_i's neighbor nodes within r;
-[node(i).nh]=find_nh(D,r,i,1);
-cl_count=cl_count+size(node(i).nh,2)-1; %trying to get network connectivity level
+[node(i).neighbors]=find_neighbors(D,r,i,1);
+cl_count=cl_count+size(node(i).neighbors,2)-1; %trying to get network connectivity level
 end
 %D=sqrt(disteusq(Network,Network,'x')); 
 %N=size(Network,1);
@@ -73,7 +73,7 @@ end %compute the shortest hop matrix using Floyed algorithm
 
 for node_k=1:N
     node_k
-    while(size(node(node_k).nh,2)==1)%node_k has no connectivity
+    while(size(node(node_k).neighbors,2)==1)%node_k has no connectivity
         node_k=node_k+1;
     end
     %tic;
@@ -81,12 +81,12 @@ for node_k=1:N
     h=2;
 %   h=3; %used to test gridLoop. 
     node(node_k).t_level=t_level;
-    if (size(node(node_k).nh,2)>t_level) 
+    if (size(node(node_k).neighbors,2)>t_level) 
         h=1;
     end
     [local_d,node_index]=localDist(D_hopCount,D_hopDist,r,node_k,h); %compute node_k's two hop distance matrix
     local_size=size(node_index,2);
-    diff=local_size-size(node(node_k).nh,2);
+    diff=local_size-size(node(node_k).neighbors,2);
 
     %node_index_merge=node_index;
     %local_d_merge=local_d;
@@ -105,7 +105,7 @@ for node_k=1:N
     node(node_k).local_d_merge=local_d;
     node(node_k).local_distance_deployed=local_distance_deployed;
     node(node_k).local_network=local_network;
-    node(node_k).nh_merge=node_index;
+    node(node_k).neighbors_merge=node_index;
     node(node_k).node_id=node_k;
     node(node_k).radius=r;
 
@@ -354,7 +354,7 @@ end %build the distance matrix for the neighborhood within
 %ldist=ldist.*(1+tmp);
 
 
-function [node_index]=find_nh(D,r,i,k)
+function [node_index]=find_neighbors(D,r,i,k)
 %localDist(D,r) takes a distance matrix D and range r to generate for  
 %node 'i' 0<i<size(D) a list that includes the nodes j such that D(i,j)<=kr. 
  

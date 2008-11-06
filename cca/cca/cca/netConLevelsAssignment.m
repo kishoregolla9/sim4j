@@ -15,7 +15,6 @@ function [CL_all]=netConLevelsAssignment(network,initial_r,step,numberOflevels)
 radius=initial_r;
 NetworkConnectivityPlot(network, initial_r) %it will show if using the shortest radio radius value 
 %given in CL_all will result in a partitioned network
-% size=26;
 size=numberOflevels;
 for ii=1:size
     [node,cl]=network_neighborMap(network,radius);

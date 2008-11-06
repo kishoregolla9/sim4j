@@ -17,31 +17,31 @@ end
 
 tic;
 patchedSet=[];
-patchCandi=node(node_k).nh_merge;
+patchCandi=node(node_k).neighbors_merge;
 P_N=size(patchCandi,2);
 M=3; %minimum number of common nodes needed for patch
 newNodes=0; %no new nodes for patch
 patchNode=node_k; %no node selected for patch
 node(node_k).patched_network=node(node_k).local_network_c;%prepare for patch
-node(node_k).patched_nh=node(node_k).nh_merge;%all the nodes in the pacthed map
+node(node_k).patched_neighbors=node(node_k).neighbors_merge;%all the nodes in the pacthed map
 while(P_N~=0)
     %adjust node_k's local network first (note: found this isn't useful)
-%     local_network=Network(node(node_k).patched_nh(1),:); %get the deployed network values
-%     for i=2:size(node(node_k).patched_nh,2)
-%         local_network=[local_network;Network(node(node_k).patched_nh(1),:)];
+%     local_network=Network(node(node_k).patched_neighbors(1),:); %get the deployed network values
+%     for i=2:size(node(node_k).patched_neighbors,2)
+%         local_network=[local_network;Network(node(node_k).patched_neighbors(1),:)];
 %     end
 %    N=size(local_network,1);
 %    %N1=1;
 %    %N2=int16(N/3);
 %    %N3=int16(N*2/3+1);
-%    for i=1:size(node(node_k).patched_nh,2)
-%        if (node(node_k).patched_nh(i)==4)
+%    for i=1:size(node(node_k).patched_neighbors,2)
+%        if (node(node_k).patched_neighbors(i)==4)
 %            N1=i;
 %        end
-%        if (node(node_k).patched_nh(i)==25)
+%        if (node(node_k).patched_neighbors(i)==25)
 %            N2=i;
 %        end
-%        if(node(node_k).patched_nh(i)==48)
+%        if(node(node_k).patched_neighbors(i)==48)
 %            N3=i;
 %        end
 %    end %find the three anchor nodes in the patched map
@@ -68,7 +68,7 @@ if(option==1) %greedy algorithm
     for i=1:P_N %select the node that has most number of common nodes for patch
         if ((node(patchCandi(i)).patch~=1)&(patchCandi(i)~=node_k)) 
             %check to see if we'd patch this node's map into the global map
-            numberOfNodes =size(intersect(node(node_k).patched_nh,node(patchCandi(i)).nh_merge),2);
+            numberOfNodes =size(intersect(node(node_k).patched_neighbors,node(patchCandi(i)).neighbors_merge),2);
             if (numberOfNodes>=M)%if have more common nodes for patch
                 patchNode=patchCandi(i); %select i as the patch node
                 M=numberOfNodes;
@@ -79,9 +79,9 @@ else %thrifty algorithm
     for i=1:P_N %select the node that has most number of different nodes for patch
         if ((node(patchCandi(i)).patch~=1)&(patchCandi(i)~=node_k)) 
             %check to see if we'd patch this node's map into the global map
-            numberOfNodes =size(intersect(node(node_k).patched_nh,node(patchCandi(i)).nh_merge),2);
+            numberOfNodes =size(intersect(node(node_k).patched_neighbors,node(patchCandi(i)).neighbors_merge),2);
             if (numberOfNodes>=M)%if have enough common nodes for patch
-                numberOfNewNodes=size(setdiff(node(patchCandi(i)).nh_merge,node(node_k).patched_nh),2);
+                numberOfNewNodes=size(setdiff(node(patchCandi(i)).neighbors_merge,node(node_k).patched_neighbors),2);
                 if (numberOfNewNodes>newNodes)
                     patchNode=patchCandi(i); %select i as the patch node
                     newNodes=numberOfNewNodes;
@@ -94,7 +94,7 @@ end
         fprintf(2,'failed to find a patch node\n');
         return;
     end
-    [commonNodes,ia,ib]=intersect(node(node_k).patched_nh,node(patchNode).nh_merge);
+    [commonNodes,ia,ib]=intersect(node(node_k).patched_neighbors,node(patchNode).neighbors_merge);
       %find the common nodes and their index in the different maps
     M=size(commonNodes,2);
     for i=1:M
@@ -112,27 +112,27 @@ end
 %     N3=int16(M*2/3+1);%select three nodes from the common nodes for map transform
 %     N2=2;
 %     N3=3;
-    M1=size(node(patchNode).nh_merge,2);
+    M1=size(node(patchNode).neighbors_merge,2);
 %     for i=1:M1 %find X1, X2, X3 in patch node's local map for transform
-%         if(node(patchNode).nh_merge(i)==commonNodes(N1))
+%         if(node(patchNode).neighbors_merge(i)==commonNodes(N1))
 %             X1=(node(patchNode).local_network_c(i,:))';
 %         end
-%         if(node(patchNode).nh_merge(i)==commonNodes(N2))
+%         if(node(patchNode).neighbors_merge(i)==commonNodes(N2))
 %             X2=(node(patchNode).local_network_c(i,:))';
 %         end
-%         if (node(patchNode).nh_merge(i)==commonNodes(N3))
+%         if (node(patchNode).neighbors_merge(i)==commonNodes(N3))
 %             X3=(node(patchNode).local_network_c(i,:))';
 %         end
 %     end
-%     M2=size(node(node_k).patched_nh,2);
+%     M2=size(node(node_k).patched_neighbors,2);
 %     for i=1:M2 %find Y1, Y2, Y3 in node_k's local map for transform
-%         if(node(node_k).patched_nh(i)==commonNodes(N1))
+%         if(node(node_k).patched_neighbors(i)==commonNodes(N1))
 %             Y1=(node(node_k).patched_network(i,:))';
 %         end
-%         if(node(node_k).patched_nh(i)==commonNodes(N2))
+%         if(node(node_k).patched_neighbors(i)==commonNodes(N2))
 %             Y2=(node(node_k).patched_network(i,:))';
 %         end
-%         if (node(node_k).patched_nh(i)==commonNodes(N3))
+%         if (node(node_k).patched_neighbors(i)==commonNodes(N3))
 %             Y3=(node(node_k).patched_network(i,:))';
 %         end
 %     end
@@ -152,27 +152,27 @@ end
     %the patched bigger map
     
     %obtain all the nodes in the resulting patched map
-    newPatched_nh=union(node(node_k).patched_nh, node(patchNode).nh_merge);
-    for i=1:size(newPatched_nh,2)%build the patched map for node_k
-        if(ismember(newPatched_nh(i),commonNodes)) %if the node is in both maps
+    newPatched_neighbors=union(node(node_k).patched_neighbors, node(patchNode).neighbors_merge);
+    for i=1:size(newPatched_neighbors,2)%build the patched map for node_k
+        if(ismember(newPatched_neighbors(i),commonNodes)) %if the node is in both maps
             for j=1:size(cNodes,2)
-                if(newPatched_nh(i)==cNodes(j).NetId)%find which commone node it is
+                if(newPatched_neighbors(i)==cNodes(j).NetId)%find which commone node it is
                     newPatched_network(i,:)=(node(node_k).patched_network(cNodes(j).kId,:)+node(patchNode).local_network_patch(cNodes(j).pId,:))/2;
                      break; %take the average value of the position values from both maps
                 end
             end
         else
-            if(ismember(newPatched_nh(i),node(node_k).patched_nh))%the node was only in node_k's map
-                for j=1:size(node(node_k).patched_nh,2)
-                    if(newPatched_nh(i)==node(node_k).patched_nh(j))
+            if(ismember(newPatched_neighbors(i),node(node_k).patched_neighbors))%the node was only in node_k's map
+                for j=1:size(node(node_k).patched_neighbors,2)
+                    if(newPatched_neighbors(i)==node(node_k).patched_neighbors(j))
                         newPatched_network(i,:)=node(node_k).patched_network(j,:);
                         break;
                     end
                 end
             end
-            if(ismember(newPatched_nh(i),node(patchNode).nh_merge))%the node is only in patchNode's map
-                for j=1:size(node(patchNode).nh_merge,2)
-                    if(newPatched_nh(i)==node(patchNode).nh_merge(j))
+            if(ismember(newPatched_neighbors(i),node(patchNode).neighbors_merge))%the node is only in patchNode's map
+                for j=1:size(node(patchNode).neighbors_merge,2)
+                    if(newPatched_neighbors(i)==node(patchNode).neighbors_merge(j))
                         newPatched_network(i,:)=node(patchNode).local_network_patch(j,:);
                         break;
                     end %if
@@ -182,21 +182,21 @@ end
     end %for
     node(patchNode).patch=1;
     patchedSet=union(patchedSet,patchNode);
-    node(node_k).patched_nh=newPatched_nh;
+    node(node_k).patched_neighbors=newPatched_neighbors;
     node(node_k).patched_network=newPatched_network;
-    patchCandi=setdiff(node(node_k).patched_nh,patchedSet);
+    patchCandi=setdiff(node(node_k).patched_neighbors,patchedSet);
     P_N=size(patchCandi,2);
     deleteCandi=[];
     for i=1:P_N
-%         if ((patchCandi(i)==node_k)|node(patchCandi(i)).D_dist_mean>0.2|(size(node(patchCandi(i)).nh_merge,2)==0))
-        if ((patchCandi(i)==node_k)|(size(node(patchCandi(i)).nh_merge,2)==0))
+%         if ((patchCandi(i)==node_k)|node(patchCandi(i)).D_dist_mean>0.2|(size(node(patchCandi(i)).neighbors_merge,2)==0))
+        if ((patchCandi(i)==node_k)|(size(node(patchCandi(i)).neighbors_merge,2)==0))
             deleteCandi=union(deleteCandi,patchCandi(i));
             node(patchCandi(i)).patch=1; %will not be able to patch it. so mark it as patched. 
             patchedSet=union(patchedSet,patchCandi(i));
         end
  
         if (option==0) %to improve the patch speed to patch as less nodes as possible in getting the global map
-            numberOfNewNodes=size(setdiff(node(patchCandi(i)).nh_merge,node(node_k).patched_nh),2);
+            numberOfNewNodes=size(setdiff(node(patchCandi(i)).neighbors_merge,node(node_k).patched_neighbors),2);
             if (numberOfNewNodes==0)
                 deleteCandi =union(deleteCandi,patchCandi(i));
                 node(patchCandi(i)).patch=1; %will not need to patch it. so mark it as patched. 
@@ -222,9 +222,9 @@ end
     newPatched_network=[];
     
     %we check the result of this patch
-%     local_network=Network(node(node_k).patched_nh(1),:); %get the deployed network values
-%     for i=2:size(node(node_k).patched_nh,2)
-%         local_network=[local_network;Network(node(node_k).patched_nh(1),:)];
+%     local_network=Network(node(node_k).patched_neighbors(1),:); %get the deployed network values
+%     for i=2:size(node(node_k).patched_neighbors,2)
+%         local_network=[local_network;Network(node(node_k).patched_neighbors(1),:)];
 %     end
    % N=size(local_network,1);
    % N1=1;
@@ -250,7 +250,7 @@ end %while
 T=toc;
 node(node_k).map_patchTime=T;
 M=size(anchorNodes,2);
-N_Map=size(node(node_k).patched_nh,2);
+N_Map=size(node(node_k).patched_neighbors,2);
 N=size(Network,1);
 if (N_Map==N) %we have a fully patched map
     for i=1:M
@@ -259,7 +259,7 @@ if (N_Map==N) %we have a fully patched map
     end
 else %we don't have a fully patched map
     for i=1:M
-            [ft,loc]=ismember(anchorNodes(i),node(node_k).patched_nh);
+            [ft,loc]=ismember(anchorNodes(i),node(node_k).patched_neighbors);
             if(ft==0)
                 fprintf(2,'Partition in the network. Patch failed\n');
                 fprintf(2,'Anchor Node %d not in the patched map\n', anchorNodes(i));
@@ -286,7 +286,7 @@ end %if
 
 %[Z,Cx]= mapTransMax(X,Y,N);
 
-% N_Map=size(node(node_k).patched_nh,2);
+% N_Map=size(node(node_k).patched_neighbors,2);
 % N=size(Network,1);
 if (N_Map==N) %we have a fully patched map
     [d, Z, transform] = procrustes(X, Y);
@@ -316,9 +316,9 @@ else %Partition in the network. We only have a partly patched map
     for i=1:(N-size(transform.c,1))
         C=[C;transform.c(1,:)];
     end
-    local_network=Network(node(node_k).patched_nh(1),:); %get the deployed network values
-    for i=2:size(node(node_k).patched_nh,2)
-        local_network=[local_network;Network(node(node_k).patched_nh(1),:)];
+    local_network=Network(node(node_k).patched_neighbors(1),:); %get the deployed network values
+    for i=2:size(node(node_k).patched_neighbors,2)
+        local_network=[local_network;Network(node(node_k).patched_neighbors(1),:)];
     end
     C_transform=transform.b * node(node_k).patched_network * transform.T+C;
     %C_transform=(Z*node(node_k).patched_network'+Cx)';
