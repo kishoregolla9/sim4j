@@ -14,7 +14,7 @@ function [node]=mapVitPatch(network,node,node_k,anchorNodes,r)
     N=size(network,1);
 	for ii=1:N      
         map{ii}=node(ii).local_network_c; %added by li as cca generates directly the network
-        index{ii} = (node(ii).nh_merge)'; %grab all the nodes in the local map
+        index{ii} = (node(ii).neighbors_merge)'; %grab all the nodes in the local map
         indexInclude{ii} = ii;
     end %for ii
     

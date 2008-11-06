@@ -5,7 +5,8 @@ addpath('cca')
 % disp(debug_on_error())
 % debug_on_error(1)
 
-r=1.3
+radioRange=1.3
+ranging=0 % range-free
 
 %This directory has files for both MDS and CCA localization. 
 %
@@ -24,38 +25,39 @@ r=1.3
 %(2)Can plot(network(:,1),network(:,2),'bo') to see what it looks like. :)
 
 %(3)Figure out what set of radio radius and connectivity levels are of interests. May
-%use NetworkConnectivityPlot(network,r), e.g., NetworkConnectivityPlot(network,1.2), to 
-%see if the network is connected for a given a certain r. Can use 
-[node,connectivity_level]=network_neighborMap(network,r)
+%use NetworkConnectivityPlot(network,radioRange), e.g., NetworkConnectivityPlot(network,1.2), to 
+%see if the network is connected for a given a certain radioRange. Can use 
+[node,connectivity_level]=network_neighborMap(network,radioRange)
 %to check out the average node 
-%connectivity level of a given r.
+%connectivity level of a given radioRange.
 
-[disconnect]=NetworkConnectivityCheck(network,r) 
+[disconnect]=NetworkConnectivityCheck(network,radioRange) 
 %would tell you if the network is disconnected
-%at a given r. 
+%at a given radioRange. 
 
 %These functions kind of do some similar things to check the connectivity levels and to 
 %plot the connectivity diagram. 
 
 %(4) To prepare for testing across multiple radius levels, can use function
-%[CL_all]=netConLevelsAssignment(network,initial_r,step,numberOflevels), e.g.,
-[CL_all]=netConLevelsAssignment(network,r,0.05,1)
+%[connectivityLevels]=netConLevelsAssignment(network,initial_r,step,numberOflevels), e.g.,
+[connectivityLevels]=netConLevelsAssignment(network,radioRange,0.05,1)
 
-disp(CL_all)
+disp(connectivityLevels)
 
 %This function tells you if the smallest radius "initial_r" would leave the network partitioned. 
 %It also plots for you the network connectivity diagram at the initial_r.
 
-%Check to see what CL_all you get. 
+%Check to see what connectivityLevels you get. 
 
-%(5)Compute local maps using localMapCOmputing.m -
-%[radiusNet,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,CL_all,option)
+%(5)Compute local maps using localMapComputing.m -
+%[radiusNet,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,option)
 %where option selects range based (option=1) or range free (option=0) method
 %e.g.,
-[rb_radiusNet,rb_localMapTimeMean,rb_localMapTimeMedian]=localMapComputing(network,CL_all,0)
-%generates the local maps for "network" at each of the connectivity levels given in the CL_all
+[rb_radiusNet,rb_localMapTimeMean,rb_localMapTimeMedian]=localMapComputing(network,connectivityLevels,ranging)
+%generates the local maps for "network" at each of the connectivity levels given in the connectivityLevels
 %using range based method and stores the local maps in rb_radiusNet{}. It also calculates the 
 %local map computing time.
+
 
 %(6)Select anchor nodes for map patching.  Have a set of scripts and functions for different
 %topologies that may be tried. For example, may use [anchor]=anchorNodesSelectionCshape100(network,m,n),
@@ -66,8 +68,8 @@ disp(CL_all)
 %Can also randomly pick up the node index to form the "anchor", 
 %e.g., 
 anchor3 =[2, 3, 5] 
-%has two three anchor node sets. Can have multiple 
-%anchor sets. So may need to form 
+%has two three anchor node sets. 
+% Can have multiple anchor sets. So may need to form 
 %'anchor' which is an matrix of MxN (M sets with each set has N anchor nodes. M>=1, N>=3)
 
 %(7)Select starting nodes for map patch. May use 
@@ -81,7 +83,7 @@ startNode=[5 20 22]
 %may not work well depends on the network.  
   
 %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
-%[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,CL_all)
+%[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
 %e.g., 
 disp('------------------------------------')
 [rb_3anchor_patchTime,rb_3anchor_coordinates_median,rb_3anchor_coordinates_median_average,rb_3anchor_allResults]=mapPatch(network,rb_radiusNet,startNode,anchor3)
@@ -91,7 +93,7 @@ disp('------------------------------------')
 
 %Follow the steps here to do mds localization experiments using the same network configurations as used 
 %in the CCA experiments above:
-%(1)use [t]=prepareMDSTestNetwork(network,CL,option) to get t(i). CL=CL_all(1,:) using if using CL_all 
-%generated in the above CCA steps. E.g.,[t]=prepareMDSTestNetwork(network,CL_all(1,:),1)
+%(1)use [t]=prepareMDSTestNetwork(network,CL,option) to get t(i). CL=connectivityLevels(1,:) using if using connectivityLevels 
+%generated in the above CCA steps. E.g.,[t]=prepareMDSTestNetwork(network,connectivityLevels(1,:),1)
 %(2)run script batchMDSLocalization. Make sure that the "startNode" and "anchor" are the same as in
 %the CCA experiments if comparisons are wanted. 

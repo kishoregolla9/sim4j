@@ -1,33 +1,33 @@
-function [radiusNet,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,CL_all,option)
+function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,option)
 
 %This function computes local maps for a given network
 %Input:
 %network - the deployed sensor network 
-%CL_all - the selected radio radius that we would compute maps against
-%option - 0/1: cca range free/cca range based option; 2:cca grid range
-%free; 3: mds grid range free
+%connectivityLevels - the selected radio radius that we would compute maps against
+%option - 
+%   0/1: cca range free/cca range based option; 
+%   2: cca grid range free; 
+%   3: mds grid range free
 %output:
-%radiusNet{} - cell of computed local maps for each radius levels given in
-%CL_all;
-%comput_time - the average computing time for each local map at each
-%different radius levels as given in CL_all
+%  localMaps{} - cell of computed local maps for each radius levels given in connectivityLevels;
+%  localMapTimeMean - the average computing time for each local map at each different radius levels as given in connectivityLevels
 
-nn=size(CL_all,2);
+nn=size(connectivityLevels,2);
 for ii=1:nn
-radius=CL_all(1,ii);
+radius=connectivityLevels(1,ii);
 if option==1 %cca range based
-    radiusNet{ii}=vitUpdateLocalMapLocalization(network,100,radius);
+    localMaps{ii}=vitUpdateLocalMapLocalization(network,100,radius);
 end
 if option==0 %cca range free
-    radiusNet{ii}=localMapConnectivityOnly(network,100,radius);
+    localMaps{ii}=localMapConnectivityOnly(network,100,radius);
 end
 
 if option==2 %cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
-    radiusNet{ii}=localMapConnectivityOnlyGrid(network,100,radius);
+    localMaps{ii}=localMapConnectivityOnlyGrid(network,100,radius);
 end
 
 if option==3 %range free mds grid
-    radiusNet{ii}=MDSLocalMapConnectivityOnlyGrid(network,radius);
+    localMaps{ii}=MDSLocalMapConnectivityOnlyGrid(network,radius);
 end
 end
 
@@ -35,13 +35,13 @@ end
 %calculate the compute time
 net_size=size(network,1);
 for ii=1:nn
+    computationTime=zeros(net_size,1);
     for jj=1:net_size
-        compute_timeC(jj)=radiusNet{ii}(jj).local_map_compuTime;
+        computationTime(jj)=localMaps{ii}(jj).local_map_compuTime
     end
-    localMapTimeMean(ii)=mean(compute_timeC');
-    localMapTimeMedian(ii)=median(compute_timeC');
-    clear compute_timeC;
+    computationTime
+    computationTime'
+    localMapTimeMean(ii)=mean(computationTime');
+    localMapTimeMedian(ii)=median(computationTime');
+    clear computationTime;
 end
-% 
-% clear compute_timeC;
-% 
