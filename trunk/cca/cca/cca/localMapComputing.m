@@ -13,7 +13,6 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 %  localMapTimeMean - the average computing time for each local map at each different radius levels as given in connectivityLevels
 
 numberOfLevels=size(connectivityLevels,2);
-localMaps=zeros(numberOfLevels);
 for i = 1:numberOfLevels
   radius=connectivityLevels(1,i);
   if option==0 %cca range free
@@ -38,9 +37,9 @@ localMapTimeMedian=zeros(numberOfLevels);
 for i=1:numberOfLevels
     computationTime=zeros(numberOfNodes,1);
     for j=1:numberOfNodes
-        computationTime(j) = localMaps{i}(j).local_map_compuTime
+        computationTime(j) = localMaps{i}(j).local_map_compuTime;
     end
-    localMapTimeMean(i) = mean(computationTime');
-    localMapTimeMedian(i) = median(computationTime');
+    localMapTimeMean(i) = mean(computationTime,1);
+    localMapTimeMedian(i) = median(computationTime,1);
     clear computationTime;
 end
