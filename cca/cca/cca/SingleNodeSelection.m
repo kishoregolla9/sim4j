@@ -6,7 +6,7 @@ function [npick]=SingleNodeSelection(network,m,x1,x2,y1,y2)
 N=size(network,1);
 
 for i=m:N
-    if ((network(i,1)<x2)&(network(i,1)>x1)&(network(i,2)<y2)&(network(i,2)>y1))
+    if (   (network(i,1)<x2) && (network(i,1)>x1) && (network(i,2)<y2) && (network(i,2)>y1) )
         npick=i;
     end
 end

@@ -1,10 +1,6 @@
 
 addpath('cca')
 
-% disp('Debug On Error')
-% disp(debug_on_error())
-% debug_on_error(1)
-
 radius=1.3
 ranging=0 % range-free
 
@@ -27,7 +23,7 @@ ranging=0 % range-free
 %(3)Figure out what set of radio radius and connectivity levels are of interests. May
 %use NetworkConnectivityPlot(network,radius), e.g., (network,1.2), to 
 %see if the network is connected for a given a certain radius. Can use 
-[node,connectivity_level]=network_neighborMap(network,radius)
+[node,connectivity_level]=network_neighborMap(network,radius);
 %to check out the average node 
 %connectivity level of a given radius.
 
@@ -48,9 +44,9 @@ ranging=0 % range-free
 %[radiusNet,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,option)
 %where option selects range based (option=1) or range free (option=0) method
 %e.g.,
-[rb_radiusNet,rb_localMapTimeMean,rb_localMapTimeMedian]=localMapComputing(network,connectivityLevels,ranging)
+[localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,ranging)
 %generates the local maps for "network" at each of the connectivity levels given in the connectivityLevels
-%using range based method and stores the local maps in rb_radiusNet{}. It also calculates the 
+%using range based method and stores the local maps in localMaps{}. It also calculates the 
 %local map computing time.
 
 
@@ -62,26 +58,30 @@ ranging=0 % range-free
 %The SingleNodeSelection.m may be used to get anchor nodes in desired area one by one.
 %Can also randomly pick up the node index to form the "anchor", 
 %e.g., 
-anchor3 =[2, 3, 5] 
+anchors =[2, 3, 5] 
 %has two three anchor node sets. 
 % Can have multiple anchor sets. So may need to form 
 %'anchor' which is an matrix of MxN (M sets with each set has N anchor nodes. M>=1, N>=3)
 
 %(7)Select starting nodes for map patch. May use 
-[npick]=SingleNodeSelection(network,1,1,3,4,6)
+minNodeChoice=1;
+anchorSelectX1=1;
+anchorSelectY1=4;
+anchorSelectX2=3;
+anchorSelectY2=6;
+[startNode]=SingleNodeSelection(network,minNodeChoice,anchorSelectX1,anchorSelectX2,anchorSelectY1,anchorSelectY2);
 %to 
 %pick nodes from different part of the network. Should form a startNode=[a b c ...] array that 
 %contains the starting node for map patching that want to experiment with. 
 %For example, 
 startNode=[5 20 22]
-%. Also have a startNodeSelection script which may work or
-%may not work well depends on the network.  
+%. Also have a startNodeSelection script which may work or may not work well depending on the network.  
   
 %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
 %[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
 %e.g., 
 disp('------------------------------------')
-[rb_3anchor_patchTime,rb_3anchor_coordinates_median,rb_3anchor_coordinates_median_average,rb_3anchor_allResults]=mapPatch(network,rb_radiusNet,startNode,anchor3)
+[patchTimeByAnchor,coordinatesMedianByAnchor,coordinatesMedianAverageByAnchor,allResultsByAnchor]=mapPatch(network,localMaps,startNode,anchors)
 
 %will generate testing results across the connectivity level;s using different anchor sets of three anchor
 %nodes and different starting nodes. 
