@@ -6,7 +6,7 @@ function [node,connectivity_level]=network_neighborMap(network,radius)
   if ( isstruct(network) && isfield(network,'distanceMatrix') )
       distanceMatrix=network.distanceMatrix;
   else
-      distanceMatrix=sqrt(disteusq(network.nodes,network.nodes,'x'));
+      distanceMatrix=sqrt(disteusq(network.points,network.points,'x'));
       network.distanceMatrix=distanceMatrix;
   end
 
@@ -23,7 +23,7 @@ function [node,connectivity_level]=network_neighborMap(network,radius)
   end
   
   connectivity_level=count/numberOfNodes;
-  network.neighbors=node;
+  network.nodes=node;
   network.connectivity_level=connectivity_level;
   
 % @param i node index to calculate neighbors for

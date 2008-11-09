@@ -14,7 +14,7 @@ numberOfNodes=network.numberOfNodes;
 if ( isstruct(network) && isfield(network,'distanceMatrix') )
     distanceMatrix=network.distanceMatrix;
 else
-    distanceMatrix=sqrt(disteusq(network.nodes,network.nodes,'x'));
+    distanceMatrix=sqrt(disteusq(network.points,network.points,'x'));
     network.distanceMatrix=distanceMatrix;
 end
 
@@ -92,7 +92,7 @@ for node_k = 1:numberOfNodes
     %local_d_merge=local_d;
     %local_size_merge = size(node_index_merge,2);
     %get the merged network real value from the deployed network
-    local_network=network.nodes(node_index,:); %use this line to replace the following three lines
+    local_network=network.points(node_index,:); %use this line to replace the following three lines
 %     local_network=network(node_index(1),:);
 %     for i=2:local_size
 %         local_network=[local_network;network(node_index(i),:)];
