@@ -3,8 +3,15 @@ function [disconnect]=NetworkConnectivityCheck(network,radius,doPlot)
 %Given a network and a radius, this function plots the connectivity of the
 %network.
 
-distanceMatrix=sqrt(disteusq(network,network,'x'));
-numberOfNodes=size(network,1);
+% distanceMatrix=sqrt(disteusq(network,network,'x'));
+if ( isstruct(network) && isfield(network,'distanceMatrix') )
+    distanceMatrix=network.distanceMatrix;
+else
+    distanceMatrix=sqrt(disteusq(network.nodes,network.nodes,'x'));
+    network.distanceMatrix=distanceMatrix;
+end
+
+numberOfNodes=network.numberOfNodes;
 connectivity = zeros(numberOfNodes);
 for i = 1:numberOfNodes
     for j = 1:numberOfNodes
@@ -50,7 +57,9 @@ end
 
 if (disconnect==1 || doPlot==true)
   % plot the network connectivity if needed  
-  gplot(connectivity, network,'-d');
+  gplot(connectivity, network.nodes,'-d');
 end
+
+network.connectivity=connectivity;
 
             
