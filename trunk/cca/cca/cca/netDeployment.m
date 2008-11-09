@@ -27,12 +27,12 @@ function [network]=netDeployment(type,size,N,length)
 
   switch type
     case 0  % random
-        network.nodes=rand(N,2)*size;
-        network.shape=sprintf('Random %ix%i',size(network.nodes),size(network.nodes))
+        network.points=rand(N,2)*size;
+        network.shape=sprintf('Random %ix%i',size(network.points),size(network.points))
 
     case 1  %In grid case, N=size*size
         network.shape=sprintf('Grid %ix%i',size,size)
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for i=1:size
             a_fixed=1:size;
             delta =(rand(1,size)-0.5*ones(1,size))*0.4;
@@ -40,43 +40,43 @@ function [network]=netDeployment(type,size,N,length)
             b_fixed =zeros(1,size);
             delta =(rand(1,size)-0.5*ones(1,size))*0.4;
             b=b_fixed+delta+i;
-            network.nodes=[network.nodes; a' b'];
+            network.points=[network.points; a' b'];
         end
         network.numberOfNodes=size*size;        
     case 2 %C-shape random
         network.shape=sprintf('C-Shape Random %ix%i',N,N)
         fraction = 0.3;
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
             while (new_points(1) > fraction) && (new_points(2) > fraction) && ...
                     (new_points(2) < (1- fraction))
                 new_points = rand(1,2);
             end
-            network.nodes(j,:) = new_points*size;
+            network.points(j,:) = new_points*size;
         end
         
     case 3  %C-shape grid, N is not used. N is determined by size.
         network.shape=sprintf('C-Shape Grid %ix%i',size,size)
         fraction = 0.3;
         index = 1;
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for i=1:size
             if (i <= size*fraction)
                 for j=1:size
-                    network.nodes(index, 1) = i+(rand-0.5)*0.4;
-                    network.nodes(index, 2) = j+(rand-0.5)*0.4;
+                    network.points(index, 1) = i+(rand-0.5)*0.4;
+                    network.points(index, 2) = j+(rand-0.5)*0.4;
                     index = index + 1;
                 end
             else
                 for j=1:size*fraction
-                    network.nodes(index, 1) = i+(rand-0.5)*0.4;
-                    network.nodes(index, 2) = j+(rand-0.5)*0.4;
+                    network.points(index, 1) = i+(rand-0.5)*0.4;
+                    network.points(index, 2) = j+(rand-0.5)*0.4;
                     index = index + 1;
                 end
                 for j= size*(1-fraction):size
-                    network.nodes(index, 1) = i+(rand-0.5)*0.4;
-                    network.nodes(index, 2) = j+(rand-0.5)*0.4;
+                    network.points(index, 1) = i+(rand-0.5)*0.4;
+                    network.points(index, 2) = j+(rand-0.5)*0.4;
                     index = index + 1;
                 end
             end
@@ -84,19 +84,19 @@ function [network]=netDeployment(type,size,N,length)
         
     case 4 %rectangle random. size is the width to length ratio.
         network.shape=sprintf('Rectangle Random %ix%i',N,length)
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
             while (new_points(2) > size)
                 new_points = rand(1,2);
             end
-            network.nodes(j,:) = new_points*length; 
+            network.points(j,:) = new_points*length; 
         end
 
     case 5 %rectangle grid with 20% placement error
         network.shape=sprintf('Rectangle Grid(20\%error) %ix%i',N,length)        
         deploy_width=size;
-        network.nodes=zeros(deploy_width,2);
+        network.points=zeros(deploy_width,2);
         for i=1:deploy_width
             a_fixed=1:N;
             delta =(rand(1,N)-0.5*ones(1,N))*0.4;
@@ -104,26 +104,26 @@ function [network]=netDeployment(type,size,N,length)
             b_fixed =zeros(1,N);
             delta =(rand(1,N)-0.5*ones(1,N))*0.4;
             b=b_fixed+delta+i;
-            network.nodes=[network; a' b'];
+            network.points=[network; a' b'];
         end
 
     case 6  %L-shape random
         fraction = 0.3;
         network.shape=sprintf('L-Shape Random %ix%i',N,length)                
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
             while (new_points(1) > fraction) && (new_points(2) > fraction)
                 new_points = rand(1,2);
             end
-            network.nodes(j,:) = new_points*size;
+            network.points(j,:) = new_points*size;
         end
 
 
     case 7 %In L-shape grid case, we get about 51 nodes
         network.shape=sprintf('L-Shape Grid %ix%i',size,length)
         rawNetwork=zeros(N,2);
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         for i=1:size
             a_fixed=1:size;
             delta =(rand(1,size)-0.5*ones(1,size))*0.4;
@@ -142,14 +142,14 @@ function [network]=netDeployment(type,size,N,length)
             if (rawNetwork(ii,1)>fraction) && (rawNetwork(ii,2)>fraction)
                 rawNetwork(ii,:);
             else
-                network.nodes(jj,:)=rawNetwork(ii,:);
+                network.points(jj,:)=rawNetwork(ii,:);
                 jj=jj+1;
             end
         end
 
     case 8 %loop random
         network.shape=sprintf('Loop Random %ix%i',size,length)
-        network.nodes=zeros(N,2);
+        network.points=zeros(N,2);
         fraction = 0.2;
         for j = 1:N
             new_points = rand(1,2);
@@ -158,12 +158,12 @@ function [network]=netDeployment(type,size,N,length)
                     && (new_points(1)<(1- fraction))
                 new_points = rand(1,2);
             end
-            network.nodes(j,:) = new_points*size;
+            network.points(j,:) = new_points*size;
         end
 
     case 9 %In loop grid case, we get about 51-64 nodes. N is not used
         network.shape=sprintf('Loop Grid %ix%i',size,length)
-        network.nodes=zeros(N,2);        
+        network.points=zeros(N,2);        
         rawNetwork=[];
         for i=1:size
             a_fixed=1:size;
@@ -183,7 +183,7 @@ function [network]=netDeployment(type,size,N,length)
                     (rawNetwork(ii,2) < fraction1)&(rawNetwork(ii,1)<fraction1)
                 rawNetwork(ii,:);
             else
-                network.nodes(jj,:)=rawNetwork(ii,:);
+                network.points(jj,:)=rawNetwork(ii,:);
                 jj=jj+1;
             end
         end
@@ -192,17 +192,17 @@ function [network]=netDeployment(type,size,N,length)
         network.shape=sprintf('Irregular %ix%i',size,length)
         xdist = sin(pi/3);
         ydist = 1;
-        network.nodes=zeros(N, 2);
+        network.points=zeros(N, 2);
         for i=1:size
             if mod(i,2) == 0
                 for j=1:size
-                    network.nodes((i-1)*size+j, 1) = i*xdist+randn*0.05;
-                    network.nodes((i-1)*size+j, 2) = j*ydist+randn*0.3;
+                    network.points((i-1)*size+j, 1) = i*xdist+randn*0.05;
+                    network.points((i-1)*size+j, 2) = j*ydist+randn*0.3;
                 end
             else
                 for j=1:size
-                    network.nodes((i-1)*size+j, 1) = i*xdist+randn*0.05;
-                    network.nodes((i-1)*size+j, 2) = j*ydist+randn*0.05+0.5;
+                    network.points((i-1)*size+j, 1) = i*xdist+randn*0.05;
+                    network.points((i-1)*size+j, 2) = j*ydist+randn*0.05+0.5;
                 end
             end
         end
