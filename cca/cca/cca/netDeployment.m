@@ -44,7 +44,7 @@ function [network]=netDeployment(type,size,N,length)
         end
         network.numberOfNodes=size*size;        
     case 2 %C-shape random
-        network.shape=sprintf('C-Shape Random %ix%i',N,N)
+        network.shape=sprintf('C-Shape Random %ix%i',size,size)
         fraction = 0.3;
         network.points=zeros(N,2);
         for j = 1:N
@@ -83,7 +83,7 @@ function [network]=netDeployment(type,size,N,length)
         end
         
     case 4 %rectangle random. size is the width to length ratio.
-        network.shape=sprintf('Rectangle Random %ix%i',N,length)
+        network.shape=sprintf('Rectangle Random %ix%i',size,length)
         network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
@@ -93,8 +93,8 @@ function [network]=netDeployment(type,size,N,length)
             network.points(j,:) = new_points*length; 
         end
 
-    case 5 %rectangle grid with 20% placement error
-        network.shape=sprintf('Rectangle Grid(20\%error) %ix%i',N,length)        
+    case 5 % Rectangle grid with 20% placement error
+        network.shape=sprintf('Rectangle Grid(20\%error) %ix%i',size,length)        
         deploy_width=size;
         network.points=zeros(deploy_width,2);
         for i=1:deploy_width
@@ -208,5 +208,5 @@ function [network]=netDeployment(type,size,N,length)
         end
         
   end
-  
+ 
 end
