@@ -16,7 +16,7 @@ e.g., [network]=netDeployment(1,10,100) for a gird network in a 10x10 area.
 (3)Figure out what set of radio radius and connectivity levels are of interests. May
 use NetworkConnectivityPlot(network,r), e.g., NetworkConnectivityPlot(network,1.2), to 
 see if the network is connected for a given a certain r. Can use 
-[node,connectivity_level]=network_neighborMap(network,r)to check out the average node 
+[node,connectivity_level]=neighborMap(network,r)to check out the average node 
 connectivity level of a given r.
 
 [disconnect]=NetworkConnectivityCheck(network,r) would tell you if the network is disconneted

@@ -10,7 +10,7 @@ function [node]=localMapConnectivityOnly(network,epochs,radius)
 % [node_index_merge,local_d_merge,local_distance_deployed,local_network]=localDisMatrix_merge(network,node_k,radius);
 
 THRESHOLD=1.5; %the max distance error average to be tolerated or we'd fail
-numberOfNodes=network.numberOfNodes;
+N=network.numberOfNodes;
 if ( isstruct(network) && isfield(network,'distanceMatrix') )
     distanceMatrix=network.distanceMatrix;
 else
@@ -20,13 +20,13 @@ end
 
 % trying to get network connectivity level
 networkConnectivityLevel=0;
-for i=1:numberOfNodes %compute all the local maps
+for i=1:N %compute all the local maps
   %get node_i's neighbor nodes within radius;
   [node(i).neighbors]=find_neighbors(distanceMatrix,radius,i,1);
   networkConnectivityLevel=networkConnectivityLevel+size(node(i).neighbors,2)-1; 
 end
 
-networkConnectivityLevel=networkConnectivityLevel/numberOfNodes; %network connectivity level
+networkConnectivityLevel=networkConnectivityLevel/N; %network connectivity level
 
 % t_level=30; %common used
 t_level=1000;
@@ -39,42 +39,7 @@ t_level=1000;
 % t_level=40;
 % t_level=70; %used in the loop random network
 
-%get prepared to compute the shortest distance matrix for distanceMatrix
-shortestDistanceMatrix=zeros(numberOfNodes);
-for i=1:numberOfNodes
-    for j=1:numberOfNodes
-        if distanceMatrix(i,j)<radius
-            shortestDistanceMatrix(i,j)=distanceMatrix(i,j);
-        else
-            shortestDistanceMatrix(i,j)=2*numberOfNodes*radius;
-        end
-    end
-end 
-
-%compute the shortest distance matrix using Floyd algorithm
-for k=1:numberOfNodes
-    shortestDistanceMatrix = min(shortestDistanceMatrix,repmat(shortestDistanceMatrix(:,k),[1 numberOfNodes])+repmat(shortestDistanceMatrix(k,:),[numberOfNodes 1])); 
-end 
-
-D_hopCount=zeros(numberOfNodes);
-for i=1:numberOfNodes
-    for j=1:numberOfNodes
-        if distanceMatrix(i,j) < radius
-            D_hopCount(i,j)=1;
-        else
-            D_hopCount(i,j)=2*numberOfNodes;
-        end
-        if(i==j) 
-            D_hopCount(i,j)=0;
-        end
-    end
-end %get prepared to compute the shortest hop matrix for distanceMatrix
-
-for k=1:numberOfNodes
-    D_hopCount = min(D_hopCount,repmat(D_hopCount(:,k),[1 numberOfNodes])+repmat(D_hopCount(k,:),[numberOfNodes 1])); 
-end %compute the shortest hop matrix using Floyed algorithm
-
-for node_k = 1:numberOfNodes
+for node_k = 1:N
     if (size(node(node_k).neighbors,2) == 1) %node_k has no connectivity
         continue;
     end
@@ -84,7 +49,7 @@ for node_k = 1:numberOfNodes
     if (size(node(node_k).neighbors,2)>t_level) 
         h=1;
     end
-    [local_d,node_index]=localDist(D_hopCount,shortestDistanceMatrix,radius,node_k,h); %compute node_k's two hop distance matrix
+    [local_d,node_index]=localDist(network.shortestHopMatrix,network.shortestDistanceMatrix,radius,node_k,h); %compute node_k's two hop distance matrix
     local_size=size(node_index,2);
     diff=local_size-size(node(node_k).neighbors,2);
 
@@ -92,11 +57,8 @@ for node_k = 1:numberOfNodes
     %local_d_merge=local_d;
     %local_size_merge = size(node_index_merge,2);
     %get the merged network real value from the deployed network
-    local_network=network.points(node_index,:); %use this line to replace the following three lines
-%     local_network=network(node_index(1),:);
-%     for i=2:local_size
-%         local_network=[local_network;network(node_index(i),:)];
-%     end %loop not needed. simplify it. 
+    local_network=network.points(node_index,:); 
+
     %compute the real distance from the deployed network node values
     local_distance_deployed=sqrt(disteusq(local_network,local_network,'x'));
     delta_distance=local_d-local_distance_deployed;
@@ -268,7 +230,7 @@ end
     end
     C_transform=transform.b*node(node_k).local_network_c * transform.T+Cx;
 
-    % [Z,Cx]= mapTrans(X1,X2,X3,Y1,Y2,Y3,numberOfNodes);
+    % [Z,Cx]= mapTrans(X1,X2,X3,Y1,Y2,Y3,N);
     % C_transform=(Z*local_network_c'+Cx)';
     node(node_k).local_network_transform=C_transform;
     D_C = sqrt(disteusq(C_transform,C_transform,'x'));
@@ -285,59 +247,23 @@ end
 end %for node_k
 
 %%%%%%%%%%%%%%%%subfunctions%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [ldist,node_index]=localDist(D_hopCount,shortestDistanceMatrix,radius,node_i,hop)
-%localDist(distanceMatrix,radius) takes a distance matrix distanceMatrix and range radius to generate for  
-%node 'i' 0<i<size(distanceMatrix) a local distance matrix ldist that includes the
-%nodes j such that distanceMatrix(i,j)<=hop*radius. All the unknown entries in ldist would be
-%marked as 'NaN'. "node_index" is an array that holds the node index
-%'j' of the node j in distanceMatrix that are selected and included in the ldist, in 
-% the ascending order. Nodes in ldist also have their index in the 
-% ascending order of the original index in distanceMatrix. 
+function [ldist,node_index]=localDist(shortestHopMatrix,shortestDistanceMatrix,radius,node_i,hop)
+%localDist(distanceMatrix,radius) 
+% Input:
+%   distanceMatrix and 
+%   range radius 
+% to generate for  
+%  node 'i' 0<i<size(distanceMatrix) a local distance matrix ldist that includes the
+%  nodes j such that distanceMatrix(i,j)<=hop*radius. All the unknown entries in ldist would be
+%  marked as 'NaN'. "node_index" is an array that holds the node index
+%  'j' of the node j in distanceMatrix that are selected and included in the ldist, in 
+%  the ascending order. Nodes in ldist also have their index in the 
+%  ascending order of the original index in distanceMatrix. 
 
-% numberOfNodes=size(distanceMatrix,1);
-% for i=1:numberOfNodes
-%     for j=1:numberOfNodes
-%         if distanceMatrix(i,j)<radius
-%             shortestDistanceMatrix(i,j)=distanceMatrix(i,j);
-%         else
-%             shortestDistanceMatrix(i,j)=2*numberOfNodes*radius;
-%         end
-%     end
-% end %get prepared to compute the shortest distance matrix for distanceMatrix
-% 
-% for k=1:numberOfNodes
-%     shortestDistanceMatrix = min(shortestDistanceMatrix,repmat(shortestDistanceMatrix(:,k),[1 numberOfNodes])+repmat(shortestDistanceMatrix(k,:),[numberOfNodes 1])); 
-% end %compute the shortest distance matrix using Floyed algorithm
-% 
-% % for k=1:63
-% %     for i = 1:63
-% %         for j = 1:63
-% %             D_hopDist2(i,j) = min(D_hopDist2(i,j), D_hopDist2(i,k)+D_hopDist2(k,j));
-% %         end
-% %     end
-% % end %compute the shortest distance matrix using Dijkas. Performance is bad in matlab
-% 
-% for i=1:numberOfNodes
-%     for j=1:numberOfNodes
-%         if distanceMatrix(i,j)<radius
-%             D_hopCount(i,j)=1;
-%         else
-%             D_hopCount(i,j)=2*numberOfNodes;
-%         end
-%         if(i==j) D_hopCount(i,j)=0;
-%         end
-%     end
-% end %get prepared to compute the shortest hop matrix for distanceMatrix
-% 
-% for k=1:numberOfNodes
-%     D_hopCount = min(D_hopCount,repmat(D_hopCount(:,k),[1 numberOfNodes])+repmat(D_hopCount(k,:),[numberOfNodes 1])); 
-% end %compute the shortest hop matrix using Floyed algorithm
-% 
-% tic;
-numberOfNodes=size(D_hopCount,1);
+numberOfNodes=size(shortestHopMatrix,1);
 node_count=0;
 for j=1:numberOfNodes
-    if D_hopCount(node_i,j)<=hop %look for all the nodes that is within hop 
+    if shortestHopMatrix(node_i,j)<=hop %look for all the nodes that is within hop 
         node_count=node_count+1; %count the number of selected nodes
         node_index(node_count)=j; %save the original index of the selected node
     end 
@@ -346,23 +272,9 @@ end %get all the nodes within the hop range.
 ldist=zeros(node_count,node_count);
 for i=1:node_count
     for j=i+1:node_count
-        ldist(i,j)=D_hopCount(node_index(i),node_index(j));
+        ldist(i,j)=shortestHopMatrix(node_index(i),node_index(j));
         ldist(j,i)=ldist(i,j);
     end
 end %build the distance matrix for the neighborhood within 
 %tmp = 0.05*(randn(size(ldist))); %added 5% error of normal distribution
 %ldist=ldist.*(1+tmp);
-
-
-function [node_index]=find_neighbors(distanceMatrix,radius,i,k)
-%localDist(distanceMatrix,radius) takes a distance matrix distanceMatrix and range radius to generate for  
-%node 'i' 0<i<size(distanceMatrix) a list that includes the nodes j such that distanceMatrix(i,j)<=kr. 
- 
-node_count=0;
-for j=1:size(distanceMatrix)
-    if distanceMatrix(i,j)<=k*radius %look for all the nodes that is within distance k*radius 
-        node_count=node_count+1; %count the number of selected nodes
-        node_index(node_count)=j; %save the original index of the selected node
-    end
-    %The saved node_index is in ascending order
-end

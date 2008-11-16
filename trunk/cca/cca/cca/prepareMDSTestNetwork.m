@@ -16,7 +16,7 @@ ss=size(CL,2);
 
 for ii=1:ss
     t(ii).xy=network;
-    [node,connectivityLevel]=network_neighborMap(network,CL(1,ii));
+    [node,connectivityLevel]=neighborMap(network,CL(1,ii));
 %     CL(2,i)=cl;
     t(ii).radioRadius=CL(1,ii);
     t(ii).xy=network;

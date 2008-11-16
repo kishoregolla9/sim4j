@@ -1,24 +1,31 @@
 function [node]=mapVitPatch(network,node,node_k,anchorNodes,r)
 %function mapVitPatch takes the input of local maps and patch them together
 %into a global map and compare the results with the original 'Network' 
-%taking the map of node_k as the starting map. The
-%input 'node' should be generated from the function of
-%localMapLocalization.m or equivalent
+%taking the map of node_k as the starting map. 
+% The %input 'node' should be generated from the function of
+% localMapLocalization.m or equivalent
 %option - Use the greedy patch taking the node that has the most number of
 %commone nodes for patch when 'option' is given as '1'. When 'option' is
 %'0', patch the map as fast as we can by taking the node that has most
 %number of different nodes. 
 
-    points = network;
-    D_deployed=sqrt(disteusq(network,network,'x'));
-    N=size(network,1);
+    points = network.points;
+    if ( isstruct(network) && isfield(network,'distanceMatrix') )
+      distanceMatrix=network.distanceMatrix;
+    else
+      sprintf('network.distanceMatrix does not exist');        
+      distanceMatrix=sqrt(disteusq(network.points,network.points,'x'));
+      network.distanceMatrix=distanceMatrix;
+    end
+
+    N=network.numberOfNodes;
 	for ii=1:N      
         map{ii}=node(ii).local_network_c; %added by li as cca generates directly the network
         index{ii} = (node(ii).neighbors_merge)'; %grab all the nodes in the local map
         indexInclude{ii} = ii;
     end %for ii
     
-    [D_hopDist, ConnectivityM]=distanceMatrix(network,r);
+    [D_hopDist, ConnectivityM]=createDistanceMatrix(network,r);
 	tStart = cputime;
 	
 % 	curNode = ceil(rand*N); %randomly select the starting node
@@ -61,7 +68,7 @@ mappedResult = TRANSFORM.b * refineResult(:,1:2) * TRANSFORM.T + ...
 % t.xyEstimate = mappedResult;
     node(node_k).patched_network_transform=mappedResult;
     D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
-    D_dist_mean = mean((mean(abs(D_C-D_deployed)))');
+    D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
     D_dist_mean=D_dist_mean/r;
     D_coordinates_mean=mean(abs(mappedResult-network));
     D_coordinates_mean=D_coordinates_mean/r;
