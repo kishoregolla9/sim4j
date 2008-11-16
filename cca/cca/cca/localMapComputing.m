@@ -15,13 +15,13 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 numberOfLevels=size(connectivityLevels,2);
 for i = 1:numberOfLevels
   radius=connectivityLevels(1,i);
-  if option==0 %cca range free
+  if option==0 % cca range free
     localMaps{i}=localMapConnectivityOnly(network,100,radius);
   end
-  if option==1 %cca range based
+  if option==1 % cca range based
     localMaps{i}=vitUpdateLocalMapLocalization(network,100,radius);
   end
-  if option==2 %cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
+  if option==2 % cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
     localMaps{i}=localMapConnectivityOnlyGrid(network,100,radius);
   end
   if option==3 %range free mds grid

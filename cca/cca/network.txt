@@ -5,7 +5,7 @@ network.numberOfNodes: size(network.points, 1)  - netDeployment.m
 network.nodes: struct
   .neighbors:    Array of arrays of neighbors  - network_neighborMap.m
   
-network.connectivity_level                     - network_neighborMap.m
-network.distanceMatrix:                        - network_neighborMap.m
-network.connectivity: connectivity matrix per node - NetworkConnectivityCheck.m
+network.connectivity                           - neighborMap.m
+network.connectivity_level                     - neighborMap.m
+network.distanceMatrix:                        - neighborMap.m
 

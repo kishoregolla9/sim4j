@@ -2,7 +2,7 @@ function [node]=vitUpdateLocalMapLocalization(Network,epochs,r)
 %localMapLocalization computes the local 1 or 2 hop map for all its nodes
 %coordinates for each node in the 'Network'. It intends to be faster than  
 % the original localMapLocalization function. (Try to
-%use this to replace 'network_neighborMap' and 'ccaLocation_hop')
+%use this to replace 'neighborMap' and 'ccaLocation_hop')
 % Network - input deployed network
 % epochs - required number of training cycles
 % r -radius

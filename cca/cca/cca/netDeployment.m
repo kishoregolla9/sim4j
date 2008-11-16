@@ -1,4 +1,4 @@
-function [network]=netDeployment(type,size,N,length)
+function [network]=netDeployment(network,type,size,N,length)
 %Li - Oct. 2006, modified April 2007
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %function netDeployment generates a network given the number of nodes, the
