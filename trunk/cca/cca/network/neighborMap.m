@@ -9,7 +9,7 @@ function [network]=neighborMap(network,radius)
 
 
 D=sqrt(disteusq(network.points,network.points,'x'));
-N=size(network.points,1);
+N=size(D,1);
 
 if ( isstruct(network) && isfield(network,'nodes') )
     nodes=network.nodes;
@@ -22,7 +22,7 @@ else
     end
 end
 
-shortestDistanceMatrix=zeros(N);
+shortestDistanceMatrix=zeros(N,2);
 shortestHopMatrix=zeros(N);
 for i=1:N
     for j=1:N
