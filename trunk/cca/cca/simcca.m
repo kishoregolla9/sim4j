@@ -2,8 +2,8 @@
 addpath('cca')
 addpath('network')
 
-radius=1.3
-ranging=0 % range-free
+radius=1.3;
+ranging=0; % range-free
 
 %This directory has files for both MDS and CCA localization. 
 %
@@ -18,7 +18,7 @@ ranging=0 % range-free
 %size and topology;
 %e.g., [network]=netDeployment(1,10,100) for a gird network in a 10x10 area.
 N=25;
-[network]=netDeployment(network,1,5,25)
+[network]=netDeployment(network,1,5,N);
 
 %(2)Can plot(network(:,1),network(:,2),'bo') to see what it looks like. :)
 

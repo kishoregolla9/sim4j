@@ -19,7 +19,10 @@ else
     for i=1:N %compute all the local maps
         %get node_i's neighbor nodes within radius;
         [nodes(i).neighbors]=find_neighbors(D,radius,i,1);
+        networkConnectivityLevel=networkConnectivityLevel+size(nodes(i).neighbors,2)-1;
     end
+    networkConnectivityLevel=networkConnectivityLevel/N;
+    sprintf('Network Connectivity Level: %i', networkConnectivityLevel)
 end
 
 shortestDistanceMatrix=zeros(N,2);
