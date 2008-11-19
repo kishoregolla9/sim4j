@@ -32,7 +32,7 @@ function [network]=netDeployment(network,type,size,N,length)
 
     case 1  %In grid case, N=size*size
         network.shape=sprintf('Grid %ix%i',size,size)
-        network.points=zeros(N,2);
+        points=[];
         for i=1:size
             a_fixed=1:size;
             delta =(rand(1,size)-0.5*ones(1,size))*0.4;
@@ -40,8 +40,9 @@ function [network]=netDeployment(network,type,size,N,length)
             b_fixed =zeros(1,size);
             delta =(rand(1,size)-0.5*ones(1,size))*0.4;
             b=b_fixed+delta+i;
-            network.points=[network.points; a' b'];
+            points=[points; a' b'];
         end
+        network.points=points
         network.numberOfNodes=size*size;        
     case 2 %C-shape random
         network.shape=sprintf('C-Shape Random %ix%i',size,size)

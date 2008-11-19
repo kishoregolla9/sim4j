@@ -10,22 +10,16 @@ function [node]=mapVitPatch(network,node,node_k,anchorNodes,r)
 %number of different nodes.
 
 points = network.points;
-if ( isstruct(network) && isfield(network,'distanceMatrix') )
-    distanceMatrix=network.distanceMatrix;
-else
-    sprintf('network.distanceMatrix does not exist');
-    distanceMatrix=sqrt(disteusq(network.points,network.points,'x'));
-    network.distanceMatrix=distanceMatrix;
-end
+distanceMatrix=network.distanceMatrix;
+N=size(network.points,1);
 
-N=network.numberOfNodes;
 for ii=1:N
     map{ii}=node(ii).local_network_c; %added by li as cca generates directly the network
     index{ii} = (node(ii).neighbors_merge)'; %grab all the nodes in the local map
     indexInclude{ii} = ii;
 end %for ii
 
-[shortestHopMatrix, ConnectivityM]=createDistanceMatrix(network,r);
+connectivity=network.connectivity;
 tStart = cputime;
 
 % 	curNode = ceil(rand*N); %randomly select the starting node
@@ -47,16 +41,15 @@ while length(curindexInclude) ~= N
     node2 = nodeList(j); % find the node with maximum intersection with
     [curMap, curindex, curindexInclude] = mergeMap(...
         curMap, map{node2}, curindex, index{node2}, ...
-        curindexInclude, indexInclude{node2},ConnectivityM);
+        curindexInclude, indexInclude{node2},connectivitiy);
 end %while
 tEnd = cputime;
 disp(['Patching the local maps takes ' num2str(tEnd-tStart) ' sec']);
 node(node_k).map_patchTime=tEnd-tStart;
-%%
+
 rawResult = curMap;
 node(node_k).patched_network=rawResult;
 refineResult=rawResult; %no refinement
-
 
 knownJ=anchorNodes;
 
@@ -106,7 +99,7 @@ return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 function [newMap, newIndex, newIndexInclude] = mergeMap(map1, map2, ...
-    index1, index2, indexInclude1, indexInclude2, ConnectivityM, method)
+    index1, index2, indexInclude1, indexInclude2, connectivitiy, method)
 
 if nargin < 8
     method = 2;

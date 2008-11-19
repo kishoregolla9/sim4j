@@ -1,4 +1,4 @@
-function [node]=localMapConnectivityOnly(network,epochs,radius)
+function [network]=localMapConnectivityOnly(network,epochs,radius)
 % localMapLocalization computes the local 2 hop map for all its nodes
 % coordinates for each node in the 'network'using range free method. 
 %
@@ -10,23 +10,12 @@ function [node]=localMapConnectivityOnly(network,epochs,radius)
 % [node_index_merge,local_d_merge,local_distance_deployed,local_network]=localDisMatrix_merge(network,node_k,radius);
 
 THRESHOLD=1.5; %the max distance error average to be tolerated or we'd fail
-N=network.numberOfNodes;
-if ( isstruct(network) && isfield(network,'distanceMatrix') )
-    distanceMatrix=network.distanceMatrix;
-else
-    distanceMatrix=sqrt(disteusq(network.points,network.points,'x'));
-    network.distanceMatrix=distanceMatrix;
-end
+N=size(network.points,1);
+shortestDistanceMatrix=network.shortestDistanceMatrix;
+shortestHopMatrix=network.shortestHopMatrix;
+nodes=network.nodes;
 
-% trying to get network connectivity level
-networkConnectivityLevel=0;
-for i=1:N %compute all the local maps
-  %get node_i's neighbor nodes within radius;
-  [node(i).neighbors]=find_neighbors(distanceMatrix,radius,i,1);
-  networkConnectivityLevel=networkConnectivityLevel+size(node(i).neighbors,2)-1; 
-end
-
-networkConnectivityLevel=networkConnectivityLevel/N; %network connectivity level
+% nodes(i).neighbors has been calculated in neighborMap.m
 
 % t_level=30; %common used
 t_level=1000;
@@ -40,18 +29,20 @@ t_level=1000;
 % t_level=70; %used in the loop random network
 
 for node_k = 1:N
-    if (size(node(node_k).neighbors,2) == 1) %node_k has no connectivity
+    if (size(nodes(node_k).neighbors,2) == 1) %node_k has no connectivity
         continue;
     end
+    sprintf('Computing Local Map %i of %i',node_k,N)    
     tStart = cputime;
     h=2;
-    node(node_k).t_level=t_level;
-    if (size(node(node_k).neighbors,2)>t_level) 
+    nodes(node_k).t_level=t_level;
+    if (size(nodes(node_k).neighbors,2)>t_level) 
         h=1;
     end
-    [local_d,node_index]=localDist(network.shortestHopMatrix,network.shortestDistanceMatrix,radius,node_k,h); %compute node_k's two hop distance matrix
+    %compute node_k's two hop distance matrix
+    [local_d,node_index]=localDist(shortestHopMatrix,shortestDistanceMatrix,radius,node_k,h); 
     local_size=size(node_index,2);
-    diff=local_size-size(node(node_k).neighbors,2);
+    diff=local_size-size(nodes(node_k).neighbors,2);
 
     %node_index_merge=node_index;
     %local_d_merge=local_d;
@@ -59,17 +50,17 @@ for node_k = 1:N
     %get the merged network real value from the deployed network
     local_network=network.points(node_index,:); 
 
-    %compute the real distance from the deployed network node values
+    %compute the real distance from the deployed network nodes values
     local_distance_deployed=sqrt(disteusq(local_network,local_network,'x'));
     delta_distance=local_d-local_distance_deployed;
-    node(node_k).Dmatrix_error_orig_mean = mean((mean(abs(delta_distance)))')/radius;
+    nodes(node_k).Dmatrix_error_orig_mean = mean((mean(abs(delta_distance)))')/radius;
 
-    node(node_k).local_d_merge=local_d;
-    node(node_k).local_distance_deployed=local_distance_deployed;
-    node(node_k).local_network=local_network;
-    node(node_k).neighbors_merge=node_index;
-    node(node_k).node_id=node_k;
-    node(node_k).radius=radius;
+    nodes(node_k).local_d_merge=local_d;
+    nodes(node_k).local_distance_deployed=local_distance_deployed;
+    nodes(node_k).local_network=local_network;
+    nodes(node_k).neighbors_merge=node_index;
+    nodes(node_k).node_id=node_k;
+    nodes(node_k).radius=radius;
 
     %calculate the proximity of the matrix using SVD
     %[u,s,v]=svd(local_d_merge);
@@ -77,8 +68,8 @@ for node_k = 1:N
 
     %calculate the local network value using cca
     pass=0;
-    %node(node_k).D_error_mean_orig=THRESHOLD; %set the threshold
-    node(node_k).D_error_mean_compute=THRESHOLD; %set the threshold
+    %nodes(node_k).D_error_mean_orig=THRESHOLD; %set the threshold
+    nodes(node_k).D_error_mean_compute=THRESHOLD; %set the threshold
     epochs_adjust=epochs;
     %use simply epochs_max=250 for all local_size and step=50 can perform
     %better. However, it takes more time to compute. So to save time, we
@@ -115,8 +106,8 @@ for node_k = 1:N
 step=50;
 
 cycle_count=100;
-node(node_k).cycles=cycle_count; %record the algorithm cycles
-node(node_k).totalRounds=0;
+nodes(node_k).cycles=cycle_count; %record the algorithm cycles
+nodes(node_k).totalRounds=0;
 if (local_size>=20)
     prime_cycle=5;
 else prime_cycle=5; %may use a bigger prome_cycle here. Didn't seem to make a difference
@@ -124,17 +115,17 @@ end
 
     for j=1:prime_cycle %running cycles of 100 for several times to pick up the best one
         local_network_c=cca(local_d,2,epochs_adjust,local_d);%computed local_network of node_k
-        node(node_k).totalRounds=node(node_k).totalRounds+1;
+        nodes(node_k).totalRounds=nodes(node_k).totalRounds+1;
         D_C = sqrt(disteusq(local_network_c,local_network_c,'x'));
        % D_dist_mean = mean((mean(abs(D_C-local_distance_deployed)))');
         D_dist_mean = mean((mean(abs(D_C-local_d)))');
         D_dist_mean=D_dist_mean/radius; %this is a bad measurement to determine the goodness of the results. 
         %Have problem with this. Should change it. 
-        if(D_dist_mean<node(node_k).D_error_mean_compute)
-           node(node_k).usefulRounds=j;
-           node(node_k).local_network_c=local_network_c;
-           %node(node_k).local_map_compuTime=T;
-           node(node_k).D_error_mean_compute=D_dist_mean;
+        if(D_dist_mean<nodes(node_k).D_error_mean_compute)
+           nodes(node_k).usefulRounds=j;
+           nodes(node_k).local_network_c=local_network_c;
+           %nodes(node_k).local_map_compuTime=T;
+           nodes(node_k).D_error_mean_compute=D_dist_mean;
         end
         if ((D_dist_mean<0.03)&(local_size>8)) %for connectivity only case, this may be good enough
             %this threshold of 0.02 or 0.04 should be adjusted. We used 0.04 for
@@ -146,10 +137,10 @@ end
         end %if
     end% for j
         
-%     node(node_k).totalCycles=500;
+%     nodes(node_k).totalCycles=500;
     epochs_adjust=step; %reset it for possible incremental further trainning cycles   
     if (pass==0)&(D_dist_mean>0.03)%&(retry>0) %further incremental training cycles
-%         node(node_k).totalRounds=retry*3;
+%         nodes(node_k).totalRounds=retry*3;
         if (local_size>19) 
             mini_cycle=3;
         else mini_cycle=3; %tried 5 and other numbers here. Cut it short to 3 to save time. 
@@ -161,21 +152,21 @@ end
 %             
 %             cycle_count=cycle_count+epochs_adjust; %update cycle count
 %             for ii=1:mini_cycle        
-            net=cca(local_d,node(node_k).local_network_c,epochs_adjust,local_d);
-            node(node_k).totalRounds=node(node_k).totalRounds+1;
+            net=cca(local_d,nodes(node_k).local_network_c,epochs_adjust,local_d);
+            nodes(node_k).totalRounds=nodes(node_k).totalRounds+1;
             local_network_c=net;
             D_C = sqrt(disteusq(local_network_c,local_network_c,'x'));
 %                  D_dist_mean = mean((mean(abs(D_C-local_distance_deployed)))');
             D_dist_mean = mean((mean(abs(D_C-local_d)))');
             D_dist_mean=D_dist_mean/radius; 
 %             epochs_adjust=epochs_adjust+step;
-            node(node_k).cycles=node(node_k).cycles+step;
+            nodes(node_k).cycles=nodes(node_k).cycles+step;
             step=0;
-                   if((D_dist_mean<node(node_k).D_error_mean_compute))
-                       node(node_k).usefulRounds=5+jj;
-                       node(node_k).local_network_c=local_network_c;
-                       %node(node_k).local_map_compuTime=T;
-                       node(node_k).D_error_mean_compute=D_dist_mean;
+                   if((D_dist_mean<nodes(node_k).D_error_mean_compute))
+                       nodes(node_k).usefulRounds=5+jj;
+                       nodes(node_k).local_network_c=local_network_c;
+                       %nodes(node_k).local_map_compuTime=T;
+                       nodes(node_k).D_error_mean_compute=D_dist_mean;
                        step=50;
                    end
                    if (D_dist_mean<0.03)&(local_size>8)
@@ -190,22 +181,22 @@ end
         end %for jj
     end %if (pass==0)
     
-    if ((pass==0)&(node(node_k).D_error_mean_compute<THRESHOLD))
+    if ((pass==0)&(nodes(node_k).D_error_mean_compute<THRESHOLD))
         T=cputime-tStart;
-        node(node_k).local_map_compuTime=T;
+        nodes(node_k).local_map_compuTime=T;
         T=0;
     end %we run all the epochs values. 
 
     if (pass==1)%D_dist_mean<0.02
-%         node(node_k).epochs=epochs_adjust;
-%         node(node_k).local_network_c=local_network_c;
-        node(node_k).local_map_compuTime=T;
+%         nodes(node_k).epochs=epochs_adjust;
+%         nodes(node_k).local_network_c=local_network_c;
+        nodes(node_k).local_map_compuTime=T;
         T=0;
     end
 
-    if ((pass==0)&(node(node_k).D_error_mean_compute==THRESHOLD))
-        fprintf(2,'node %d failed to compute the cca\n', node_k);
-    end %we can't get it for this node
+    if ((pass==0)&(nodes(node_k).D_error_mean_compute==THRESHOLD))
+        fprintf(2,'nodes %d failed to compute the cca\n', node_k);
+    end %we can't get it for this nodes
     
     %debug
 %     if((D_dist_mean>=0.02)&(epochs_adjust<250))
@@ -217,9 +208,9 @@ end
     N1=1;
     N2=int16(N_local/3);
     N3=int16(N_local*2/3+1);
-    Y(1,:)=node(node_k).local_network_c(N1,:);
-    Y(2,:)=node(node_k).local_network_c(N2,:);
-    Y(3,:)=node(node_k).local_network_c(N3,:);
+    Y(1,:)=nodes(node_k).local_network_c(N1,:);
+    Y(2,:)=nodes(node_k).local_network_c(N2,:);
+    Y(3,:)=nodes(node_k).local_network_c(N3,:);
     X(1,:)=local_network(N1,:);
     X(2,:)=local_network(N2,:);
     X(3,:)=local_network(N3,:);
@@ -228,22 +219,22 @@ end
     for i=1:(N_local-size(transform.c,1))
           Cx=[Cx;transform.c(1,:)];
     end
-    C_transform=transform.b*node(node_k).local_network_c * transform.T+Cx;
+    C_transform=transform.b*nodes(node_k).local_network_c * transform.T+Cx;
 
     % [Z,Cx]= mapTrans(X1,X2,X3,Y1,Y2,Y3,N);
     % C_transform=(Z*local_network_c'+Cx)';
-    node(node_k).local_network_transform=C_transform;
+    nodes(node_k).local_network_transform=C_transform;
     D_C = sqrt(disteusq(C_transform,C_transform,'x'));
     D_dist_mean = mean((mean(abs(D_C-local_distance_deployed)))');
     D_dist_mean=D_dist_mean/radius;
-    node(node_k).D_dist_mean_true=D_dist_mean;
+    nodes(node_k).D_dist_mean_true=D_dist_mean;
     D_coordinates_mean=mean(abs(C_transform-local_network));
     D_coordinates_mean=D_coordinates_mean/radius;
     D_coordinates_median=median(abs(C_transform-local_network));
     D_coordinates_median=D_coordinates_median/radius;
     C_delta=C_transform - local_network;
-    node(node_k).local_coordinates_error_mean=D_coordinates_mean;
-    node(node_k).local_coordinates_error_median=D_coordinates_median;
+    nodes(node_k).local_coordinates_error_mean=D_coordinates_mean;
+    nodes(node_k).local_coordinates_error_median=D_coordinates_median;
 end %for node_k
 
 %%%%%%%%%%%%%%%%subfunctions%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -253,10 +244,10 @@ function [ldist,node_index]=localDist(shortestHopMatrix,shortestDistanceMatrix,r
 %   distanceMatrix and 
 %   range radius 
 % to generate for  
-%  node 'i' 0<i<size(distanceMatrix) a local distance matrix ldist that includes the
+%  nodes 'i' 0<i<size(distanceMatrix) a local distance matrix ldist that includes the
 %  nodes j such that distanceMatrix(i,j)<=hop*radius. All the unknown entries in ldist would be
-%  marked as 'NaN'. "node_index" is an array that holds the node index
-%  'j' of the node j in distanceMatrix that are selected and included in the ldist, in 
+%  marked as 'NaN'. "node_index" is an array that holds the nodes index
+%  'j' of the nodes j in distanceMatrix that are selected and included in the ldist, in 
 %  the ascending order. Nodes in ldist also have their index in the 
 %  ascending order of the original index in distanceMatrix. 
 
@@ -265,7 +256,7 @@ node_count=0;
 for j=1:numberOfNodes
     if shortestHopMatrix(node_i,j)<=hop %look for all the nodes that is within hop 
         node_count=node_count+1; %count the number of selected nodes
-        node_index(node_count)=j; %save the original index of the selected node
+        node_index(node_count)=j; %save the original index of the selected nodes
     end 
 end %get all the nodes within the hop range.  
 %node_index=sort(node_index);
