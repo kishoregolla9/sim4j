@@ -1,4 +1,4 @@
-function [network]=localMapConnectivityOnly(network,epochs,radius)
+function [nodes]=localMapConnectivityOnly(network,epochs,radius)
 % localMapLocalization computes the local 2 hop map for all its nodes
 % coordinates for each node in the 'network'using range free method. 
 %
@@ -113,7 +113,7 @@ if (local_size>=20)
 else prime_cycle=5; %may use a bigger prome_cycle here. Didn't seem to make a difference
 end
 
-    for j=1:prime_cycle %running cycles of 100 for several times to pick up the best one
+    for j=1:prime_cycle  % running cycles of 100 for several times to pick up the best one
         local_network_c=cca(local_d,2,epochs_adjust,local_d);%computed local_network of node_k
         nodes(node_k).totalRounds=nodes(node_k).totalRounds+1;
         D_C = sqrt(disteusq(local_network_c,local_network_c,'x'));
@@ -121,10 +121,10 @@ end
         D_dist_mean = mean((mean(abs(D_C-local_d)))');
         D_dist_mean=D_dist_mean/radius; %this is a bad measurement to determine the goodness of the results. 
         %Have problem with this. Should change it. 
-        if(D_dist_mean<nodes(node_k).D_error_mean_compute)
+        if ( D_dist_mean<nodes(node_k).D_error_mean_compute )
            nodes(node_k).usefulRounds=j;
            nodes(node_k).local_network_c=local_network_c;
-           %nodes(node_k).local_map_compuTime=T;
+           % nodes(node_k).local_map_compuTime=T;
            nodes(node_k).D_error_mean_compute=D_dist_mean;
         end
         if ((D_dist_mean<0.03)&(local_size>8)) %for connectivity only case, this may be good enough
@@ -132,16 +132,16 @@ end
             %other cases. 0.02 is good for network where the hop count
             %approximation is not too much inaccurate.
             pass=1;
-             T=cputime-tStart;
+            T=cputime-tStart;
             break;
         end %if
     end% for j
-        
+    nodes(node_k).local_map_compuTime=cputime-tStart;        
 %     nodes(node_k).totalCycles=500;
     epochs_adjust=step; %reset it for possible incremental further trainning cycles   
-    if (pass==0)&(D_dist_mean>0.03)%&(retry>0) %further incremental training cycles
+    if (pass==0) && (D_dist_mean>0.03) %&(retry>0) %further incremental training cycles
 %         nodes(node_k).totalRounds=retry*3;
-        if (local_size>19) 
+        if ( local_size > 19 ) 
             mini_cycle=3;
         else mini_cycle=3; %tried 5 and other numbers here. Cut it short to 3 to save time. 
                     % May not make big difference between "5" and "3" here.

@@ -1,4 +1,4 @@
-function [network,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,option)
+function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,connectivityLevels,option)
 
 %This function computes local maps for a given network
 %Input:
@@ -10,14 +10,14 @@ function [network,localMapTimeMean,localMapTimeMedian]=localMapComputing(network
 %   3: mds grid range free
 %output:
 %  localMaps{} - cell of computed local maps for each radius levels given in connectivityLevels;
-%  localMapTimeMean - the average computing time for each local map at each different radius levels as given in connectivityLevels
+%  localMapTimeMean - the average computing time for each local map at each
+%  different radius levels as given in connectivityLevels
 
 numberOfLevels=size(connectivityLevels,2);
 for i = 1:numberOfLevels
   radius=connectivityLevels(1,i);
   if option==0 % cca range free
     localMaps{i}=localMapConnectivityOnly(network,100,radius);
-    
   end
   if option==1 % cca range based
     localMaps{i}=vitUpdateLocalMapLocalization(network,100,radius);
