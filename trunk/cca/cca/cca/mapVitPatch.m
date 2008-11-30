@@ -41,7 +41,7 @@ while length(curindexInclude) ~= N
     node2 = nodeList(j); % find the node with maximum intersection with
     [curMap, curindex, curindexInclude] = mergeMap(...
         curMap, map{node2}, curindex, index{node2}, ...
-        curindexInclude, indexInclude{node2},connectivitiy);
+        curindexInclude, indexInclude{node2},connectivity);
 end %while
 tEnd = cputime;
 disp(['Patching the local maps takes ' num2str(tEnd-tStart) ' sec']);
@@ -63,11 +63,11 @@ node(node_k).patched_network_transform=mappedResult;
 D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
 D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/r;
-D_coordinates_mean=mean(abs(mappedResult-network));
+D_coordinates_mean=mean(abs(mappedResult-network.points));
 D_coordinates_mean=D_coordinates_mean/r;
 node(node_k).patched_net_dist_error_mean=D_dist_mean;
 node(node_k).patched_net_coordinates_error_mean=D_coordinates_mean;
-D_coordinates_median=median(abs(mappedResult-network));
+D_coordinates_median=median(abs(mappedResult-network.points));
 D_coordinates_median=D_coordinates_median/r;
 node(node_k).patched_net_coordinates_error_median=D_coordinates_median;
 

@@ -16,6 +16,7 @@ if ( isstruct(network) && isfield(network,'nodes') )
 else
     %preallocate nodes array
     nodes=repmat(struct('neighbors',zeros(5)),N,1);
+    networkConnectivityLevel=0;
     for i=1:N %compute all the local maps
         %get node_i's neighbor nodes within radius;
         [nodes(i).neighbors]=find_neighbors(D,radius,i,1);
