@@ -74,3 +74,4 @@ network.connectivity=connectivity;
 network.distanceMatrix=D;
 network.shortestDistanceMatrix=shortestDistanceMatrix;
 network.shortestHopMatrix=shortestHopMatrix;
+network.networkConnectivityLevel=networkConnectivityLevel;
