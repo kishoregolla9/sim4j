@@ -1,12 +1,12 @@
-
+clear
 addpath('cca')
 addpath('network')
 
 ranging=0; % range-free
 
 radius=1.2
-step=0.1
-maxRadius=3.0
+step=0.2
+maxRadius=2.4
 
 numSteps=(maxRadius-radius)/step
 
@@ -117,8 +117,7 @@ for i=1 : numSteps+1
 
 end
 
-%plot(result.radius,result.medianError,'-o');
-plot(result.connectivity,result.medianError);
+plot([result.connectivity],[result.coordinatesMedianByAnchor],'-o');
 xlabel('Network Connectivity');
 ylabel('Median Error');
 
