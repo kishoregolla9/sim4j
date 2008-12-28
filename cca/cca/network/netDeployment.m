@@ -28,7 +28,7 @@ function [network]=netDeployment(network,type,size,N,length)
   switch type
     case 0  % random
         network.points=rand(N,2)*size;
-        network.shape=sprintf('Random %ix%i',size(network.points),size(network.points))
+        network.shape=sprintf('Random %ix%i',size,size)
 
     case 1  %In grid case, N=size*size
         network.shape=sprintf('Grid %ix%i',size,size)

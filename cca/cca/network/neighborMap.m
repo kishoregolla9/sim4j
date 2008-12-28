@@ -13,6 +13,7 @@ N=size(D,1);
 
 if ( isstruct(network) && isfield(network,'nodes') )
     nodes=network.nodes;
+    networkConnectivityLevel=network.networkConnectivityLevel;
 else
     %preallocate nodes array
     nodes=repmat(struct('neighbors',zeros(5)),N,1);

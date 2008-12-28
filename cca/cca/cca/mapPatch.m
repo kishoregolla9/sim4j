@@ -1,5 +1,8 @@
-function [patchTime,coordinates_median,coordinates_median_average,allResults]=...
-    mapPatch(network,localMaps,startNodes,anchorSets)
+% function [patchTime,coordinates_median,coordinates_median_average,allResults]=...
+%     mapPatch(network,localMaps,startNodes,anchorSets)
+
+function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
+
 %This function patches local maps into the global map for all the local maps
 %computed for each radius value stored in the localMaps.
 %input:
@@ -9,6 +12,9 @@ function [patchTime,coordinates_median,coordinates_median_average,allResults]=..
 %    experimented with
 %  anchorSets - SxT matrix containing S anchorSets sets that want to be experimented
 %    with. Each anchorSets set has T anchorSets nodes.
+
+result.connectivity=network.networkConnectivityLevel;
+result.radius=radius;
 
 node=startNodes %#ok<NOPRT>
 numStartNodes=size(node,2);  % number of starting nodes
@@ -36,14 +42,23 @@ for startNodeIndex=1:numStartNodes % for each starting node
             times(anchorSetIndex)=localMaps{radiusIndex}(node(startNodeIndex)).map_patchTime;
         end
 
-        allResults(radiusIndex,:,startNodeIndex)=A;
-        patchTime(startNodeIndex,radiusIndex)=median(times')
+        result.anchorResults(radiusIndex,:,startNodeIndex)=A;
+        result.patchTime(startNodeIndex,radiusIndex)=median(times')
         % A=A(1:3);
-        coordinates_median(startNodeIndex,radiusIndex)=median(A')
-        coordinates_median_average(startNodeIndex,radiusIndex)=mean(A')
+        result.medianErrorByAnchor(startNodeIndex,radiusIndex)=median(A')
+        result.meanErrorByAnchor(startNodeIndex,radiusIndex)=mean(A')
+        result.minErrorByAnchor(startNodeIndex,radiusIndex)=min(A')
+        result.maxErrorByAnchor(startNodeIndex,radiusIndex)=max(A')
 
+        
         clear A;
         clear times;
     end % for radiusIndex
 end % for startNodeIndex
 
+result.medianError=median(result.medianErrorByAnchor)
+result.meanError=median(result.meanErrorByAnchor)        
+result.minError=median(result.minErrorByAnchor)
+result.maxError=median(result.maxErrorByAnchor)
+fieldnames(result)
+return

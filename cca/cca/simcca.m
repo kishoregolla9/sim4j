@@ -2,16 +2,17 @@ clear
 addpath('cca')
 addpath('network')
 
+tic
+
 ranging=0; % range-free
 
-radius=1.2
+radius=1.4
 step=0.2
-maxRadius=2.4
+maxRadius=5.0
+
+networkType=1; %0=random,1=grid,
 
 numSteps=(maxRadius-radius)/step
-
-result=struct('radius',zeros(numSteps,1),'connectivity',zeros(numSteps,1),'medianError',zeros(numSteps,1));
-
 
 for i=1 : numSteps+1
     
@@ -31,7 +32,7 @@ for i=1 : numSteps+1
     %e.g., [network]=netDeployment(1,10,100) for a gird network in a 10x10 area.
     N=25;
     network=struct();
-    [network]=netDeployment(network,1,5,N);
+    [network]=netDeployment(network,networkType,5,N);
 
     %(2)Can plot(network(:,1),network(:,2),'bo') to see what it looks like. :)
 
@@ -103,24 +104,25 @@ for i=1 : numSteps+1
     %e.g.,
     disp('------------------------------------')
     sprintf('Doing Map Patch')
-    tic
-    [patchTimeByAnchor,coordinatesMedianByAnchor,coordinatesMedianAverageByAnchor,allResultsByAnchor]=mapPatch(network,localMaps,startNode,anchors)
+    [result(i)]=mapPatch(network,localMaps,startNode,anchors,radius)
     sprintf('Done Map Patch:')
-    toc
-    
-    result(i).radius=radius;
-    result(i).coordinatesMedianByAnchor=median(coordinatesMedianByAnchor);
-    result(i).coordinatesMedianAverageByAnchor=median(coordinatesMedianAverageByAnchor);
-    result(i).connectivity=network.networkConnectivityLevel;
     
     radius = radius + step;
 
 end
-
-plot([result.connectivity],[result.coordinatesMedianByAnchor],'-o');
+plot([result.connectivity],[result.medianError],'-o');
 xlabel('Network Connectivity');
-ylabel('Median Error');
+ylabel('Error');
+grid on
+hold all
+plot([result.connectivity],[result.maxError],'-d');
+legend('Median Error','Max Error');
+hold off
 
+filename=sprintf('results\\NetworkConn_vs_Error_%s_%f_to_%f.fig',network.shape,step,maxRadius);
+hgsave(filename);
+
+toc
 
 %will generate testing results across the connectivity level;s using different anchor sets of three anchor
 %nodes and different starting nodes.

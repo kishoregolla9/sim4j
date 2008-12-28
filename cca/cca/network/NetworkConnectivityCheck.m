@@ -25,6 +25,8 @@ end
 
 if (disconnect==1 || doPlot==true)
     gplot(connectivity, network.points,'-d');
+    filename=sprintf('results\\network_%s_%f.fig',network.shape,radius);
+    hgsave(filename);
 end
 
 network.connectivity=connectivity;
