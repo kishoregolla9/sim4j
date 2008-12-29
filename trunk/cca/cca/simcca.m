@@ -1,28 +1,24 @@
 clear
+hold off
 addpath('cca')
 addpath('network')
 
-tic
+tic;
 
 ranging=0; % range-free
 
-radius=1.2;
-step=0.4;
-maxRadius=4.0;
+radius=1.5;
+step=0.5;
+maxRadius=3.0;
+numSteps=ceil((maxRadius-radius)/step);
 
-networkType=0;
+networkType=1;
 %  0:random, 1:grid, 2:C-shape random, 3:C-shape grid, 4:rectangle random,
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-
-numSteps=(maxRadius-radius)/step;
-
-%(1) use [network]=netDeployment(type,size,N) to generate the network of the required
-%size and topology;
-%e.g., [network]=netDeployment(1,10,100) for a grid network in a 10x10 area.
 N=25;
-networkEdge=4;
+networkEdge=5;
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 
 for i=1 : numSteps+1
@@ -31,7 +27,7 @@ for i=1 : numSteps+1
 
     % Build and check the network
     [network]=checkNetwork(sourceNetwork,radius);
-    if (~network.connected), continue, end
+    if (~network.connected), return, end
 
     %(5)Compute local maps using localMapComputing.m -
     fprintf(1,'Generating local maps for radius %.1f\n',radius);
@@ -80,21 +76,23 @@ for i=1 : numSteps+1
 
 end
 
-hold all
+hold off
+plot([result.connectivity],[result.meanErrorByAnchor],'-o');
 grid on
 xlabel('Network Connectivity');
-ylabel('Error (r)');
-
-plot([result.connectivity],[result.medianError],'-o');
-plot([result.connectivity],[result.maxError],'-d');
-plot([result.connectivity],[result.minError],'-s');
-legend('Median Error','Max Error','Min Error');
+ylabel('Location Error (factor of radius)');
+hold all
+plot([result.connectivity],[result.maxErrorByAnchor],'-d');
+plot([result.connectivity],[result.minErrorByAnchor],'-s');
+legend('Mean Error','Max Error','Min Error');
 hold off
 
-filename=sprintf('results\\NetworkConn_vs_Error_%s_%fstep_to_%fradius.fig',network.shape,step,maxRadius);
+filename=sprintf('results\\NetworkConn_vs_Error_%s_%.1fstep_to_%.1fradius.fig',network.shape,step,maxRadius);
 hgsave(filename);
 
-toc
+totalTime=toc;
+fprintf(1,'Done %i radius steps in %.3f sec (%.3f sec/step) (%.3f sec/node)\n',...
+    numSteps,totalTime,totalTime/numSteps,totalTime/(numSteps*N));
 
 %will generate testing results across the connectivity level;s using different anchor sets of three anchor
 %nodes and different starting nodes.
