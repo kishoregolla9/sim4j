@@ -2,10 +2,10 @@ function [node]=mapVitPatch(network,node,node_k,anchorNodes,r)
 %function mapVitPatch takes the input of local maps and patch them together
 %into a global map and compare the results with the original 'Network'
 %taking the map of node_k as the starting map.
-% The %input 'node' should be generated from the function of
+% The input 'node' should be generated from the function of
 % localMapLocalization.m or equivalent
 %option - Use the greedy patch taking the node that has the most number of
-%commone nodes for patch when 'option' is given as '1'. When 'option' is
+%common nodes for patch when 'option' is given as '1'. When 'option' is
 %'0', patch the map as fast as we can by taking the node that has most
 %number of different nodes.
 
@@ -14,7 +14,7 @@ distanceMatrix=network.distanceMatrix;
 N=size(network.points,1);
 
 for ii=1:N
-    map{ii}=node(ii).local_network_c; %added by li as cca generates directly the network
+    map{ii}=node(ii).local_network_c; %added by li as cca directly generates the network
     index{ii} = (node(ii).neighbors_merge)'; %grab all the nodes in the local map
     indexInclude{ii} = ii;
 end %for ii
@@ -38,7 +38,7 @@ while length(curindexInclude) ~= N
     end
     [tmp, j] = max(nxlist);
 
-    node2 = nodeList(j); % find the node with maximum intersection with
+    node2 = nodeList(j); % find the node with maximum intersection
     [curMap, curindex, curindexInclude] = mergeMap(...
         curMap, map{node2}, curindex, index{node2}, ...
         curindexInclude, indexInclude{node2},connectivity);
@@ -61,16 +61,17 @@ mappedResult = TRANSFORM.b * refineResult(:,1:2) * TRANSFORM.T + ...
 % t.xyEstimate = mappedResult;
 node(node_k).patched_network_transform=mappedResult;
 D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
+
+differenceVector=abs(mappedResult-network.points);
+
 D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/r;
-D_coordinates_mean=mean(abs(mappedResult-network.points));
-D_coordinates_mean=D_coordinates_mean/r;
 node(node_k).patched_net_dist_error_mean=D_dist_mean;
-node(node_k).patched_net_coordinates_error_mean=D_coordinates_mean;
-D_coordinates_median=median(abs(mappedResult-network.points));
-D_coordinates_median=D_coordinates_median/r;
-node(node_k).patched_net_coordinates_error_median=D_coordinates_median;
 
+node(node_k).patched_net_coordinates_error_mean=mean(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_median=median(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_max=max(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_min=min(differenceVector)/r;
 
 return;
 

@@ -11,14 +11,16 @@ gplot(connectivity, network.points,'-d');
 
 for i=1:N
     nodeConnected=0;
-    for j=i:N
-        if (connectivity(i,j)==1)
+    for j=1:N
+        if (i == j), continue, end
+        if (connectivity(i,j) == 1)
             nodeConnected=1;
-            continue;
+            break;
         end;
     end
     if (nodeConnected==0)
         disconnect=1;
+        fprintf(2,'Node [%i,%i] is not connected!\n',i,j);
         break;
     end
 end
