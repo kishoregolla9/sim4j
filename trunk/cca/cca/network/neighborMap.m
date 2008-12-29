@@ -7,7 +7,6 @@ function [network]=neighborMap(network,radius)
 %       .neighbors: a list of neighbor coordinates
 %   connectivity_level
 
-
 D=sqrt(disteusq(network.points,network.points,'x'));
 N=size(D,1);
 
