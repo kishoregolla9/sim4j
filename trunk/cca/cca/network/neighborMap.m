@@ -24,7 +24,7 @@ else
         networkConnectivityLevel=networkConnectivityLevel+size(nodes(i).neighbors,2)-1;
     end
     networkConnectivityLevel=networkConnectivityLevel/N;
-    sprintf('Network Connectivity Level: %i', networkConnectivityLevel)
+    fprintf(1,'Network Connectivity Level: %f\n', networkConnectivityLevel);
 end
 
 shortestDistanceMatrix=zeros(N,2);

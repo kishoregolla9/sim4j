@@ -1,4 +1,4 @@
-function [network]=netDeployment(network,type,size,N,length)
+function [network]=netDeployment(type,size,N,length)
 %Li - Oct. 2006, modified April 2007
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %function netDeployment generates a network given the number of nodes, the
@@ -25,13 +25,17 @@ function [network]=netDeployment(network,type,size,N,length)
 %  In C shape grid, N is about 79 when size=10; in L-shape grid, N is about 51
 %length - length of the network, for rectangles (default 25)
 
+  network=struct();
+  
   switch type
     case 0  % random
-        network.points=rand(N,2)*size;
-        network.shape=sprintf('Random %ix%i',size,size)
-
+        points=rand(N,2)*size;
+        network.shape=sprintf('Random %ix%i Square',size,size)
+        network.points=points;
+        network.numberOfNodes=size*size;
     case 1  %In grid case, N=size*size
-        network.shape=sprintf('Grid %ix%i',size,size)
+        if (sqrt(N) ~= size), sprintf('Size must be %fx%f=%f!',size,size,N), end 
+        network.shape=sprintf('Grid %ix%i Square',size,size)
         points=[];
         for i=1:size
             a_fixed=1:size;

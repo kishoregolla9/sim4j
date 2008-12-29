@@ -15,6 +15,7 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 
 numberOfLevels=size(connectivityLevels,2);
 for i = 1:numberOfLevels
+  fprintf(1,'Calculating local map #%.0f of %.0f\n',i,numberOfLevels);
   radius=connectivityLevels(1,i);
   if option==0 % cca range free
     localMaps{i}=localMapConnectivityOnly(network,100,radius);
