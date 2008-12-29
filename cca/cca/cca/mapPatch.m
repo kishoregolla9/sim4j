@@ -16,39 +16,39 @@ function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
 
-node=startNodes %#ok<NOPRT>
+node=startNodes;
 numStartNodes=size(node,2);  % number of starting nodes
 numAnchorSets=size(anchorSets,1);  % number of anchorSets sets for testing
 numRadiusLevels=size(localMaps,2); % number of radius levels computed
 
 for startNodeIndex=1:numStartNodes % for each starting node
-    sprintf('+++ Starting Node %i: %i', startNodeIndex, node(startNodeIndex))
+    fprintf(1,'+++ Starting Node %i: %i of %i\n', startNodeIndex, node(startNodeIndex), numStartNodes);
     
     for radiusIndex=1:numRadiusLevels %for each radius level
-        sprintf('++++++ Radius Level %i', radiusIndex)
+        fprintf(1,'++++++ Radius Level %i of %i\n', radiusIndex,numRadiusLevels);
         
         A=zeros(numAnchorSets,1);
         times=zeros(numAnchorSets,1);
         for anchorSetIndex=1:numAnchorSets % for each anchorSets set
-            sprintf('+++++++++ Anchor Set %i', anchorSetIndex)
+            fprintf(1,'+++++++++ Anchor Set %i of %i\n', anchorSetIndex,numAnchorSets);
             %       localMaps{radiusIndex}(1).radius=connectivityLevels(1,radiusIndex);
             localMaps{radiusIndex}= ...
                 mapVitPatch(network,localMaps{radiusIndex},node(startNodeIndex),...
                 anchorSets(anchorSetIndex,:),localMaps{radiusIndex}(1).radius);
-            localMaps{radiusIndex}(node(startNodeIndex))
+            localMaps{radiusIndex}(node(startNodeIndex));
             A(anchorSetIndex)=...
                 (localMaps{radiusIndex}(node(startNodeIndex)).patched_net_coordinates_error_median(1)+...,
-                localMaps{radiusIndex}(node(startNodeIndex)).patched_net_coordinates_error_median(2))/2
+                localMaps{radiusIndex}(node(startNodeIndex)).patched_net_coordinates_error_median(2))/2;
             times(anchorSetIndex)=localMaps{radiusIndex}(node(startNodeIndex)).map_patchTime;
         end
 
         result.anchorResults(radiusIndex,:,startNodeIndex)=A;
-        result.patchTime(startNodeIndex,radiusIndex)=median(times')
+        result.patchTime(startNodeIndex,radiusIndex)=median(times');
         % A=A(1:3);
-        result.medianErrorByAnchor(startNodeIndex,radiusIndex)=median(A')
-        result.meanErrorByAnchor(startNodeIndex,radiusIndex)=mean(A')
-        result.minErrorByAnchor(startNodeIndex,radiusIndex)=min(A')
-        result.maxErrorByAnchor(startNodeIndex,radiusIndex)=max(A')
+        result.medianErrorByAnchor(startNodeIndex,radiusIndex)=median(A');
+        result.meanErrorByAnchor(startNodeIndex,radiusIndex)=mean(A');
+        result.minErrorByAnchor(startNodeIndex,radiusIndex)=min(A');
+        result.maxErrorByAnchor(startNodeIndex,radiusIndex)=max(A');
 
         
         clear A;
@@ -56,9 +56,8 @@ for startNodeIndex=1:numStartNodes % for each starting node
     end % for radiusIndex
 end % for startNodeIndex
 
-result.medianError=median(result.medianErrorByAnchor)
-result.meanError=median(result.meanErrorByAnchor)        
-result.minError=median(result.minErrorByAnchor)
-result.maxError=median(result.maxErrorByAnchor)
-fieldnames(result)
+result.medianError=median(result.meanErrorByAnchor);
+result.meanError=mean(result.meanErrorByAnchor);
+result.minError=min(result.meanErrorByAnchor);
+result.maxError=max(result.meanErrorByAnchor);
 return

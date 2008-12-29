@@ -20,7 +20,7 @@ end
 if (disconnect==1)
     fprintf(2,'Network is not connected!\n');
 else
-    fprintf(2,'Network is connected\n');
+    fprintf(1,'Network is connected\n');
 end
 
 if (disconnect==1 || doPlot==true)
