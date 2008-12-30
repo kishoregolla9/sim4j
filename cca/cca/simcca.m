@@ -30,21 +30,25 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    %(5)Compute local maps using localMapComputing.m -
-    fprintf(1,'Generating local maps for radius %.1f\n',radius);
-    localMapStart=cputime;
-    [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
-    fprintf(1,'Done generating local maps: %f\n', cputime-localMapStart);
-
-    %(6)Select anchor nodes for map patching.  Have a set of scripts and functions for different
-    %topologies that may be tried. For example, may use [anchor]=anchorNodesSelectionCshape100(network,m,n),
+    anchors=selectAnchorNodesBad(network,3);
+    % Plot the network, showing the anchor nodes with red circles
+    hold off
+    gplot(network.connectivity, network.points,'-db');
+    hold all
+    for g=1:size(anchors)
+        plot(network.points(anchors(g),1),network.points(anchors(g),2),'-or');
+    end
+    hold off
+    filename=sprintf('results\\network_%s_%.1f.fig',network.shape,radius);
+    hgsave(filename);    
+    
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
     %That often means the area where you want to select an anchor node has no node in it to be selected.
     %The SingleNodeSelection.m may be used to get anchor nodes in desired area one by one.
     %Can also randomly pick up the node index to form the "anchor",
     %e.g.,
-    anchors=[2, 3, 5];
+%    anchors=[2, 3, 5];
     %has two three anchor node sets.
     % Can have multiple anchor sets. So may need to form
     %'anchor' which is an matrix of MxN (M sets with each set has N anchor nodes. M>=1, N>=3)
@@ -64,6 +68,13 @@ for i=1 : numSteps+1
     startNode=[5 20 22];
     % Also have a startNodeSelection script which may work or may not work well depending on the network.
 
+    %(5)Compute local maps using localMapComputing.m -
+    fprintf(1,'Generating local maps for radius %.1f\n',radius);
+    localMapStart=cputime;
+    [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
+    fprintf(1,'Done generating local maps: %f\n', cputime-localMapStart);
+
+    
     %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
     %[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
     %e.g.,

@@ -24,6 +24,7 @@ else
     end
     networkConnectivityLevel=networkConnectivityLevel/N;
     fprintf(1,'Network Connectivity Level: %f\n', networkConnectivityLevel);
+    network.nodes=nodes;
 end
 
 shortestDistanceMatrix=zeros(N,2);
