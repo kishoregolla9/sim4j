@@ -62,16 +62,16 @@ mappedResult = TRANSFORM.b * refineResult(:,1:2) * TRANSFORM.T + ...
 node(node_k).patched_network_transform=mappedResult;
 D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
 
-differenceVector=abs(mappedResult-network.points)/r;
+differenceVector=abs(mappedResult-network.points);
 
 D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/r;
 node(node_k).patched_net_dist_error_mean=D_dist_mean;
 
-node(node_k).patched_net_coordinates_error_mean=mean(differenceVector);
-node(node_k).patched_net_coordinates_error_median=median(differenceVector);
-node(node_k).patched_net_coordinates_error_max=max(differenceVector);
-node(node_k).patched_net_coordinates_error_min=min(differenceVector);
+node(node_k).patched_net_coordinates_error_mean=mean(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_median=median(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_max=max(differenceVector)/r;
+node(node_k).patched_net_coordinates_error_min=min(differenceVector)/r;
 
 return;
 

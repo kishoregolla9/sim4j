@@ -7,18 +7,19 @@ tic;
 
 ranging=0; % range-free
 
-radius=1.5;
-step=0.5;
-maxRadius=3.0;
-numSteps=ceil((maxRadius-radius)/step);
+radius=1.4;
+step=0.4;
+numSteps=8;
+minRadius=1.4;
+maxRadius=1.4+(step*numSteps);
 
-networkType=1;
+networkType=0;
 %  0:random, 1:grid, 2:C-shape random, 3:C-shape grid, 4:rectangle random,
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-N=25;
-networkEdge=5;
+N=100;
+networkEdge=sqrt(N)
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 
 for i=1 : numSteps+1
@@ -77,29 +78,22 @@ for i=1 : numSteps+1
 end
 
 hold off
-plot([result.connectivity],[result.meanErrorByAnchor],'-o');
+plot([result.connectivity],[result.meanError],'-o');
 grid on
+plotTitle=sprintf('Network %s',network.shape);
+title(plotTitle);
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
-plot([result.connectivity],[result.maxErrorByAnchor],'-d');
-plot([result.connectivity],[result.minErrorByAnchor],'-s');
+plot([result.connectivity],[result.maxError],'-d');
+plot([result.connectivity],[result.minError],'-s');
 legend('Mean Error','Max Error','Min Error');
 hold off
 
-filename=sprintf('results\\NetworkConn_vs_Error_%s_%.1fstep_to_%.1fradius.fig',network.shape,step,maxRadius);
+filename=sprintf('results\\NetworkConn_vs_Error_%s_%.1f_to_%.1fradius_%.0f.fig',...
+    network.shape,minRadius,maxRadius,N);
 hgsave(filename);
 
 totalTime=toc;
-fprintf(1,'Done %i radius steps in %.3f sec (%.3f sec/step) (%.3f sec/node)\n',...
-    numSteps,totalTime,totalTime/numSteps,totalTime/(numSteps*N));
-
-%will generate testing results across the connectivity level;s using different anchor sets of three anchor
-%nodes and different starting nodes.
-
-%Follow the steps here to do mds localization experiments using the same network configurations as used
-%in the CCA experiments above:
-%(1)use [t]=prepareMDSTestNetwork(network,CL,option) to get t(i). CL=connectivityLevels(1,:) using if using connectivityLevels
-%generated in the above CCA steps. E.g.,[t]=prepareMDSTestNetwork(network,connectivityLevels(1,:),1)
-%(2)run script batchMDSLocalization. Make sure that the "startNode" and "anchor" are the same as in
-%the CCA experiments if comparisons are wanted.
+fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
+    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N));
