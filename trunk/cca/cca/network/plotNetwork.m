@@ -3,12 +3,10 @@ function [filename]=plotNetwork(network,anchors,radius)
 clf
 anchorCoordinates=sprintf('(%.3f,%.3f) ',network.points(anchors,:)');
 figurename=sprintf('The Network\nradius=%.1f\nAnchors=%s',radius,anchorCoordinates);
-%figure('Name',figurename);
+figure('Name',figurename);
 hold off
 gplot(network.connectivity, network.points,'-db');
 hold all
-w=network.width;
-h=network.height;
 for g=1:size(anchors')
     plot(network.points(anchors(g),1),network.points(anchors(g),2),'-or');
     xArrow=[(network.points(anchors(g),1)+0.5),network.points(anchors(g),1)];
