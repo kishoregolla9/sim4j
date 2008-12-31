@@ -7,4 +7,6 @@ network.numberOfNodes=sourceNetwork.numberOfNodes;
 [network]=neighborMap(network,radius);
 [disconnect]=NetworkConnectivityCheck(network,radius);
 network.connected=~disconnect;
+network.width=sourceNetwork.width;
+network.height=sourceNetwork.height;
 return;
