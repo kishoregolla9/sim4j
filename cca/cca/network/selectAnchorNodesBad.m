@@ -17,11 +17,12 @@ end
 return;
 
 function [neMost]=getNextNorthEastMost(points,neighbors)
-
+% Return the index in the given points of the north-easterly-most point.
+% This is defined as the largest sum of x and y coordinates
 neMost=0;
 for i=1:size(neighbors')
     n=neighbors(i);
-    if (neMost == 0 || (n ~= 0 && points(n,1) > points(neMost,1) && points(n,2) > points(neMost,2)))
+    if (neMost == 0 || (n ~= 0 && points(n,1)+points(n,2) > points(neMost,1)+points(neMost,2)) )
         neMost=n;
     end
 end
