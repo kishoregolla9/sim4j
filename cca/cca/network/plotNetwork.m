@@ -1,11 +1,13 @@
 function [filename]=plotNetwork(network,anchors,radius)
 % Plot the network, showing the anchor nodes with red circles
 
-figure('Name',network.shape);
+radiusString=sprintf('Radio Range: %.1f',radius);
+figurename=sprintf('%s %s',network.shape,radiusString);
+figure('Name',figurename);
 hold off
 gplot(network.connectivity, network.points,'-db');
-radiusString=sprintf('Radio Range: %.1f',radius);
-anchorCoordinates=sprintf('Anchors: (%.3f,%.3f) ',network.points(anchors,:)');
+
+anchorCoordinates=sprintf('Anchor: (%.3f,%.3f) ',network.points(anchors,:)');
 title({network.shape;anchorCoordinates;radiusString});
 hold all
 for g=1:size(anchors')
