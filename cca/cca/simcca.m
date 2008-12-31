@@ -18,10 +18,11 @@ networkType=0;
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-N=100;
-networkEdge=sqrt(N)
+N=50;
+networkEdge=6;
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
-
+sourceNetwork.width=networkEdge;
+sourceNetwork.height=networkEdge;
 for i=1 : numSteps+1
 
     fprintf(1,'Radius: %.1f\n', radius);
@@ -30,17 +31,10 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    anchors=selectAnchorNodesBad(network,3);
-    % Plot the network, showing the anchor nodes with red circles
-    hold off
-    gplot(network.connectivity, network.points,'-db');
-    hold all
-    for g=1:size(anchors)
-        plot(network.points(anchors(g),1),network.points(anchors(g),2),'-or');
-    end
-    hold off
-    filename=sprintf('results\\network_%s_%.1f.fig',network.shape,radius);
-    hgsave(filename);    
+    anchors=selectAnchorNodesBad(network,3)';
+
+    plotNetwork(network,anchors,radius);
+
     
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
@@ -88,6 +82,7 @@ for i=1 : numSteps+1
 
 end
 
+figure('Name','The Results');
 hold off
 plot([result.connectivity],[result.meanError],'-o');
 grid on
