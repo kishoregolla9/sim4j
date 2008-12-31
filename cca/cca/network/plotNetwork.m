@@ -1,6 +1,5 @@
 function [filename]=plotNetwork(network,anchors,radius)
 % Plot the network, showing the anchor nodes with red circles
-clf
 anchorCoordinates=sprintf('(%.3f,%.3f) ',network.points(anchors,:)');
 figurename=sprintf('The Network\nradius=%.1f\nAnchors=%s',radius,anchorCoordinates);
 figure('Name',figurename);
