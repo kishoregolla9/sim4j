@@ -27,44 +27,53 @@ meanErrorPerStart=zeros(numStartNodes,1);
 maxErrorPerStart=zeros(numStartNodes,1);
 minErrorPerStart=zeros(numStartNodes,1);
 
+medianError=zeros(numAnchorSets,numStartNodes);
+meanError=zeros(numAnchorSets,numStartNodes);
+maxError=zeros(numAnchorSets,numStartNodes);
+minError=zeros(numAnchorSets,numStartNodes);
+times=zeros(numAnchorSets,numStartNodes);
+
 for startNodeIndex=1:numStartNodes % for each starting node
     fprintf(1,'+++ Starting Node %i of %i: %i \n', startNodeIndex, numStartNodes, node(startNodeIndex));
-   
-       
-        medianError=zeros(numAnchorSets,1);
-        meanError=zeros(numAnchorSets,1);
-        maxError=zeros(numAnchorSets,1);
-        minError=zeros(numAnchorSets,1);
-        times=zeros(numAnchorSets,1);
-        for anchorSetIndex=1:numAnchorSets % for each anchorSets set
-            fprintf(1,'+++++ Anchor Set %i of %i\n', anchorSetIndex,numAnchorSets);
-            
-            localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
-                anchorSets(anchorSetIndex,:),radius);
 
-            resultNode=localMaps{1}(node(startNodeIndex));
-            
-            medianError(anchorSetIndex)=mean(resultNode.patched_net_coordinates_error_median);
-            meanError(anchorSetIndex)=mean(resultNode.patched_net_coordinates_error_mean);
-            maxError(anchorSetIndex)=mean(resultNode.patched_net_coordinates_error_max);
-            minError(anchorSetIndex)=mean(resultNode.patched_net_coordinates_error_min);
-            times(anchorSetIndex)=resultNode.map_patchTime;
-        end
+    for anchorSetIndex=1:numAnchorSets % for each anchorSets set
+        fprintf(1,'+++++ Anchor Set %i of %i\n', anchorSetIndex,numAnchorSets);
 
-        patchTimePerStart(startNodeIndex)=median(times);
-        medianErrorPerStart(startNodeIndex)=median(medianError);
-        meanErrorPerStart(startNodeIndex)=median(meanError);
-        maxErrorPerStart(startNodeIndex)=median(maxError);
-        minErrorPerStart(startNodeIndex)=median(minError);
-        
-        clear A;
-        clear times;
+        localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
+            anchorSets(anchorSetIndex,:),radius);
+
+        resultNode=localMaps{1}(node(startNodeIndex));
+
+        medianError(anchorSetIndex,startNodeIndex)=mean(resultNode.patched_net_coordinates_error_median);
+        meanError(anchorSetIndex,startNodeIndex)=mean(resultNode.patched_net_coordinates_error_mean);
+        maxError(anchorSetIndex,startNodeIndex)=mean(resultNode.patched_net_coordinates_error_max);
+        minError(anchorSetIndex,startNodeIndex)=mean(resultNode.patched_net_coordinates_error_min);
+        times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
+    end
+
+    patchTimePerStart(startNodeIndex)=median(times(:,startNodeIndex));
+    medianErrorPerStart(startNodeIndex)=median(medianError(:,startNodeIndex));
+    meanErrorPerStart(startNodeIndex)=median(meanError(:,startNodeIndex));
+    maxErrorPerStart(startNodeIndex)=median(maxError(:,startNodeIndex));
+    minErrorPerStart(startNodeIndex)=median(minError(:,startNodeIndex));
+
+    clear A;
+    clear times;
 
 end % for startNodeIndex
 
-result.patchTime=mean(patchTimePerStart);
-result.medianError=mean(medianErrorPerStart);
-result.meanError=mean(meanErrorPerStart);
-result.minError=mean(minErrorPerStart);
-result.maxError=mean(maxErrorPerStart);
+result.patchTime=median(patchTimePerStart);
+result.medianError=median(medianErrorPerStart);
+result.meanError=median(meanErrorPerStart);
+result.minError=median(minErrorPerStart);
+result.maxError=median(maxErrorPerStart);
+
+for a=1:numAnchorSets % for each anchorSets set
+    result.medianErrorPerAnchorSet(a)=median(medianError(a,:));
+    result.meanErrorPerAnchorSet(a)=median(meanError(a,:));
+    result.minErrorPerAnchorSet(a)=median(minError(a,:));
+    result.maxErrorPerAnchorSet(a)=median(maxError(a,:));
+end
+
+
 return

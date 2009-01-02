@@ -6,7 +6,7 @@ addpath('network')
 tic;
 
 ranging=0; % range-free
-numAnchors=3;
+numAnchors=4;
 
 radius=1.4;
 step=0.4;
@@ -19,11 +19,19 @@ networkType=0;
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-N=100;
-networkEdge=10;
+N=25;
+networkEdge=5;
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 sourceNetwork.width=networkEdge;
 sourceNetwork.height=networkEdge;
+
+%anchors=selectNodesFromCorner(network,numAnchors,1)';
+
+anchors=zeros(5,numAnchors);
+for a=1:6
+    anchors(a,:)=selectNodesAtCenter(sourceNetwork,numAnchors,a);
+end
+
 for i=1 : numSteps+1
 
     fprintf(1,'Radius: %.1f\n', radius);
@@ -32,12 +40,11 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    %anchors=selectNodesFromCorner(network,3,1)';
-    anchors=selectNodesAtCenter(network,numAnchors)';
-
-    plotNetwork(network,anchors,radius);
-
-    
+    for a=1:size(anchors,1)
+        suffix=sprintf('AnchorSet%.0f',a);
+        plotNetwork(network,anchors(a,:)',radius,suffix);
+    end
+   
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
     %That often means the area where you want to select an anchor node has no node in it to be selected.
@@ -81,7 +88,6 @@ for i=1 : numSteps+1
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
     radius = radius + step;
-
 end
 
 plotResult(result,minRadius,maxRadius);
