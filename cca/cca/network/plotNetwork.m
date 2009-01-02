@@ -3,7 +3,8 @@ function [filename]=plotNetwork(network,anchors,radius)
 
 radiusString=sprintf('Radio Range: %.1f',radius);
 figurename=sprintf('%s %s',network.shape,radiusString);
-figure('Name',figurename);
+clf
+%figure('Name',figurename);
 hold off
 gplot(network.connectivity, network.points,'-db');
 

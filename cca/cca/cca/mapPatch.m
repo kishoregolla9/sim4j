@@ -13,6 +13,7 @@ function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
 %  anchorSets - SxT matrix containing S anchorSets sets that want to be experimented
 %    with. Each anchorSets set has T anchorSets nodes.
 
+result.network=network;
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
 
