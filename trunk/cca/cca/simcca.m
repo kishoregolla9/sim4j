@@ -32,8 +32,8 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    %anchors=selectAnchorNodesFromCorner(network,3,1)';
-    anchors=selectAnchorNodesAtCenter(network,numAnchors)';
+    %anchors=selectNodesFromCorner(network,3,1)';
+    anchors=selectNodesAtCenter(network,numAnchors)';
 
     plotNetwork(network,anchors,radius);
 
