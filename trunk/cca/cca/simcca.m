@@ -9,8 +9,8 @@ ranging=0; % range-free
 
 radius=1.4;
 step=0.4;
-numSteps=8;
-minRadius=1.4;
+numSteps=5;
+minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
 networkType=0;
@@ -18,8 +18,8 @@ networkType=0;
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-N=50;
-networkEdge=6;
+N=100;
+networkEdge=10;
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 sourceNetwork.width=networkEdge;
 sourceNetwork.height=networkEdge;
@@ -31,7 +31,8 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    anchors=selectAnchorNodesBad(network,3)';
+    %anchors=selectAnchorNodesFromCorner(network,3,1)';
+    anchors=selectAnchorNodesFromEachCorner(network)';
 
     plotNetwork(network,anchors,radius);
 
@@ -82,23 +83,7 @@ for i=1 : numSteps+1
 
 end
 
-figure('Name','The Results');
-hold off
-plot([result.connectivity],[result.meanError],'-o');
-grid on
-plotTitle=sprintf('Network %s',network.shape);
-title(plotTitle);
-xlabel('Network Connectivity');
-ylabel('Location Error (factor of radius)');
-hold all
-plot([result.connectivity],[result.maxError],'-d');
-plot([result.connectivity],[result.minError],'-s');
-legend('Mean Error','Max Error','Min Error');
-hold off
-
-filename=sprintf('results\\NetworkConn_vs_Error_%s_%.1f_to_%.1fradius_%.0f.fig',...
-    network.shape,minRadius,maxRadius,N);
-hgsave(filename);
+plotResult(result,minRadius,maxRadius);
 
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
