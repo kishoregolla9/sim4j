@@ -1,4 +1,4 @@
-function [anchors]=selectAnchorNodesCloseToPoints(network,targets)
+function [anchors]=selectNodesCloseToPoints(network,targets)
 % Picks anchors close to the given targets
 % The result is the same length as the given targets
 

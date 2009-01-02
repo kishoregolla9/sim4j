@@ -1,4 +1,4 @@
-function [anchors]=selectAnchorNodesFromCorner(network,numAnchors,hopsFromCorner)
+function [anchors]=selectNodesFromCorner(network,numAnchors,hopsFromCorner)
 % Picks the 3 neighbors clumped together in the northeast corner
 if exist('numAnchors','var') == 0
     numAnchors=3;
