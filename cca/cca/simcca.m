@@ -6,6 +6,7 @@ addpath('network')
 tic;
 
 ranging=0; % range-free
+numAnchors=3;
 
 radius=1.4;
 step=0.4;
@@ -32,7 +33,7 @@ for i=1 : numSteps+1
     if (~network.connected), return, end
 
     %anchors=selectAnchorNodesFromCorner(network,3,1)';
-    anchors=selectAnchorNodesFromEachCorner(network)';
+    anchors=selectAnchorNodesAtCenter(network,numAnchors)';
 
     plotNetwork(network,anchors,radius);
 
