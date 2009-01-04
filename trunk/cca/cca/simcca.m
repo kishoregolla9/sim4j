@@ -8,19 +8,20 @@ tic;
 ranging=0; % range-free
 numAnchors=4;
 
-radius=1.4;
+radius=1.6;
 step=0.4;
 numSteps=5;
 minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
-networkType=0;
 %  0:random, 1:grid, 2:C-shape random, 3:C-shape grid, 4:rectangle random,
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-N=25;
-networkEdge=5;
+networkType=0;
+N=225;
+networkEdge=15;
+
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 sourceNetwork.width=networkEdge;
 sourceNetwork.height=networkEdge;
@@ -40,11 +41,8 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
 
-    for a=1:size(anchors,1)
-        suffix=sprintf('AnchorSet%.0f',a);
-        plotNetwork(network,anchors(a,:)',radius,suffix);
-    end
-   
+    plotNetwork(network,anchors(a,:)',radius);
+  
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
     %That often means the area where you want to select an anchor node has no node in it to be selected.
