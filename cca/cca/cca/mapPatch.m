@@ -16,6 +16,7 @@ function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
 result.network=network;
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
+result.anchors=anchorSets;
 
 node=startNodes;
 numStartNodes=size(node,2);  % number of starting nodes
