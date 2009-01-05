@@ -9,4 +9,5 @@ network.numberOfNodes=sourceNetwork.numberOfNodes;
 network.connected=~disconnect;
 network.width=sourceNetwork.width;
 network.height=sourceNetwork.height;
+network.radius=radius;
 return;

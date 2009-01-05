@@ -30,7 +30,7 @@ function [network]=buildNetwork(type,width,N,length)
   switch type
     case 0  % random
         points=rand(N,2)*width;
-        network.shape=sprintf('Random %.0fx%.0f Square with %.0f nodes',width,width,N);
+        network.shape=sprintf('Random-%.0fx%.0f-Square-with-%.0f-nodes',width,width,N);
         network.points=points;
         network.numberOfNodes=N;
     case 1  % Square Grid 
@@ -38,7 +38,7 @@ function [network]=buildNetwork(type,width,N,length)
             fprintf(2,'Size must be %fx%f=%f!',width,width,N); 
             return;
         end 
-        network.shape=sprintf('Grid %.0fx%.0f Square with %.0f nodes',width,width,N);
+        network.shape=sprintf('Grid-%.0fx%.0f-Square-with-%.0f-nodes',width,width,N);
         points=zeros(N,2);
         k=1;
         for i=1:width
@@ -53,7 +53,7 @@ function [network]=buildNetwork(type,width,N,length)
         network.points=points;
         network.numberOfNodes=width*width;        
     case 2 % C-shape random
-        network.shape=sprintf('C-Shape Random %ix%i',width,width);
+        network.shape=sprintf('C-Shape-Random-%ix%i',width,width);
         fraction = 0.3;
         network.points=zeros(N,2);
         for j = 1:N
@@ -66,7 +66,7 @@ function [network]=buildNetwork(type,width,N,length)
         end
         
     case 3  %C-shape grid, N is not used. N is determined by width.
-        network.shape=sprintf('C-Shape Grid %ix%i',width,width);
+        network.shape=sprintf('C-Shape-Grid-%ix%i',width,width);
         fraction = 0.3;
         index = 1;
         network.points=zeros(N,2);
@@ -92,7 +92,7 @@ function [network]=buildNetwork(type,width,N,length)
         end
         
     case 4 %rectangle random. width is the width to length ratio.
-        network.shape=sprintf('Rectangle Random %ix%i',width,length);
+        network.shape=sprintf('Rectangle-Random-%ix%i',width,length);
         network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
@@ -103,7 +103,7 @@ function [network]=buildNetwork(type,width,N,length)
         end
 
     case 5 % Rectangle grid with 20% placement error
-        network.shape=sprintf('Rectangle Grid(20\%error) %ix%i',width,length);       
+        network.shape=sprintf('Rectangle-Grid(20\%error)-%ix%i',width,length);       
         deploy_width=width;
         network.points=zeros(deploy_width,2);
         for i=1:deploy_width
@@ -118,7 +118,7 @@ function [network]=buildNetwork(type,width,N,length)
 
     case 6  %L-shape random
         fraction = 0.3;
-        network.shape=sprintf('L-Shape Random %ix%i',N,length);                
+        network.shape=sprintf('L-Shape-Random-%ix%i',N,length);                
         network.points=zeros(N,2);
         for j = 1:N
             new_points = rand(1,2);
@@ -130,7 +130,7 @@ function [network]=buildNetwork(type,width,N,length)
 
 
     case 7 %In L-shape grid case, we get about 51 nodes
-        network.shape=sprintf('L-Shape Grid %ix%i',width,length);
+        network.shape=sprintf('L-Shape-Grid-%ix%i',width,length);
         rawNetwork=zeros(N,2);
         network.points=zeros(N,2);
         for i=1:width
@@ -157,7 +157,7 @@ function [network]=buildNetwork(type,width,N,length)
         end
 
     case 8 %loop random
-        network.shape=sprintf('Loop Random %ix%i',width,length);
+        network.shape=sprintf('Loop-Random %ix%i',width,length);
         network.points=zeros(N,2);
         fraction = 0.2;
         for j = 1:N
@@ -198,7 +198,7 @@ function [network]=buildNetwork(type,width,N,length)
         end
 
     case 10  % irregular shape
-        network.shape=sprintf('Irregular %ix%i',width,length);
+        network.shape=sprintf('Irregular-%ix%i',width,length);
         xdist = sin(pi/3);
         ydist = 1;
         network.points=zeros(N, 2);
