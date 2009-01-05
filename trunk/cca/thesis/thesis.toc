@@ -1,11 +1,9 @@
 \contentsline {chapter}{Abstract}{iii}
 \contentsline {chapter}{Acknowledgments}{v}
-\contentsline {chapter}{Preface}{vi}
-\contentsline {chapter}{Table of Contents}{vii}
-\contentsline {chapter}{Nomenclature}{viii}
+\contentsline {chapter}{Table of Contents}{vi}
+\contentsline {chapter}{List of Figures}{vii}
 \contentsline {chapter}{ \numberline {1}Introduction}{1}
-\contentsline {section}{\numberline {1.1}First Section}{1}
-\contentsline {section}{\numberline {1.2}Section Demonstrating Tables}{2}
+\contentsline {section}{\numberline {1.1}Anchor Placement: Equal distribution along 45 Degree Axis}{1}
 \contentsline {chapter}{ \numberline {2}The Beginning of the Details}{4}
 \contentsline {section}{\numberline {2.1}Section Heading}{4}
 \contentsline {subsection}{\numberline {2.1.1}Sub-Section Heading}{4}
