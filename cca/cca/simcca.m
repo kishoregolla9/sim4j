@@ -1,4 +1,7 @@
-clear
+if exist('folder','var') == 0
+    folder='result\\temp';
+end
+
 hold off
 addpath('cca')
 addpath('network')
@@ -18,20 +21,21 @@ maxRadius=1.4+(step*numSteps);
 %  5:rectangle grid with 10% placement error (length=N, width=size)
 %  6:L-shape random, 7:L-shape grid with 10% placement error)
 %  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-networkType=0;
-N=225;
-networkEdge=15;
+networkType=1;
+N=49;
+networkEdge=7;
 
 [sourceNetwork]=buildNetwork(networkType,networkEdge,N);
 sourceNetwork.width=networkEdge;
 sourceNetwork.height=networkEdge;
 
-%anchors=selectNodesFromCorner(network,numAnchors,1)';
-
-anchors=zeros(5,numAnchors);
-for a=1:6
-    anchors(a,:)=selectNodesAtCenter(sourceNetwork,numAnchors,a);
+anchors=zeros(6,numAnchors);
+distanceFromCenter=0;
+for a=1:5
+    anchors(a,:)=selectNodesAtCenter(sourceNetwork,numAnchors,distanceFromCenter);
+    distanceFromCenter=distanceFromCenter+0.5;
 end
+anchors(6,:)=selectNodesFromEachCorner(sourceNetwork);
 
 for i=1 : numSteps+1
 
@@ -40,8 +44,8 @@ for i=1 : numSteps+1
     % Build and check the network
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
-
-    plotNetwork(network,anchors(a,:)',radius);
+    network.anchors=anchors;
+    close(plotNetwork(network,folder));
   
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
@@ -88,7 +92,7 @@ for i=1 : numSteps+1
     radius = radius + step;
 end
 
-plotResult(result,minRadius,maxRadius);
+plotResult(result,minRadius,maxRadius,folder);
 
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
