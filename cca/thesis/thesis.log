@@ -1,4 +1,4 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2009.1.3)  4 JAN 2009 23:15
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2009.1.3)  5 JAN 2009 21:49
 entering extended mode
 **thesis.tex
 (./thesis.tex
@@ -257,9 +257,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--2
 
 (./chapter1.tex
 Chapter 1.
-File: results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.ep
-s Graphic file (type eps)
-<results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.eps>
+File: ../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Ra
+dius.eps Graphic file (type eps)
+
+<../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.
+eps>
 File: results/45DegreeAxis_Random/NetworkConn-vs-Error-Random-6x6-Square-with-5
 0-nodes-1.6-to-3.4radius-50.eps Graphic file (type eps)
 
@@ -319,12 +321,12 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 1981 strings out of 94501
- 25043 string characters out of 1175795
+ 1982 strings out of 94501
+ 25085 string characters out of 1175795
  77505 words of memory out of 1000000
  5104 multiletter control sequences out of 10000+50000
  9526 words of font info for 34 fonts, out of 500000 for 2000
  580 hyphenation exceptions out of 8191
  28i,12n,33p,370b,273s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on thesis.dvi (12 pages, 7984 bytes).
+Output written on thesis.dvi (12 pages, 7992 bytes).
