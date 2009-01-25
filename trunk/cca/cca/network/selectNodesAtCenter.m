@@ -16,20 +16,17 @@ if (distanceFromCenter ==0)
         targets(i,2)=y;
     end
 else
-    if (numNodes ~= 4)
-        fprintf(2,'Must have 4 nodes for getting distances away from center');
+    degreesPerTarget=2*pi/numNodes;
+    angle=0;
+    for i=1:numNodes
+        x=distanceFromCenter*cos(angle);
+        y=distanceFromCenter*sin(angle);
+        targets(i,1)=x+network.width/2;
+        targets(i,2)=y+network.height/2;
+        
+        angle=angle+degreesPerTarget;
     end
-    targets(1,1)=x-distanceFromCenter;
-    targets(1,2)=y+distanceFromCenter;
     
-    targets(2,1)=x+distanceFromCenter;
-    targets(2,2)=y+distanceFromCenter;
-
-    targets(3,1)=x+distanceFromCenter;
-    targets(3,2)=y-distanceFromCenter;
-    
-    targets(4,1)=x-distanceFromCenter;
-    targets(4,2)=y-distanceFromCenter;
 end
 
 anchors=selectNodesCloseToPoints(network,targets);
