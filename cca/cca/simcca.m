@@ -1,5 +1,6 @@
 if exist('folder','var') == 0
-    folder='result\\temp';
+    folder='results\\temp';
+    mkdir folder
 end
 
 hold off
@@ -7,9 +8,7 @@ addpath('cca')
 addpath('network')
 
 tic;
-
-ranging=0; % range-free
-numAnchors=4;
+networkconstants;
 
 radius=1.6;
 step=0.4;
@@ -17,26 +16,17 @@ numSteps=5;
 minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
-%  0:random, 1:grid, 2:C-shape random, 3:C-shape grid, 4:rectangle random,
-%  5:rectangle grid with 10% placement error (length=N, width=size)
-%  6:L-shape random, 7:L-shape grid with 10% placement error)
-%  8:loop random, 9:loop grid with 10% placement error, 10:irregular
-networkType=1;
-N=49;
-networkEdge=7;
+shape=SHAPE_SQUARE;
+placement=NODE_GRID;
+N=120;
+networkEdge=8;
+ranging=0; % range-free
+numAnchors=3;
+numAnchorSets=5;
 
-[sourceNetwork]=buildNetwork(networkType,networkEdge,N);
-sourceNetwork.width=networkEdge;
-sourceNetwork.height=networkEdge;
-
-anchors=zeros(6,numAnchors);
-distanceFromCenter=0;
-for a=1:5
-    anchors(a,:)=selectNodesAtCenter(sourceNetwork,numAnchors,distanceFromCenter);
-    distanceFromCenter=distanceFromCenter+0.5;
-end
-anchors(6,:)=selectNodesFromEachCorner(sourceNetwork);
-
+[sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
+[anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
+close(gcf);
 for i=1 : numSteps+1
 
     fprintf(1,'Radius: %.1f\n', radius);
@@ -45,8 +35,8 @@ for i=1 : numSteps+1
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
     network.anchors=anchors;
-    close(plotNetwork(network,folder));
-  
+    plotNetwork(network,folder);
+    disp 'hello';
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
     %That often means the area where you want to select an anchor node has no node in it to be selected.
