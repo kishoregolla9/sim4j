@@ -36,7 +36,7 @@ for i=1 : numSteps+1
     if (~network.connected), return, end
     network.anchors=anchors;
     plotNetwork(network,folder);
-    disp 'hello';
+
     %or anchorNodesSelectionSquare100.m or other similar functions (e.g., SingleNodeSelection.m)
     %to get anchors or anchor sets. Sometimes, you get error when running these scripts/functions.
     %That often means the area where you want to select an anchor node has no node in it to be selected.
