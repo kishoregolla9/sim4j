@@ -13,11 +13,11 @@ points = network.points;
 distanceMatrix=network.distanceMatrix;
 N=size(network.points,1);
 
-for ii=1:N
-    map{ii}=node(ii).local_network_c; %added by li as cca directly generates the network
-    index{ii} = (node(ii).neighbors_merge)'; %grab all the nodes in the local map
-    indexInclude{ii} = ii;
-end %for ii
+for i=1:N
+    map{i}=node(i).local_network_c; %added by li as cca directly generates the network
+    index{i} = (node(i).neighbors_merge)'; %grab all the nodes in the local map
+    indexInclude{i} = i;
+end %for i
 
 connectivity=network.connectivity;
 tStart = cputime;
@@ -43,6 +43,7 @@ while length(curindexInclude) ~= N
         curMap, map{node2}, curindex, index{node2}, ...
         curindexInclude, indexInclude{node2},connectivity);
 end %while
+
 tEnd = cputime;
 disp(['Patching the local maps takes ' num2str(tEnd-tStart) ' sec']);
 node(node_k).map_patchTime=tEnd-tStart;
@@ -68,13 +69,10 @@ D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/r;
 node(node_k).patched_net_dist_error_mean=D_dist_mean;
 
-node(node_k).patched_net_coordinates_error_mean=mean(differenceVector)/r;
-node(node_k).patched_net_coordinates_error_median=median(differenceVector)/r;
-node(node_k).patched_net_coordinates_error_max=max(differenceVector)/r;
-node(node_k).patched_net_coordinates_error_min=min(differenceVector)/r;
+node(node_k).differenceVector=differenceVector;
+node(node_k).mappedPoints=mappedResult;
 
 return;
-
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

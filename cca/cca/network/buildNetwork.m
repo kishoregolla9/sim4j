@@ -60,12 +60,12 @@ switch shape
                     end
                     network.points(j,:) = new_points*width;
                 end
-
+                network.numberOfNodes=N;
             case NODE_GRID  %C-shape grid, N is not used. N is determined by width.
                 network.shape=sprintf('C-Shape-Grid-%ix%i',width,width);
                 fraction = 0.3;
                 index = 1;
-                network.points=zeros(N,2);
+                network.points=zeros(N,2);  
                 for i=1:width
                     if (i <= width*fraction)
                         for j=1:width
@@ -86,6 +86,7 @@ switch shape
                         end
                     end
                 end
+                network.numberOfNodes=N;
         end
 
     case SHAPE_RECTANGLE
