@@ -1,6 +1,7 @@
-if exist('folder','var') == 0
+clear;
+if exist('folder','var') ~= 1
     folder='results\\temp';
-    mkdir folder
+    mkdir(folder);
 end
 
 %% BuildNetwork
@@ -13,13 +14,13 @@ networkconstants;
 
 radius=1.5;
 step=0.5;
-numSteps=3;
+numSteps=1;
 minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=40;
+N=25;
 networkEdge=5;
 ranging=0; % range-free
 numAnchors=3;
@@ -52,7 +53,6 @@ for i=1 : numSteps+1
     [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
     fprintf(1,'Done generating local maps: %f\n', cputime-localMapStart);
 
-    
     %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
     %[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
     %e.g.,
@@ -66,7 +66,8 @@ for i=1 : numSteps+1
 end
 
 plotResult(result,minRadius,maxRadius,folder);
-
+filename=sprintf('%s\\cca_results.mat',folder);
+save filename;
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N));

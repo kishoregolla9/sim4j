@@ -17,7 +17,7 @@ else
     %preallocate nodes array
     nodes=repmat(struct('neighbors',zeros(5)),N,1);
     networkConnectivityLevel=0;
-    for i=1:N %compute all the local maps
+    for i=1:N 
         %get node_i's neighbor nodes within radius;
         [nodes(i).neighbors]=find_neighbors(D,radius,i,1);
         networkConnectivityLevel=networkConnectivityLevel+size(nodes(i).neighbors,2)-1;
