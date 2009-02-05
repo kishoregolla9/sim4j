@@ -1,6 +1,6 @@
 clear;
 if exist('folder','var') ~= 1
-    folder='results\\temp';
+    folder=sprintf('results\\%i-%i-%i_%i:%i:%i',fix(clock));
     mkdir(folder);
 end
 
@@ -62,6 +62,11 @@ for i=1 : numSteps+1
     [result(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
+    filename=sprintf('%s\\networkDifference-%s-%.1f.eps',folder,network.shape,radius);
+    plotNetworkDiff(network,...
+        result(1).localMaps.mappedPoints,...
+        network.anchors(1,:),filename);
+    
     radius = radius + step;
 end
 
