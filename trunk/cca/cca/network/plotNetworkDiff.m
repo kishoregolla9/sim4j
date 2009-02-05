@@ -1,4 +1,4 @@
-function [h]=plotNetworkDiff(network,mappedPoints,anchors,folder)
+function [h]=plotNetworkDiff(network,mappedPoints,anchors,filename)
 % Plot the network, showing the anchor nodes with red circles
 
 figurename=sprintf('%s',network.shape);
@@ -21,7 +21,6 @@ for a=1:size(anchors,2)
 end
 
 hold off
-% filename=sprintf('%s\\network-%s-Radius%.1f.eps',folder,network.shape,radius);
-% print('-depsc',filename);
+print('-depsc',filename);
 
 return;
