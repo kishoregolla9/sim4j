@@ -1,6 +1,6 @@
 clear;
 if exist('folder','var') ~= 1
-    folder=sprintf('results\\%i-%i-%i_%i:%i:%i',fix(clock));
+    folder=sprintf('results\\%i-%i-%i_%i_%i_%i',fix(clock));
     mkdir(folder);
 end
 
@@ -14,17 +14,17 @@ networkconstants;
 
 radius=1.5;
 step=0.5;
-numSteps=1;
+numSteps=3;
 minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=25;
-networkEdge=5;
+N=36;
+networkEdge=6;
 ranging=0; % range-free
 numAnchors=3;
-numAnchorSets=1;
+numAnchorSets=3;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
@@ -62,10 +62,12 @@ for i=1 : numSteps+1
     [result(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
-    filename=sprintf('%s\\networkDifference-%s-%.1f.eps',folder,network.shape,radius);
-    plotNetworkDiff(network,...
-        result(1).localMaps.mappedPoints,...
-        network.anchors(1,:),filename);
+    for j=1:3
+        plottitle=sprintf('NetworkDifference-%s-Radius%.1f-AnchorSet%i',network.shape,radius,j);
+        filename=sprintf('%s\\%s.eps',folder,plottitle);
+        mappedPoints=result(i).localMaps(j).mappedPoints;
+        plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
+    end
     
     radius = radius + step;
 end
