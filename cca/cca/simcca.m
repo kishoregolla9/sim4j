@@ -8,15 +8,16 @@ end
 hold off
 addpath('cca')
 addpath('network')
+addpath('plot')
 
 tic;
 networkconstants;
-
-radius=1.5;
+minRadius=1.6;
 step=0.5;
 numSteps=4;
-minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
+
+radii=[minRadius:step:maxRadius];
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
@@ -32,7 +33,9 @@ numAnchorSets=3;
 %% RUNCCA
 close(gcf);
 for i=1 : numSteps+1
-
+    
+    radius=radii(1);
+    
     fprintf(1,'Radius: %.1f\n', radius);
 
     % Build and check the network
@@ -69,10 +72,9 @@ for i=1 : numSteps+1
         plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
     end
     
-    radius = radius + step;
 end
-
-plotResult(result,minRadius,maxRadius,folder);
+result.radii=radii;
+plotResult(result,folder);
 filename=sprintf('%s\\cca_results.mat',folder);
 save filename;
 totalTime=toc;
