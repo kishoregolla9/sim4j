@@ -15,9 +15,10 @@ plot([result.connectivity],[result.minError],'-s');
 legend('Mean Error','Max Error','Min Error');
 hold off
 
-filename=sprintf('%s\\Connectivity-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
+filename=sprintf('%s\\Connectivity-vs-Error-%s-Radius%.1f-to-%.1f',...
    folder,network.shape,minRadius,maxRadius);
 print('-depsc',filename);
+print('-dpng',filename);
 
 figure('Name','The Results By Anchor');
 
@@ -50,8 +51,9 @@ plot(1:numAnchorSets,median(mins),'-s');
 legend('Median Error','Max Error','Min Error');
 hold off
 
-filename=sprintf('%s\\AnchorSetsVsError-%s-Radius%.1f-to-%.1f.eps',...
+filename=sprintf('%s\\AnchorSetsVsError-%s-Radius%.1f-to-%.1f',...
    folder,network.shape,minRadius,maxRadius);
 print('-depsc',filename);
+print('-dpng',filename);
 
 

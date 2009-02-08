@@ -14,14 +14,14 @@ networkconstants;
 
 radius=1.5;
 step=0.5;
-numSteps=3;
+numSteps=4;
 minRadius=1.6;
 maxRadius=1.4+(step*numSteps);
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=36;
-networkEdge=6;
+N=100;
+networkEdge=10;
 ranging=0; % range-free
 numAnchors=3;
 numAnchorSets=3;
@@ -64,7 +64,7 @@ for i=1 : numSteps+1
 
     for j=1:3
         plottitle=sprintf('NetworkDifference-%s-Radius%.1f-AnchorSet%i',network.shape,radius,j);
-        filename=sprintf('%s\\%s.eps',folder,plottitle);
+        filename=sprintf('%s\\%s',folder,plottitle);
         mappedPoints=result(i).localMaps(j).mappedPoints;
         plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
     end

@@ -12,12 +12,12 @@ clf
 
 gplot(network.connectivity, network.points,'-db');
 
-[xLine,yLine]=dsxy2figxy(gca,[0,network.width],[0,network.height]);
-line1=annotation('line',xLine,yLine);
-set(line1,'LineStyle','--','LineWidth',2);
-[xLine,yLine]=dsxy2figxy(gca,[0,network.width],[network.height,0]);
-line2=annotation('line',xLine,yLine);
-set(line2,'LineStyle','--','LineWidth',2);
+% [xLine,yLine]=dsxy2figxy(gca,[0,network.width],[0,network.height]);
+% line1=annotation('line',xLine,yLine);
+% set(line1,'LineStyle','--','LineWidth',2);
+% [xLine,yLine]=dsxy2figxy(gca,[0,network.width],[network.height,0]);
+% line2=annotation('line',xLine,yLine);
+% set(line2,'LineStyle','--','LineWidth',2);
 
 title({network.shape;radiusString});
 hold all
@@ -42,7 +42,8 @@ end
 
 
 hold off
-filename=sprintf('%s\\network-%s-Radius%.1f.eps',folder,network.shape,radius);
+filename=sprintf('%s\\network-%s-Radius%.1f',folder,network.shape,radius);
 print('-depsc',filename);
+print('-dpng',filename);
 
 return;

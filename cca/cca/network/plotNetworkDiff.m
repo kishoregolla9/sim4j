@@ -19,5 +19,6 @@ end
 
 hold off
 print('-depsc',filename);
+print('-dpng',filename);
 
 return;
