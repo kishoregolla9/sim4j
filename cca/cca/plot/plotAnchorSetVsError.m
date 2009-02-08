@@ -1,7 +1,9 @@
-function [ h ] = plotAnchorSetVsError( result,folder )
+function [ h ] = plotAnchorSetVsError( result,radii,folder )
 %PLOTANCHORSETVSERROR plot the error of each anchor set
 
 network=result.network;
+minRadius=radii(1);
+maxRadius=radii(size(radii,2));
 h=figure('Name','The Results By Anchor');
 
 numAnchorSets=size(result(1).anchors,1);
@@ -15,24 +17,22 @@ for i=1:size(result,2)
         mins(i,:)=result(i).minErrorPerAnchorSet;
         maxs(i,:)=result(i).maxErrorPerAnchorSet;
     else
-        fprintf(1,'Result %.0f has a low connectivity\n',i);
+        fprintf(1,'Result %.0f has a low connectivity (%f)\n',i,result.connectivity);
     end
 end
 
-hold off
-plot(1:numAnchorSets,median(medians),'-o');
+bar3([median(maxs);median(medians);median(mins)],'detached');
 grid on
-plotTitle=sprintf('Network %s',network.shape);
-title(plotTitle);
-xlabel('Anchor Set');
-ylabel('Location Error (factor of radius)');
-hold all
-plot(1:numAnchorSets,median(maxs),'-d');
-plot(1:numAnchorSets,median(mins),'-s');
 legend('Median Error','Max Error','Min Error');
-hold off
+plotTitle=sprintf('Network %s',network.shape);
+title({'Median Error for Connectivities > 10',plotTitle});
+ylabel('Anchor Set');
+zlabel('Location Error (factor of radius)');
+% hold off
 
-filename=sprintf('%s\\AnchorSetsVsError-%s-Radius%.1f-to-%.1f',...
+filename=sprintf('%s\\AnchorSetsVsError-%s-Radius%.1f-to-%.1f.eps',...
    folder,network.shape,minRadius,maxRadius);
 print('-depsc',filename);
+filename=sprintf('%s\\AnchorSetsVsError-%s-Radius%.1f-to-%.1f.png',...
+   folder,network.shape,minRadius,maxRadius);
 print('-dpng',filename);
