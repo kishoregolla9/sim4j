@@ -12,12 +12,13 @@ addpath('plot')
 
 tic;
 networkconstants;
-minRadius=1.6;
+
+minRadius=1.5;
 step=0.5;
 numSteps=4;
-maxRadius=1.4+(step*numSteps);
+maxRadius=minRadius+(step*numSteps);
 
-radii=[minRadius:step:maxRadius];
+radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
@@ -71,10 +72,10 @@ for i=1 : numSteps+1
         mappedPoints=result(i).localMaps(j).mappedPoints;
         plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
     end
-    
+
 end
-result.radii=radii;
-plotResult(result,folder);
+
+plotResult(result,radii,folder);
 filename=sprintf('%s\\cca_results.mat',folder);
 save filename;
 totalTime=toc;
