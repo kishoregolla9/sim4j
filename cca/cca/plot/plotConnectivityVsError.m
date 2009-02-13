@@ -1,22 +1,22 @@
-function [ h ] = plotConnectivityVsError( result,radii,folder )
+function [ h ] = plotConnectivityVsError( results,radii,folder )
 %PLOTCONNECTIVITYVSERROR Plot network connectivity vs localization error
 %   
 
-network=result.network;
+network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 h=figure('Name','The Results by Connectivity');
 hold off
-plot([result.connectivity],[result.meanError],'-o');
+plot([results.connectivity],[results.meanError],'-o');
 grid on
 plotTitle=sprintf('Network %s',network.shape);
 title({'Localization Error',plotTitle});
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
-plot([result.connectivity],[result.maxError],'-d');
-plot([result.connectivity],[result.minError],'-s');
+plot([results.connectivity],[results.maxError],'-d');
+plot([results.connectivity],[results.minError],'-s');
 legend('Mean Error','Max Error','Min Error');
 hold off
 

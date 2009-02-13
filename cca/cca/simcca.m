@@ -35,7 +35,7 @@ numAnchorSets=3;
 close(gcf);
 for i=1 : numSteps+1
     
-    radius=radii(1);
+    radius=radii(i);
     
     fprintf(1,'Radius: %.1f\n', radius);
 
@@ -63,19 +63,19 @@ for i=1 : numSteps+1
     disp('------------------------------------')
     fprintf(1,'Doing Map Patch\n');
     startMapPatch=cputime;
-    [result(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
+    [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
     for j=1:3
         plottitle=sprintf('NetworkDifference-%s-Radius%.1f-AnchorSet%i',network.shape,radius,j);
         filename=sprintf('%s\\%s',folder,plottitle);
-        mappedPoints=result(i).localMaps(j).mappedPoints;
+        mappedPoints=results(i).localMaps(j).mappedPoints;
         plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
     end
 
 end
 
-plotResult(result,radii,folder);
+plotResult(results,radii,folder);
 filename=sprintf('%s\\cca_results.mat',folder);
 save filename;
 totalTime=toc;
