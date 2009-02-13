@@ -18,7 +18,8 @@ for a=1:size(anchors,2)
 end
 
 hold off
-print('-depsc',filename);
-print('-dpng',filename);
-
+foo=sprintf('%s.eps',filename);
+print('-depsc',foo);
+foo=sprintf('%s.png',filename);
+print('-dpng',foo);
 return;
