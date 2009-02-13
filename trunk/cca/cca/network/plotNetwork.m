@@ -42,8 +42,9 @@ end
 
 
 hold off
-filename=sprintf('%s\\network-%s-Radius%.1f',folder,network.shape,radius);
+filename=sprintf('%s\\network-%s-Radius%.1f.eps',folder,network.shape,radius);
 print('-depsc',filename);
+filename=sprintf('%s\\network-%s-Radius%.1f.png',folder,network.shape,radius);
 print('-dpng',filename);
 
 return;
