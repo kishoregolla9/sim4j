@@ -13,9 +13,9 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=2.0;
+minRadius=2.5;
 step=0.5;
-numSteps=3;
+numSteps=0;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
@@ -66,12 +66,9 @@ for i=1 : numSteps+1
     [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
-    for j=1:3
-        plottitle=sprintf('NetworkDifference-%s-Radius%.1f-AnchorSet%i',network.shape,radius,j);
-        filename=sprintf('%s\\%s',folder,plottitle);
-        mappedPoints=results(i).localMaps(j).mappedPoints;
-        plotNetworkDiff(network,mappedPoints,network.anchors(j,:),plottitle,filename);
-    end
+    plottitle=sprintf('NetworkDifference-%s-Radius%.1f',network.shape,radius);
+    filename=sprintf('%s\\%s',folder,plottitle);
+    plotNetworkDiff(results(i),plottitle,filename);
 
 end
 
