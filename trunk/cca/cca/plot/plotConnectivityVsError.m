@@ -15,9 +15,10 @@ title({'Localization Error',plotTitle});
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
+plot([results.connectivity],[results.medianError],'-x');
 plot([results.connectivity],[results.maxError],'-d');
 plot([results.connectivity],[results.minError],'-s');
-legend('Mean Error','Max Error','Min Error');
+legend('Mean Error','Median Error','Max Error','Min Error');
 hold off
 
 filename=sprintf('%s\\Connectivity-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
