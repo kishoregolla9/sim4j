@@ -66,9 +66,7 @@ for i=1 : numSteps+1
     [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
 
-    plottitle=sprintf('NetworkDifference-%s-Radius%.1f',network.shape,radius);
-    filename=sprintf('%s\\%s',folder,plottitle);
-    plotNetworkDiff(results(i),plottitle,filename);
+    plotNetworkDiff(results(i),folder);
 
 end
 
