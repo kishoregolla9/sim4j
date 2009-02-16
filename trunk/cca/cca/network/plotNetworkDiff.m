@@ -19,7 +19,7 @@ for j=1:numAnchorSets
     hold all
     for i=1:size(realPoints,1)
         plot([realPoints(i,1),mappedPoints(i,1)],...
-            [realPoints(i,2),mappedPoints(i,2)],'-dr','MarkerSize',3);
+            [realPoints(i,2),mappedPoints(i,2)],'-or','MarkerSize',3);
     end
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
 
@@ -32,8 +32,8 @@ for j=1:numAnchorSets
             'MarkerSize',3);
         rectangle('Position',[x-r,y-r,r*2,r*2],'Curvature',[1 1]);
     end
-    axis equal square
     axis([0 ceil(max(realPoints(:,1))) 0 ceil(max(realPoints(:,2)))]);
+    axis square
     hold off    
 end
 
@@ -44,6 +44,8 @@ dataToPlot=[result.maxErrorPerAnchorSet;result.meanErrorPerAnchorSet;result.medi
 bar(dataToPlot);
 legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3']);
 set(gca,'XTickLabel','Max|Mean|Median|Min')
+title('Location Error Statistics');
+grid on;
 
 filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,result.network.shape,r);
 foo=sprintf('%s.eps',filename);
