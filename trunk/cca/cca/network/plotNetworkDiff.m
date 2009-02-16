@@ -4,20 +4,16 @@ function [h]=plotNetworkDiff(result,folder)
 % Red points are mapped point locations
 
 r=result.radius;
-plottitle=sprintf('NetworkDifference-%s-Radius%.1f',result.network.shape,r);
-h=figure('Name',plottitle);
-numPlots=size(result.network.anchors,1);
+plottitle=sprintf('%s Radius %.1f',result.network.shape,r);
+h=figure('Name',['Network Difference' plottitle]);
+numAnchorSets=size(result.network.anchors,1);
 
-subplot(2,numPlots,numPlots+1:2*numPlots);
-dataToPlot=[result.maxErrorPerAnchorSet;result.medianErrorPerAnchorSet;result.minErrorPerAnchorSet]
-bar(dataToPlot);
-
-for j=1:numPlots
+for j=1:numAnchorSets
     mappedPoints=result.localMaps(j).mappedPoints;
     realPoints=result.network.points;
     anchors=result.network.anchors(j,:);
     
-    subplot(2,numPlots,j,'align');
+    subplot(2,numAnchorSets,j,'align');
     subplotTitle=sprintf('Anchor Set %i',j);
     title(subplotTitle);
     hold all
@@ -43,7 +39,13 @@ end
 
 suptitle(plottitle);
 
-filename=sprintf('%s\\%s',folder,plottitle);
+subplot(2,numAnchorSets,numAnchorSets+1:2*numAnchorSets);
+dataToPlot=[result.maxErrorPerAnchorSet;result.meanErrorPerAnchorSet;result.medianErrorPerAnchorSet;result.minErrorPerAnchorSet];
+bar(dataToPlot);
+legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3']);
+set(gca,'XTickLabel','Max|Mean|Median|Min')
+
+filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,result.network.shape,r);
 foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
