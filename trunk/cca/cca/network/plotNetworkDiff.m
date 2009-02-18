@@ -23,6 +23,11 @@ for j=1:numAnchorSets
     end
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
 
+    
+    differenceVector=result.localMaps(j).differenceVector;
+    [m]=getMaxErrorPoint(differenceVector)
+    plot(realPoints(m),'pg','MarkerSize',5);
+    
     for a=1:size(anchors,2)
         x=realPoints(anchors(:,a),1);
         y=realPoints(anchors(:,a),2);
@@ -52,4 +57,15 @@ foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
 print('-dpng',foo);
-return;
+end
+
+function [m]=getMaxErrorPoint(differenceVector)
+    maxError=0;
+    for i=1:size(differenceVector)
+        thisError=mean(differenceVector(i,:))
+        if (thisError > maxError) 
+            maxError=thisError; 
+            m=i;
+        end
+    end
+end
