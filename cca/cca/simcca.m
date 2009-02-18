@@ -13,20 +13,20 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=2.5;
+minRadius=1.5;
 step=0.5;
-numSteps=0;
+numSteps=6;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=64;
-networkEdge=8;
+N=400;
+networkEdge=20;
 ranging=0; % range-free
 numAnchors=3;
-numAnchorSets=3;
+numAnchorSets=5;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
@@ -75,4 +75,4 @@ filename=sprintf('%s\\cca_workspace_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
 save(filename);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
-    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N));
+    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))

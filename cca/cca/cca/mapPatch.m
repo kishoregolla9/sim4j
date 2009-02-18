@@ -48,7 +48,7 @@ for startNodeIndex=1:numStartNodes % for each starting node
         resultNode=localMaps{1}(node(startNodeIndex));
         differenceVector=resultNode.differenceVector;
         result.localMaps(anchorSetIndex)=resultNode;
-        
+
         % Remove the anchor node differences
 %         for i=1:size(anchorNodes,2)
 %             % Assumes anchorNodes are in order
