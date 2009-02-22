@@ -8,7 +8,6 @@ maxRadius=radii(size(radii,2));
 h=figure('Name','The Results by Connectivity');
 hold off
 
-subplot(2,3,1);
 plot([results.connectivity],[results.meanError],'-o');
 grid on
 plotTitle=sprintf('Network %s',network.shape);

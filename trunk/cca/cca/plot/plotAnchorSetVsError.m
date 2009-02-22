@@ -1,25 +1,25 @@
-function [ h ] = plotAnchorSetVsError( result,radii,folder )
+function plotAnchorSetVsError( results,radii,folder )
 %PLOTANCHORSETVSERROR plot the error of each anchor set
 
-network=result.network;
+network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
-h=figure('Name','The Results By Anchor');
+figure('Name','Anchor Set By Anchor');
 
-numAnchorSets=size(result(1).anchors,1);
-numConnectivityPoints=size(result,2);
+numAnchorSets=size(results(1).anchors,1);
+numConnectivityPoints=size(results,2);
 medianErrors=zeros(numConnectivityPoints,numAnchorSets);
 meanErrors=zeros(numConnectivityPoints,numAnchorSets);
 minErrors=zeros(numConnectivityPoints,numAnchorSets);
 maxErrors=zeros(numConnectivityPoints,numAnchorSets);
-for i=1:size(result,2)
-    if result(i).connectivity > 10
-        maxErrors(i,:)=result(i).maxErrorPerAnchorSet;
-        medianErrors(i,:)=result(i).medianErrorPerAnchorSet;
-        meanErrors(i,:)=result(i).meanErrorPerAnchorSet;
-        minErrors(i,:)=result(i).minErrorPerAnchorSet;
+for i=1:size(results,2)
+    if results(i).connectivity > 10
+        maxErrors(i,:)=results(i).maxErrorPerAnchorSet;
+        medianErrors(i,:)=results(i).medianErrorPerAnchorSet;
+        meanErrors(i,:)=results(i).meanErrorPerAnchorSet;
+        minErrors(i,:)=results(i).minErrorPerAnchorSet;
     else
-        fprintf(1,'Result %.0f has a low connectivity (%f)\n',i,result.connectivity);
+        fprintf(1,'Result %.0f has a low connectivity (%f)\n',i,results.connectivity);
     end
 end
 
