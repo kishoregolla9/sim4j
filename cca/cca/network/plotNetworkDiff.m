@@ -3,6 +3,8 @@ function [h]=plotNetworkDiff(result,folder)
 % Blue points are real point locations
 % Red points are mapped point locations
 
+NUM_MAX_TO_SHOW=3;
+
 r=result.radius;
 plottitle=sprintf('%s Radius %.1f',result.network.shape,r);
 h=figure('Name',['Network Difference' plottitle]);
@@ -22,11 +24,13 @@ for j=1:numAnchorSets
             [realPoints(i,2),mappedPoints(i,2)],'-or','MarkerSize',3);
     end
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
-
-    
     differenceVector=result.localMaps(j).differenceVector;
-    [m]=getMaxErrorPoint(differenceVector)
-    plot(realPoints(m),'pg','MarkerSize',5);
+
+    m=zeros(NUM_MAX_TO_SHOW,1);
+    for i=1:NUM_MAX_TO_SHOW
+        m(i)=getMaxErrorPoint(differenceVector,m);
+        plot(realPoints(m(i)),'pg','MarkerSize',7);
+    end
     
     for a=1:size(anchors,2)
         x=realPoints(anchors(:,a),1);
@@ -59,13 +63,23 @@ foo=sprintf('%s.png',filename);
 print('-dpng',foo);
 end
 
-function [m]=getMaxErrorPoint(differenceVector)
+function [m]=getMaxErrorPoint(differenceVector,exclude)
     maxError=0;
     for i=1:size(differenceVector)
-        thisError=mean(differenceVector(i,:))
-        if (thisError > maxError) 
+        thisError=sum(differenceVector(i,:));
+        if (thisError > maxError && ~contains(exclude,i)) 
             maxError=thisError; 
             m=i;
+        end
+    end
+end
+
+function [b]=contains(v,a)
+    b=0;
+    for i=1:size(v,1)
+        if v(i) == a
+            b=1;
+            break;
         end
     end
 end
