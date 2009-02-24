@@ -67,10 +67,10 @@ for startNodeIndex=1:numStartNodes % for each starting node
         for i=1:size(anchorNodes,2)
             fprintf('Anchor Node Error: %i - %.2f\n', anchorNodes(i),differenceVector(i));
         end
-        medianError(anchorSetIndex,startNodeIndex)=mean(coordinates_error_median);
-        meanError(anchorSetIndex,startNodeIndex)=mean(coordinates_error_mean);
-        maxError(anchorSetIndex,startNodeIndex)=mean(coordinates_error_max);
-        minError(anchorSetIndex,startNodeIndex)=mean(coordinates_error_min);
+        medianError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_median);
+        meanError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_mean);
+        maxError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_max);
+        minError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_min);
         
         times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
     end

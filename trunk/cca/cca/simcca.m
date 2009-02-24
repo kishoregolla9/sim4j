@@ -22,11 +22,11 @@ radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=400;
-networkEdge=20;
+N=100;
+networkEdge=10;
 ranging=0; % range-free
 numAnchors=3;
-numAnchorSets=5;
+numAnchorSets=4;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
