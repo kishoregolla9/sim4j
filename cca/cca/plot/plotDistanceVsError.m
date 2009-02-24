@@ -41,9 +41,7 @@ for i=1:numAnchorSets
     xlabel('Distance to Nearest Anchor');
     ylabel('Location Error (factor of radius)');
 
-    units=get(gcf,'units');
-    set(gcf,'units','normalized','outerposition',[0 0 1 1]);
-    set(gcf,'units',units);
+    maximize(gcf);
     
     filename=sprintf('%s\\DistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.eps',...
         folder,network.shape,minRadius,maxRadius,i);
