@@ -10,6 +10,9 @@ plotDistanceVsError(results,radii,folder);
 close all
 hold off
 plotAnchorDistanceVsError(results,radii,folder);
+close all
+hold off
+plotAnchorNeighborsVsError(results,radii,folder);
 
 
 

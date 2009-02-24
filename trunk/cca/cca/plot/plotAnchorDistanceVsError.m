@@ -17,7 +17,7 @@ for i=1:numAnchorSets
     d=zeros(numAnchors-1,1);
     for a=1:numAnchors
         b=mod(a+1,numAnchors) + 1;
-        d(a)=distance(points(anchors(a),:),points(anchors(b),:));
+        d(a)=network.distanceMatrix(points(anchors(a),:),points(anchors(b),:));
     end
 	distances(i)=sum(d);
 end
@@ -31,20 +31,10 @@ for r=1:size(results,2)
 end
 legend(labels,'Location','NorthWest');
 xlabel('Sum of Distance between Anchors');
-ylabel('Location Error');
+ylabel('Median Location Error');
 hold off
 
-maximize(gcf);
-
-filename=sprintf('%s\\AnchorDistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.eps',...
-    folder,network.shape,minRadius,maxRadius,i);
-print('-depsc',filename);
-filename=sprintf('%s\\AnchorDistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.png',...
-    folder,network.shape,minRadius,maxRadius,i);
-print('-dpng',filename);
-end
-
-
-function [d]=distance(p1,p2)
-    d=sqrt( ((p2(1)-p1(1))^2) + ((p2(2)-p1(2))^2) );
+filename=sprintf('AnchorDistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i',...
+    network.shape,minRadius,maxRadius,i);
+saveFigure(folder,filename);
 end
