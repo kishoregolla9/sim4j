@@ -10,6 +10,7 @@ h=figure('Name',figurename);
 hold off
 clf
 
+%% Plot Network
 gplot(network.connectivity, network.points,'-db');
 
 % [xLine,yLine]=dsxy2figxy(gca,[0,network.width],[0,network.height]);
@@ -20,20 +21,37 @@ gplot(network.connectivity, network.points,'-db');
 % set(line2,'LineStyle','--','LineWidth',2);
 
 title({network.shape;radiusString});
+
+%% Label Network
+for i=1:size(network.points,1)
+        [x,y]=dsxy2figxy(gca,network.points(i,1),network.points(i,2)-.2);
+        content=sprintf('%.0f',i);
+        textbox=annotation('textbox',[x y 0.1 0.1]);
+        set(textbox,'String',content,...
+            'EdgeColor','none',...
+            'FitBoxToText','off',...
+            'FitHeightToText','off',...
+            'HorizontalAlignment','left',...
+            'VerticalAlignment','bottom',...
+            'Margin',0);
+end
+
+%% Plot Anchor Nodes
 hold all
 arrow=zeros(size(anchors,1),size(anchors(1,:),1));
 c=['r','c','g','k'];
 for a=1:size(anchors,1)
     for g=1:size(anchors(a,:),2)
-        plot(network.points(anchors(a,g),1),network.points(anchors(a,g),2),'-s',...
+        xData=network.points(anchors(a,g),1);
+        yData=network.points(anchors(a,g),2);
+        plot(xData,yData,'-s',...
                 'MarkerEdgeColor','k',...
                 'MarkerFaceColor',c(mod(a-1,size(c,2))+1),...
                 'MarkerSize',10);
-        xArrow=[(network.points(anchors(a,g),1)+0.3),network.points(anchors(a,g),1)];
-        yArrow=[(network.points(anchors(a,g),2)-0.3),network.points(anchors(a,g),2)];
-        [arrowx,arrowy]=dsxy2figxy(gca,xArrow,yArrow);
-        arrow(a,g)=annotation('textarrow',arrowx,arrowy);
-        %content = sprintf('(%4.2f,%4.2f)',xArrow(2), yArrow(2));
+        xDataArrow=[(xData+0.3),xData];
+        yDataArrow=[(yData-0.3),yData];
+        [xFigArrow,yFigArrow]=dsxy2figxy(gca,xDataArrow,yDataArrow);
+        arrow(a,g)=annotation('textarrow',xFigArrow,yFigArrow);
         content=sprintf('%.0f',a);
         set(arrow(a,g),'String',content,'HeadStyle','vback1',...
             'FontSize',10,'FontWeight','bold','Color',c(mod(a-1,size(c,2))+1));
@@ -43,6 +61,7 @@ end
 
 hold off
 
+%% Save figure
 filename=sprintf('network-%s-Radius%.1f',network.shape,radius);
 saveFigure(folder,filename);
 
