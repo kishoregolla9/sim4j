@@ -11,7 +11,7 @@ figure('Name','Distance to Anchor vs Error');
 
 for i=1:numAnchorSets
     hold off
-    subplot(ceil(numAnchorSets/2),ceil(numAnchorSets/2),i);
+    subplot(ceil(numAnchorSets/2)+1,ceil(numAnchorSets/2),i);
     hold all
     t=sprintf('Anchor Set %i',i);
     title(t);
@@ -26,7 +26,7 @@ for i=1:numAnchorSets
         distances(p)=sum(distToAnchor);
     end
     
-    labels=cell(1, size(results,2));
+    labels=cell(2, size(results,2));
     for r=1:size(results,2)
         errors=sum(results(r).localMaps(i).differenceVector,2)/results(r).radius;
         dataToPlot=sortrows([distances,errors]);
@@ -34,8 +34,10 @@ for i=1:numAnchorSets
         y=dataToPlot(:,2);
         windowSize=25;
         yy=filter(ones(1,windowSize)/windowSize,1,y);
+        plot(x,y);
+        labels{1,r}=sprintf('Radius=%.1f',results(r).radius);
         plot(x,yy);
-        labels{r}=sprintf('Radius=%.1f',results(r).radius);
+        labels{2,r}=sprintf('Radius=%.1f Filtered',results(r).radius);
     end
     legend(labels,'Location','NorthWest');
     xlabel('Distance to Nearest Anchor');

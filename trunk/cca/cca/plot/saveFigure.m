@@ -4,7 +4,7 @@ function saveFigure( folder, name )
 
 maximize(gcf);
 
-filename=sprintf('%s\\%s.eps',folder,name,i);
+filename=sprintf('%s\\%s.eps',folder,name);
 print('-depsc',filename);
-filename=sprintf('%s\\%s.png',folder,name,i);
+filename=sprintf('%s\\%s.png',folder,name);
 print('-dpng',filename);

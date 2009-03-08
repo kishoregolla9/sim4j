@@ -45,7 +45,7 @@ while length(curindexInclude) ~= N
 end %while
 
 tEnd = cputime;
-disp(['Patching the local maps takes ' num2str(tEnd-tStart) ' sec']);
+disp(['Patching the local maps took ' num2str(tEnd-tStart) ' sec']);
 node(node_k).map_patchTime=tEnd-tStart;
 
 rawResult = curMap;

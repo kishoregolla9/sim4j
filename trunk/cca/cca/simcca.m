@@ -13,20 +13,20 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=1.5;
+minRadius=2.5;
 step=0.5;
-numSteps=6;
+numSteps=0;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=100;
-networkEdge=10;
+N=36;
+networkEdge=6;
 ranging=0; % range-free
-numAnchors=3;
-numAnchorSets=4;
+numAnchors=3;4;
+numAnchorSets=2;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
@@ -35,11 +35,10 @@ numAnchorSets=4;
 close(gcf);
 for i=1 : numSteps+1
     
+    %% Build and check the network
     radius=radii(i);
-    
     fprintf(1,'Radius: %.1f\n', radius);
 
-    % Build and check the network
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
     network.anchors=anchors;
@@ -51,25 +50,28 @@ for i=1 : numSteps+1
     startNode=[5 20 22];
     % Also have a startNodeSelection script which may work or may not work well depending on the network.
 
-    %(5)Compute local maps using localMapComputing.m -
+    %% Build Local Maps
     fprintf(1,'Generating local maps for radius %.1f\n',radius);
     localMapStart=cputime;
     [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
-    fprintf(1,'Done generating local maps: %f\n', cputime-localMapStart);
+    fprintf(1,'Done generating local maps for radius %.1f in %f sec\n',radius,cputime-localMapStart);
 
+    %% Map Patching
     %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
     %[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
     %e.g.,
     disp('------------------------------------')
-    fprintf(1,'Doing Map Patch\n');
+    fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
     startMapPatch=cputime;
     [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
-    fprintf(1,'Done Map Patch in %f\n', cputime-startMapPatch);
-
+    fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',cputime-startMapPatch,radius);
+    
+    %% PLOT NETWOR DIFFERENCE
     plotNetworkDiff(results(i),folder);
 
 end
 
+%% PLOT RESULT
 plotResult(results,radii,folder);
 filename=sprintf('%s\\cca_workspace_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
 save(filename);
