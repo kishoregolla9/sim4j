@@ -1,6 +1,6 @@
 function plotDistanceVsError( results,radii,folder )
 % Plot distance of each node to its nearest anchor vs error
-
+windowSize=25;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
@@ -16,36 +16,34 @@ for i=1:numAnchorSets
     hold all
     t=sprintf('Anchor Set %i',i);
     title(t);
-    distances=zeros(size(points,1),1);
-    closestDistance=zeros(size(points,1),1);
+    meanDistanceToAnchors=zeros(size(points,1),1);
+    minDistanceToAnchors=zeros(size(points,1),1);
 
-    for p=1:size(distances,1)
+    for p=1:size(meanDistanceToAnchors,1)
         numAnchors=size(network.anchors,2);
         distToAnchor=zeros(numAnchors,1);
         for a=1:numAnchors
             distToAnchor(a)=distance(points(network.anchors(a),:),points(p,:));
         end
-        distances(p)=mean(distToAnchor);
-        closestDistance(p)=min(distToAnchor);
+        meanDistanceToAnchors(p)=mean(distToAnchor);
+        minDistanceToAnchors(p)=min(distToAnchor);
     end
     
     labels=cell(4, size(results,2));
     for r=1:size(results,2)
         errors=sum(results(r).localMaps(i).differenceVector,2)/results(r).radius;
-        dataToPlot=sortrows([distances,errors]);
+        dataToPlot=sortrows([meanDistanceToAnchors,errors]);
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
-        windowSize=25;
         yy=filter(ones(1,windowSize)/windowSize,1,y);
         plot(x,y,'--');
         labels{1,r}=sprintf('Mean of Distances Radius=%.1f',results(r).radius);
         plot(x,yy);
         labels{2,r}=sprintf('Mean of Distances Radius=%.1f Filtered',results(r).radius);
         
-        dataToPlot=sortrows([closestDistance,errors]);
+        dataToPlot=sortrows([minDistanceToAnchors,errors]);
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
-        windowSize=25;
         yy=filter(ones(1,windowSize)/windowSize,1,y);
         plot(x,y,'--');
         labels{3,r}=sprintf('Nearest Distance Radius=%.1f',results(r).radius);
