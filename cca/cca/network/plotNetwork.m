@@ -42,9 +42,8 @@ end
 
 
 hold off
-filename=sprintf('%s\\network-%s-Radius%.1f.eps',folder,network.shape,radius);
-print('-depsc',filename);
-filename=sprintf('%s\\network-%s-Radius%.1f.png',folder,network.shape,radius);
-print('-dpng',filename);
+
+filename=sprintf('network-%s-Radius%.1f',network.shape,radius);
+saveFigure(folder,filename);
 
 return;

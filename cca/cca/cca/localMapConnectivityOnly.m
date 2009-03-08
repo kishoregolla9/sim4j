@@ -32,7 +32,7 @@ for node_k = 1:N
     if (size(nodes(node_k).neighbors,2) == 1) %node_k has no connectivity
         continue;
     end
-    fprintf(1,'Calculating local map for node #%.0f of %.0f\n',node_k,N);
+    fprintf(1,'Calculating local map for node #%.0f of %.0f for radius %.1f\n',node_k,N,radius);
     tStart = cputime;
     h=2;
     nodes(node_k).t_level=t_level;

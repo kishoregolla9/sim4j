@@ -64,9 +64,9 @@ for startNodeIndex=1:numStartNodes % for each starting node
         coordinates_error_max=max(differenceVector)/radius;
         coordinates_error_min=min(differenceVector)/radius;
         
-        for i=1:size(anchorNodes,2)
-            fprintf('Anchor Node Error: %i - %.2f\n', anchorNodes(i),differenceVector(i));
-        end
+%         for i=1:size(anchorNodes,2)
+%             fprintf('Anchor Node Error: %i - %.2f\n', anchorNodes(i),differenceVector(i));
+%         end
         medianError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_median);
         meanError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_mean);
         maxError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_max);

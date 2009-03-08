@@ -10,15 +10,15 @@ distances=network.distanceMatrix;
 numAnchorSets=size(network.anchors,1);
 labels=cell(1, size(radii,2));
 hold all
+numAnchorNeighbors=zeros(size(radii,2),1);
 for r=1:size(radii,2)
-    numAnchorNeighbors=zeros(numAnchorSets,1);
     for s=1:numAnchorSets
         anchors=network.anchors(s,:);
         numAnchors=size(anchors,2);
         for a=1:numAnchors
             for p=1:size(points,1)
                 if a ~= p && distances(a,p) < radii(r)
-                    numAnchorNeighbors(s)=numAnchorNeighbors(s)+1;
+                    numAnchorNeighbors(r)=numAnchorNeighbors(r)+1;
                 end
             end
         end
@@ -32,8 +32,8 @@ ylabel('Median Location Error');
 hold off
 
 
-filename=sprintf('AnchorNeighborsVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i',...
-    network.shape,minRadius,maxRadius,i);
+filename=sprintf('AnchorNeighborsVsError-%s-Radius%.1f-to-%.1f',...
+    network.shape,minRadius,maxRadius);
 saveFigure(folder,filename);
 
 end
