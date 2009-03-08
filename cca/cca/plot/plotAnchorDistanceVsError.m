@@ -1,4 +1,5 @@
 function plotAnchorDistanceVsError( results,radii,folder )
+% Plot distance between the anchors themselves vs error
 
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));

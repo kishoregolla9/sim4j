@@ -1,4 +1,5 @@
 function plotDistanceVsError( results,radii,folder )
+% Plot distance of each node to its nearest anchor vs error
 
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
@@ -16,6 +17,7 @@ for i=1:numAnchorSets
     t=sprintf('Anchor Set %i',i);
     title(t);
     distances=zeros(size(points,1),1);
+    closestDistance=zeros(size(points,1),1);
 
     for p=1:size(distances,1)
         numAnchors=size(network.anchors,2);
@@ -23,10 +25,11 @@ for i=1:numAnchorSets
         for a=1:numAnchors
             distToAnchor(a)=distance(points(network.anchors(a),:),points(p,:));
         end
-        distances(p)=sum(distToAnchor);
+        distances(p)=mean(distToAnchor);
+        closestDistance(p)=min(distToAnchor);
     end
     
-    labels=cell(2, size(results,2));
+    labels=cell(4, size(results,2));
     for r=1:size(results,2)
         errors=sum(results(r).localMaps(i).differenceVector,2)/results(r).radius;
         dataToPlot=sortrows([distances,errors]);
@@ -34,13 +37,23 @@ for i=1:numAnchorSets
         y=dataToPlot(:,2);
         windowSize=25;
         yy=filter(ones(1,windowSize)/windowSize,1,y);
-        plot(x,y);
-        labels{1,r}=sprintf('Radius=%.1f',results(r).radius);
+        plot(x,y,'--');
+        labels{1,r}=sprintf('Mean of Distances Radius=%.1f',results(r).radius);
         plot(x,yy);
-        labels{2,r}=sprintf('Radius=%.1f Filtered',results(r).radius);
+        labels{2,r}=sprintf('Mean of Distances Radius=%.1f Filtered',results(r).radius);
+        
+        dataToPlot=sortrows([closestDistance,errors]);
+        x=dataToPlot(:,1);
+        y=dataToPlot(:,2);
+        windowSize=25;
+        yy=filter(ones(1,windowSize)/windowSize,1,y);
+        plot(x,y,'--');
+        labels{3,r}=sprintf('Nearest Distance Radius=%.1f',results(r).radius);
+        plot(x,yy);
+        labels{4,r}=sprintf('Nearest Distance Radius=%.1f Filtered',results(r).radius);
     end
     legend(labels,'Location','NorthWest');
-    xlabel('Distance to Nearest Anchor');
+    xlabel('Distance to Anchor');
     ylabel('Location Error (factor of radius)');
 
     maximize(gcf);
