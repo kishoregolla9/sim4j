@@ -12,7 +12,7 @@ figure('Name','Distance to Anchor vs Error');
 
 for i=1:numAnchorSets
     hold off
-    subplot(ceil(numAnchorSets/2)+1,ceil(numAnchorSets/2),i);
+    subplot(numAnchorSets,1,i);
     hold all
     t=sprintf('Anchor Set %i',i);
     title(t);
