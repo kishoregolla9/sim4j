@@ -6,7 +6,10 @@ hold off
 plotAnchorSetVsError(results,radii,folder);
 close all
 hold off
-plotDistanceVsError(results,radii,folder);
+% plotDistanceVsError(results,radii,folder);
+% close all
+% hold off
+plotHopCountVsError(results,radii,folder);
 close all
 hold off
 plotAnchorDistanceVsError(results,radii,folder);

@@ -13,17 +13,17 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=2.5;
+minRadius=1.5;
 step=0.5;
-numSteps=0;
+numSteps=4;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_GRID;
-N=36;
-networkEdge=6;
+N=64;
+networkEdge=8;
 ranging=0; % range-free
 numAnchors=3;4;
 numAnchorSets=2;

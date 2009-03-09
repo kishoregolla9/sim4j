@@ -17,7 +17,7 @@ for i=1:numAnchorSets
     d=zeros(numAnchors-1,1);
     for a=1:numAnchors
         b=mod(a+1,numAnchors) + 1;
-        d(a)=network.distanceMatrix(points(anchors(a),:),points(anchors(b),:));
+        d(a)=network.distanceMatrix(anchors(a),anchors(b));
     end
 	distances(i)=sum(d);
 end

@@ -8,11 +8,11 @@ network=results(1).network;
 points=network.points;
 numAnchorSets=size(network.anchors,1);
 
-figure('Name','Distance to Anchor vs Error');
+figure('Name','Hop Count to Anchor vs Error');
 
 for i=1:numAnchorSets
     hold off
-    subplot(ceil(numAnchorSets/2)+1,ceil(numAnchorSets/2),i);
+    subplot(numAnchorSets,1,i);
     hold all
     t=sprintf('Anchor Set %i',i);
     title(t);
@@ -29,49 +29,47 @@ for i=1:numAnchorSets
         minHopCount(p)=min(hopsToAnchor);
     end
     
-    labels=cell(2, size(results,2));
-    maxErrors=zeros(size(results,2));
+    labels=cell(1, size(results,2));
     for r=1:size(results,2)
         errors=sum(results(r).localMaps(i).differenceVector,2)/results(r).radius;
-        dataToPlot=sortrows([meanHopCount,errors]);
-        dataToPlot=accumulate(dataToPlot);
-        x=dataToPlot(:,1);
-        y=dataToPlot(:,2);
-        plot(x,y);
-        labels{1,r}=sprintf('Mean of Distances Radius=%.1f',results(r).radius);
+%         dataToPlot=sortrows([meanHopCount,errors]);
+%         dataToPlot=accumulate(dataToPlot);
+%         x=dataToPlot(:,1);
+%         y=dataToPlot(:,2);
+%         plot(x,y);
+%         labels{1,r}=sprintf('Mean of Distances Radius=%.1f',results(r).radius);
         
         dataToPlot=sortrows([minHopCount,errors]);
         dataToPlot=accumulate(dataToPlot);
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
         plot(x,y);
-        labels{2,r}=sprintf('Nearest Distance Radius=%.1f',results(r).radius);
+        labels{1,r}=sprintf('r=%.1f',results(r).radius);
         
-        maxErrors=max(errors);
     end
     legend(labels,'Location','NorthWest');
     xlabel('Hop Count to Nearest Anchor');
     ylabel('Location Error (factor of radius)');
     hold on
-
+    h1=gca;
+    h2 = axes('Position',get(h1,'Position'));
     %     hist(minHopCount);
     uniqueCounts=unique(minHopCount);
     sortedCounts=sort(minHopCount);
-    n_elements = histc(sortedCounts,uniqueCounts);
-    c_elements = cumsum(n_elements);
-    scaleFactor=max(maxErrors)/max(c_elements);
-    c_elements=c_elements*scaleFactor;
-    histBar=bar(uniqueCounts,c_elements);
+    binCounts = histc(sortedCounts,uniqueCounts);
+    histBar=bar(uniqueCounts,binCounts);
     set(histBar,'BarWidth',0.1,'FaceColor','none');
+    set(h2,'YAxisLocation','right','Color','none','XTickLabel',[]);
+    set(h2,'XLim',get(h1,'XLim'),'Layer','top');
     hold off
-
+    set(gcf,'CurrentAxes',h1);
     maximize(gcf);
     
-    filename=sprintf('%s\\HopCountVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.eps',...
-        folder,network.shape,minRadius,maxRadius,i);
+    filename=sprintf('%s\\HopCountVsError-%s-Radius%.1f-to-%.1f.eps',...
+        folder,network.shape,minRadius,maxRadius);
     print('-depsc',filename);
-    filename=sprintf('%s\\HopCountVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.png',...
-        folder,network.shape,minRadius,maxRadius,i);
+    filename=sprintf('%s\\HopCountVsError-%s-Radius%.1f-to-%.1f.png',...
+        folder,network.shape,minRadius,maxRadius);
     print('-dpng',filename);
 end
 
