@@ -11,6 +11,7 @@ h=figure('Name',['Network Difference' plottitle]);
 numAnchorSets=size(result.network.anchors,1);
 
 for j=1:numAnchorSets
+    fprintf('Plotting Network Difference for Anchor Set #%i\n',j);
     mappedPoints=result.localMaps(j).mappedPoints;
     realPoints=result.network.points;
     anchors=result.network.anchors(j,:);
@@ -19,19 +20,25 @@ for j=1:numAnchorSets
     subplotTitle=sprintf('Anchor Set %i',j);
     title(subplotTitle);
     hold all
+    % Show a line from each real to each mapped point (red circles)
     for i=1:size(realPoints,1)
         plot([realPoints(i,1),mappedPoints(i,1)],...
             [realPoints(i,2),mappedPoints(i,2)],'-or','MarkerSize',3);
     end
+    % Overlay the real points with blue diamonds
+    % to distinguish them from the mapped points
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
+    
+    % Show the worst (max error) points with stars
     differenceVector=result.localMaps(j).differenceVector;
-
-    m=zeros(NUM_MAX_TO_SHOW,1);
-    for i=1:NUM_MAX_TO_SHOW
-        m(i)=getMaxErrorPoint(differenceVector,m);
-        plot(realPoints(m(i)),'pg','MarkerSize',7);
+    m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
+    for i=1:size(m,1)
+        %p=pentagram(star),g=green
+        fprintf('Drawing start at %i,%i\n',realPoints(m(i),:));
+        plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',7);
     end
     
+    % Show a circle of the radius around each anchor point
     for a=1:size(anchors,2)
         x=realPoints(anchors(:,a),1);
         y=realPoints(anchors(:,a),2);
@@ -56,6 +63,8 @@ set(gca,'XTickLabel','Max|Mean|Median|Min')
 title('Location Error Statistics');
 grid on;
 
+maximize(gcf);
+
 filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,result.network.shape,r);
 foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
@@ -63,23 +72,16 @@ foo=sprintf('%s.png',filename);
 print('-dpng',foo);
 end
 
-function [m]=getMaxErrorPoint(differenceVector,exclude)
-    maxError=0;
-    for i=1:size(differenceVector)
+function [m]=getMaxErrorPoints(differenceVector,num)
+    m=zeros(num,1);
+    errors=zeros(num,1);
+    for i=1:size(differenceVector,1)
         thisError=sum(differenceVector(i,:));
-        if (thisError > maxError && ~contains(exclude,i)) 
-            maxError=thisError; 
-            m=i;
+        [c,minIndex]=min(errors);
+        if thisError > c
+            m(minIndex)=i;
+            errors(minIndex)=thisError;
         end
     end
 end
 
-function [b]=contains(v,a)
-    b=0;
-    for i=1:size(v,1)
-        if v(i) == a
-            b=1;
-            break;
-        end
-    end
-end
