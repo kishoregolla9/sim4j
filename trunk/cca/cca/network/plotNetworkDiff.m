@@ -6,17 +6,19 @@ function [h]=plotNetworkDiff(result,folder)
 NUM_MAX_TO_SHOW=3;
 
 r=result.radius;
-plottitle=sprintf('%s Radius %.1f',result.network.shape,r);
+network=result.network;
+plottitle=sprintf('%s Radius %.1f',network.shape,r);
 h=figure('Name',['Network Difference' plottitle]);
-numAnchorSets=size(result.network.anchors,1);
+numAnchorSets=size(network.anchors,1);
 
+% Plot a network diff diagram for each anchor set
 for j=1:numAnchorSets
     fprintf('Plotting Network Difference for Anchor Set #%i\n',j);
-    mappedPoints=result.localMaps(j).mappedPoints;
-    realPoints=result.network.points;
-    anchors=result.network.anchors(j,:);
+    mappedPoints=result.patchedMap(j).mappedPoints;
+    realPoints=network.points;
+    anchors=network.anchors(j,:);
     
-    subplot(2,numAnchorSets,j,'align');
+    subplot(3,numAnchorSets,j,'align');
     subplotTitle=sprintf('Anchor Set %i',j);
     title(subplotTitle);
     hold all
@@ -30,12 +32,12 @@ for j=1:numAnchorSets
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
     
     % Show the worst (max error) points with stars
-    differenceVector=result.localMaps(j).differenceVector;
+    differenceVector=result.patchedMap(j).differenceVector;
     m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
-        %p=pentagram(star),g=green
+        %p=pentagram(star),k=black
         fprintf('Drawing start at %i,%i\n',realPoints(m(i),:));
-        plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',7);
+        plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',7);
     end
     
     % Show a circle of the radius around each anchor point
@@ -55,17 +57,33 @@ end
 
 suptitle(plottitle);
 
-subplot(2,numAnchorSets,numAnchorSets+1:2*numAnchorSets);
+% Plot general location error statistics as bar chart
+subplot(3,numAnchorSets,numAnchorSets+1:2*numAnchorSets);
 dataToPlot=[result.maxErrorPerAnchorSet;result.meanErrorPerAnchorSet;result.medianErrorPerAnchorSet;result.minErrorPerAnchorSet];
 bar(dataToPlot);
-legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3']);
+legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3';'Anchor Set 4']);
 set(gca,'XTickLabel','Max|Mean|Median|Min')
 title('Location Error Statistics');
 grid on;
 
+% Plot hops to nearest anchor vs error
+subplot(3,numAnchorSets,2*numAnchorSets+1:3*numAnchorSets);
+hold all
+for j=1:numAnchorSets
+    minHopCount=getHopCounts(network.anchors(j),...
+        network.points,...
+        network.shortestHopMatrix);
+    
+    diffVector=result.patchedMap(i).differenceVector;
+    l=sprintf('Anchor Set %i',j);
+    subPlotHopCountVsError( result, r, diffVector, minHopCount, l );
+end
+grid on;
+legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3';'Anchor Set 4']);
+hold off
 maximize(gcf);
 
-filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,result.network.shape,r);
+filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
 foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
