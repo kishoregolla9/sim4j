@@ -1,8 +1,4 @@
 clear;
-if exist('folder','var') ~= 1
-    folder=sprintf('results\\%i-%i-%i_%i_%i_%i',fix(clock));
-    mkdir(folder);
-end
 
 %% BuildNetwork
 hold off
@@ -13,23 +9,28 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=1.5;
+minRadius=2.5;
 step=0.5;
-numSteps=4;
+numSteps=0;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
-placement=NODE_GRID;
-N=64;
-networkEdge=8;
+placement=NODE_RANDOM;
+N=100;
+networkEdge=10;
 ranging=0; % range-free
-numAnchors=3;4;
-numAnchorSets=2;
+numAnchors=3;
+numAnchorSets=4;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
+
+if exist('folder','var') ~= 1
+    folder=sprintf('results\\%i-%i-%i_%i_%i_%i-%s',fix(clock),sourceNetwork.shape);
+    mkdir(folder);
+end
 
 %% RUNCCA
 close(gcf);
@@ -57,16 +58,13 @@ for i=1 : numSteps+1
     fprintf(1,'Done generating local maps for radius %.1f in %f sec\n',radius,cputime-localMapStart);
 
     %% Map Patching
-    %(8)To patch local maps to obtain the node coordinates, use function in mapPatch.m,
-    %[patchTime,coordinates_median,coordinates_median_average,allResults]=mapPatch(network, radiusNet,startNode,anchor,connectivityLevels)
-    %e.g.,
     disp('------------------------------------')
     fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
     startMapPatch=cputime;
     [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
     fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',cputime-startMapPatch,radius);
     
-    %% PLOT NETWOR DIFFERENCE
+    %% PLOT NETWORK DIFFERENCE
     plotNetworkDiff(results(i),folder);
 
 end

@@ -43,11 +43,11 @@ for startNodeIndex=1:numStartNodes % for each starting node
 
         anchorNodes=anchorSets(anchorSetIndex,:);
         
-        localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
+        patchedMap=mapVitPatch(network,localMaps,node(startNodeIndex),...
             anchorNodes,radius);
-        resultNode=localMaps{1}(node(startNodeIndex));
+        resultNode=patchedMap(node(startNodeIndex));
         differenceVector=resultNode.differenceVector;
-        result.localMaps(anchorSetIndex)=resultNode;
+        result.patchedMap(anchorSetIndex)=resultNode;
 
         % Remove the anchor node differences
 %         for i=1:size(anchorNodes,2)
