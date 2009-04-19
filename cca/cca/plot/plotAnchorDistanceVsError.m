@@ -5,14 +5,13 @@ minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 network=results(1).network;
-points=network.points;
 numAnchorSets=size(network.anchors,1);
 
 figure('Name','Anchor Distance vs Error');
 
 distances=zeros(numAnchorSets,1);
 for i=1:numAnchorSets
-    anchors=results(i).network.anchors(i,:);
+    anchors=results.network.anchors(i,:);
     numAnchors=size(anchors,2);
     d=zeros(numAnchors-1,1);
     for a=1:numAnchors

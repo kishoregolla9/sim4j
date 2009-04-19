@@ -18,11 +18,11 @@ radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_RANDOM;
-N=100;
-networkEdge=10;
+N=49;
+networkEdge=7;
 ranging=0; % range-free
 numAnchors=3;
-numAnchorSets=4;
+numAnchorSets=3;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
 [anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
@@ -52,17 +52,17 @@ for i=1 : numSteps+1
     % Also have a startNodeSelection script which may work or may not work well depending on the network.
 
     %% Build Local Maps
-    fprintf(1,'Generating local maps for radius %.1f\n',radius);
-    localMapStart=cputime;
+    fprintf(1,'Generating local maps for radius %.2f\n',radius);
+    localMapStart=tic;
     [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
-    fprintf(1,'Done generating local maps for radius %.1f in %f sec\n',radius,cputime-localMapStart);
+    fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
 
     %% Map Patching
     disp('------------------------------------')
     fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
-    startMapPatch=cputime;
+    startMapPatch=tic;
     [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
-    fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',cputime-startMapPatch,radius);
+    fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',toc(startMapPatch),radius);
     
     %% PLOT NETWORK DIFFERENCE
     plotNetworkDiff(results(i),folder);
