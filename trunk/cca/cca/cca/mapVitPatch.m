@@ -13,14 +13,16 @@ points = network.points;
 distanceMatrix=network.distanceMatrix;
 N=size(network.points,1);
 
+map=cell(N,1);
+index=cell(N,1);
+indexInclude=cell(N,1);
 for i=1:N
     map{i}=node(i).local_network_c; %added by li as cca directly generates the network
     index{i} = (node(i).neighbors_merge)'; %grab all the nodes in the local map
     indexInclude{i} = i;
 end %for i
 
-connectivity=network.connectivity;
-tStart = cputime;
+tStart=tic;
 
 % 	curNode = ceil(rand*N); %randomly select the starting node
 curNode=node_k;
@@ -40,13 +42,13 @@ while length(curindexInclude) ~= N
 
     node2 = nodeList(j); % find the node with maximum intersection
     [curMap, curindex, curindexInclude] = mergeMap(...
-        curMap, map{node2}, curindex, index{node2}, ...
-        curindexInclude, indexInclude{node2},connectivity);
+        curMap, map{node2}, curindex, index{node2}, ...f
+        curindexInclude, indexInclude{node2});
 end %while
 
-tEnd = cputime;
-disp(['Patching the local maps took ' num2str(tEnd-tStart) ' sec']);
-node(node_k).map_patchTime=tEnd-tStart;
+tElapsed=toc(tStart);
+disp(['Patching the local maps took ' num2str(tElapsed) ' sec']);
+node(node_k).map_patchTime=tElapsed;
 
 rawResult = curMap;
 node(node_k).patched_network=rawResult;
@@ -98,37 +100,23 @@ return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 function [newMap, newIndex, newIndexInclude] = mergeMap(map1, map2, ...
-    index1, index2, indexInclude1, indexInclude2, connectivitiy, method)
+    index1, index2, indexInclude1, indexInclude2)
 
-if nargin < 8
-    method = 2;
-end
-
-unionIndex = union(index1, index2);
 [intersectIndex, ii1, ii2] = intersect(index1, index2);
 
 [D, Z, TRANSFORM] = procrustes(map1(ii1,:), map2(ii2,:));
 
-% if method == 1
-% -- Method 1: scale and average
-%%%%%%%%%%%%%%%%%%%%%% used this block for range based. usually not good %%%%%%%%%%%%%
-%     newMap2 = TRANSFORM.b * map2 * TRANSFORM.T + ...
-%         repmat(TRANSFORM.c(1,:),length(index2),1);
-%     newMap = map1;
-%     newMap(ii1,:) = 0.5 *(map1(ii1,:) + Z);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% elseif method == 2
-%     -- Method 2: average (do not scale)- better one
-%
 newMap2 = map2 * TRANSFORM.T + ...
     repmat(TRANSFORM.c(1,:),length(index2),1);
 newMap = map1;
 newMap(ii1,:) = 0.5 *(map1(ii1,:) + newMap2(ii2,:));
 
-% end
-
 newMap = [newMap; newMap2(setdiff(1:length(index2),ii2),:)];
 newIndex = [index1; setdiff(index2,intersectIndex)];
+%x=setdiff(index2,intersectIndex);
+%size(index1)
+%size(x)
+%newIndex = [index1; x];
 
 [newIndex j] = sort(newIndex);
 newMap = newMap(j,:);

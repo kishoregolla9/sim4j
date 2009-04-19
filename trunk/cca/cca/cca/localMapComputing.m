@@ -9,31 +9,29 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 %   2: cca grid range free;
 %   3: mds grid range free
 %output:
-%  localMaps{} - cell of computed local maps for each radius levels given in connectivityLevels;
-%  localMapTimeMean - the average computing time for each local map at each
-%  different radius levels as given in connectivityLevels
+%  localMaps - computed local maps for the given each radius level
+%  localMapTimeMean - the average computing time 
 
 fprintf(1,'Calculating local map for radius %0.2f\n',radius);
 if option==0 % cca range free
-    localMaps=localMapConnectivityOnly(network,100,radius);
+    localMaps{1}=localMapConnectivityOnly(network,100,radius);
 end
 if option==1 % cca range based
-    localMaps=vitUpdateLocalMapLocalization(network,100,radius);
+    localMaps{1}=vitUpdateLocalMapLocalization(network,100,radius);
 end
 if option==2 % cca grid range free. if use one level of LEM, use localMapConnectivityOnlyGrid1
-    localMaps=localMapConnectivityOnlyGrid(network,100,radius);
+    localMaps{1}=localMapConnectivityOnlyGrid(network,100,radius);
 end
 if option==3 %range free mds grid
-    localMaps=MDSLocalMapConnectivityOnlyGrid(network,radius);
+    localMaps{1}=MDSLocalMapConnectivityOnlyGrid(network,radius);
 end
 
-
-%calculate the compute time
-numberOfNodes=size(network,1);
-computationTime=zeros(numberOfNodes,1);
-for j=1:numberOfNodes
-    computationTime(j) = localMaps(j).local_map_compuTime;
+%% Calculate Local Map Error
+% error is the average of the distance error of each node
+for k=1:size(network.points,1)
+    
 end
-localMapTimeMean = mean(computationTime,1);
-localMapTimeMedian = median(computationTime,1);
-clear computationTime;
+
+%% Calculate computation time
+localMapTimeMean = mean([localMaps{1}(:).local_map_compuTime],2);
+localMapTimeMedian = median([localMaps{1}(:).local_map_compuTime],2);

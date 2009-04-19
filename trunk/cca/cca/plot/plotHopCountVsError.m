@@ -5,7 +5,6 @@ minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 network=results(1).network;
-points=network.points;
 numAnchorSets=size(network.anchors,1);
 
 figure('Name','Hop Count to Anchor vs Error');
@@ -21,8 +20,8 @@ for i=1:numAnchorSets
         network.points,...
         network.shortestHopMatrix);
     
-    diffVector=results(r).localMaps(i).differenceVector;
-    radius=results(r).radius;
+    diffVector=results.patchedMap(i).differenceVector;
+    radius=results.radius;
     
     subPlotHopCountVsError( results, radius, ...
         diffVector, minHopCount )
