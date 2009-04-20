@@ -63,7 +63,7 @@ for i=1:dim,
 end
 
 % initial projection
-if prod(size(P))==1, 
+if numel(P)==1, 
 %   P = (2*rand(noc,P)-1).*st(noc_x_1,1:P) + me(noc_x_1,1:P); 
   P =  randn(noc,P); %Li Li: change the above line to generate the initial projection data
 else
@@ -87,16 +87,16 @@ sample_inds = ceil(noc*rand(train_len,1)); %li - this was
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % mutual distances
-if nargin<4 | isempty(Mdist) | all(isnan(Mdist(:))),
+if nargin<4 || isempty(Mdist) || all(isnan(Mdist(:))),
   fprintf(2, 'computing mutual distances\r');
   dim_x_1 = ones(dim,1);
   for i = 1:noc,
     x = D(i,:); 
     Diff = D - x(noc_x_1,:);
     N = isnan(Diff);
-    Diff(find(N)) = 0; 
+    Diff(N~=0) = 0; 
     Mdist(:,i) = sqrt((Diff.^2)*dim_x_1);
-    N = find(sum(N')==dim); %mutual distance unknown
+    N = find(sum(N,2)==dim); %mutual distance unknown
     if ~isempty(N), Mdist(N,i) = NaN; end
   end
 else
@@ -108,10 +108,10 @@ else
 end
 
 % alpha and lambda
-if nargin<5 | isempty(alpha0) | isnan(alpha0), alpha0 = 0.5; end
+if nargin<5 || isempty(alpha0) || isnan(alpha0), alpha0 = 0.5; end
 alpha = potency_curve(alpha0,alpha0/100,train_len);
 
-if nargin<6 | isempty(lambda0) | isnan(lambda0), lambda0 = max(st)*3; end
+if nargin<6 || isempty(lambda0) || isnan(lambda0), lambda0 = max(st)*3; end
 lambda = potency_curve(lambda0,0.01,train_len);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,13 +131,14 @@ for i=1:train_len,
     y = P(ind,:);                 
 
     % distances in output space
-    Dy = P(known,:) - y(noc_x_1(known),:); 
+    qrs=y(noc_x_1(known),:);
+    Dy = P(known,:) - qrs; 
     dy = sqrt((Dy.^2)*odim_x_1);           
   
     % relative effect
-    dy(find(dy==0)) = 1;        % to get rid of div-by-zero's
+    dy(dy==0) = 1;        % to get rid of div-by-zero's
     fy = exp(-dy/lambda(i)) .* (dx(known) ./ dy - 1);
-
+    
     % Note that the function F here is e^(-dy/lambda)) 
     % instead of the bubble function 1(lambda-dy) used in the 
     % paper.
@@ -147,7 +148,8 @@ for i=1:train_len,
     % function w.r.t. to changes in dy.
     
     % update
-    P(known,:) = P(known,:) + alpha(i)*fy(:,odim_x_1).*Dy;
+    u=alpha(i)*fy(:,odim_x_1).*Dy;
+    P(known,:) = P(known,:) + u;
     
   end
 
