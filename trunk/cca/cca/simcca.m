@@ -11,15 +11,15 @@ networkconstants;
 
 minRadius=2.5;
 step=0.5;
-numSteps=0;
+numSteps=3;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_RANDOM;
-N=49;
-networkEdge=7;
+N=100;
+networkEdge=10;
 ranging=0; % range-free
 numAnchors=3;
 numAnchorSets=3;

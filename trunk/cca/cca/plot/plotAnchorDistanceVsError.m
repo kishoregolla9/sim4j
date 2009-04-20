@@ -11,7 +11,7 @@ figure('Name','Anchor Distance vs Error');
 
 distances=zeros(numAnchorSets,1);
 for i=1:numAnchorSets
-    anchors=results.network.anchors(i,:);
+    anchors=results(1).network.anchors(i,:);
     numAnchors=size(anchors,2);
     d=zeros(numAnchors-1,1);
     for a=1:numAnchors
