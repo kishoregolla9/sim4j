@@ -15,7 +15,10 @@ hold off
 plotAnchorDistanceVsError(results,radii,folder);
 close all
 hold off
-plotAnchorNeighborsVsError(results,radii,folder);
+%plotAnchorNeighborsVsError(results,radii,folder);
+%close all
+%hold off
+plotHistograms(results,radii,folder);
 
 
 
