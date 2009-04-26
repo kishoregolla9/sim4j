@@ -27,19 +27,22 @@ medianErrorPerStart=zeros(numStartNodes,1);
 meanErrorPerStart=zeros(numStartNodes,1);
 maxErrorPerStart=zeros(numStartNodes,1);
 minErrorPerStart=zeros(numStartNodes,1);
+stdErrorPerStart=zeros(numStartNodes,1);
 
 medianError=zeros(numAnchorSets,numStartNodes);
 meanError=zeros(numAnchorSets,numStartNodes);
 maxError=zeros(numAnchorSets,numStartNodes);
 minError=zeros(numAnchorSets,numStartNodes);
+stdError=zeros(numAnchorSets,numStartNodes);
+
 times=zeros(numAnchorSets,numStartNodes);
 bestNodes=zeros(numAnchorSets,numStartNodes);
 worstNodes=zeros(numAnchorSets,numStartNodes);
 for startNodeIndex=1:numStartNodes % for each starting node
-    fprintf(1,'+++ Starting Node %i of %i: %i \n', startNodeIndex, numStartNodes, node(startNodeIndex));
+    fprintf(1,'+++ Start Node %i (%i of %i)\n', node(startNodeIndex), startNodeIndex, numStartNodes);
 
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
-        fprintf(1,'+++++ Anchor Set %i of %i\n', anchorSetIndex,numAnchorSets);
+        fprintf(1,'++++ Anchor Set %i of %i\n', anchorSetIndex, numAnchorSets);
 
         anchorNodes=anchorSets(anchorSetIndex,:);
         
@@ -63,6 +66,7 @@ for startNodeIndex=1:numStartNodes % for each starting node
         coordinates_error_median=median(differenceVector)/radius;
         coordinates_error_max=max(differenceVector)/radius;
         coordinates_error_min=min(differenceVector)/radius;
+        coordinates_error_std=std(differenceVector)/radius;
         
 %         for i=1:size(anchorNodes,2)
 %             fprintf('Anchor Node Error: %i - %.2f\n', anchorNodes(i),differenceVector(i));
@@ -71,6 +75,7 @@ for startNodeIndex=1:numStartNodes % for each starting node
         meanError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_mean);
         maxError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_max);
         minError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_min);
+        stdError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_std);
         
         times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
     end
@@ -80,6 +85,7 @@ for startNodeIndex=1:numStartNodes % for each starting node
     meanErrorPerStart(startNodeIndex)=median(meanError(:,startNodeIndex));
     maxErrorPerStart(startNodeIndex)=median(maxError(:,startNodeIndex));
     minErrorPerStart(startNodeIndex)=median(minError(:,startNodeIndex));
+    stdErrorPerStart(startNodeIndex)=median(stdError(:,startNodeIndex));
 
     clear A;
     clear times;
@@ -90,17 +96,19 @@ end % for startNodeIndex
 result.patchTime=median(patchTimePerStart);
 result.medianError=median(medianErrorPerStart);
 result.meanError=median(meanErrorPerStart);
-result.minError=median(minErrorPerStart);
 result.maxError=median(maxErrorPerStart);
+result.minError=median(minErrorPerStart);
+result.stdError=median(stdErrorPerStart);
 
 result.bestNodesPerAnchorSet=bestNodes;
 result.worstNodesPerAnchorSet=worstNodes;
 
 for a=1:numAnchorSets % for each anchorSets set
-    result.medianErrorPerAnchorSet(a)=median(medianError(a,:));
-    result.meanErrorPerAnchorSet(a)=median(meanError(a,:));
-    result.minErrorPerAnchorSet(a)=median(minError(a,:));
-    result.maxErrorPerAnchorSet(a)=median(maxError(a,:));
+    result.medianErrorPerAnchorSet(a,:)=medianError(a,:);
+    result.meanErrorPerAnchorSet(a,:)=meanError(a,:);
+    result.maxErrorPerAnchorSet(a,:)=maxError(a,:);
+    result.minErrorPerAnchorSet(a,:)=minError(a,:);
+    result.stdErrorPerAnchorSet(a,:)=stdError(a,:);
 end
 
 return

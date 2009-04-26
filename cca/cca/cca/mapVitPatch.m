@@ -1,7 +1,7 @@
-function [node]=mapVitPatch(network,node,node_k,anchorNodes,r)
+function [node]=mapVitPatch(network,node,startNode,anchorNodes,r)
 %function mapVitPatch takes the input of local maps and patch them together
 %into a global map and compare the results with the original 'Network'
-%taking the map of node_k as the starting map.
+%taking the map of startNode as the starting map.
 % The input 'node' should be generated from the function of
 % localMapLocalization.m or equivalent
 %option - Use the greedy patch taking the node that has the most number of
@@ -25,7 +25,7 @@ end %for i
 tStart=tic;
 
 % 	curNode = ceil(rand*N); %randomly select the starting node
-curNode=node_k;
+curNode=startNode;
 curMap = map{curNode};
 curindex = index{curNode};
 curindexInclude = indexInclude{curNode};
@@ -42,16 +42,16 @@ while length(curindexInclude) ~= N
 
     node2 = nodeList(j); % find the node with maximum intersection
     [curMap, curindex, curindexInclude] = mergeMap(...
-        curMap, map{node2}, curindex, index{node2}, ...f
+        curMap, map{node2}, curindex, index{node2},...
         curindexInclude, indexInclude{node2});
 end %while
 
 tElapsed=toc(tStart);
-disp(['Patching the local maps took ' num2str(tElapsed) ' sec']);
-node(node_k).map_patchTime=tElapsed;
+disp(['Patching the local maps for start node ' startNode ' took ' num2str(tElapsed) ' sec']);
+node(startNode).map_patchTime=tElapsed;
 
 rawResult = curMap;
-node(node_k).patched_network=rawResult;
+node(startNode).patched_network=rawResult;
 refineResult=rawResult; %no refinement
 
 knownJ=anchorNodes;
@@ -62,17 +62,17 @@ mappedResult = TRANSFORM.b * refineResult(:,1:2) * TRANSFORM.T + ...
 
 % set output
 % t.xyEstimate = mappedResult;
-node(node_k).patched_network_transform=mappedResult;
+node(startNode).patched_network_transform=mappedResult;
 D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
 
 differenceVector=abs(mappedResult-network.points);
 
 D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/r;
-node(node_k).patched_net_dist_error_mean=D_dist_mean;
+node(startNode).patched_net_dist_error_mean=D_dist_mean;
 
-node(node_k).differenceVector=differenceVector;
-node(node_k).mappedPoints=mappedResult;
+node(startNode).differenceVector=differenceVector;
+node(startNode).mappedPoints=mappedResult;
 
 return;
 
@@ -113,10 +113,10 @@ newMap(ii1,:) = 0.5 *(map1(ii1,:) + newMap2(ii2,:));
 
 newMap = [newMap; newMap2(setdiff(1:length(index2),ii2),:)];
 newIndex = [index1; setdiff(index2,intersectIndex)];
-%x=setdiff(index2,intersectIndex);
-%size(index1)
-%size(x)
-%newIndex = [index1; x];
+% x=setdiff(index2,intersectIndex);
+% size(index1)
+% size(x)
+% newIndex = [index1; x];
 
 [newIndex j] = sort(newIndex);
 newMap = newMap(j,:);
