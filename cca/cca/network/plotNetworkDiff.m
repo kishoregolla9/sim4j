@@ -61,7 +61,11 @@ suptitle(plottitle);
 subplot(3,numAnchorSets,numAnchorSets+1:2*numAnchorSets);
 dataToPlot=[result.maxErrorPerAnchorSet;result.meanErrorPerAnchorSet;result.medianErrorPerAnchorSet;result.minErrorPerAnchorSet];
 bar(dataToPlot);
-legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3';'Anchor Set 4']);
+labels=cell(numAnchorSets,1);
+for i=1:numAnchorSets
+   labels{i}=sprintf('Anchor Set %i',i);
+end
+legend(gca,labels);
 set(gca,'XTickLabel','Max|Mean|Median|Min')
 title('Location Error Statistics');
 grid on;
@@ -79,7 +83,7 @@ for j=1:numAnchorSets
     subPlotHopCountVsError( result, r, diffVector, minHopCount, l );
 end
 grid on;
-legend(gca,['Anchor Set 1';'Anchor Set 2';'Anchor Set 3';'Anchor Set 4']);
+legend(gca,labels);
 hold off
 maximize(gcf);
 
