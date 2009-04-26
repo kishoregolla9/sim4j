@@ -11,7 +11,6 @@ function [nodes]=localMapConnectivityOnly(network,epochs,radius)
 
 THRESHOLD=1.5; %the max distance error average to be tolerated or we'd fail
 N=size(network.points,1);
-shortestDistanceMatrix=network.shortestDistanceMatrix;
 shortestHopMatrix=network.shortestHopMatrix;
 nodes=network.nodes;
 
@@ -127,7 +126,7 @@ end
            % nodes(node_k).local_map_compuTime=T;
            nodes(node_k).D_error_mean_compute=D_dist_mean;
         end
-        if ((D_dist_mean<0.03)&(local_size>8)) %for connectivity only case, this may be good enough
+        if ((D_dist_mean<0.03)&&(local_size>8)) %for connectivity only case, this may be good enough
             %this threshold of 0.02 or 0.04 should be adjusted. We used 0.04 for
             %other cases. 0.02 is good for network where the hop count
             %approximation is not too much inaccurate.
@@ -255,20 +254,21 @@ function [ldist,node_index]=localDist(shortestHopMatrix,node_i,hop)
 
 numberOfNodes=size(shortestHopMatrix,1);
 node_count=0;
-node_index=zeros(numberOfNodes,1);
+%node_index=zeros(numberOfNodes,1);  -- Putting this back messes up
+%mapVitPatch.mergeMap
 for j=1:numberOfNodes
     if shortestHopMatrix(node_i,j)<=hop %look for all the nodes that is within hop 
         node_count=node_count+1; %count the number of selected nodes
         node_index(node_count)=j; %save the original index of the selected nodes
     end 
 end %get all the nodes within the hop range.  
-node_index=node_index(sum(node_index,2)~=0,:); %remove all rows that are zero
+%node_index=node_index(sum(node_index,2)~=0,:); %remove all rows that are zero
 ldist=zeros(node_count,node_count);
 for i=1:node_count
     for j=i+1:node_count
         ldist(i,j)=shortestHopMatrix(node_index(i),node_index(j));
         ldist(j,i)=ldist(i,j);
     end
-end %build the distance matrix for the neighborhood within 
+end % build the distance matrix for the neighborhood within 
 %tmp = 0.05*(randn(size(ldist))); %added 5% error of normal distribution
 %ldist=ldist.*(1+tmp);
