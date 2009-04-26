@@ -80,12 +80,12 @@ for startNodeIndex=1:numStartNodes % for each starting node
         times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
     end
 
-    patchTimePerStart(startNodeIndex)=median(times(:,startNodeIndex));
-    medianErrorPerStart(startNodeIndex)=median(medianError(:,startNodeIndex));
-    meanErrorPerStart(startNodeIndex)=median(meanError(:,startNodeIndex));
-    maxErrorPerStart(startNodeIndex)=median(maxError(:,startNodeIndex));
-    minErrorPerStart(startNodeIndex)=median(minError(:,startNodeIndex));
-    stdErrorPerStart(startNodeIndex)=median(stdError(:,startNodeIndex));
+    patchTimePerStart(startNodeIndex)=mean(times(:,startNodeIndex));
+    medianErrorPerStart(startNodeIndex)=mean(medianError(:,startNodeIndex));
+    meanErrorPerStart(startNodeIndex)=mean(meanError(:,startNodeIndex));
+    maxErrorPerStart(startNodeIndex)=mean(maxError(:,startNodeIndex));
+    minErrorPerStart(startNodeIndex)=mean(minError(:,startNodeIndex));
+    stdErrorPerStart(startNodeIndex)=mean(stdError(:,startNodeIndex));
 
     clear A;
     clear times;
@@ -93,12 +93,12 @@ for startNodeIndex=1:numStartNodes % for each starting node
 end % for startNodeIndex
 
 % Average over the start nodes
-result.patchTime=median(patchTimePerStart);
-result.medianError=median(medianErrorPerStart);
-result.meanError=median(meanErrorPerStart);
-result.maxError=median(maxErrorPerStart);
-result.minError=median(minErrorPerStart);
-result.stdError=median(stdErrorPerStart);
+result.patchTime=patchTimePerStart;
+result.medianError=medianErrorPerStart;
+result.meanError=meanErrorPerStart;
+result.maxError=maxErrorPerStart;
+result.minError=minErrorPerStart;
+result.stdError=stdErrorPerStart;
 
 result.bestNodesPerAnchorSet=bestNodes;
 result.worstNodesPerAnchorSet=worstNodes;
