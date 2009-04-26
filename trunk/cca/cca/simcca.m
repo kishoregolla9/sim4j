@@ -44,7 +44,7 @@ for i=1 : numSteps+1
     if (~network.connected), return, end
     network.anchors=anchors;
     plotNetwork(network,folder);
-    
+    close all
     %to pick nodes from different part of the network. Should form a startNode=[a b c ...] array that
     %contains the starting node for map patching that want to experiment with.
     %For example,
