@@ -36,7 +36,6 @@ for j=1:numAnchorSets
     m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
         %p=pentagram(star),k=black
-        fprintf('Drawing start at %i,%i\n',realPoints(m(i),:));
         plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',7);
     end
     
