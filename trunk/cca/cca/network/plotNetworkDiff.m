@@ -71,19 +71,8 @@ grid on;
 
 % Plot hops to nearest anchor vs error
 subplot(3,numAnchorSets,2*numAnchorSets+1:3*numAnchorSets);
-hold all
-for j=1:numAnchorSets
-    minHopCount=getHopCounts(network.anchors(j),...
-        network.points,...
-        network.shortestHopMatrix);
-    
-    diffVector=result.patchedMap(i).differenceVector;
-    l=sprintf('Anchor Set %i',j);
-    subPlotHopCountVsError( result, r, diffVector, minHopCount, l );
-end
-grid on;
-legend(gca,labels);
-hold off
+plotHopsToNearestAnchorVsError(network,result,r);
+
 maximize(gcf);
 
 filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
@@ -91,6 +80,27 @@ foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
 print('-dpng',foo);
+end
+
+function []=plotHopsToNearestAnchorVsError(network,result,r)
+    hold all
+    numAnchorSets=size(network.anchors,1);
+    for j=1:numAnchorSets
+        minHopCount=getHopCounts(network.anchors(j),...
+            network.points,...
+            network.shortestHopMatrix);
+        
+        diffVector=result.patchedMap(j).differenceVector;
+        l=sprintf('Anchor Set %i',j);
+        subPlotHopCountVsError( result, r, diffVector, minHopCount, l );
+    end
+    grid on;
+    labels=cell(numAnchorSets,1);
+    for i=1:numAnchorSets
+        labels{i}=sprintf('Anchor Set %i',i);
+    end
+    legend(gca,labels);
+    hold off
 end
 
 function [m]=getMaxErrorPoints(differenceVector,num)

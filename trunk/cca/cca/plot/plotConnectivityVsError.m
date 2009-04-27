@@ -20,17 +20,14 @@ title({'Localization Error',plotTitle});
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
+plot([results.connectivity],[results.meanError],'-x');
 plot([results.connectivity],[results.medianError],'-x');
 plot([results.connectivity],[results.maxError],'-d');
 plot([results.connectivity],[results.minError],'-s');
-plot([results.connectivity],sigma);
+plot([results.connectivity],[results.stdError],'-o');
 legend('Mean Error','Median Error','Max Error','Min Error','StdDev');
 hold off
 
-filename=sprintf('%s\\Connectivity-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
-   folder,network.shape,minRadius,maxRadius);
-print('-depsc',filename);
-filename=sprintf('%s\\Connectivity-vs-Error-%s-Radius%.1f-to-%.1f.png',...
-   folder,network.shape,minRadius,maxRadius);
-print('-dpng',filename);
-
+filename=sprintf('Connectivity-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
+   network.shape,minRadius,maxRadius);
+saveFigure(folder,filename);
