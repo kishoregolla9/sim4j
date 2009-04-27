@@ -18,8 +18,8 @@ radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_RANDOM;
-N=64;
-networkEdge=8;
+N=144;
+networkEdge=12;
 ranging=0; % range-free
 numAnchors=3;
 numAnchorSets=3;
