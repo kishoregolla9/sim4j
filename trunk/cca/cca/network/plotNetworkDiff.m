@@ -72,7 +72,6 @@ grid on;
 % Plot hops to nearest anchor vs error
 subplot(3,numAnchorSets,2*numAnchorSets+1:3*numAnchorSets);
 plotHopsToNearestAnchorVsError(network,result,r);
-
 maximize(gcf);
 
 filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
@@ -80,6 +79,19 @@ foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
 print('-dpng',foo);
+end
+
+function [m]=getMaxErrorPoints(differenceVector,num)
+m=zeros(num,1);
+errors=zeros(num,1);
+for i=1:size(differenceVector,1)
+    thisError=sum(differenceVector(i,:));
+    [c,minIndex]=min(errors);
+    if thisError > c
+        m(minIndex)=i;
+        errors(minIndex)=thisError;
+    end
+end
 end
 
 function []=plotHopsToNearestAnchorVsError(network,result,r)
@@ -102,17 +114,3 @@ function []=plotHopsToNearestAnchorVsError(network,result,r)
     legend(gca,labels);
     hold off
 end
-
-function [m]=getMaxErrorPoints(differenceVector,num)
-    m=zeros(num,1);
-    errors=zeros(num,1);
-    for i=1:size(differenceVector,1)
-        thisError=sum(differenceVector(i,:));
-        [c,minIndex]=min(errors);
-        if thisError > c
-            m(minIndex)=i;
-            errors(minIndex)=thisError;
-        end
-    end
-end
-

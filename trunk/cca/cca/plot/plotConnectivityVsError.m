@@ -13,18 +13,17 @@ for i=1:size(results,2)
     sigma(i,:)=std(results(i).patchedMap(1).differenceVector);
 end
 
-plot([results.connectivity],[results.meanError],'-o');
+plot([results.connectivity],mean([results.meanError]),'-o');
 grid on
 plotTitle=sprintf('Network %s',network.shape);
 title({'Localization Error',plotTitle});
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
-plot([results.connectivity],[results.meanError],'-x');
-plot([results.connectivity],[results.medianError],'-x');
-plot([results.connectivity],[results.maxError],'-d');
-plot([results.connectivity],[results.minError],'-s');
-plot([results.connectivity],[results.stdError],'-o');
+plot([results.connectivity],mean([results.medianError]),'-x');
+plot([results.connectivity],mean([results.maxError]),'-d');
+plot([results.connectivity],mean([results.minError]),'-s');
+plot([results.connectivity],mean([results.stdError]),'-o');
 legend('Mean Error','Median Error','Max Error','Min Error','StdDev');
 hold off
 

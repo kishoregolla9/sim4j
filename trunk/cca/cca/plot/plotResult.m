@@ -6,6 +6,9 @@ hold off
 plotAnchorSetVsError(results,radii,folder);
 close all
 hold off
+plotAnchorLocalMapErrorVsError(results,radii,folder);
+close all
+hold off
 % plotDistanceVsError(results,radii,folder);
 % close all
 % hold off
