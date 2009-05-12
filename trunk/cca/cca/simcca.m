@@ -18,8 +18,8 @@ radii=minRadius:step:maxRadius;
 
 shape=SHAPE_SQUARE;
 placement=NODE_RANDOM;
-N=144;
-networkEdge=12;
+N=400;
+networkEdge=20;
 ranging=0; % range-free
 numAnchors=3;
 numAnchorSets=3;
@@ -34,6 +34,8 @@ end
 
 %% RUNCCA
 close(gcf);
+
+%% Make Local Maps
 for i=1 : numSteps+1
     
     %% Build and check the network
@@ -42,14 +44,6 @@ for i=1 : numSteps+1
 
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected), return, end
-    network.anchors=anchors;
-    plotNetwork(network,folder);
-    close all
-    %to pick nodes from different part of the network. Should form a startNode=[a b c ...] array that
-    %contains the starting node for map patching that want to experiment with.
-    %For example,
-    startNode=[5 20 22];
-    % Also have a startNodeSelection script which may work or may not work well depending on the network.
 
     %% Build Local Maps
     fprintf(1,'Generating local maps for radius %.2f\n',radius);
@@ -57,11 +51,41 @@ for i=1 : numSteps+1
     [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
     fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
 
+    allMaps(i)=localMaps;
+    networks(i)=network;
+    radius=radii(i);
+    
+end
+
+filename=sprintf('%s\\networks.mat',folder,radius);
+save(filename, 'localMaps', 'network', 'radii');
+
+%% Do Map Patching
+for i=1 : numSteps+1
+    
+    localMaps=allMaps(i);
+    network=networks(i);
+    
+    % Pick nodes from different part of the network.
+    % Should form a startNode=[a b c ...] array that contains the 
+    % starting node for map patching that want to experiment with.
+    % For example,
+    startNode=[5 20 22];
+    % Also have a startNodeSelection script which may work or may not 
+    % work well depending on the network.
+
+    % pick 2 more anchor sets: best and worst set of localMaps
+    myAnchors=[anchors;getBestAndWorstLocalMaps(localMaps)];
+    
+    network.anchors=anchors;
+    plotNetwork(network,folder);
+    close all
+
     %% Map Patching
     disp('------------------------------------')
     fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
     startMapPatch=tic;
-    [results(i)]=mapPatch(network,localMaps,startNode,anchors,radius);
+    [results(i)]=mapPatch(network,localMaps,startNode,myAnchors,radius);
     fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',toc(startMapPatch),radius);
     
     %% PLOT NETWORK DIFFERENCE
@@ -70,9 +94,9 @@ for i=1 : numSteps+1
 end
 
 %% PLOT RESULT
-plotResult(results,radii,folder);
 filename=sprintf('%s\\cca_workspace_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
 save(filename);
+plotResult(results,radii,folder);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))

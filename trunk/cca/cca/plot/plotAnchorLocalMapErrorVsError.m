@@ -17,7 +17,7 @@ for r=1:size(results,2)
             sum(results(r).localMaps{1}(a).local_coordinates_error_mean);
     end
     normalized=normalize(sumLocalMapError);
-    plot(normalized,[results(r).meanError],'-o');
+    plot(normalized,mean(results(r).meanErrorPerAnchorSet,2),'-o');
     labels{r}=sprintf('Radius %.2f', results(r).radius);
     hold all;
 end
@@ -29,7 +29,7 @@ xlabel('Sum of Local Map Errors for all Anchors');
 ylabel('Location Error (factor of radius)');
 legend(labels);
 hold off;
- 
+
 filename=sprintf('AnchorLocalMapError-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
    network.shape,minRadius,maxRadius);
 saveFigure(folder,filename);

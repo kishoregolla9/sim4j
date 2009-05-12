@@ -9,14 +9,14 @@ r=result.radius;
 network=result.network;
 plottitle=sprintf('%s Radius %.1f',network.shape,r);
 h=figure('Name',['Network Difference' plottitle]);
-numAnchorSets=size(network.anchors,1);
+numAnchorSets=size(result.anchors,1);
 
 % Plot a network diff diagram for each anchor set
 for j=1:numAnchorSets
     fprintf('Plotting Network Difference for Anchor Set #%i\n',j);
     mappedPoints=result.patchedMap(j).mappedPoints;
     realPoints=network.points;
-    anchors=network.anchors(j,:);
+    anchors=result.anchors(j,:);
     
     subplot(3,numAnchorSets,j,'align');
     subplotTitle=sprintf('Anchor Set %i',j);
@@ -96,9 +96,9 @@ end
 
 function []=plotHopsToNearestAnchorVsError(network,result,r)
     hold all
-    numAnchorSets=size(network.anchors,1);
+    numAnchorSets=size(result.anchors,1);
     for j=1:numAnchorSets
-        minHopCount=getHopCounts(network.anchors(j),...
+        minHopCount=getHopCounts(result.anchors(j),...
             network.points,...
             network.shortestHopMatrix);
         
