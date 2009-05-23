@@ -16,8 +16,10 @@ maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
-shape=SHAPE_SQUARE;
-placement=NODE_RANDOM;
+clear minRadius maxRadius;
+
+shape=NET.SHAPE_SQUARE;
+placement=NET.NODE_RANDOM;
 N=400;
 networkEdge=20;
 ranging=0; % range-free
@@ -25,7 +27,6 @@ numAnchors=3;
 numAnchorSets=3;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
-[anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
 
 if exist('folder','var') ~= 1
     folder=sprintf('results\\%i-%i-%i_%i_%i_%i-%s',fix(clock),sourceNetwork.shape);
@@ -48,17 +49,20 @@ for i=1 : numSteps+1
     %% Build Local Maps
     fprintf(1,'Generating local maps for radius %.2f\n',radius);
     localMapStart=tic;
-    [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,ranging);
+    [localMaps]=localMapComputing(network,radius,ranging);
     fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
-
+    clear localMapStart;
     allMaps(i)=localMaps;
+    clear localMaps;
     networks(i)=network;
     radius=radii(i);
     
 end
 
 filename=sprintf('%s\\networks.mat',folder,radius);
-save(filename, 'localMaps', 'network', 'radii');
+save(filename, 'allMaps', 'network', 'radii', 'sourceNetwork');
+
+[anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
 
 %% Do Map Patching
 for i=1 : numSteps+1
@@ -75,21 +79,9 @@ for i=1 : numSteps+1
     % work well depending on the network.
 
     % pick 2 more anchor sets: best and worst set of localMaps
-    myAnchors=[anchors;getBestAndWorstLocalMaps(localMaps)];
-    
+    %myAnchors=[anchors;getBestAndWorstLocalMaps(localMaps)];
     network.anchors=anchors;
-    plotNetwork(network,folder);
-    close all
-
-    %% Map Patching
-    disp('------------------------------------')
-    fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
-    startMapPatch=tic;
-    [results(i)]=mapPatch(network,localMaps,startNode,myAnchors,radius);
-    fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',toc(startMapPatch),radius);
-    
-    %% PLOT NETWORK DIFFERENCE
-    plotNetworkDiff(results(i),folder);
+    [network,results(i)]=doMapPatch(network,radius,localMaps,startNode,anchors,folder);
 
 end
 
