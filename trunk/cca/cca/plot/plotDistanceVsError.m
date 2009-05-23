@@ -1,4 +1,4 @@
-function plotDistanceVsError( results,radii,folder )
+function plotDistanceVsError( results,anchors,radii,folder )
 % Plot distance of each node to its nearest anchor vs error
 windowSize=25;
 minRadius=radii(1);
@@ -6,7 +6,7 @@ maxRadius=radii(size(radii,2));
 
 network=results(1).network;
 points=network.points;
-numAnchorSets=size(network.anchors,1);
+numAnchorSets=size(anchors,1);
 
 figure('Name','Distance to Anchor vs Error');
 
@@ -20,10 +20,10 @@ for i=1:numAnchorSets
     minDistanceToAnchors=zeros(size(points,1),1);
 
     for p=1:size(meanDistanceToAnchors,1)
-        numAnchors=size(network.anchors,2);
+        numAnchors=size(anchors,2);
         distToAnchor=zeros(numAnchors,1);
         for a=1:numAnchors
-            distToAnchor(a)=distance(points(network.anchors(a),:),points(p,:));
+            distToAnchor(a)=distance(points(anchors(a),:),points(p,:));
         end
         meanDistanceToAnchors(p)=mean(distToAnchor);
         minDistanceToAnchors(p)=min(distToAnchor);

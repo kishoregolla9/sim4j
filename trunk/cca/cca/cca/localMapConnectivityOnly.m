@@ -41,7 +41,7 @@ for node_k = 1:N
     %compute node_k's h-hop distance matrix
     [local_d,node_index]=localDist(shortestHopMatrix,node_k,h); 
     local_size=size(node_index,2);
-    diff=local_size-size(nodes(node_k).neighbors,2);
+    %diff=local_size-size(nodes(node_k).neighbors,2);
 
     %node_index_merge=node_index;
     %local_d_merge=local_d;

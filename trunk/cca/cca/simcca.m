@@ -9,9 +9,9 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=2.5;
-step=0.5;
-numSteps=3;
+minRadius=3.0;
+step=1;
+numSteps=2;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
@@ -20,8 +20,8 @@ clear minRadius maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-N=400;
-networkEdge=20;
+N=324;
+networkEdge=18;
 ranging=0; % range-free
 numAnchors=3;
 numAnchorSets=3;
@@ -33,9 +33,16 @@ if exist('folder','var') ~= 1
     mkdir(folder);
 end
 
+filename=sprintf('%s\\sourceNetwork.mat',folder);
+save(filename, 'sourceNetwork', 'radii');
+
 %% RUNCCA
 close(gcf);
 
+[anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchors,numAnchorSets);
+filename=sprintf('%s\\anchors.mat',folder);
+save(filename, 'anchors');
+allMaps=cell(numSteps+1,1);
 %% Make Local Maps
 for i=1 : numSteps+1
     
@@ -52,17 +59,19 @@ for i=1 : numSteps+1
     [localMaps]=localMapComputing(network,radius,ranging);
     fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
     clear localMapStart;
+    if ~exist('networks','var')
+        % preallocate
+        networks(numSteps+1)=struct(network);
+    end
     allMaps(i)=localMaps;
-    clear localMaps;
     networks(i)=network;
-    radius=radii(i);
     
+    radius=radii(i);
+    clear localMaps network;
 end
 
-filename=sprintf('%s\\networks.mat',folder,radius);
-save(filename, 'allMaps', 'network', 'radii', 'sourceNetwork');
-
-[anchors]=buildAnchors(sourceNetwork,ANCHORS_SPREAD,numAnchors,numAnchorSets);
+filename=sprintf('%s\\localMaps.mat',folder);
+save(filename, 'allMaps', 'radii');
 
 %% Do Map Patching
 for i=1 : numSteps+1
@@ -80,15 +89,19 @@ for i=1 : numSteps+1
 
     % pick 2 more anchor sets: best and worst set of localMaps
     %myAnchors=[anchors;getBestAndWorstLocalMaps(localMaps)];
-    network.anchors=anchors;
-    [network,results(i)]=doMapPatch(network,radius,localMaps,startNode,anchors,folder);
-
+    [network,result]=doMapPatch(network,radius,localMaps,startNode,anchors,folder);
+    if ~exist('results','var')
+        % preallocate
+        results(numSteps+1)=result;
+    end
+    results(i)=result;
+    clear result network localMaps;
 end
 
 %% PLOT RESULT
-filename=sprintf('%s\\cca_workspace_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
-save(filename);
-plotResult(results,radii,folder);
+filename=sprintf('%s\\cca_results_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
+save(filename,'results');
+plotResult(results,anchors,radii,folder);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))

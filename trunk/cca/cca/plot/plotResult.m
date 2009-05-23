@@ -1,4 +1,4 @@
-function plotResult(results,radii,folder)
+function plotResult(results,anchors,radii,folder)
 
 plotConnectivityVsError(results,radii,folder);
 close all
@@ -6,22 +6,22 @@ hold off
 plotAnchorSetVsError(results,radii,folder);
 close all
 hold off
-plotAnchorLocalMapErrorVsError(results,radii,folder);
+plotAnchorLocalMapErrorVsError(results,anchors,radii,folder);
 close all
 hold off
-% plotDistanceVsError(results,radii,folder);
+%plotDistanceVsError(results,anchors,radii,folder);
 % close all
 % hold off
-%plotHopCountVsError(results,radii,folder);
+%plotHopCountVsError(results,anchors,radii,folder);
 %close all
 %hold off
-plotAnchorDistanceVsError(results,radii,folder);
+plotAnchorDistanceVsError(results,anchors,radii,folder);
 close all
 hold off
-%plotAnchorNeighborsVsError(results,radii,folder);
+%plotAnchorNeighborsVsError(results,anchors,radii,folder);
 %close all
 %hold off
-plotHistograms(results,folder);
+plotHistograms(results,anchors,folder);
 
 
 

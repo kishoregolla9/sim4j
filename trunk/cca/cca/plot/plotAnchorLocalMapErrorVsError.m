@@ -1,4 +1,4 @@
-function [ h ] = plotAnchorLocalMapErrorVsError( results,radii,folder )
+function [ h ] = plotAnchorLocalMapErrorVsError( results,anchors,radii,folder )
 
 network=results.network;
 minRadius=radii(1);
@@ -7,7 +7,7 @@ maxRadius=radii(size(radii,2));
 h=figure('Name','The Results by Connectivity');
 hold off
 
-numAnchorSets=size(network.anchors,1);
+numAnchorSets=size(anchors,1);
 labels=cell(size(results,2),1);
 for r=1:size(results,2)
     hold all
