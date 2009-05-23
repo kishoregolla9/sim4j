@@ -1,8 +1,7 @@
-function [h]=plotNetwork(network,folder)
+function [h]=plotNetwork(network,anchors,folder)
 % Plot the network, showing the anchor nodes with red circles
 
 radius=network.radius;
-anchors=network.anchors;
 
 radiusString=sprintf('Radio Range: %.1f',radius);
 figurename=sprintf('%s %s',network.shape,radiusString);

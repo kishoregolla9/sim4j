@@ -1,7 +1,7 @@
-function plotHistograms( results,folder )
+function plotHistograms( results,anchors,folder )
 
 network=results(1).network;
-numAnchorSets=size(network.anchors,1);
+numAnchorSets=size(anchors,1);
 numResults=size(results,2);
 
 figure('Name','Histograms');

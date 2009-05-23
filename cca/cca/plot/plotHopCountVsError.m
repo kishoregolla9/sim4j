@@ -1,11 +1,11 @@
-function plotHopCountVsError( results,radii,folder )
+function plotHopCountVsError( results,anchors,radii,folder )
 % Plot hop count distance of each node to its nearest anchor vs error
 
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 network=results(1).network;
-numAnchorSets=size(network.anchors,1);
+numAnchorSets=size(anchors,1);
 
 figure('Name','Hop Count to Anchor vs Error');
 
@@ -16,7 +16,7 @@ for i=1:numAnchorSets
     t=sprintf('Anchor Set %i',i);
     title(t);
     
-    [minHopCount,meanHopCount]=getHopCounts(network.anchors,...
+    [minHopCount,meanHopCount]=getHopCounts(anchors,...
         network.points,...
         network.shortestHopMatrix);
     
