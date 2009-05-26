@@ -1,6 +1,7 @@
 function [results]=doMapPatch(networks,radius,allMaps,anchors,folder)
 
 %% Do Map Patching
+numSteps=size(networks,2);
 for i=1 : numSteps+1
     fprintf('Doing map patch #%i',i);
     localMaps=allMaps(i);
@@ -14,10 +15,6 @@ for i=1 : numSteps+1
     % Also have a startNodeSelection script which may work or may not 
     % work well depending on the network.
 
-    %    [network,result]=doMapPatch(network,radius,localMaps,startNode,anchors,folder);
-    plotNetwork(network,anchors,folder);
-    close all
-    
     %% Map Patching
     disp('------------------------------------')
     fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
@@ -25,7 +22,7 @@ for i=1 : numSteps+1
     fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',result.mapPatchTime,radius);
     
     %% PLOT NETWORK DIFFERENCE
-    plotNetworkDiff(result,anchors,folder);
+    % plotNetworkDiff(result,anchors,folder);
     % done doMapPatch
       
     if ~exist('results','var')

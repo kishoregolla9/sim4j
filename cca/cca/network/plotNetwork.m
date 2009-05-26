@@ -35,28 +35,29 @@ for i=1:size(network.points,1)
             'Margin',0);
 end
 
-%% Plot Anchor Nodes
-hold all
-arrow=zeros(size(anchors,1),size(anchors(1,:),1));
-c=['r','c','g','k'];
-for a=1:size(anchors,1)
-    for g=1:size(anchors(a,:),2)
-        xData=network.points(anchors(a,g),1);
-        yData=network.points(anchors(a,g),2);
-        plot(xData,yData,'-s',...
+if size(anchors,1) > 1
+    %% Plot Anchor Nodes
+    hold all
+    arrow=zeros(size(anchors,1),size(anchors(1,:),1));
+    c=['r','c','g','k'];
+    for a=1:size(anchors,1)
+        for g=1:size(anchors(a,:),2)
+            xData=network.points(anchors(a,g),1);
+            yData=network.points(anchors(a,g),2);
+            plot(xData,yData,'-s',...
                 'MarkerEdgeColor','k',...
                 'MarkerFaceColor',c(mod(a-1,size(c,2))+1),...
                 'MarkerSize',10);
-        xDataArrow=[(xData+0.3),xData];
-        yDataArrow=[(yData-0.3),yData];
-        [xFigArrow,yFigArrow]=dsxy2figxy(gca,xDataArrow,yDataArrow);
-        arrow(a,g)=annotation('textarrow',xFigArrow,yFigArrow);
-        content=sprintf('%.0f',a);
-        set(arrow(a,g),'String',content,'HeadStyle','vback1',...
-            'FontSize',10,'FontWeight','bold','Color',c(mod(a-1,size(c,2))+1));
+            xDataArrow=[(xData+0.3),xData];
+            yDataArrow=[(yData-0.3),yData];
+            [xFigArrow,yFigArrow]=dsxy2figxy(gca,xDataArrow,yDataArrow);
+            arrow(a,g)=annotation('textarrow',xFigArrow,yFigArrow);
+            content=sprintf('%.0f',a);
+            set(arrow(a,g),'String',content,'HeadStyle','vback1',...
+                'FontSize',10,'FontWeight','bold','Color',c(mod(a-1,size(c,2))+1));
+        end
     end
 end
-
 
 hold off
 

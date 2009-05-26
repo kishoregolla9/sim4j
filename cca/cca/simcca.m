@@ -28,7 +28,6 @@ numAnchorSets=3;
 
 clear minRadius maxRadius step networkEdge;
 
-
 if exist('folder','var') ~= 1
     folder=sprintf('results\\%i-%i-%i_%i_%i_%i-%s',fix(clock),sourceNetwork.shape);
     mkdir(folder);
@@ -41,7 +40,7 @@ close(gcf);
 
 %% Build Networks
 for i=1 : numSteps+1
-    %% Build and check the network
+    % Build and check the network
     radius=radii(i);
     fprintf(1,'Radius: %.1f\n', radius);
 
@@ -51,14 +50,18 @@ for i=1 : numSteps+1
     if ~exist('networks','var')
         % preallocate
         networks(numSteps+1)=struct(network);
+        
     end
     networks(i)=network;
+    
+    plotNetwork(network,zeros(0),folder);
+    close all
+    
     clear network;
 end
 
-
 filename=sprintf('%s\\networks.mat',folder);
-save(filename, 'networks', 'radii', 'numSteps','N','placement','ranging','shape');
+save(filename, 'networks', 'radii', 'numSteps','N','placement','ranging','shape','folder');
 
 %% BuildAnchors
 [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchors,numAnchorSets);
