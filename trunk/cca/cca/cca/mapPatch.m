@@ -13,6 +13,8 @@ function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
 %  anchorSets - SxT matrix containing S anchorSets sets that want to be experimented
 %    with. Each anchorSets set has T anchorSets nodes.
 
+startMapPatch=tic;
+
 result.network=network;
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
@@ -111,5 +113,7 @@ for a=1:numAnchorSets % for each anchorSets set
     result.minErrorPerAnchorSet(a,:)=minError(a,:);
     result.stdErrorPerAnchorSet(a,:)=stdError(a,:);
 end
+
+result.mapPatchTime=toc(startMapPatch);
 
 return
