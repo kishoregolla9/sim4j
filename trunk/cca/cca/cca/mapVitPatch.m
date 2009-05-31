@@ -47,7 +47,6 @@ while length(curindexInclude) ~= N
 end %while
 
 tElapsed=toc(tStart);
-disp(['Patching the local maps for start node ' startNode ' took ' num2str(tElapsed) ' sec']);
 node(startNode).map_patchTime=tElapsed;
 
 rawResult = curMap;
