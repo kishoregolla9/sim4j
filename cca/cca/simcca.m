@@ -50,7 +50,6 @@ for i=1 : numSteps+1
     if ~exist('networks','var')
         % preallocate
         networks(numSteps+1)=struct(network);
-        
     end
     networks(i)=network;
     
@@ -87,8 +86,8 @@ end
 filename=sprintf('%s\\localMaps.mat',folder);
 save(filename, 'allMaps', 'radii');
 
-
-[results]=doMapPatch(networks,radius,allMaps,anchors,folder);
+%% MAP PATCHING
+[results]=doMapPatch(networks,allMaps,anchors,folder);
 
 %% PLOT RESULT
 filename=sprintf('%s\\cca_results_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));

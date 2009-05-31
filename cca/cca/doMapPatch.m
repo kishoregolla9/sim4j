@@ -1,17 +1,18 @@
-function [results]=doMapPatch(networks,radius,allMaps,anchors,folder)
+function [results]=doMapPatch(networks,allMaps,anchors,folder)
 
 %% Do Map Patching
 numSteps=size(networks,2);
-for i=1 : numSteps+1
+for i=1 : 1
     fprintf('Doing map patch #%i',i);
     localMaps=allMaps(i);
     network=networks(i);
-    
+    radius=network.radius;
     % Pick nodes from different part of the network.
     % Should form a startNode=[a b c ...] array that contains the 
     % starting node for map patching that want to experiment with.
     % For example,
-    startNode=[5 20 22];
+    %startNode=[5 20 22];
+    startNode=20;
     % Also have a startNodeSelection script which may work or may not 
     % work well depending on the network.
 
@@ -30,6 +31,10 @@ for i=1 : numSteps+1
         results(numSteps+1)=result;
     end
     results(i)=result;
+    
+    filename=sprintf('%s\\result-%i_%i-%i-%i_%i_%i_%i.mat',folder,i,fix(clock));
+    save(filename,'result');
+    
     clear result network localMaps;
 end
 end

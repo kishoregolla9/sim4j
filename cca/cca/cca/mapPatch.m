@@ -15,6 +15,8 @@ function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
 
 startMapPatch=tic;
 
+MOD_ANCHORS=50000;
+
 result.network=network;
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
@@ -23,7 +25,7 @@ result.localMaps=localMaps;
 
 node=startNodes;
 numStartNodes=size(node,2);  % number of starting nodes
-numAnchorSets=size(anchorSets,1);  % number of anchorSets sets for testing
+numAnchorSets=floor(size(anchorSets,1)/MOD_ANCHORS);  % number of anchorSets sets for testing
 
 patchTimePerStart=zeros(numStartNodes,1);
 medianErrorPerStart=zeros(numStartNodes,1);
@@ -43,12 +45,13 @@ bestNodes=zeros(numAnchorSets,numStartNodes);
 worstNodes=zeros(numAnchorSets,numStartNodes);
 for startNodeIndex=1:numStartNodes % for each starting node
     fprintf(1,'+++ Start Node %i (%i of %i)\n', node(startNodeIndex), startNodeIndex, numStartNodes);
-
+    anchor=0;
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
+        startAnchor=tic;
         fprintf(1,'++++ Anchor Set %i of %i\n', anchorSetIndex, numAnchorSets);
-
-        anchorNodes=anchorSets(anchorSetIndex,:);
-        
+        anchor=anchor+MOD_ANCHORS;
+        anchorNodes=anchorSets(anchor,:);
+         
         localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
             anchorNodes,radius);
         resultNode=localMaps{1}(node(startNodeIndex));
@@ -81,6 +84,9 @@ for startNodeIndex=1:numStartNodes % for each starting node
         stdError(anchorSetIndex,startNodeIndex)=sum(coordinates_error_std);
         
         times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
+        
+        fprintf(1,'++++ Patched local map for anchor set %i of %i in %.2f sec\n', ...
+           anchorSetIndex, numAnchorSets, toc(startAnchor));
     end
 
     patchTimePerStart(startNodeIndex)=mean(times(:,startNodeIndex));
