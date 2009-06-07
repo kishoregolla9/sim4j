@@ -1,4 +1,4 @@
-function plotDistanceVsError( results,anchors,radii,folder )
+function plotDistanceVsError( results,anchors,radii,folder,allMaps )
 % Plot distance of each node to its nearest anchor vs error
 windowSize=25;
 minRadius=radii(1);
@@ -31,7 +31,7 @@ for i=1:numAnchorSets
     
     labels=cell(4, size(results,2));
     for r=1:size(results,2)
-        errors=sum(results(r).localMaps(i).differenceVector,2)/results(r).radius;
+        errors=sum(results(r).patchedMap(i).differenceVector,2)/results(r).radius;
         dataToPlot=sortrows([meanDistanceToAnchors,errors]);
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);

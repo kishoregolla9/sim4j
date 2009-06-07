@@ -1,29 +1,33 @@
-function plotAnchorNeighborsVsError( results, anchors,radii, folder )
+function plotAnchorNeighborsVsError(results,anchors,radii,folder)
 %PLOTANCHORNEIGHBORSVSERROR Summary of this function goes here
 %   Detailed explanation goes here
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 network=results(1).network;
-points=network.points;
-distances=network.distanceMatrix;
+% points=network.points;
+% distances=network.distanceMatrix;
 numAnchorSets=size(anchors,1);
 labels=cell(1, size(radii,2));
 hold all
-numAnchorNeighbors=zeros(size(radii,2),1);
+numAnchorNeighbors=zeros(numAnchorSets,size(radii,2));
 for r=1:size(radii,2)
     for s=1:numAnchorSets
-        anchors=anchors(s,:);
-        numAnchors=size(anchors,2);
-        for a=1:numAnchors
-            for p=1:size(points,1)
-                if a ~= p && distances(a,p) < radii(r)
-                    numAnchorNeighbors(r)=numAnchorNeighbors(r)+1;
-                end
-            end
+        numAnchorsPerSet=size(anchors,2);
+        for a=1:numAnchorsPerSet
+            numAnchorNeighbors(s,r)=numAnchorNeighbors(s,r)+size(results(r).network.nodes(anchors(s,a)).neighbors,2);
+%             for p=1:size(points,1)
+%                 if a ~= p && distances(a,p) < radii(r)
+%                     numAnchorNeighbors(r,s)=numAnchorNeighbors(r)+1;
+%                 end
+%             end
         end
     end
-    plot(numAnchorNeighbors,results(r).medianErrorPerAnchorSet);
+    dataToPlot=[numAnchorNeighbors(:,r) results(r).medianErrorPerAnchorSet];
+    dataToPlot=sortrows(dataToPlot,1);    
+    plot(dataToPlot(:,1),dataToPlot(:,2),'-x');
+    
+%     plot(numAnchorNeighbors(r),results(r).medianErrorPerAnchorSet,'-x');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
 legend(labels,'Location','NorthWest');
