@@ -93,7 +93,7 @@ save(filename,'results');
 
 
 %% PLOT RESULT
-plotResult(results,anchors,radii,folder);
+plotResult(results,anchors,radii,folder,allMaps);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))
