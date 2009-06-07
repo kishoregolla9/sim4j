@@ -3,7 +3,7 @@ function plotResult(results,anchors,radii,folder)
 plotConnectivityVsError(results,radii,folder);
 close all
 hold off
-plotAnchorSetVsError(results,radii,folder);
+plotAnchorSetVsError(results,anchors,radii,folder);
 close all
 hold off
 plotAnchorLocalMapErrorVsError(results,anchors,radii,folder);

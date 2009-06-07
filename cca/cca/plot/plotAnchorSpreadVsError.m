@@ -1,11 +1,11 @@
-function [ h ] = plotAnchorSpreadVsError( results,radii,folder )
+function [ h ] = plotAnchorSpreadVsError( results,anchors,radii,folder )
 
 network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 distanceMatrix=network.distanceMatrix;
 
-anchorSets=results(1).anchors;
+anchorSets=anchors;
 numAnchorSets=size(anchorSets,1);
 %% Calculate anchor spread
 spread=zeros(numAnchorSets,1);

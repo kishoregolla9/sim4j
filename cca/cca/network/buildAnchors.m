@@ -1,10 +1,10 @@
-function [anchors]=buildAnchors(network,anchorPlacement,A,sets,targets)
+function [anchors]=buildAnchors(network,anchorPlacement,A,S,targets)
 % anchorPlacement: see networkconstants.m
 % A:            number of anchors per anchor set
-% sets:         number of anchor sets
+% S:            number of anchor sets
 % targets:      anchor target locations, if applicable to anchorPlacement
 networkconstants;
-anchors=zeros(sets,A);
+anchors=zeros(S,A);
 switch anchorPlacement
     case NET.ANCHORS_CLUMPED
     
@@ -15,13 +15,23 @@ switch anchorPlacement
         % Choose anchor sets equally spread from the center of the network 
         % over axis (determinedod by number of anchors, eg, if 4, along 45deg axis) 
         r=0;
-        rIncrement=sqrt((network.height/2).^2+(network.height/2).^2)/sets;
-        for a=1:sets
+        rIncrement=sqrt((network.height/2).^2+(network.height/2).^2)/S;
+        for a=1:S
             anchors(a,:)=selectNodesAtCenter(network,A,r);
             r=r+rIncrement;
         end
         
     case NET.ANCHORS_RANDOM
-        anchors=nchoosek(1:network.numberOfNodes,A);
+        start=tic;
+        allAnchors=nchoosek(1:network.numberOfNodes,A);
+        fprintf(1,'n choose k took %.2fsec\n',toc(start));
+        MOD_ANCHORS=50000;
+        numAnchorSets=floor(size(allAnchors,1)/MOD_ANCHORS);  % number of anchorSets sets for testing
+        anchor=0;
+        for anchorSetIndex=1:numAnchorSets % for each anchorSets set
+            anchor=anchor+MOD_ANCHORS;
+            anchors(anchorSetIndex,:)=allAnchors(anchor,:);
+        end
+        fprintf(1,'Building anchors took %.2fsec\n',toc(start));
 end
 end

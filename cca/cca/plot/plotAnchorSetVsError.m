@@ -1,4 +1,4 @@
-function plotAnchorSetVsError( results,radii,folder )
+function plotAnchorSetVsError( results,anchors,radii,folder )
 %PLOTANCHORSETVSERROR plot the error of each anchor set
 
 network=results.network;
@@ -6,7 +6,7 @@ minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 figure('Name','Anchor Set By Anchor');
 
-numAnchorSets=size(results(1).anchors,1);
+numAnchorSets=size(anchors,1);
 numConnectivityPoints=size(results,2);
 medianErrors=zeros(numConnectivityPoints,numAnchorSets);
 meanErrors=zeros(numConnectivityPoints,numAnchorSets);
