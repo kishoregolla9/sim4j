@@ -21,7 +21,7 @@ placement=NET.NODE_RANDOM;
 N=324;
 networkEdge=18;
 ranging=0; % range-free
-numAnchors=3;
+numAnchorsPerSet=3;
 numAnchorSets=3;
 
 [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
@@ -63,7 +63,7 @@ filename=sprintf('%s\\networks.mat',folder);
 save(filename, 'networks', 'radii', 'numSteps','N','placement','ranging','shape','folder');
 
 %% BuildAnchors
-[anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchors,numAnchorSets);
+[anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets);
 filename=sprintf('%s\\anchors.mat',folder);
 save(filename, 'anchors','numAnchorSets');
 allMaps=cell(numSteps+1,1);
@@ -88,10 +88,11 @@ save(filename, 'allMaps', 'radii');
 
 %% MAP PATCHING
 [results]=doMapPatch(networks,allMaps,anchors,folder);
-
-%% PLOT RESULT
 filename=sprintf('%s\\cca_results_%i-%i-%i_%i_%i_%i.mat',folder,fix(clock));
 save(filename,'results');
+
+
+%% PLOT RESULT
 plotResult(results,anchors,radii,folder);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...

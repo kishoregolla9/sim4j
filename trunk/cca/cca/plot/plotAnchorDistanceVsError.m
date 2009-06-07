@@ -1,17 +1,17 @@
-function plotAnchorDistanceVsError( results,anchors,radii,folder )
+function plotAnchorDistanceVsError( results,allAnchors,radii,folder )
 % Plot distance between the anchors themselves vs error
 
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
 network=results(1).network;
-numAnchorSets=size(anchors,1);
+numAnchorSets=size(allAnchors,1);
 
 figure('Name','Anchor Distance vs Error');
 
 distances=zeros(numAnchorSets,1);
 for i=1:numAnchorSets
-    anchors=results(1).anchors(i,:);
+    anchors=allAnchors(i,:);
     numAnchors=size(anchors,2);
     d=zeros(numAnchors-1,1);
     for a=1:numAnchors
