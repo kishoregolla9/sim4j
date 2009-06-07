@@ -20,8 +20,6 @@ MOD_ANCHORS=50000;
 result.network=network;
 result.connectivity=network.networkConnectivityLevel;
 result.radius=radius;
-%result.anchors=anchorSets;
-%result.localMaps=localMaps;
 
 node=startNodes;
 numStartNodes=size(node,2);  % number of starting nodes

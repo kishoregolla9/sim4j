@@ -1,4 +1,4 @@
-function [h]=plotNetworkDiff(result,folder)
+function [h]=plotNetworkDiff(result,allAnchors,folder)
 % Plot the network difference, showing the anchor nodes with green squares
 % Blue points are real point locations
 % Red points are mapped point locations
@@ -9,14 +9,14 @@ r=result.radius;
 network=result.network;
 plottitle=sprintf('%s Radius %.1f',network.shape,r);
 h=figure('Name',['Network Difference' plottitle]);
-numAnchorSets=size(result.anchors,1);
+numAnchorSets=size(allAnchors,1);
 
 % Plot a network diff diagram for each anchor set
 for j=1:numAnchorSets
     fprintf('Plotting Network Difference for Anchor Set #%i\n',j);
     mappedPoints=result.patchedMap(j).mappedPoints;
     realPoints=network.points;
-    anchors=result.anchors(j,:);
+    anchors=allAnchors(j,:);
     
     subplot(3,numAnchorSets,j,'align');
     subplotTitle=sprintf('Anchor Set %i',j);
@@ -71,7 +71,7 @@ grid on;
 
 % Plot hops to nearest anchor vs error
 subplot(3,numAnchorSets,2*numAnchorSets+1:3*numAnchorSets);
-plotHopsToNearestAnchorVsError(network,result,r);
+plotHopsToNearestAnchorVsError(network,result,anchors,r);
 maximize(gcf);
 
 filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
@@ -94,11 +94,11 @@ for i=1:size(differenceVector,1)
 end
 end
 
-function []=plotHopsToNearestAnchorVsError(network,result,r)
+function []=plotHopsToNearestAnchorVsError(network,result,allAnchors,r)
     hold all
-    numAnchorSets=size(result.anchors,1);
+    numAnchorSets=size(allAnchors,1);
     for j=1:numAnchorSets
-        minHopCount=getHopCounts(result.anchors(j),...
+        minHopCount=getHopCounts(allAnchors(j),...
             network.points,...
             network.shortestHopMatrix);
         

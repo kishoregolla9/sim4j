@@ -2,7 +2,7 @@ function [results]=doMapPatch(networks,allMaps,anchors,folder)
 
 %% Do Map Patching
 numSteps=size(networks,2);
-for i=1 : 1
+for i=1 : size(allMaps,1)
     fprintf('Doing map patch #%i',i);
     localMaps=allMaps(i);
     network=networks(i);
