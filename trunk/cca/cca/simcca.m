@@ -2,6 +2,7 @@ clear;
 
 %% BuildSourceNetwork
 hold off
+addpath('sim')
 addpath('cca')
 addpath('network')
 addpath('plot')
@@ -34,33 +35,15 @@ if exist('folder','var') ~= 1
 end
 
 filename=sprintf('%s\\sourceNetwork.mat',folder);
-save(filename, 'sourceNetwork');
+save(filename, 'sourceNetwork','N','placement','ranging','shape');
 
 close(gcf);
 
 %% Build Networks
-for i=1 : numSteps+1
-    % Build and check the network
-    radius=radii(i);
-    fprintf(1,'Radius: %.1f\n', radius);
-
-    [network]=checkNetwork(sourceNetwork,radius);
-    if (~network.connected), return, end
-
-    if ~exist('networks','var')
-        % preallocate
-        networks(numSteps+1)=struct(network);
-    end
-    networks(i)=network;
-    
-    plotNetwork(network,zeros(0),folder);
-    close all
-    
-    clear network;
-end
+[ networks ] = buildNetworks(sourceNetwork, radii, numSteps);
 
 filename=sprintf('%s\\networks.mat',folder);
-save(filename, 'networks', 'radii', 'numSteps','N','placement','ranging','shape','folder');
+save(filename, 'networks', 'radii', 'numSteps','folder');
 
 %% BuildAnchors
 [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets);
