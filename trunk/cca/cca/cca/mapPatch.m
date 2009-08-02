@@ -1,7 +1,7 @@
 % function [patchTime,coordinates_median,coordinates_median_average,allResults]=...
 %     mapPatch(network,localMaps,startNodes,anchorSets)
 
-function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius)
+function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius,patchNumber)
 
 %This function patches local maps into the global map for all the local maps
 %computed for each radius value stored in the localMaps.
@@ -22,7 +22,7 @@ result.radius=radius;
 node=startNodes;
 numStartNodes=size(node,2);  % number of starting nodes
 %numAnchorSets=floor(size(anchorSets,1)/MOD_ANCHORS);  % number of anchorSets sets for testing
-numAnchorSets=size(anchors,1);
+numAnchorSets=size(anchorSets,1);
 
 patchTimePerStart=zeros(numStartNodes,1);
 medianErrorPerStart=zeros(numStartNodes,1);
@@ -41,10 +41,10 @@ times=zeros(numAnchorSets,numStartNodes);
 bestNodes=zeros(numAnchorSets,numStartNodes);
 worstNodes=zeros(numAnchorSets,numStartNodes);
 for startNodeIndex=1:numStartNodes % for each starting node
-    fprintf(1,'+++ Start Node %i (%i of %i)\n', node(startNodeIndex), startNodeIndex, numStartNodes);
+    fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, node(startNodeIndex), startNodeIndex, numStartNodes);
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
         startAnchor=tic;
-        fprintf(1,'++++ Anchor Set %i of %i\n', anchorSetIndex, numAnchorSets);
+        fprintf(1,'++++ %s Anchor Set %i of %i\n', patchNumber, anchorSetIndex, numAnchorSets);
         anchorNodes=anchorSets(anchorSetIndex,:);
          
         localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
@@ -80,8 +80,8 @@ for startNodeIndex=1:numStartNodes % for each starting node
         
         times(anchorSetIndex,startNodeIndex)=resultNode.map_patchTime;
         
-        fprintf(1,'++++ Patched local map for anchor set %i of %i in %.2f sec\n', ...
-           anchorSetIndex, numAnchorSets, toc(startAnchor));
+        fprintf(1,'++++ %s Patched local map for anchor set %i of %i in %.2f sec\n', ...
+           patchNumber, anchorSetIndex, numAnchorSets, toc(startAnchor));
     end
 
     patchTimePerStart(startNodeIndex)=mean(times(:,startNodeIndex));

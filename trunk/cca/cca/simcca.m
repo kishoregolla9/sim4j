@@ -2,7 +2,6 @@ clear;
 
 %% BuildSourceNetwork
 hold off
-addpath('sim')
 addpath('cca')
 addpath('network')
 addpath('plot')
@@ -45,11 +44,6 @@ close(gcf);
 filename=sprintf('%s\\networks.mat',folder);
 save(filename, 'networks', 'radii', 'numSteps','folder');
 
-%% BuildAnchors
-[anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets);
-filename=sprintf('%s\\anchors.mat',folder);
-save(filename, 'anchors','numAnchorSets');
-allMaps=cell(numSteps+1,1);
 
 %% Build Local Maps
 for i=1 : numSteps+1
@@ -68,6 +62,13 @@ end
 
 filename=sprintf('%s\\localMaps.mat',folder);
 save(filename, 'allMaps', 'radii');
+
+%% BuildAnchors
+[randomAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets);
+[spreadAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_SPREAD,3,5);
+filename=sprintf('%s\\anchors.mat',folder);
+save(filename, 'anchors','numAnchorSets');
+allMaps=cell(numSteps+1,1);
 
 %% MAP PATCHING
 [results]=doMapPatch(networks,allMaps,anchors,folder);

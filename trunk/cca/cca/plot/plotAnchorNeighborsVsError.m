@@ -8,6 +8,11 @@ network=results(1).network;
 % points=network.points;
 % distances=network.distanceMatrix;
 numAnchorSets=size(anchors,1);
+
+figure('Name','Anchor Neighbors vs Error');
+plotTitle=sprintf('Network %s',network.shape);
+title({'Number of Neighbors per Anchor vs Localization Error',plotTitle});
+
 labels=cell(1, size(radii,2));
 hold all
 numAnchorNeighbors=zeros(numAnchorSets,size(radii,2));
@@ -24,10 +29,8 @@ for r=1:size(radii,2)
         end
     end
     dataToPlot=[numAnchorNeighbors(:,r) results(r).medianErrorPerAnchorSet];
-    dataToPlot=sortrows(dataToPlot,1);    
+    dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-x');
-    
-%     plot(numAnchorNeighbors(r),results(r).medianErrorPerAnchorSet,'-x');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
 legend(labels,'Location','NorthWest');
