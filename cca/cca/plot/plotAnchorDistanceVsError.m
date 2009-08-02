@@ -8,15 +8,23 @@ network=results(1).network;
 numAnchorSets=size(anchors,1);
 
 figure('Name','Anchor Distance vs Error');
+plotTitle=sprintf('Network %s',network.shape);
+title({'Sum of Distance between All Anchors vs Localization Error',plotTitle});
 
 distances=zeros(numAnchorSets,1);
 for i=1:numAnchorSets
     anchorNodes=anchors(i,:);
     numAnchors=size(anchorNodes,2);
-    d=zeros(numAnchors-1,1);
+    d=zeros(numAnchors*2-1,1);
+    j=0;
     for a=1:numAnchors
-        b=mod(a+1,numAnchors) + 1;
-        d(a)=network.distanceMatrix(anchorNodes(a),anchorNodes(b));
+        for b=a:numAnchors
+            if (a ~= b)
+                j=j+1;
+                d(j)=network.distanceMatrix(anchorNodes(a),anchorNodes(b));
+                fprintf('Set %i: Distance between %i and %i: %.1f\n',i,a,b,d(a));
+            end
+        end
     end
 	distances(i)=sum(d);
 end

@@ -3,7 +3,6 @@ function [results]=doMapPatch(networks,allMaps,anchors,folder)
 %% Do Map Patching
 numSteps=size(networks,2);
 for i=1 : size(allMaps,1)
-    fprintf('Doing map patch #%i',i);
     localMaps=allMaps(i);
     network=networks(i);
     radius=network.radius;
@@ -17,10 +16,11 @@ for i=1 : size(allMaps,1)
     % work well depending on the network.
 
     %% Map Patching
-    disp('------------------------------------')
-    fprintf(1,'Doing Map Patch for radius %.1f\n',radius);
-    result=mapPatch(network,localMaps,startNode,anchors,radius);
-    fprintf(1,'Done Map Patch in %f sec for radius %.1f\n',result.mapPatchTime,radius);
+    disp('------------------------------------\n')
+    patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,size(allMaps,1),radius);
+    fprintf('Doing %s\n',patchNumber);        
+    result=mapPatch(network,localMaps,startNode,anchors,radius,patchNumber);
+    fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
     
     %% PLOT NETWORK DIFFERENCE
     % plotNetworkDiff(result,anchors,folder);
@@ -28,7 +28,7 @@ for i=1 : size(allMaps,1)
       
     if ~exist('results','var')
         % preallocate
-        results(numSteps+1)=result;
+        results(size(allMaps,1))=result;
     end
     results(i)=result;
     

@@ -20,8 +20,8 @@ close all
 hold off
 plotAnchorNeighborsVsError(results,anchors,radii,folder);
 close all
-hold off
-plotHistograms(results,anchors,folder);
+%hold off
+%plotHistograms(results,anchors,folder);
 
 
 
