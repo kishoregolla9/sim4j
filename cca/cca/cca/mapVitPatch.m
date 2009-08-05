@@ -1,4 +1,4 @@
-function [node]=mapVitPatch(network,node,startNode,anchorNodes,r)
+function [node,rawResult]=mapVitPatch(network,node,startNode,anchorNodes,r)
 %function mapVitPatch takes the input of local maps and patch them together
 %into a global map and compare the results with the original 'Network'
 %taking the map of startNode as the starting map.
@@ -51,11 +51,6 @@ node(startNode).map_patchTime=tElapsed;
 
 rawResult = curMap;
 node(startNode).patched_network=rawResult;
-refineResult=rawResult; %no refinement
-
-mappedResult=transformMap(points, refineResult, anchorNodes);
-
-[node]=compareMaps(node, mappedResult);
 
 return;
 
