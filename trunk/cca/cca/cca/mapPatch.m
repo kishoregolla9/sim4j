@@ -47,8 +47,13 @@ for startNodeIndex=1:numStartNodes % for each starting node
         fprintf(1,'++++ %s Anchor Set %i of %i\n', patchNumber, anchorSetIndex, numAnchorSets);
         anchorNodes=anchorSets(anchorSetIndex,:);
          
-        localMaps{1}=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
+        [localMaps{1},rawResult]=mapVitPatch(network,localMaps{1},node(startNodeIndex),...
             anchorNodes,radius);
+        refineResult=rawResult; %no refinement
+        mappedResult=transformMap(points, refineResult, anchorNodes);
+        node=compareMaps(node, mappedResult);
+
+        
         resultNode=localMaps{1}(node(startNodeIndex));
         differenceVector=resultNode.differenceVector;
         result.patchedMap(anchorSetIndex)=resultNode;
