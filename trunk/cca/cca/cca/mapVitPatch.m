@@ -53,25 +53,9 @@ rawResult = curMap;
 node(startNode).patched_network=rawResult;
 refineResult=rawResult; %no refinement
 
-knownJ=anchorNodes;
+mappedResult=transformMap(points, refineResult, anchorNodes);
 
-[D, Z, TRANSFORM] = procrustes(points(knownJ,:), refineResult(knownJ,1:2));
-mappedResult = TRANSFORM.b * refineResult(:,1:2) * TRANSFORM.T + ...
-    repmat(TRANSFORM.c(1,:),N,1);
-
-% set output
-% t.xyEstimate = mappedResult;
-node(startNode).patched_network_transform=mappedResult;
-D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
-
-differenceVector=abs(mappedResult-network.points);
-
-D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
-D_dist_mean=D_dist_mean/r;
-node(startNode).patched_net_dist_error_mean=D_dist_mean;
-
-node(startNode).differenceVector=differenceVector;
-node(startNode).mappedPoints=mappedResult;
+[node]=compareMaps(node, mappedResult);
 
 return;
 
