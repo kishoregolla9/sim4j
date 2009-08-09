@@ -15,11 +15,11 @@ minErrors=zeros(numConnectivityPoints,numAnchorSets);
 stdErrors=zeros(numConnectivityPoints,numAnchorSets);
 for i=1:size(results,2)
     if results(i).connectivity > 10
-        maxErrors=results(i).maxErrorPerAnchorSet;
-        medianErrors=results(i).medianErrorPerAnchorSet;
-        meanErrors=results(i).meanErrorPerAnchorSet;
-        minErrors=results(i).minErrorPerAnchorSet;
-        stdErrors=results(i).stdErrorPerAnchorSet;
+        maxErrors=results(i).errorsPerAnchorSet.max;
+        medianErrors=results(i).errorsPerAnchorSet.median;
+        meanErrors=results(i).errorsPerAnchorSet.mean;
+        minErrors=results(i).errorsPerAnchorSet.min;
+        stdErrors=results(i).errorsPerAnchorSet.std;
     else
         fprintf(1,'Result %.0f has a low connectivity (%f)\n',i,results.connectivity);
     end

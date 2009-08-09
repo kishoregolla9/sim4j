@@ -33,7 +33,7 @@ hold all
 
 labels=cell(1, size(results,2));
 for r=1:size(results,2)
-    dataToPlot=[distances, results(r).medianErrorPerAnchorSet];
+    dataToPlot=[distances, results(r).errorsPerAnchorSet.median];
     dataToPlot=sortrows(dataToPlot,1);    
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
