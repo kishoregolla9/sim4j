@@ -28,7 +28,7 @@ for r=1:size(radii,2)
 %             end
         end
     end
-    dataToPlot=[numAnchorNeighbors(:,r) results(r).errorsPerAnchorSet.median];
+    dataToPlot=[numAnchorNeighbors(:,r) mean([results(r).errors(:,a).median])];
     dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-x');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
