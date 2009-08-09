@@ -9,7 +9,7 @@ networkconstants;
 
 minRadius=3.0;
 step=1;
-numSteps=2;
+numSteps=0;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
@@ -19,8 +19,8 @@ placement=NET.NODE_RANDOM;
 %N=324;
 %networkEdge=18;
 % MOD_RANDOM_ANCHORS=500000;
-N=16;
-networkEdge=4;
+N=36;
+networkEdge=6;
 MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free

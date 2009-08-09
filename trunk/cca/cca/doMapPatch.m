@@ -9,8 +9,8 @@ for i=1 : size(allMaps,1)
     % Should form a startNode=[a b c ...] array that contains the 
     % starting node for map patching that want to experiment with.
     % For example,
-    %startNode=[5 20 22];
-    startNode=20;
+    %startNodes=[5 20 22];
+    startNodes=1:2:size(network.points,1);
     % Also have a startNodeSelection script which may work or may not 
     % work well depending on the network.
 
@@ -18,7 +18,7 @@ for i=1 : size(allMaps,1)
     disp('------------------------------------')
     patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,size(allMaps,1),radius);
     fprintf('Doing %s\n',patchNumber);        
-    result=mapPatch(network,localMaps,startNode,anchors,radius,patchNumber,folder);
+    result=mapPatch(network,localMaps,startNodes,anchors,radius,patchNumber,folder);
     fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
     
     %% PLOT NETWORK DIFFERENCE
@@ -27,9 +27,9 @@ for i=1 : size(allMaps,1)
       
     if ~exist('results','var')
         % preallocate
-        results(size(allMaps,1))=result;
+        results(size(allMaps,1))=result; %#ok<AGROW>
     end
-    results(i)=result;
+    results(i)=result; %#ok<AGROW>
     
     filename=sprintf('%s\\result-%i_%i-%i-%i_%i_%i_%i.mat',folder,i,fix(clock));
     save(filename,'result');
