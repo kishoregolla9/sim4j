@@ -27,7 +27,7 @@ plots(2)=plot([results.connectivity],mean([errors(1,:).median]),'-x');
 plots(3)=plot([results.connectivity],mean([errors(1,:).mean]),'-*');
 plots(4)=plot([results.connectivity],mean([errors(1,:).std]),'-o');
 plots(5)=plot([results.connectivity],mean([errors(1,:).min]),'-s');
-legend(plots,'Max Error','Median Error','Mean Error','Min Error','StdDev');
+legend(plots,'Max Error','Median Error','Mean Error','StdDev','Min Error');
 hold off
 
 filename=sprintf('Connectivity-vs-Error-%s-Radius%.1f-to-%.1f',...
