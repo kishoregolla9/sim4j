@@ -1,24 +1,22 @@
-function [node,rawResult]=mapVitPatch(network,node,startNode,anchorNodes,r)
+function [localMaps,rawResult]=mapVitPatch(network,localMaps,startNode)
 %function mapVitPatch takes the input of local maps and patch them together
 %into a global map and compare the results with the original 'Network'
 %taking the map of startNode as the starting map.
-% The input 'node' should be generated from the function of
+% The input 'localMaps' should be generated from the function of
 % localMapLocalization.m or equivalent
 %option - Use the greedy patch taking the node that has the most number of
 %common nodes for patch when 'option' is given as '1'. When 'option' is
 %'0', patch the map as fast as we can by taking the node that has most
 %number of different nodes.
 
-points = network.points;
-distanceMatrix=network.distanceMatrix;
 N=size(network.points,1);
 
 map=cell(N,1);
 index=cell(N,1);
 indexInclude=cell(N,1);
 for i=1:N
-    map{i}=node(i).local_network_c; %added by li as cca directly generates the network
-    index{i} = (node(i).neighbors_merge)'; %grab all the nodes in the local map
+    map{i}=localMaps(i).local_network_c; %added by li as cca directly generates the network
+    index{i} = (localMaps(i).neighbors_merge)'; %grab all the nodes in the local map
     indexInclude{i} = i;
 end %for i
 
@@ -47,10 +45,10 @@ while length(curindexInclude) ~= N
 end %while
 
 tElapsed=toc(tStart);
-node(startNode).map_patchTime=tElapsed;
+localMaps(startNode).map_patchTime=tElapsed;
 
 rawResult = curMap;
-node(startNode).patched_network=rawResult;
+localMaps(startNode).patched_network=rawResult;
 
 return;
 
