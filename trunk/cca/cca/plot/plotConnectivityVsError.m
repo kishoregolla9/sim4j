@@ -21,11 +21,12 @@ title({'The Results by Connectivity','Localization Error',plotTitle});
 xlabel('Network Connectivity');
 ylabel('Location Error (factor of radius)');
 hold all
-plots(1)=plot([results.connectivity],[results.maxError],'-d');
-plots(2)=plot([results.connectivity],[results.medianError],'-x');
-plots(3)=plot([results.connectivity],[results.meanError],'-*');
-plots(4)=plot([results.connectivity],[results.stdError],'-o');
-plots(5)=plot([results.connectivity],[results.minError],'-s');
+errorsPerStart=[results.errorsPerStart];
+plots(1)=plot([results.connectivity],[errorsPerStart.max],'-d');
+plots(2)=plot([results.connectivity],[errorsPerStart.median],'-x');
+plots(3)=plot([results.connectivity],[errorsPerStart.mean],'-*');
+plots(4)=plot([results.connectivity],[errorsPerStart.std],'-o');
+plots(5)=plot([results.connectivity],[errorsPerStart.min],'-s');
 plots(5)=plot([results.connectivity],sigma,'-^');
 legend(plots,'Max Error','Median Error','Mean Error','Min Error','StdDev');
 hold off
