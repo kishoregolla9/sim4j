@@ -1,4 +1,4 @@
-function [anchors]=buildAnchors(network,anchorPlacement,A,S,targets)
+function [anchors]=buildAnchors(network,anchorPlacement,A,S, MOD_ANCHORS)
 % anchorPlacement: see networkconstants.m
 % A:            number of anchors per anchor set
 % S:            number of anchor sets
@@ -25,7 +25,6 @@ switch anchorPlacement
         start=tic;
         allAnchors=nchoosek(1:network.numberOfNodes,A);
         fprintf(1,'n choose k took %.2fsec\n',toc(start));
-        MOD_ANCHORS=50000;
         numAnchorSets=floor(size(allAnchors,1)/MOD_ANCHORS);  % number of anchorSets sets for testing
         anchor=0;
         for anchorSetIndex=1:numAnchorSets % for each anchorSets set

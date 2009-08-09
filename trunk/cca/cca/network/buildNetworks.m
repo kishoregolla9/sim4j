@@ -1,4 +1,4 @@
-function [ networks ] = buildNetworks( sourceNetwork, radii, numSteps,  )
+function [ networks ] = buildNetworks( sourceNetwork, radii, numSteps, folder)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -12,15 +12,15 @@ for i=1 : numSteps+1
 
     if ~exist('networks','var')
         % preallocate
-        networks(numSteps+1)=struct(network);
+        networks(numSteps+1)=struct(network); %#ok<AGROW>
     end
-    networks(i)=network;
+    networks(i)=network; %#ok<AGROW>
     
     plotNetwork(network,zeros(0),folder);
-    close all
+    close all;
     
     clear network;
 end
-
+close all;
 end
 
