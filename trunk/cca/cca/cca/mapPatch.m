@@ -110,6 +110,7 @@ for startNodeIndex=1:numStartNodes   % for each starting node
 end % for startNodeIndex
 
 % Average over the start nodes
+result.errors=errors;
 result.errorsPerStart=errorsPerStart;
 result.bestNodesPerAnchorSet=bestNodes;
 result.worstNodesPerAnchorSet=worstNodes;
