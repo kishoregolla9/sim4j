@@ -17,8 +17,8 @@ for r=1:size(results,2)
             sum(allMaps{r}(a).local_coordinates_error_mean);
     end
     normalized=normalize(sumLocalMapError);
-    errorsPerAnchorSet=[results(r).errorsPerAnchorSet];
-    dataToPlot=[sumLocalMapError mean(errorsPerAnchorSet.mean,2)];
+    errorPerAnchorSet=mean([results(r).errors(:,a).mean],1)';
+    dataToPlot=[normalized errorPerAnchorSet];
     dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius %.2f', results(r).radius);
