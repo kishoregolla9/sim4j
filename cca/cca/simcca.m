@@ -16,12 +16,12 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-%N=324;
-%networkEdge=18;
-% MOD_RANDOM_ANCHORS=500000;
-N=36;
-networkEdge=6;
-MOD_RANDOM_ANCHORS=50;
+N=324;
+networkEdge=18;
+MOD_RANDOM_ANCHORS=500000;
+% N=36;
+% networkEdge=6;
+% MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
 numAnchorsPerSet=3;
