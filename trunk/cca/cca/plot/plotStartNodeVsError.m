@@ -18,9 +18,9 @@ for r=1:size(results,2)
     numStartNodes=size(results(r).errors,2);
     startNodeData=zeros(numStartNodes,1);
     for s=1:numStartNodes
-        startNodeData(s,1)=mean([results(r).errors(s,:).mean],1)';
+        startNodeData(s,1)=mean([results(r).errors(:,s).mean],2);
     end
-
+    size(startNodeData)
     % errors=[results.errors];
     % plots(5)=plot([results.connectivity],mean([errors(:,1).min]),'-s');
     plots(1)=plot(1:numStartNodes,startNodeData,'-d');
