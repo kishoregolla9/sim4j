@@ -9,8 +9,8 @@ hold off
 
 grid on
 plotTitle=sprintf('Network %s',network.shape);
-title({'The Results by Start Node','Localization Error',plotTitle});
-xlabel('Start Node');
+title({'Localization Error',plotTitle});
+xlabel('Index (Start Node or Anchor Set)');
 ylabel('Location Error (factor of radius)');
 hold all
 
@@ -20,16 +20,21 @@ for r=1:size(results,2)
     for s=1:numStartNodes
         startNodeData(s,1)=mean([results(r).errors(:,s).mean],2);
     end
-    size(startNodeData)
+    
+    numAnchorSets=size(results(r).errors,1);
+    anchorSetData=zeros(numAnchorSets,1);
+    for a=1:numAnchorSets
+        anchorSetData(a,1)=mean([results(r).errors(a,:).mean],2);
+    end
+    
     % errors=[results.errors];
-    % plots(5)=plot([results.connectivity],mean([errors(:,1).min]),'-s');
-    plots(1)=plot(1:numStartNodes,startNodeData,'-d');
-    % plots(2)=plot([results.connectivity],mean([errors(:,1).median]),'-x');
-    % plots(3)=plot([results.connectivity],mean([errors(:,1).mean]),'-*');
-    % plots(4)=plot([results.connectivity],mean([errors(:,1).std]),'-o');
-    legend(plots,'Max Error','Median Error','Mean Error','StdDev','Min Error');
+    x=normalize(1:numStartNodes,1);
+    plots(1)=plot(x,startNodeData,'-d');
+    x=normalize(1:numAnchorSets,1);
+    plots(2)=plot(x,anchorSetData,'-d');
+    legend(plots,'Start Node (avg over all anchor sets)','Anchor Sets (avg over all start nodes)');
     hold off
 end
-filename=sprintf('Connectivity-vs-Error-%s-Radius%.1f-to-%.1f',...
+filename=sprintf('StartNode-vs-Error-%s-Radius%.1f-to-%.1f',...
    network.shape,minRadius,maxRadius);
 saveFigure(folder,filename);

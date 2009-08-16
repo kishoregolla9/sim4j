@@ -37,17 +37,3 @@ filename=sprintf('AnchorLocalMapError-vs-Error-%s-Radius%.1f-to-%.1f.eps',...
    network.shape,minRadius,maxRadius);
 saveFigure(folder,filename);
 
-function [ndat] = normalize(dat)
-m = size(dat,2);
-ndat = dat;
-norms = zeros(m,1);
-for i = 1:m
-    theNorm=norm(ndat(:,i));
-    if theNorm ~= 0
-        norms(i) = theNorm;
-        ndat(:,i) = ndat(:,i)/norms(i);
-    else
-        fprintf(1,'The norm of sample %g is 0, sample not normalized!',i);
-    end
-end
-
