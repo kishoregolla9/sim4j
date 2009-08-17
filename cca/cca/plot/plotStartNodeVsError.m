@@ -10,7 +10,7 @@ hold off
 grid on
 plotTitle=sprintf('Network %s',network.shape);
 title({'Localization Error',plotTitle});
-xlabel('Index (Start Node or Anchor Set)');
+xlabel('Normalized Index (Start Node or Anchor Set)');
 ylabel('Location Error (factor of radius)');
 hold all
 
@@ -28,11 +28,13 @@ for r=1:size(results,2)
     end
     
     % errors=[results.errors];
-    x=normalize(1:numStartNodes,1);
+    x=(1:numStartNodes)./numStartNodes;
     plots(1)=plot(x,startNodeData,'-d');
-    x=normalize(1:numAnchorSets,1);
+    x=(1:numAnchorSets)./numAnchorSets;
     plots(2)=plot(x,anchorSetData,'-d');
-    legend(plots,'Start Node (avg over all anchor sets)','Anchor Sets (avg over all start nodes)');
+    startNodeLegend=sprintf('Start Node (avg over all %i anchor sets)',numAnchorSets);
+    anchorSetLegend=sprintf('Anchor Sets (avg over all %i start nodes)',numStartNodes);
+    legend(plots,startNodeLegend,anchorSetLegend);
     hold off
 end
 filename=sprintf('StartNode-vs-Error-%s-Radius%.1f-to-%.1f',...
