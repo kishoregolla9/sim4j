@@ -27,10 +27,17 @@ for r=1:size(results,2)
         anchorSetData(a,1)=mean([results(r).errors(a,:).mean],2);
     end
     
+    sortable=[(1:numAnchorSets)' anchorSetData];
+    sorted=sortrows(sortable,2);
+    sorted(size(sorted,1)-10:size(sorted,1),:)
+%     for i=1:10
+%         sortable(i,:)
+%     end
+    
     % errors=[results.errors];
-    x=(1:numStartNodes)./numStartNodes;
+    x=(1:numStartNodes); %./numStartNodes;
     plots(1)=plot(x,startNodeData,'-d');
-    x=(1:numAnchorSets)./numAnchorSets;
+    x=(1:numAnchorSets); %./numAnchorSets;
     plots(2)=plot(x,anchorSetData,'-d');
     startNodeLegend=sprintf('Start Node (avg over all %i anchor sets)',numAnchorSets);
     anchorSetLegend=sprintf('Anchor Sets (avg over all %i start nodes)',numStartNodes);
