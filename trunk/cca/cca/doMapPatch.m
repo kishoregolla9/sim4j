@@ -10,7 +10,7 @@ for i=1 : size(allMaps,1)
     % starting node for map patching that want to experiment with.
     % For example,
     %startNodes=[5 20 22];
-    startNodes=1:2:size(network.points,1);
+    startNodes=1:10:size(network.points,1);
     % Also have a startNodeSelection script which may work or may not 
     % work well depending on the network.
 

@@ -99,14 +99,15 @@ else
     save(filename,'results');
 end
 
-%% PLOT NETWORKS
-for a=1:size(anchors,1)
-    suffix=sprintf('AnchorSet%i',a);
-    plotNetwork(networks,anchors(a,:),folder,suffix);
-end
-
 %% PLOT RESULT
 plotResult(results,anchors,radii,folder,allMaps);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))
+
+%% PLOT NETWORKS
+for a=1:size(anchors,1)
+    suffix=sprintf('AnchorSet%i',a);
+    plotNetwork(networks,anchors(a,:),folder,suffix);
+    close
+end
