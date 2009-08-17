@@ -18,7 +18,7 @@ shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
 N=324;
 networkEdge=18;
-MOD_RANDOM_ANCHORS=500000;
+MOD_RANDOM_ANCHORS=50000;
 % N=36;
 % networkEdge=6;
 % MOD_RANDOM_ANCHORS=50;
@@ -35,7 +35,7 @@ end
 
 filename=sprintf('%s\\sourceNetwork.mat',folder);
 if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading source network from %s',filename);
+    fprintf(1,'Loading source network from %s\n',filename);
     load(filename);
 else
     [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
@@ -47,7 +47,7 @@ end
 %% Build Networks
 filename=sprintf('%s\\networks.mat',folder);
 if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading networks from %s',filename);
+    fprintf(1,'Loading networks from %s\n',filename);
     load(filename);
 else
     [ networks ] = buildNetworks(sourceNetwork, radii, numSteps, folder);
@@ -57,7 +57,7 @@ end
 %% Build Local Maps
 filename=sprintf('%s\\localMaps.mat',folder);
 if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading local maps from %s',filename);
+    fprintf(1,'Loading local maps from %s\n',filename);
     load(filename);
 else
     allMaps=cell(numSteps+1,1);
@@ -80,7 +80,7 @@ end
 %% BuildAnchors
 filename=sprintf('%s\\anchors.mat',folder);
 if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading anchors from %s',filename);
+    fprintf(1,'Loading anchors from %s\n',filename);
     load(filename);
 else
     [randomAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets,MOD_RANDOM_ANCHORS);
@@ -92,11 +92,17 @@ end
 %% MAP PATCHING
 filename=sprintf('%s\\cca_results.mat',folder);
 if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading results from %s',filename);
+    fprintf(1,'Loading results from %s\n',filename);
     load(filename);
 else
     [results]=doMapPatch(networks,allMaps,anchors,folder);
     save(filename,'results');
+end
+
+%% PLOT NETWORKS
+for a=1:size(anchors,1)
+    suffix=sprintf('AnchorSet%i',a);
+    plotNetwork(networks,anchors(a,:),folder,suffix);
 end
 
 %% PLOT RESULT
