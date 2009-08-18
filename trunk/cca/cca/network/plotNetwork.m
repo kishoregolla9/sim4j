@@ -77,7 +77,7 @@ end
 hold off
 
 %% Save figure
-filename=sprintf('network-%s-Radius%.1f-%s',network.shape,radius,suffix);
+filename=sprintf('network-%s-Radius%i-%s',network.shape,radius,suffix);
 saveFigure(folder,filename);
 
 return;
