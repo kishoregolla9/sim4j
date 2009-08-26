@@ -16,8 +16,8 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-N=100;
-networkEdge=10;
+N=400;
+networkEdge=20;
 MOD_RANDOM_ANCHORS=50000;
 % N=36;
 % networkEdge=6;
@@ -29,15 +29,15 @@ numAnchorSets=2;
 
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,N);
 if exist('folder','var') == 0
-    folder=sprintf('results\\%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
+    folder=sprintf('results/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
     mkdir(folder);
-    f=sprintf('%s\\eps',folder);
+    f=sprintf('%s/eps',folder);
     mkdir(f);
-    f=sprintf('%s\\png',folder);
+    f=sprintf('%s/png',folder);
     mkdir(f);
 end
 
-filename=sprintf('%s\\sourceNetwork.mat',folder);
+filename=sprintf('%s/sourceNetwork.mat',folder);
 if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading source network from %s\n',filename);
     load(filename);
@@ -49,7 +49,7 @@ else
 end
 
 %% Build Networks
-filename=sprintf('%s\\networks.mat',folder);
+filename=sprintf('%s/networks.mat',folder);
 if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading networks from %s\n',filename);
     load(filename);
@@ -59,7 +59,7 @@ else
 end
 
 %% Build Local Maps
-filename=sprintf('%s\\localMaps.mat',folder);
+filename=sprintf('%s/localMaps.mat',folder);
 if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading local maps from %s\n',filename);
     load(filename);
@@ -82,7 +82,7 @@ else
 end
 
 %% BuildAnchors
-filename=sprintf('%s\\anchors.mat',folder);
+filename=sprintf('%s/anchors.mat',folder);
 if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',filename);
     load(filename);
@@ -94,7 +94,7 @@ else
 end
 
 %% MAP PATCHING
-filename=sprintf('%s\\cca_results.mat',folder);
+filename=sprintf('%s/cca_results.mat',folder);
 if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading results from %s\n',filename);
     load(filename);
