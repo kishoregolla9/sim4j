@@ -6,7 +6,7 @@ radiusString=sprintf('Radio Range: %.1f',radius);
 figurename=sprintf('%s %s',network.shape,radiusString);
 hold off
 %% Plot Network
-filename=sprintf('%s\\network.fig',folder);
+filename=sprintf('%s/network.fig',folder);
 if (exist(filename,'file') ~= 0)
     fprintf('Loading network figure from %s\n',filename);
     h=hgload(filename);

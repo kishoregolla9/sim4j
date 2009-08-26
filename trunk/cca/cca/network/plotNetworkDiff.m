@@ -74,7 +74,7 @@ subplot(3,numAnchorSets,2*numAnchorSets+1:3*numAnchorSets);
 plotHopsToNearestAnchorVsError(network,result,anchors,r);
 maximize(gcf);
 
-filename=sprintf('%s\\NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
+filename=sprintf('%s/NetworkDifference-%s-Radius%.1f',folder,network.shape,r);
 foo=sprintf('%s.eps',filename);
 print('-depsc',foo);
 foo=sprintf('%s.png',filename);
