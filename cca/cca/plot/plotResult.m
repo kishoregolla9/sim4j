@@ -6,6 +6,9 @@ hold off
 plotStartNodeVsError(results,radii,folder);
 close all
 hold off
+plotSingleStartNode(results,radii,folder);
+close all
+hold off
 plotAnchorSetVsError(results,anchors,radii,folder);
 close all
 hold off
@@ -13,6 +16,7 @@ plotAnchorLocalMapErrorVsError(results,anchors,radii,folder,allMaps);
 close all
 hold off
 plotDistanceVsError(results,anchors,radii,folder,allMaps);
+
 % close all
 % hold off
 % plotHopCountVsError(results,anchors,radii,folder);

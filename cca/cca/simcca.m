@@ -16,8 +16,8 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-N=324;
-networkEdge=18;
+N=100;
+networkEdge=10;
 MOD_RANDOM_ANCHORS=50000;
 % N=36;
 % networkEdge=6;
@@ -31,6 +31,10 @@ shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,N);
 if exist('folder','var') == 0
     folder=sprintf('results\\%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
     mkdir(folder);
+    f=sprintf('%s\\eps',folder);
+    mkdir(f);
+    f=sprintf('%s\\png',folder);
+    mkdir(f);
 end
 
 filename=sprintf('%s\\sourceNetwork.mat',folder);
