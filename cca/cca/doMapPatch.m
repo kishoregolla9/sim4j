@@ -31,7 +31,7 @@ for i=1 : size(allMaps,1)
     end
     results(i)=result; %#ok<AGROW>
     
-    filename=sprintf('%s\\result-%i_%i-%i-%i_%i_%i_%i.mat',folder,i,fix(clock));
+    filename=sprintf('%s/result-%i_%i-%i-%i_%i_%i_%i.mat',folder,i,fix(clock));
     save(filename,'result');
     
     clear result network localMaps;
