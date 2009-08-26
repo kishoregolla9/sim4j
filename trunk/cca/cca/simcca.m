@@ -65,7 +65,7 @@ if (exist(filename,'file') ~= 0)
     load(filename);
 else
     allMaps=cell(numSteps+1,1);
-    for i=1 : numSteps+1
+    parfor i=1 : numSteps+1
         network=networks(i);
         radius=radii(i);
         fprintf(1,'Generating local maps for radius %.2f\n',radius);
