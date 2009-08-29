@@ -12,13 +12,17 @@ labels=cell(size(results,2),1);
 for r=1:size(results,2)
     hold all
     sumLocalMapError=zeros(numAnchorSets,1);
-    for a=1:numAnchorSets
-        sumLocalMapError(a)=sumLocalMapError(a)+...
-            sum(allMaps{r}(a).local_coordinates_error_mean);
+    for s=1:numAnchorSets
+        anchorSet=anchors(s,:);
+        for a=1:size(anchorSet,2)
+            sumLocalMapError(s)=sumLocalMapError(s)+...
+                sum(allMaps(r,anchorSet(a)).local_coordinates_error_mean);
+        end
     end
     normalized=normalize(sumLocalMapError);
-    errorPerAnchorSet=mean([results(r).errors(:,a).mean],1)';
-    dataToPlot=[normalized errorPerAnchorSet];
+    means=[results(r).errors(:).mean];
+    errorPerAnchorSet=mean(means,1)';
+    dataToPlot=[sumLocalMapError errorPerAnchorSet];
     dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius %.2f', results(r).radius);

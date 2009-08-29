@@ -12,28 +12,28 @@ plotTitle=sprintf('Network %s',network.shape);
 title({'Sum of Distance between All Anchors vs Localization Error',plotTitle});
 
 distances=zeros(numAnchorSets,1);
-for i=1:numAnchorSets
-    anchorNodes=anchors(i,:);
+for s=1:numAnchorSets
+    anchorNodes=anchors(s,:);
     numAnchors=size(anchorNodes,2);
     d=zeros(numAnchors*2-1,1);
     j=0;
-    for a=1:numAnchors
-        for b=a:numAnchors
-            if (a ~= b)
+    for x=1:numAnchors
+        for y=x:numAnchors
+            if (x ~= y)
                 j=j+1;
-                d(j)=network.distanceMatrix(anchorNodes(a),anchorNodes(b));
-                fprintf('Set %i: Distance between %i and %i: %.1f\n',i,a,b,d(a));
+                d(j)=network.distanceMatrix(anchorNodes(x),anchorNodes(y));
+                fprintf('Set %i: Distance between %i and %i: %.1f\n',s,x,y,d(j));
             end
         end
     end
-	distances(i)=sum(d);
+	distances(s)=sum(d);
 end
 
 hold all
 
 labels=cell(1, size(results,2));
 for r=1:size(results,2)
-    dataToPlot=[distances, results(r).errorsPerAnchorSet.median];
+    dataToPlot=[distances, [results(r).errors(:).median]'];
     dataToPlot=sortrows(dataToPlot,1);    
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);

@@ -1,4 +1,4 @@
-function plotDistanceVsError( results,anchors,radii,folder,allMaps )
+function plotDistanceVsError( results,anchors,radii,folder)
 % Plot distance of each node to its nearest anchor vs error
 windowSize=25;
 minRadius=radii(1);
@@ -56,12 +56,9 @@ for i=1:numAnchorSets
 
     maximize(gcf);
     
-    filename=sprintf('%s/DistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.eps',...
-        folder,network.shape,minRadius,maxRadius,i);
-    print('-depsc',filename);
-    filename=sprintf('%s/DistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i.png',...
-        folder,network.shape,minRadius,maxRadius,i);
-    print('-dpng',filename);
+    filename=sprintf('DistanceVsError-%s-Radius%.1f-to-%.1f-AnchorSet%i',...
+        network.shape,minRadius,maxRadius,i);
+    saveFigure(folder,filename);
 end
 
 hold off

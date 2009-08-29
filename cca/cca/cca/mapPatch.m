@@ -47,7 +47,7 @@ for startNodeIndex=1:numStartNodes   % for each starting node
     filename=sprintf('%s/patchedMaps_startNode%i_index-%i',folder,startNodes(startNodeIndex),startNodeIndex);
     if (exist(filename,'file') == 0)
         fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, startNodes(startNodeIndex), startNodeIndex, numStartNodes);
-        [localMaps{1},rawResult]=mapVitPatch(network,localMaps{1},startNodeIndex);
+        [localMaps,rawResult]=mapVitPatch(network,localMaps,startNodeIndex);
         save(filename,'localMaps','rawResult');
     else
         load(filename);
@@ -60,7 +60,7 @@ for startNodeIndex=1:numStartNodes   % for each starting node
         fprintf(1,'++++ %s Anchor Set %i of %i\n', patchNumber, anchorSetIndex, numAnchorSets);
         anchorNodes=anchorSets(anchorSetIndex,:);
         mappedResult=transformMap(network.points, refineResult, anchorNodes);
-        resultNode=compareMaps(network, localMaps{1}(startNodeIndex), mappedResult, radius);
+        resultNode=compareMaps(network, localMaps(startNodeIndex), mappedResult, radius);
         
         differenceVector=resultNode.differenceVector;
         result.patchedMap(anchorSetIndex)=resultNode;

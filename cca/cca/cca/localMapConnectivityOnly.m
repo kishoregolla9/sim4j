@@ -1,4 +1,4 @@
-function [nodes]=localMapConnectivityOnly(network,epochs,radius)
+function [nodes]=localMapConnectivityOnly(network,epochs,radius,folder)
 % localMapLocalization computes the local 2 hop map for all its nodes
 % coordinates for each node in the 'network'using range free method. 
 %
@@ -27,7 +27,7 @@ t_level=1000;
 % t_level=40;
 % t_level=70; %used in the loop random network
 
-parfor (node_k = 1 : N)
+for node_k = 1 : N
     if (size(nodes(node_k).neighbors,2) == 1) %node_k has no connectivity
         continue;
     end
