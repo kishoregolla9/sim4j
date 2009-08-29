@@ -1,4 +1,5 @@
-function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(network,radius,option)
+function [localMaps,localMapTimeMean,localMapTimeMedian]=...
+    localMapComputing(network,radius,option,folder)
 
 %This function computes local maps for a given network
 %Input:
@@ -14,7 +15,7 @@ function [localMaps,localMapTimeMean,localMapTimeMedian]=localMapComputing(netwo
 
 fprintf(1,'Calculating local map for radius %0.2f\n',radius);
 if option==0 % cca range free
-    localMaps{1}=localMapConnectivityOnly(network,100,radius);
+    localMaps=localMapConnectivityOnly(network,100,radius,folder);
 end
 if option==1 % cca range based
     localMaps{1}=vitUpdateLocalMapLocalization(network,100,radius);
@@ -33,5 +34,5 @@ for k=1:size(network.points,1)
 end
 
 %% Calculate computation time
-localMapTimeMean = mean([localMaps{1}(:).local_map_compuTime],2);
-localMapTimeMedian = median([localMaps{1}(:).local_map_compuTime],2);
+localMapTimeMean = mean([localMaps(:).local_map_compuTime],2);
+localMapTimeMedian = median([localMaps(:).local_map_compuTime],2);

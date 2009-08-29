@@ -24,7 +24,7 @@ switch anchorPlacement
         
     case NET.ANCHORS_RANDOM
         start=tic;
-        fprintf(1,'Building ALL %i random anchors\n', A);
+        fprintf(1,'Building ALL %i random anchor sets\n', A);
         allAnchors=nchoosek(1:network.numberOfNodes,A);
         fprintf(1,'n choose k took %.2fsec\n',toc(start));
         % number of anchorSets sets for testing

@@ -16,9 +16,9 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-N=400;
-networkEdge=20;
-MOD_RANDOM_ANCHORS=50000;
+N=16;
+networkEdge=4;
+MOD_RANDOM_ANCHORS=1;
 % N=36;
 % networkEdge=6;
 % MOD_RANDOM_ANCHORS=50;
@@ -34,6 +34,8 @@ if exist('folder','var') == 0
     f=sprintf('%s/eps',folder);
     mkdir(f);
     f=sprintf('%s/png',folder);
+    mkdir(f);
+    f=sprintf('%s/localMaps',folder);
     mkdir(f);
 end
 
@@ -59,26 +61,21 @@ else
 end
 
 %% Build Local Maps
-filename=sprintf('%s/localMaps.mat',folder);
-if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading local maps from %s\n',filename);
-    load(filename);
-else
-    allMaps=cell(numSteps+1,1);
-    parfor i=1 : numSteps+1
+for i=1 : numSteps+1
+    localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
+    if (exist(localMapsFilename,'file') == 0)
         network=networks(i);
         radius=radii(i);
         fprintf(1,'Generating local maps for radius %.2f\n',radius);
         localMapStart=tic;
-        [localMaps]=localMapComputing(network,radius,ranging);
+        [localMaps]=localMapComputing(network,radius,ranging,folder);
         fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
         clear localMapStart;
-        allMaps(i)=localMaps;
         
         radius=radii(i);
-        clear localMaps network;
+        save(localMapsFilename, 'localMaps');
+        clear network;
     end
-    save(filename, 'allMaps', 'radii');
 end
 
 %% BuildAnchors
@@ -87,20 +84,49 @@ if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',filename);
     load(filename);
 else
-    [randomAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets,MOD_RANDOM_ANCHORS);
-    [spreadAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_SPREAD,3,5);
-    anchors=[randomAnchors;spreadAnchors];
-    save(filename, 'randomAnchors','spreadAnchors','anchors','numAnchorSets');
+    [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets,MOD_RANDOM_ANCHORS);
+%     [spreadAnchors]=buildAnchors(sourceNetwork,NET.ANCHORS_SPREAD,3,5);
+%     anchors=[randomAnchors;spreadAnchors];
+    save(filename, 'anchors','numAnchorSets');
 end
 
+% Pick nodes from different part of the network.
+% Should form a startNode=[a b c ...] array that contains the
+% starting node for map patching that want to experiment with.
+% For example,
+%startNodes=[5 20 22];
+
+
 %% MAP PATCHING
-filename=sprintf('%s/cca_results.mat',folder);
-if (exist(filename,'file') ~= 0)
-    fprintf(1,'Loading results from %s\n',filename);
-    load(filename);
-else
-    [results]=doMapPatch(networks,allMaps,anchors,folder);
-    save(filename,'results');
+localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps+1);
+load(localMapsFilename);
+allMaps(numSteps+1,:)=localMaps;
+for i=1 : numSteps+1
+    localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
+    load(localMapsFilename);
+    network=networks(i);
+    allMaps(i,:)=localMaps;
+    startNodes=1:50:size(network.points,1);
+    
+    resultFilename=sprintf('%s/result-%i.mat',folder,i);
+    if (exist(resultFilename,'file') ~= 0)
+        fprintf(1,'Loading results from %s\n',filename);
+        load(filename);
+    else
+        disp('------------------------------------')
+        patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,numSteps+1,radius);
+        fprintf('Doing %s\n',patchNumber);
+        result=mapPatch(network,localMaps,startNodes,anchors,network.radius,patchNumber,folder);
+        fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
+        save(resultFilename,'result');
+
+%         plotNetworkDiff(result,anchors,folder);
+    end
+    if ~exist('results','var')
+        % preallocate
+        results(size(numSteps+1,1))=result; %#ok<AGROW>
+    end
+    results(i)=result; %#ok<AGROW>
 end
 
 %% PLOT RESULT

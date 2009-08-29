@@ -12,7 +12,7 @@ if (exist(filename,'file') ~= 0)
     h=hgload(filename);
     maximize(h);
 else
-    h=figure('Name',figurename);
+    h=figure('Name',figurename,'visible','off');
     hold off
 
     gplot(network.connectivity, network.points,'-sb');
