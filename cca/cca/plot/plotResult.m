@@ -8,7 +8,7 @@ end
 plotStartNodeVsError(results,radii,folder);
 close all
 hold off
-plotSingleStartNode(results,radii,folder);
+plotSingleStartNode(results,folder);
 close all
 hold off
 plotAnchorSetVsError(results,anchors,radii,folder);

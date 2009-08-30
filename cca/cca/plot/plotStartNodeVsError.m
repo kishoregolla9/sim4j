@@ -1,11 +1,9 @@
-function [  ] = plotStartNodeVsError( results,radii,folder )
+function [  ] = plotStartNodeVsError( results,folder )
 
 network=results.network;
-minRadius=radii(1);
-maxRadius=radii(size(radii,2));
 
 for r=1:size(results,2)
-    figureName=sprintf('The Results %i by Start Node and Anchor Set',r);
+    figureName=sprintf('The Results for Radius %.1f by Start Node and Anchor Set',results(r).radius);
     h=figure('Name',figureName,'visible','off');
     hold off
 
@@ -36,7 +34,7 @@ for r=1:size(results,2)
     fiveBest=sprintf('Best Anchor Sets: %i %i %i %i %i',sorted(1:5,1));
     fifthWorst=size(sorted,1)-4;
     fiveWorst=sprintf('Worst Anchor Sets: %i %i %i %i %i',sorted(end:-1:fifthWorst,1));
-    title({'Localization Error',plotTitle,fiveBest,fiveWorst});
+    title({figureName,plotTitle,fiveBest,fiveWorst});
     
     % errors=[results.errors];
     x=(1:numAnchorSets);
@@ -60,8 +58,8 @@ for r=1:size(results,2)
     l=legend(plots,a,b,c,d,e,f);
     set(l,'FontSize',6);
    
-    filename=sprintf('StartNodeAndAnchorSets-vs-Error-Result%i-%s-Radius%.1f-to-%.1f',...
-        r,network.shape,minRadius,maxRadius);
+    filename=sprintf('StartNodeAndAnchorSets-vs-Error-%s-Radius%.1f',...
+        network.shape,results(r).radius);
     saveFigure(folder,filename,h);
 
     hold off
