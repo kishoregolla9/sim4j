@@ -9,7 +9,7 @@ networkconstants;
 
 minRadius=2.5;
 step=1;
-numSteps=3;
+numSteps=1;
 maxRadius=minRadius+(step*(numSteps+1));
 
 radii=minRadius:step:maxRadius;
