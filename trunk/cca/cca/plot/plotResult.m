@@ -5,7 +5,7 @@ if (size(results,1) > 1)
     close all
     hold off
 end
-plotStartNodeVsError(results,radii,folder);
+plotStartNodeVsError(results,folder);
 close all
 hold off
 plotSingleStartNode(results,folder);

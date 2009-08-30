@@ -138,10 +138,18 @@ totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
 
-%% PLOT NETWORKS
-for a=1:size(anchors,1)
-    fprintf('Plotting anchor set %i of %i on the network\n',a,size(anchors,1));    
-    suffix=sprintf('AnchorSet%i',a);
-    plotNetwork(networks(1),anchors(a,:),folder,suffix,results,a);
-    close
+%% PLOT NETWORKS WITH ANCHORS
+for s=1:size(anchors,1)
+    for r=1:size(results,2);
+        radius=results(r).radius;
+        network=networks(r);
+        filename=sprintf('networks/radius%.1f/network-%s-Radius%.1f-%s',radius,network.shape,radius,suffix);
+        if (exist(filename,'file') == 0)
+            fprintf('Plotting anchor set %i of %i for radius %.1f\n',s,size(anchors,1),radius);
+            suffix=sprintf('AnchorSet%i',s);
+            h=plotNetwork(network,anchors(s,:),folder,suffix,results(r),s);
+            saveFigure(folder,filename,h);
+            close
+        end
+    end
 end
