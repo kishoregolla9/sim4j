@@ -22,7 +22,7 @@ for r=1:size(results,2)
     normalized=normalize(sumLocalMapError);
     means=[results(r).errors(:).mean];
     errorPerAnchorSet=mean(means,1)';
-    dataToPlot=[sumLocalMapError errorPerAnchorSet];
+    dataToPlot=[sumLocalMapError normalized];
     dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius %.2f', results(r).radius);

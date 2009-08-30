@@ -1,20 +1,20 @@
-function [ h ] = plotStartNodeVsError( results,radii,folder )
+function [  ] = plotStartNodeVsError( results,radii,folder )
 
 network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
-h=figure('Name','The Results by Start Node');
-hold off
-
-grid on
-plotTitle=sprintf('Network %s',network.shape);
-title({'Localization Error',plotTitle});
-xlabel('Normalized Index (Start Node or Anchor Set)');
-ylabel('Location Error (factor of radius)');
-hold all
-
 for r=1:size(results,2)
+    figureName=sprintf('The Results %i by Start Node and Anchor Set',r);
+    h=figure('Name',figureName,'visible','off');
+    hold off
+
+    grid on
+    plotTitle=sprintf('Network %s',network.shape);
+    xlabel({'Index','(Start Node is normalized)'});
+    ylabel('Location Error (factor of radius)');
+    hold all
+    
     numStartNodes=size(results(r).errors,2);
     startNodeData=zeros(numStartNodes,3);
     for s=1:numStartNodes
@@ -33,20 +33,22 @@ for r=1:size(results,2)
     
     sortable=[(1:numAnchorSets)' anchorSetData(:,1)];
     sorted=sortrows(sortable,2);
-    fprintf(1,'Worst\n');
-    sorted(size(sorted,1)-5:size(sorted,1),:)
-    fprintf(1,'Best\n');
-    sorted(1:5,:)
+    fiveBest=sprintf('Best Anchor Sets: %i %i %i %i %i',sorted(1:5,1));
+    fifthWorst=size(sorted,1)-4;
+    fiveWorst=sprintf('Worst Anchor Sets: %i %i %i %i %i',sorted(end:-1:fifthWorst,1));
+    title({'Localization Error',plotTitle,fiveBest,fiveWorst});
     
     % errors=[results.errors];
-    x=(1:numStartNodes)./numStartNodes;
-    plots(1)=plot(x,startNodeData(:,1),'-d');
-    plots(2)=plot(x,startNodeData(:,2),'-d');
-    plots(3)=plot(x,startNodeData(:,3),'-d');
-    x=(1:numAnchorSets)./numAnchorSets;
-    plots(4)=plot(x,anchorSetData(:,1),'-d');
-    plots(5)=plot(x,anchorSetData(:,2),'-d');
-    plots(6)=plot(x,anchorSetData(:,3),'-d');
+    x=(1:numAnchorSets);
+    plots(4)=plot(x,anchorSetData(:,1),'-o');
+    plots(5)=plot(x,anchorSetData(:,2),'-o');
+    plots(6)=plot(x,anchorSetData(:,3),'-o');
+    
+    x=(1:numStartNodes).*numAnchorSets./numStartNodes;
+    plots(1)=plot(x,startNodeData(:,1),'-s');
+    plots(2)=plot(x,startNodeData(:,2),'-s');
+    plots(3)=plot(x,startNodeData(:,3),'-s');
+
     startNodeLegend=sprintf('Start Node (avg over all %i anchor sets)',numAnchorSets);
     anchorSetLegend=sprintf('Anchor Sets (avg over all %i start nodes)',numStartNodes);
     a=sprintf('%s (Max)',startNodeLegend);
@@ -55,9 +57,13 @@ for r=1:size(results,2)
     d=sprintf('%s (Max)',anchorSetLegend);
     e=sprintf('%s (Mean)',anchorSetLegend);
     f=sprintf('%s (Min)',anchorSetLegend);    
-    legend(plots,a,b,c,d,e,f);
+    l=legend(plots,a,b,c,d,e,f);
+    set(l,'FontSize',6);
+   
+    filename=sprintf('StartNodeAndAnchorSets-vs-Error-Result%i-%s-Radius%.1f-to-%.1f',...
+        r,network.shape,minRadius,maxRadius);
+    saveFigure(folder,filename,h);
+
     hold off
+    close
 end
-filename=sprintf('StartNode-vs-Error-%s-Radius%i-to-%i',...
-   network.shape,minRadius,maxRadius);
-saveFigure(folder,filename);

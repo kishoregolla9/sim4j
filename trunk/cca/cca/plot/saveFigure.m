@@ -1,8 +1,12 @@
-function saveFigure( folder, name )
+function saveFigure( folder, name, h )
 %SAVEFIGURE Summary of this function goes here
 %   Detailed explanation goes here
 
-maximize(gcf);
+if exist('h','var') == 0
+   h=gcf; 
+end
+
+maximize(h);
 
 filename=sprintf('%s/eps/%s.eps',folder,name);
 print('-depsc',filename);

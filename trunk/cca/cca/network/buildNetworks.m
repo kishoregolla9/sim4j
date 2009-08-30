@@ -16,8 +16,8 @@ for i=1 : numSteps+1
     end
     networks(i)=network; %#ok<AGROW>
     
-    plotNetwork(network,zeros(0),folder,'');
-    close all;
+%     plotNetwork(network,zeros(0),folder,'');
+%     close all;
     
     clear network;
 end
