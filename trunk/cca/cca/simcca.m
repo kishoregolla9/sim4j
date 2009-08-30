@@ -113,7 +113,7 @@ for i=1 : numSteps+1
     
     resultFilename=sprintf('%s/result-%i.mat',folder,i);
     if (exist(resultFilename,'file') ~= 0)
-        fprintf(1,'Loading results from %s\n',filename);
+        fprintf(1,'Loading results from %s\n',resultFilename);
         load(filename);
     else
         disp('------------------------------------')
@@ -133,7 +133,7 @@ for i=1 : numSteps+1
 end
 
 %% PLOT RESULT
-plotResult(results,anchors,radii,folder,allMaps);
+%plotResult(results,anchors,radii,folder,allMaps);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
