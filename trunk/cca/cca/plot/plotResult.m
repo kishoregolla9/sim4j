@@ -1,8 +1,10 @@
 function plotResult(results,anchors,radii,folder,allMaps)
 
-plotConnectivityVsError(results,radii,folder);
-close all
-hold off
+if (size(results,1) > 1)
+    plotConnectivityVsError(results,radii,folder);
+    close all
+    hold off
+end
 plotStartNodeVsError(results,radii,folder);
 close all
 hold off
@@ -23,8 +25,8 @@ plotDistanceVsError(results,anchors,radii,folder);
 % close all
 % hold off
 plotAnchorDistanceVsError(results,anchors,radii,folder);
-% close all
-% hold off
+close all
+hold off
 % plotAnchorNeighborsVsError(results,anchors,radii,folder);
 close all
 %hold off
