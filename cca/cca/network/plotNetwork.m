@@ -46,13 +46,13 @@ for s=1:size(anchors,1)
             'MarkerEdgeColor','k',...
             'MarkerFaceColor',c(mod(s-1,size(c,2))+1),...
             'MarkerSize',10);
+        [rFigX,rFigY]=dsxy2figxy(gca,radius,radius);
         [xFig,yFig]=dsxy2figxy(gca,xData-radius,yData-radius);
-        [rFig]=dsxy2figxy(gca,radius,radius);
         xFig=max([0 xFig]);
         yFig=max([0 yFig]);
-        rFig=min([1 rFig]);
-        [xFig yFig rFig rFig]
-        annotation('ellipse',[xFig,yFig,rFig,rFig]);
+        rFigX=min([1 rFigX]);
+        rFigY=min([1 rFigY]);
+        annotation('ellipse',[xFig,yFig,rFigX,rFigY]);
     end
 end
 
