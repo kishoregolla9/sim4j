@@ -9,8 +9,11 @@ end
 maximize(h);
 
 filename=sprintf('%s/eps/%s.eps',folder,name);
-java.io.File(filename).getParentFile().mkdirs();
+[pathstr]=fileparts(filename);
+mkdir(pathstr);
 print('-depsc',filename);
+
 filename=sprintf('%s/png/%s.png',folder,name);
-java.io.File(filename).getParentFile().mkdirs();
+[pathstr]=fileparts(filename);
+mkdir(pathstr);
 print('-dpng',filename);
