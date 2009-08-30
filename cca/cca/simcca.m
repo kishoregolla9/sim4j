@@ -16,16 +16,16 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-numNodes=16;
-networkEdge=4;
+numNodes=400;
+networkEdge=20;
 % numNodes=36;
 % networkEdge=6;
 % MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
 numAnchorsPerSet=3;
-numAnchorSets=500;
-numStartNodes=16;
+numAnchorSets=1000;
+numStartNodes=10;
 
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes);
 if exist('folder','var') == 0
