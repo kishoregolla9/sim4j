@@ -44,7 +44,7 @@ bestNodes=zeros(numAnchorSets,numStartNodes);
 worstNodes=zeros(numAnchorSets,numStartNodes);
 
 for startNodeIndex=1:numStartNodes   % for each starting node
-    filename=sprintf('%s/patchedMaps_startNode%i_index-%i',folder,startNodes(startNodeIndex),startNodeIndex);
+    filename=sprintf('%s/patchedMaps/patchedMaps_startNode%i_index-%i',folder,startNodes(startNodeIndex),startNodeIndex);
     if (exist(filename,'file') == 0)
         fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, startNodes(startNodeIndex), startNodeIndex, numStartNodes);
         [localMaps,rawResult]=mapVitPatch(network,localMaps,startNodeIndex);
@@ -57,7 +57,6 @@ for startNodeIndex=1:numStartNodes   % for each starting node
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
 
         startAnchor=tic;
-        fprintf(1,'++++ %s Anchor Set %i of %i\n', patchNumber, anchorSetIndex, numAnchorSets);
         anchorNodes=anchorSets(anchorSetIndex,:);
         mappedResult=transformMap(network.points, refineResult, anchorNodes);
         resultNode=compareMaps(network, localMaps(startNodeIndex), mappedResult, radius);
@@ -92,8 +91,8 @@ for startNodeIndex=1:numStartNodes   % for each starting node
             'std',sum(coordinatesError.std),...
             'time',resultNode.map_patchTime);
        
-        fprintf(1,'++++ %s Patched local map for anchor set %i of %i in %.2f sec\n', ...
-           patchNumber, anchorSetIndex, numAnchorSets, toc(startAnchor));
+        fprintf(1,'++++ %s Patched Maps with Start #%i/%i, Anchor Set %i/%i in %.2f sec\n', ...
+           patchNumber,startNodeIndex,numStartNodes, anchorSetIndex, numAnchorSets, toc(startAnchor));
     end
 
     errorsPerStart(startNodeIndex)=struct(...

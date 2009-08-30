@@ -35,9 +35,6 @@ xlabel('Anchor Set');
 ylabel('Error Statistic');
 set(gca,'YTickLabel','Max|Mean|Median|Min|Std');
 
-filename=sprintf('%s/AnchorSetsVsError-%s-Radius%.1f-to-%.1f.eps',...
-    folder,network.shape,minRadius,maxRadius);
-print('-depsc',filename);
-filename=sprintf('%s/AnchorSetsVsError-%s-Radius%.1f-to-%.1f.png',...
-    folder,network.shape,minRadius,maxRadius);
-print('-dpng',filename);
+filename=sprintf('AnchorSetsVsError-%s-Radius%.1f-to-%.1f',...
+  network.shape,minRadius,maxRadius);
+saveFigure(folder, filename);

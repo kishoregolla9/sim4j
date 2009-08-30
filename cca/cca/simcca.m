@@ -7,27 +7,28 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=3.0;
+minRadius=2.5;
 step=1;
-numSteps=0;
+numSteps=2;
 maxRadius=minRadius+(step*numSteps);
 
 radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-N=16;
+numNodes=16;
 networkEdge=4;
 MOD_RANDOM_ANCHORS=1;
-% N=36;
+% numNodes=36;
 % networkEdge=6;
 % MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
 numAnchorsPerSet=3;
 numAnchorSets=2;
+numStartNodes=16;
 
-shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,N);
+shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes);
 if exist('folder','var') == 0
     folder=sprintf('results/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
     mkdir(folder);
@@ -37,6 +38,8 @@ if exist('folder','var') == 0
     mkdir(f);
     f=sprintf('%s/localMaps',folder);
     mkdir(f);
+    f=sprintf('%s/patchedMaps',folder);
+    mkdir(f);
 end
 
 filename=sprintf('%s/sourceNetwork.mat',folder);
@@ -44,8 +47,8 @@ if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading source network from %s\n',filename);
     load(filename);
 else
-    [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,N);
-    save(filename, 'sourceNetwork','N','placement','ranging','shape');
+    [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,numNodes);
+    save(filename, 'sourceNetwork','numNodes','placement','ranging','shape');
     clear minRadius maxRadius step networkEdge;
     close(gcf);
 end
@@ -95,7 +98,8 @@ end
 % starting node for map patching that want to experiment with.
 % For example,
 %startNodes=[5 20 22];
-
+startNodeIncrement=numNodes/numStartNodes;
+startNodes=1:startNodeIncrement:size(networks(1).points,1);
 
 %% MAP PATCHING
 localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps+1);
@@ -106,7 +110,6 @@ for i=1 : numSteps+1
     load(localMapsFilename);
     network=networks(i);
     allMaps(i,:)=localMaps;
-    startNodes=1:50:size(network.points,1);
     
     resultFilename=sprintf('%s/result-%i.mat',folder,i);
     if (exist(resultFilename,'file') ~= 0)
@@ -133,11 +136,12 @@ end
 plotResult(results,anchors,radii,folder,allMaps);
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
-    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*N))
+    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
 
 %% PLOT NETWORKS
 for a=1:size(anchors,1)
+    fprintf('Plotting anchor set %i of %i on the network\n',a,size(anchors,1));    
     suffix=sprintf('AnchorSet%i',a);
-    plotNetwork(networks,anchors(a,:),folder,suffix);
+    plotNetwork(networks(1),anchors(a,:),folder,suffix,results,a);
     close
 end
