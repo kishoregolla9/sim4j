@@ -33,16 +33,7 @@ if exist('folder','var') == 0
     mkdir(folder);
     f=sprintf('%s/eps',folder);
     mkdir(f);
-    f=sprintf('%s/eps/byStartNode',folder);
-    mkdir(f);
-    f=sprintf('%s/eps/networks',folder);
-    mkdir(f);
-    
     f=sprintf('%s/png',folder);
-    mkdir(f);
-    f=sprintf('%s/png/byStartNode',folder);
-    mkdir(f);
-    f=sprintf('%s/png/networks',folder);
     mkdir(f);
     f=sprintf('%s/localMaps',folder);
     mkdir(f);    
