@@ -1,6 +1,5 @@
 function plotAnchorNeighborsVsError(results,anchors,radii,folder)
-%PLOTANCHORNEIGHBORSVSERROR Summary of this function goes here
-%   Detailed explanation goes here
+
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
@@ -20,12 +19,8 @@ for r=1:size(radii,2)
     for s=1:numAnchorSets
         numAnchorsPerSet=size(anchors,2);
         for a=1:numAnchorsPerSet
-            numAnchorNeighbors(s,r)=numAnchorNeighbors(s,r)+size(results(r).network.nodes(anchors(s,a)).neighbors,2);
-%             for p=1:size(points,1)
-%                 if a ~= p && distances(a,p) < radii(r)
-%                     numAnchorNeighbors(r,s)=numAnchorNeighbors(r)+1;
-%                 end
-%             end
+            numAnchorNeighbors(s,r)=numAnchorNeighbors(s,r)+...
+                size(results(r).network.nodes(anchors(s,a)).neighbors,2);
         end
     end
     dataToPlot=[numAnchorNeighbors(:,r) [results(r).errors(:,a).median]'];
