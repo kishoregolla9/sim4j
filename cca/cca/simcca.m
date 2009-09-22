@@ -111,18 +111,19 @@ for i=1 : numSteps
     allMaps(i,:)=localMaps;
     
     resultFilename=sprintf('%s/result-%i.mat',folder,i);
-    if (exist(resultFilename,'file') ~= 0)
-        fprintf(1,'Loading results from %s\n',resultFilename);
-        load(resultFilename);
-    else
+%     if (exist(resultFilename,'file') ~= 0)
+%         fprintf(1,'Loading results from %s\n',resultFilename);
+%         load(resultFilename);
+%     else
         disp('------------------------------------')
-        patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,numSteps,radius);
+        patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
+            numSteps,network.radius);
         fprintf('Doing %s\n',patchNumber);
         result=mapPatch(network,localMaps,startNodes,anchors,network.radius,patchNumber,folder);
         fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
         save(resultFilename,'result');
 %         plotNetworkDiff(result,anchors,folder);
-    end
+%     end
     if ~exist('results','var')
         % preallocate
         results(size(numSteps,1))=result; %#ok<AGROW>
@@ -137,17 +138,17 @@ fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',.
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
 
 %% PLOT NETWORKS WITH ANCHORS
-for s=1:size(anchors,1)
-    for r=1:size(results,2);
-        radius=results(r).radius;
-        network=networks(r);
-        suffix=sprintf('AnchorSet%i',s);
-        filename=sprintf('networks/radius%.1f/network-%s-Radius%.1f-%s',radius,network.shape,radius,suffix);
-        if (exist(filename,'file') == 0)
-            fprintf('Plotting anchor set %i of %i for radius %.1f\n',s,size(anchors,1),radius);
-            h=plotNetwork(network,anchors(s,:),folder,suffix,results(r),s);
-            saveFigure(folder,filename,h);
-            close
-        end
-    end
-end
+% for s=1:size(anchors,1)
+%     for r=1:size(results,2);
+%         radius=results(r).radius;
+%         network=networks(r);
+%         suffix=sprintf('AnchorSet%i',s);
+%         filename=sprintf('networks/radius%.1f/network-%s-Radius%.1f-%s',radius,network.shape,radius,suffix);
+%         if (exist(filename,'file') == 0)
+%             fprintf('Plotting anchor set %i of %i for radius %.1f\n',s,size(anchors,1),radius);
+%             h=plotNetwork(network,anchors(s,:),folder,suffix,results(r),s);
+%             saveFigure(folder,filename,h);
+%             close
+%         end
+%     end
+% end

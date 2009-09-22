@@ -1,8 +1,8 @@
-function plotAnchorTriangleHeightVsError( results,anchors,radii,folder )
+function plotAnchorTriangleHeightVsError( results,anchors,folder )
 % Plot distance between the anchors themselves vs error
 
-minRadius=radii(1);
-maxRadius=radii(size(radii,2));
+minRadius=results(1).radius;
+maxRadius=results(end).radius;
 
 network=results(1).network;
 numAnchorSets=size(anchors,1);

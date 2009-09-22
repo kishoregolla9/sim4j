@@ -24,10 +24,10 @@ plotAnchorLocalMapErrorVsError(results,anchors,radii,folder,allMaps);
 % plotHopCountVsError(results,anchors,radii,folder);
 % close all
 % hold off
-plotAnchorAreaVsError(results,anchors,radii,folder);
+plotAnchorAreaVsError(results,anchors,folder);
+plotAnchorTriangleHeightVsError(results,anchors,folder);
 plotNumAnchorNeighborsVsError(results,anchors,radii,folder);
 plotAnchorAngleVsError(results,anchors,radii,folder);
-plotAnchorTriangleHeightVsError(results,anchors,radii,folder);
 plotAnchorDistanceVsError(results,anchors,radii,folder);
 close all
 hold off
