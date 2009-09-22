@@ -13,22 +13,26 @@ if (exist(filename,'file') ~= 0)
     set(h,'visible','off');    
 else
     hold off
-    h=figure('Name',figurename,'visible','off');
-    gplot(network.connectivity, network.points,'-sb');
+    h=figure('Name',figurename); %,'visible','off');
+    zData=mean(result.patchedMap(anchorIndex).differenceVector,2);
+    dataToPlot=[network.points(:,1) network.points(:,2) zData];
+    gplot(network.connectivity, dataToPlot,'-sb');
     hold all
     xData=network.points(:,1);
     yData=network.points(:,2);
     
-    ms=mean(result.patchedMap(anchorIndex).differenceVector,2);
-    symbolm(xData,yData,ms,'o',...
-        'MarkerEdgeColor','k',...
-        'MarkerFaceColor','g');%,...
+    fprintf(1,'x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
+    plot3(xData,yData,zData);
+%     ,'o',...
+%         'MarkerEdgeColor','k',...
+%         'MarkerFaceColor','g');%,...
         %'MarkerSize',ms);      
-    maximize(h);
-    hgsave(h,filename);
-    set(h,'visible','off');    
+%     maximize(h);
+%     hgsave(h,filename);
+%     set(h,'visible','off');    
 end
 
+hold all
 stats=sprintf('Max: %.2f Mean: %.2f Min: %.2f',...
     mean([result.errors(anchorIndex,:).max]),...
     mean([result.errors(anchorIndex,:).mean]),...
@@ -38,13 +42,14 @@ title({network.shape;radiusString;suffix;stats});
 
 %% Plot Anchor Nodes
 hold all
-% arrow=zeros(size(anchors,1),size(anchors(1,:),1));
 c=['r','c','g','k'];
 for s=1:size(anchors,1)
     for a=1:size(anchors,2)
         xData=network.points(anchors(s,a),1);
         yData=network.points(anchors(s,a),2);
-        plot(xData,yData,'^',...
+        zData=mean(result.patchedMap(anchorIndex).differenceVector(anchors(s,a)),2);
+        fprintf(1,'Anchors: x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
+        plot3(xData,yData,zData,'^',...
             'MarkerEdgeColor','k',...
             'MarkerFaceColor',c(mod(s-1,size(c,2))+1),...
             'MarkerSize',10);
@@ -54,7 +59,7 @@ for s=1:size(anchors,1)
         yFig=max([0 yFig]);
         rFigX=min([1 rFigX]);
         rFigY=min([1 rFigY]);
-        annotation('ellipse',[xFig,yFig,rFigX,rFigY]);
+%         annotation('ellipse',[xFig,yFig,rFigX,rFigY]);
     end
 end
 
