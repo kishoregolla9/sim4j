@@ -13,7 +13,7 @@ if (exist(filename,'file') ~= 0)
     set(h,'visible','off');    
 else
     hold off
-    h=figure('Name',figurename); %,'visible','off');
+    h=figure('Name',figurename,'visible','off');
     zData=mean(result.patchedMap(anchorIndex).differenceVector,2);
     dataToPlot=[network.points(:,1) network.points(:,2) zData];
     gplot(network.connectivity, dataToPlot,'-sb');
@@ -21,7 +21,7 @@ else
     xData=network.points(:,1);
     yData=network.points(:,2);
     
-    fprintf(1,'x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
+%     fprintf(1,'x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
     plot3(xData,yData,zData);
 %     ,'o',...
 %         'MarkerEdgeColor','k',...
@@ -48,7 +48,7 @@ for s=1:size(anchors,1)
         xData=network.points(anchors(s,a),1);
         yData=network.points(anchors(s,a),2);
         zData=mean(result.patchedMap(anchorIndex).differenceVector(anchors(s,a)),2);
-        fprintf(1,'Anchors: x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
+%         fprintf(1,'Anchors: x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
         plot3(xData,yData,zData,'^',...
             'MarkerEdgeColor','k',...
             'MarkerFaceColor',c(mod(s-1,size(c,2))+1),...

@@ -14,7 +14,11 @@ maximize(h);
 %     mkdir(pathstr);
 % end
 % print('-depsc',filename);
-prefix=FILE_PREFIX;
+if exist('FILE_PREFIX','var') == 1
+    prefix=FILE_PREFIX;
+else
+    prefix='';
+end
 filename=sprintf('%s/png/%s%s.png',folder,prefix,name);
 [pathstr]=fileparts(filename);
 if exist(pathstr,'file')==0
