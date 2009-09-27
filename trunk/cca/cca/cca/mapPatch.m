@@ -1,7 +1,8 @@
 % function [patchTime,coordinates_median,coordinates_median_average,allResults]=...
 %     mapPatch(network,localMaps,startNodes,anchorSets)
 
-function [result]=mapPatch(network,localMaps,startNodes,anchorSets,radius,patchNumber,folder)
+function [result]=mapPatch(network,localMaps,startNodes,anchorSets,...
+    radius,patchNumber,folder,operations)
 
 %This function patches local maps into the global map for all the local maps
 %computed for each radius value stored in the localMaps.
@@ -58,8 +59,10 @@ for startNodeIndex=1:numStartNodes   % for each starting node
 
         startAnchor=tic;
         anchorNodes=anchorSets(anchorSetIndex,:);
-        mappedResult=transformMap(network.points, refineResult, anchorNodes);
-        resultNode=compareMaps(network, localMaps(startNodeIndex), mappedResult, radius);
+        mappedResult=transformMap(network.points, refineResult, ...
+            anchorNodes, operations);
+        resultNode=compareMaps(network, localMaps(startNodeIndex), ...
+            mappedResult, radius);
         
         differenceVector=resultNode.differenceVector;
         result.patchedMap(anchorSetIndex)=resultNode;
