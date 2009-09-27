@@ -16,10 +16,10 @@ radii=minRadius:step:maxRadius;
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-numNodes=400;
-networkEdge=20;
-% numNodes=36;
-% networkEdge=6;
+% numNodes=100;
+% networkEdge=10;
+numNodes=36;
+networkEdge=6;
 % MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
@@ -97,42 +97,59 @@ end
 % starting node for map patching that want to experiment with.
 % For example,
 %startNodes=[5 20 22];
-startNodeIncrement=numNodes/numStartNodes;
+startNodeIncrement=floor(numNodes/numStartNodes);
 startNodes=1:startNodeIncrement:size(networks(1).points,1);
 
 %% MAP PATCHING
-localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
-load(localMapsFilename);
-allMaps(numSteps,:)=localMaps;
-for i=1 : numSteps
-    localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
+
+for operations=4:-1:1
+    switch operations
+        case 3
+            prefix='notranslation-';
+        case 2
+            prefix='norotation-';
+        case 1
+            prefix='noscaling';
+        otherwise
+            prefix='';
+    end
+    global FILE_PREFIX;
+    FILE_PREFIX=prefix;
+    localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
     load(localMapsFilename);
-    network=networks(i);
-    allMaps(i,:)=localMaps;
-    
-    resultFilename=sprintf('%s/result-%i.mat',folder,i);
-%     if (exist(resultFilename,'file') ~= 0)
-%         fprintf(1,'Loading results from %s\n',resultFilename);
-%         load(resultFilename);
-%     else
+    allMaps(numSteps,:)=localMaps;
+    for i=1 : numSteps
+        localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
+        load(localMapsFilename);
+        network=networks(i);
+        allMaps(i,:)=localMaps;
+        
+        resultFilename=sprintf('%s/%2result-%i.mat',folder,prefix,i);
+        %     if (exist(resultFilename,'file') ~= 0)
+        %         fprintf(1,'Loading results from %s\n',resultFilename);
+        %         load(resultFilename);
+        %     else
         disp('------------------------------------')
         patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
             numSteps,network.radius);
         fprintf('Doing %s\n',patchNumber);
-        result=mapPatch(network,localMaps,startNodes,anchors,network.radius,patchNumber,folder);
+        result=mapPatch(network,localMaps,startNodes,anchors,...
+            network.radius,patchNumber,folder,operations);
         fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
         save(resultFilename,'result');
-%         plotNetworkDiff(result,anchors,folder);
-%     end
-    if ~exist('results','var')
-        % preallocate
-        results(size(numSteps,1))=result; %#ok<AGROW>
+        %         plotNetworkDiff(result,anchors,folder);
+        %     end
+        if ~exist('results','var')
+            % preallocate
+            results(size(numSteps,1))=result; %#ok<AGROW>
+        end
+        results(i)=result; %#ok<AGROW>
     end
-    results(i)=result; %#ok<AGROW>
-end
+    
+    %% PLOT RESULT
+    plotResult(results,anchors,radii,folder,allMaps);
 
-%% PLOT RESULT
-plotResult(results,anchors,radii,folder,allMaps);
+end
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
