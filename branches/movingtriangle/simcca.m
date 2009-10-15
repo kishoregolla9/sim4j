@@ -18,8 +18,8 @@ shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
 % numNodes=100;
 % networkEdge=10;
-numNodes=64;
-networkEdge=8;
+numNodes=225;
+networkEdge=15;
 % MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
@@ -49,10 +49,19 @@ else
     [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,numNodes);
     % 4 identical triangles, replacing real nodes 1-12
     n=1;
-    root=[network.width/4,network.height/4];
+    root=[sourceNetwork.width/4,sourceNetwork.height/4];
     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
     for i=1:4
-        base=(root.*transforms(i,:)) + [network.width/2,network.height/2];
+        base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
+        sourceNetwork.points(n,:)=[base(1)-1,base(2)];
+        sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
+        sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+        n=n+3;
+    end
+    root=[sourceNetwork.width/8,sourceNetwork.height/8];
+    transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
+    for i=1:4
+        base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
