@@ -7,7 +7,7 @@ maxRadius=results(end).radius;
 network=results(1).network;
 numAnchorSets=size(anchors,1);
 
-heights=zeros(numAnchorSets,3);
+heights=zeros(numAnchorSets,4);
 for s=1:numAnchorSets
     anchorNodes=anchors(s,:);
     d=zeros(3,1);
@@ -22,9 +22,11 @@ for s=1:numAnchorSets
     heights(s,1)=max(h);
     heights(s,2)=median(h);
     heights(s,3)=min(h);
+    heights(s,4)=sum(h);
 end
 
-figure('Name','Anchor Triangle Height vs Error');
+
+figure('Name','Anchor Triangle Height vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Height of Triangle made by Anchors vs Localization Error',...
     plotTitle});
@@ -39,8 +41,17 @@ for r=1:size(results,2)
         errorPerAnchorSet(s)=[results(r).errors(s,1).median];
     end    
     
-    stats={'Max','Median','Min'};
-    for i=3:3
+    stats={'Max','Median','Min','Sum'};
+
+    hStddev=zeros(4,1);
+    hRanges=zeros(4,1);
+    for i=1:4
+        hStddev(i)=std(heights(:,i));
+        hRanges(i)=range(heights(:,i));
+        fprintf(1,'Std Dev of %s: %.2f; Range:%.2f\n',stats{i},hStddev(i),hRanges(i));
+    end
+    [m,index]=min(hStddev./hRanges);    
+    for i=index:index
         dataToPlot=[heights(:,i), errorPerAnchorSet];
         dataToPlot=sortrows(dataToPlot,1);
         plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
