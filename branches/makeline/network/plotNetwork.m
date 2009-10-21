@@ -59,7 +59,7 @@ for s=1:size(anchors,1)
         yFig=max([0 yFig]);
         rFigX=min([1 rFigX]);
         rFigY=min([1 rFigY]);
-%         annotation('ellipse',[xFig,yFig,rFigX,rFigY]);
+        annotation('ellipse',[xFig,yFig,rFigX,rFigY]);
     end
 end
 

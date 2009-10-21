@@ -151,7 +151,7 @@ for operations=4:-1:4  % To perform the operations, 4:-1:1
         network=networks(i);
         allMaps(i,:)=localMaps;
         
-        resultFilename=sprintf('%s/%2result-%i.mat',folder,prefix,i);
+        resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
         %     if (exist(resultFilename,'file') ~= 0)
         %         fprintf(1,'Loading results from %s\n',resultFilename);
         %         load(resultFilename);
