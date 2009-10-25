@@ -45,7 +45,7 @@ bestNodes=zeros(numAnchorSets,numStartNodes);
 worstNodes=zeros(numAnchorSets,numStartNodes);
 
 for startNodeIndex=1:numStartNodes   % for each starting node
-    filename=sprintf('%s/patchedMaps/patchedMaps_startNode%i_index-%i',folder,startNodes(startNodeIndex),startNodeIndex);
+    filename=sprintf('%s/patchedMaps/patchedMaps_startNode%i_index-%i.mat',folder,startNodes(startNodeIndex),startNodeIndex);
     if (exist(filename,'file') == 0)
         fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, startNodes(startNodeIndex), startNodeIndex, numStartNodes);
         [localMaps,rawResult]=mapVitPatch(network,localMaps,startNodeIndex);
@@ -56,7 +56,6 @@ for startNodeIndex=1:numStartNodes   % for each starting node
     refineResult=rawResult; %no refinement
     
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
-
         startAnchor=tic;
         anchorNodes=anchorSets(anchorSetIndex,:);
         mappedResult=transformMap(network.points, refineResult, ...

@@ -135,9 +135,9 @@ allMaps(numSteps,:)=localMaps;
 for operations=4:-1:1  % To perform the operations, 4:-1:1
     switch operations
         case 3
-            prefix='notranslation-';
+            prefix='notranslation';
         case 2
-            prefix='norotation-';
+            prefix='norotation';
         case 1
             prefix='noscaling';
         otherwise
@@ -159,13 +159,10 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
         disp('------------------------------------')
         patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
             numSteps,network.radius);
-        fprintf('Doing %s\n',patchNumber);
         result=mapPatch(network,localMaps,startNodes,anchors,...
             network.radius,patchNumber,folder,operations);
         fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
         save(resultFilename,'result');
-        %         plotNetworkDiff(result,anchors,folder);
-        %     end
         plotNetworkDiffs(result,anchors, folder,prefix);
         if ~exist('results','var')
             % preallocate
@@ -175,7 +172,9 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
     end
     
     %% PLOT RESULT
-    plotResult(results,anchors,radii,folder,allMaps);
+    resultFolder=sprintf('%s/%s',folder,prefix);
+    mkdir(resultFolder);
+    plotResult(results,anchors,radii,resultFolder,allMaps);
 
 end
 totalTime=toc;
@@ -189,7 +188,7 @@ for s=1:size(anchors,1)
         network=networks(r);
         suffix=sprintf('AnchorSet%i',s);
         filename=sprintf('networks/radius%.1f/network-%s-Radius%.1f-%s',radius,network.shape,radius,suffix);
-        if (exist(filename,'file') == 0)
+        if (exist(sprintf('%s/png/%s.png',folder,filename),'file') == 0)
             fprintf('Plotting anchor set %i of %i for radius %.1f\n',s,size(anchors,1),radius);
             h=plotNetwork(network,anchors(s,:),folder,suffix,results(r),s);
             saveFigure(folder,filename,h);
