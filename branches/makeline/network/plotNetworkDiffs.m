@@ -1,4 +1,4 @@
-function [h]=plotNetworkDiffs(result,allAnchors,folder,prefix)
+function []=plotNetworkDiffs(result,allAnchors,folder,prefix)
 % Plot the network difference, showing the anchor nodes with green squares
 % Blue points are real point locations
 % Red points are mapped point locations
@@ -10,17 +10,25 @@ network=result.network;
 plottitle=sprintf('%s Radius %.1f',network.shape,r);
 
 numAnchorSets=size(allAnchors,1);
-
+patchedMaps=result.patchedMap;
+realPoints=network.points;
+shape=network.shape;
+errors=result.errors;
 % Plot a network diff diagram for each anchor set
-for j=1:numAnchorSets
+parfor j=1:numAnchorSets
     h=figure('Name',['Network Difference' plottitle],'visible','off');
-    fprintf('Plotting Network Difference for Anchor Set #%i\n',j);
-    mappedPoints=result.patchedMap(j).mappedPoints;
-    realPoints=network.points;
+    fprintf('Plotting Network Difference for Anchor Set #%i %s\n',j,prefix);
+    mappedPoints=patchedMaps(j).mappedPoints;
     anchors=allAnchors(j,:);
     
     subplotTitle=sprintf('Anchor Set %i',j);
-    title(subplotTitle);
+
+    stats=sprintf('Max: %.2f Mean: %.2f Min: %.2f',...
+        mean([errors(j,:).max]),...
+        mean([errors(j,:).mean]),...
+        mean([errors(j,:).min]));
+    
+    title({subplotTitle,prefix,stats});
     hold all
     % Show a line from each real to each mapped point (red circles)
     for i=1:size(realPoints,1)
@@ -32,7 +40,7 @@ for j=1:numAnchorSets
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
     
     % Show the worst (max error) points with stars
-    differenceVector=result.patchedMap(j).differenceVector;
+    differenceVector=patchedMaps(j).differenceVector;
     m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
         %p=pentagram(star),k=black
@@ -40,9 +48,9 @@ for j=1:numAnchorSets
     end
     
     % Show a circle of the radius around each anchor point
-    for a=1:size(anchors,2)
-        x=realPoints(anchors(:,a),1);
-        y=realPoints(anchors(:,a),2);
+    for anchorPoint=1:size(anchors,2)
+        x=realPoints(anchors(:,anchorPoint),1);
+        y=realPoints(anchors(:,anchorPoint),2);
         plot(x,y,'-d',...
             'MarkerEdgeColor','k',...
             'MarkerFaceColor','g',...
@@ -53,7 +61,7 @@ for j=1:numAnchorSets
     axis square
     hold off    
     
-    filename=sprintf('networkdiffs/%sNetworkDifference-%s-Radius%.1f-AnchorSet%i',prefix,network.shape,r,j);
+    filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
     saveFigure(folder,filename,h);
     hold off
     close
