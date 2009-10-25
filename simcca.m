@@ -132,17 +132,8 @@ FILE_PREFIX='';
 localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
 load(localMapsFilename);
 allMaps(numSteps,:)=localMaps;
-for operations=2:-1:1  % To perform the operations, 4:-1:1
-    switch operations
-        case 3
-            prefix='notranslation';
-        case 2
-            prefix='noscaling';
-        case 1
-            prefix='norotation';
-        otherwise
-            prefix='';
-    end
+for operations=4:-1:1  % To perform the operations, 4:-1:1
+    prefix=getPrefix(operations);
     FILE_PREFIX=prefix;
 
     for i=1 : numSteps
@@ -177,6 +168,26 @@ for operations=2:-1:1  % To perform the operations, 4:-1:1
     plotResult(results,anchors,radii,resultFolder,allMaps);
 
 end
+
+%% Plot Errors by transforms
+figure('Name','Errors by Transform');
+hold on
+for operations=4:-1:1 
+    prefix=getPrefix(operations);
+    FILE_PREFIX=prefix;
+    resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
+    if (exist(filename,'file') == 0) 
+        break; 
+    end
+    
+    load(resultFilename);
+    errorsByTransforms(operations)=result.errors; %#ok<AGROW>
+    plot(1:size(result.errors),mean([errors(:).mean],1));
+end
+hold off
+
+%% Foo
+
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
@@ -196,3 +207,4 @@ for s=1:size(anchors,1)
         end
     end
 end
+
