@@ -1,51 +1,47 @@
-function [mappedResult] = transformMap(points, refineResult, anchorNodes, ...
+function [Z] = transformMap(realPoints, patchedPoints, anchorNodes, ...
     operations)
 % Transform the map using the procrustes algorithm
-% points: the input points (only anchor nodes are used)
-% refineResult: the local map points, so far
+% realPoints: the input points (only anchor nodes are used)
+% patchedPoints: the local map points, so far
 % anchor Nodes:
 % operations: 4 - all
 %             3 - no translation
-%             2 - no rotation/reflection
-%             1 - no scaling
+%             2 - no scaling
+%             1 - no rotation/reflection
 
 if nargin < 4
     operations=4;
 end
 
 
-n=size(points,1);
-%      c:  the translation component
-%      T:  the orthogonal rotation and reflection component
-%      b:  the scale component
+n=size(realPoints,1);
+%      c:  the translation component (a n x 2 matrix, where each row is
+%      identical)
+%      T:  the orthogonal rotation and reflection component (2x2 matrix)
+%      b:  the scale component (a scalar)
 %   That is, Z = tr.b * Y * tr.T + tr.c.
-X=points(anchorNodes,:);
-Y=refineResult(anchorNodes,1:2);
-YComplete=refineResult(:,1:2);
+X=realPoints(anchorNodes,:);
+Y=patchedPoints(anchorNodes,1:2);
+YComplete=patchedPoints(:,1:2);
 [d, Z, tr] = procrustes(X, Y);
-fprintf(1,'Done Transform for %i', operations);
+tr.c=repmat(tr.c(1,:),n,1); % expand tr.c for all points
 switch operations
     case 4
         % All operations
-        % do nothing
+        Z = tr.b * YComplete * tr.T + tr.c;
     case 3
         %NO TRANSLATION
-        trUntranslated.T = tr.T;
-        trUntranslated.b = tr.b;
-        trUntranslated.c = ones(size(tr.c));
-        tr=trUntranslated;
+        tr.c = ones(size(tr.c));
+        Z = tr.b * YComplete * tr.T;
     case 2
         %NO SCALING
-        trUnscaled.T = tr.T;
-        trUnscaled.b = 1;
-        trUnscaled.c = mean(X) - mean(Y) * trUnscaled.T;
-        tr=trUnscaled;
+        tr.b = 1;
+        tr.c = mean(X) - mean(Y) * tr.T;
+        tr.c = repmat(tr.c(1,:),n,1); % expand tr.c for all points
+        Z = YComplete * tr.T + tr.c;
     case 1
         %NO ROTATION/REFLECTION
-        trUnrotated.T = ones(size(tr.T));
-        trUnrotated.b = tr.b;
-        trUnrotated.c = mean(X) - mean(Y) * trUnrotated.T;
-        tr=trUnrotated;
+        tr.T = ones(size(tr.T));
+        Z = tr.b * YComplete * tr.T + tr.c;
 end
-mappedResult = tr.b * YComplete * tr.T + repmat(tr.c(1,:),n,1);
 end 
