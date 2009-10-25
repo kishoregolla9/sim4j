@@ -34,7 +34,7 @@ if exist('folder','var') == 0
     f=sprintf('%s/eps',folder);
     mkdir(f);
     f=sprintf('%s/png',folder);
-    mkdir(f);f
+    mkdir(f);
     f=sprintf('%s/localMaps',folder);
     mkdir(f);    
     f=sprintf('%s/patchedMaps',folder);
@@ -132,14 +132,14 @@ FILE_PREFIX='';
 localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
 load(localMapsFilename);
 allMaps(numSteps,:)=localMaps;
-for operations=4:-1:1  % To perform the operations, 4:-1:1
+for operations=2:-1:1  % To perform the operations, 4:-1:1
     switch operations
         case 3
             prefix='notranslation';
         case 2
-            prefix='norotation';
-        case 1
             prefix='noscaling';
+        case 1
+            prefix='norotation';
         otherwise
             prefix='';
     end
