@@ -15,8 +15,11 @@ end
 
 
 N=size(points,1);
+%      c:  the translation component
+%      T:  the orthogonal rotation and reflection component
+%      b:  the scale component
+%   That is, Z = TRANSFORM.b * Y * TRANSFORM.T + TRANSFORM.c.
 [D, Z, TRANSFORM] = procrustes(points(anchorNodes,:), refineResult(anchorNodes,1:2));
-%Z = TRANSFORM.b * Y * TRANSFORM.T + TRANSFORM.c;
 
 switch operations
     case 4

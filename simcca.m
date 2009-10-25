@@ -34,7 +34,7 @@ if exist('folder','var') == 0
     f=sprintf('%s/eps',folder);
     mkdir(f);
     f=sprintf('%s/png',folder);
-    mkdir(f);
+    mkdir(f);f
     f=sprintf('%s/localMaps',folder);
     mkdir(f);    
     f=sprintf('%s/patchedMaps',folder);
@@ -80,7 +80,7 @@ if (exist(netfilename,'file') ~= 0)
     load(netfilename);
 else
     [ networks ] = buildNetworks(sourceNetwork, radii, numSteps, folder);
-    save(netfilename, 'networks', 'radii', 'numSteps','folder');
+    save(netfilename, 'networks', 'radii', 'numSteps');
 end
 
 %% Build Local Maps
@@ -132,7 +132,7 @@ FILE_PREFIX='';
 localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
 load(localMapsFilename);
 allMaps(numSteps,:)=localMaps;
-for operations=4:-1:4  % To perform the operations, 4:-1:1
+for operations=4:-1:1  % To perform the operations, 4:-1:1
     switch operations
         case 3
             prefix='notranslation-';
@@ -166,6 +166,7 @@ for operations=4:-1:4  % To perform the operations, 4:-1:1
         save(resultFilename,'result');
         %         plotNetworkDiff(result,anchors,folder);
         %     end
+        plotNetworkDiffs(result,anchors, folder,prefix);
         if ~exist('results','var')
             % preallocate
             results(size(numSteps,1))=result; %#ok<AGROW>
