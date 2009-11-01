@@ -132,6 +132,7 @@ FILE_PREFIX='';
 localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
 load(localMapsFilename);
 allMaps(numSteps,:)=localMaps;
+
 for operations=4:-1:1  % To perform the operations, 4:-1:1
     prefix=getPrefix(operations);
     FILE_PREFIX=prefix;
@@ -143,50 +144,66 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
         allMaps(i,:)=localMaps;
         
         resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
-        %     if (exist(resultFilename,'file') ~= 0)
-        %         fprintf(1,'Loading results from %s\n',resultFilename);
-        %         load(resultFilename);
-        %     else
-        disp('------------------------------------')
-        patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
-            numSteps,network.radius);
-        result=mapPatch(network,localMaps,startNodes,anchors,...
-            network.radius,patchNumber,folder,operations);
-        fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
-        save(resultFilename,'result');
+        if (exist(resultFilename,'file') == 2)
+            fprintf(1,'Loading results from %s for Map patch #%i of %i for Radius %.1f\n',...
+                resultFilename,i,numSteps,network.radius);
+            load(resultFilename);
+        else
+            disp('------------------------------------')
+            patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
+                numSteps,network.radius);
+            result=mapPatch(network,localMaps,startNodes,anchors,...
+                network.radius,patchNumber,folder,operations);
+            fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
+            save(resultFilename,'result');
+        end
         plotNetworkDiffs(result,anchors, folder,prefix);
+        
         if ~exist('results','var')
             % preallocate
             results(size(numSteps,1))=result; %#ok<AGROW>
         end
         results(i)=result; %#ok<AGROW>
     end
-    
+    resultsByOperation(operations)=results;%#ok<AGROW>
     %% PLOT RESULT
-    resultFolder=sprintf('%s/%s',folder,prefix);
-    mkdir(resultFolder);
-    plotResult(results,anchors,radii,resultFolder,allMaps);
+%     resultFolder=sprintf('%s/%s',folder,prefix);
+%     mkdir(resultFolder);
+%     plotResult(results,anchors,radii,resultFolder,allMaps);
 
 end
 
 %% Plot Errors by transforms
-figure('Name','Errors by Transform');
-hold on
-for operations=4:-1:1 
-    prefix=getPrefix(operations);
-    FILE_PREFIX=prefix;
-    resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
-    if (exist(filename,'file') == 0) 
-        break; 
-    end
-    
-    load(resultFilename);
-    errorsByTransforms(operations)=result.errors; %#ok<AGROW>
-    plot(1:size(result.errors),mean([errors(:).mean],1));
+hold off
+close all
+figure1=figure('Name','Errors by Transform');
+hold all
+% grid on
+labels=cell(1,4);
+d=zeros(4,numAnchorSets);
+for operations=1:1:4 
+    errors=resultsByOperation(operations).errorsPerAnchorSet;
+    d(operations,:)=[errors(:).mean];
 end
+dataToPlot=sortrows(d',4)';
+for operations=1:4
+    prefix=getPrefix(operations);
+    labels{operations}=sprintf('Error %s',prefix);
+    semilogx(fliplr(dataToPlot(operations,:)),'-o');
+end
+legend(labels,'Location','Best');
+xlabel({'Anchor Sets Sorted by Total Error','Logarthmic to show worst errors clearly'});
+ylabel('Mean Error');
+axes1=get(figure1,'CurrentAxes');
+set(axes1,'XScale','log');
+grid on;
+title('Error per Anchor Set for each Transform Operation Skipped');
+filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
+    network.shape,minRadius,maxRadius);
+saveFigure(folder,filename);
 hold off
 
-%% Foo
+%% Done
 
 totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...

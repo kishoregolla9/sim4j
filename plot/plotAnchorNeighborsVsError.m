@@ -28,7 +28,7 @@ for r=1:size(radii,2)
     plot(dataToPlot(:,1),dataToPlot(:,2),'-x');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
-legend(labels,'Location','NorthWest');
+legend(labels,'Location','Best');
 xlabel('Number of Neighbors to Anchors');
 ylabel('Median Location Error');
 hold off
