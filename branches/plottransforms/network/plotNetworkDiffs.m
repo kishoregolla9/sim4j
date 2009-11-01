@@ -90,11 +90,11 @@ for j=1:numAnchorSets
     grid on
     hold off    
     
+    fprintf(' - done in %.2f seconds\n',minX,minY,maxX,maxY,toc(startPlotting));
     filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
     saveFigure(folder,filename,h);
     hold off
     close
-    fprintf('(%i,%i)-(%i,%i) done in %f seconds\n',minX,minY,maxX,maxY,toc(startPlotting));
 end
 
 end
@@ -113,7 +113,7 @@ end
 end
 
 function [m]=getMinErrorPoints(differenceVector,num)
-m=zeros(num,1);
+m=ones(num,1);
 errors=ones(num,1);
 errors=errors.*1000000;
 for i=1:size(differenceVector,1)
