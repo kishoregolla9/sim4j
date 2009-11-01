@@ -4,7 +4,7 @@ function plotAnchorSetVsError( results,anchors,radii,folder )
 network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
-figure('Name','Anchor Set By Anchor');
+figure('Name','Anchor Set By Anchor','visible','off');
 
 numAnchorSets=size(anchors,1);
 numConnectivityPoints=size(results,2);

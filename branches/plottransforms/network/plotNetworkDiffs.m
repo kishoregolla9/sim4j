@@ -15,7 +15,7 @@ realPoints=network.points;
 shape=network.shape;
 errors=result.errors;
 % Plot a network diff diagram for each anchor set
-parfor j=1:numAnchorSets
+for j=1:numAnchorSets
     startPlotting=tic;
     h=figure('Name',['Network Difference' plottitle],'visible','off');
     fprintf('Plotting Network Difference for Anchor Set #%i %s',j,prefix);
@@ -65,7 +65,7 @@ parfor j=1:numAnchorSets
             'MarkerEdgeColor','k',...
             'MarkerFaceColor','g',...
             'MarkerSize',5);
-        rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1 1]);
+        rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1]);
         
         % A line of the triangle
         b=mod(a,size(anchors,2))+1;
@@ -73,6 +73,12 @@ parfor j=1:numAnchorSets
         yb=realPoints(anchors(:,b),2);
         line([xa,xb],[ya,yb],'LineWidth',1,'Color','green');
     end
+
+    % Draw a rectangle around the "real" area
+    width=ceil(max(realPoints(:,1)));
+    height=ceil(max(realPoints(:,2)));
+    rectangle('Position',[0,0,width,height],'Curvature',[0,0],...
+        'LineWidth',2,'LineStyle','--');
 
     minX=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
     minY=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));

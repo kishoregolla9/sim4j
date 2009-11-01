@@ -49,7 +49,7 @@ for r=1:size(results,2)
         li=li+1;
     end
 end
-legend(labels,'Location','NorthEast');
+legend(labels,'Location',' ');
 xlabel('Angle (degrees)');
 ylabel('Location Error');
 hold off

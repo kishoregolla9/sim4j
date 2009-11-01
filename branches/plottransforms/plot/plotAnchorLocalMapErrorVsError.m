@@ -4,7 +4,7 @@ network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
-h=figure('Name','Anchor Set Local Map Error vs Final Error');
+h=figure('Name','Anchor Set Local Map Error vs Final Error','visible','off');
 hold off
 
 numAnchorSets=size(anchors,1);

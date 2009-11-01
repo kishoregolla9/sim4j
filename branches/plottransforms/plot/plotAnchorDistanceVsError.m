@@ -8,7 +8,7 @@ network=results(1).network;
 numAnchorSets=size(anchors,1);
 
 %% Plot by Perimeter
-figure('Name','Anchor Distance vs Error');
+figure('Name','Anchor Distance vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Sum of Distance between All Anchors vs Localization Error',...
     plotTitle});
@@ -39,7 +39,7 @@ for r=1:size(results,2)
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
-legend(labels,'Location','NorthEast');
+legend(labels,'Location','Best');
 xlabel('Sum of Distance between Anchors');
 ylabel('Median Location Error');
 hold off

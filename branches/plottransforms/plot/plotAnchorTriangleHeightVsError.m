@@ -59,7 +59,7 @@ for r=1:size(results,2)
         li=li+1;
     end
 end
-legend(labels,'Location','NorthEast');
+legend(labels,'Location','Best');
 xlabel('Height of Anchors Triangle');
 ylabel('Location Error');
 hold off

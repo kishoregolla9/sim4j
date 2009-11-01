@@ -21,7 +21,7 @@ for r=1:size(results,2)
     plot(x,y);
     labels{1,r}=sprintf('%s r=%.1f',l,radius);
 end
-legend(labels,'Location','NorthWest');
+legend(labels,'Location','Best');
 xlabel('Hop Count to Nearest Anchor');
 ylabel('Location Error (factor of radius)');
 
