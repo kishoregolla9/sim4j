@@ -1,0 +1,11 @@
+Field of network struct:
+
+network.points: 2-dim array of x,y coordinates  - netDeployment.m
+network.numberOfNodes: size(network.points, 1)  - netDeployment.m
+network.nodes: struct
+  .neighbors:    Array of arrays of neighbors  - network_neighborMap.m
+  
+network.connectivity                           - neighborMap.m
+network.connectivity_level                     - neighborMap.m
+network.distanceMatrix:                        - neighborMap.m
+
