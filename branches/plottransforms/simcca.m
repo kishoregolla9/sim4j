@@ -97,7 +97,7 @@ for i=1 : numSteps
         
         radius=radii(i);
         save(localMapsFilename, 'localMaps');
-        clear network;
+        clear network localMaps;
     end
 end
 
@@ -127,26 +127,20 @@ startNodeIncrement=floor(numNodes/numStartNodes);
 startNodes=1:startNodeIncrement:size(networks(1).points,1);
 
 %% MAP PATCHING
-global FILE_PREFIX;
-FILE_PREFIX='';
-localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,numSteps);
-load(localMapsFilename);
-allMaps(numSteps,:)=localMaps;
-
 for operations=4:-1:1  % To perform the operations, 4:-1:1
     prefix=getPrefix(operations);
     FILE_PREFIX=prefix;
 
-    for i=1 : numSteps
+    for i=numSteps:-1:1
         localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
         load(localMapsFilename);
         network=networks(i);
-        allMaps(i,:)=localMaps;
+        allMaps(i,:)=localMaps;  %#ok<AGROW>
         
         resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
         if (exist(resultFilename,'file') == 2)
-            fprintf(1,'Loading results from %s for Map patch #%i of %i for Radius %.1f\n',...
-                resultFilename,i,numSteps,network.radius);
+            fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
+                i,numSteps,network.radius,resultFilename);
             load(resultFilename);
         else
             disp('------------------------------------')
@@ -167,41 +161,17 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
     end
     resultsByOperation(operations)=results;%#ok<AGROW>
     %% PLOT RESULT
-%     resultFolder=sprintf('%s/%s',folder,prefix);
-%     mkdir(resultFolder);
-%     plotResult(results,anchors,radii,resultFolder,allMaps);
+     resultFolder=sprintf('%s/%s',folder,prefix);
+     if exist('folder','var') == 0, mkdir(resultFolder); end
+     plotResult(results,anchors,radii,resultFolder,allMaps);
 
 end
 
-%% Plot Errors by transforms
-hold off
-close all
-figure1=figure('Name','Errors by Transform');
-hold all
-% grid on
-labels=cell(1,4);
-d=zeros(4,numAnchorSets);
-for operations=1:1:4 
-    errors=resultsByOperation(operations).errorsPerAnchorSet;
-    d(operations,:)=[errors(:).mean];
-end
-dataToPlot=sortrows(d',4)';
-for operations=1:4
-    prefix=getPrefix(operations);
-    labels{operations}=sprintf('Error %s',prefix);
-    semilogx(fliplr(dataToPlot(operations,:)),'-o');
-end
-legend(labels,'Location','Best');
-xlabel({'Anchor Sets Sorted by Total Error','Logarthmic to show worst errors clearly'});
-ylabel('Mean Error');
-axes1=get(figure1,'CurrentAxes');
-set(axes1,'XScale','log');
-grid on;
-title('Error per Anchor Set for each Transform Operation Skipped');
+%% Plot Results By Transform
 filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
     network.shape,minRadius,maxRadius);
-saveFigure(folder,filename);
-hold off
+plotErrorsPerTransform(resultsByOperation,filename,folder);
+
 
 %% Done
 
@@ -209,19 +179,5 @@ totalTime=toc;
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
     numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
 
-%% PLOT NETWORKS WITH ANCHORS
-for s=1:size(anchors,1)
-    for r=1:size(results,2);
-        radius=results(r).radius;
-        network=networks(r);
-        suffix=sprintf('AnchorSet%i',s);
-        filename=sprintf('networks/radius%.1f/network-%s-Radius%.1f-%s',radius,network.shape,radius,suffix);
-        if (exist(sprintf('%s/png/%s.png',folder,filename),'file') == 0)
-            fprintf('Plotting anchor set %i of %i for radius %.1f\n',s,size(anchors,1),radius);
-            h=plotNetwork(network,anchors(s,:),folder,suffix,results(r),s);
-            saveFigure(folder,filename,h);
-            close
-        end
-    end
-end
+%plotNetworks(anchors, results, networks, folder);
 
