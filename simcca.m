@@ -7,7 +7,7 @@ addpath('plot')
 tic;
 networkconstants;
 
-minRadius=2.5;
+minRadius=2.5*1000000;
 step=1;
 numSteps=1;
 maxRadius=minRadius+(step*(numSteps+1));
@@ -170,7 +170,7 @@ end
 %% Plot Results By Transform
 filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
     network.shape,minRadius,maxRadius);
-plotErrorsPerTransform(resultsByOperation,filename,folder);
+plotErrorsPerTransform(resultsByOperation,folder,filename);
 
 
 %% Done
