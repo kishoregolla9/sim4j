@@ -4,7 +4,7 @@ function plotAnchorSetVsError( results,anchors,radii,folder )
 network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
-figure('Name','Anchor Set By Anchor','visible','off');
+figure('Name','Anchor Set By Anchor'); %,'visible','off');
 
 numAnchorSets=size(anchors,1);
 numConnectivityPoints=size(results,2);
@@ -27,6 +27,13 @@ end
 
 dataToPlot=[mean(maxErrors);mean(meanErrors);mean(medianErrors);mean(minErrors);mean(stdErrors)];
 bar3(dataToPlot,'detached');
+
+for i=1:size(dataToPlot)
+    t=sprintf('%.2f',dataToPlot(i));
+    th=text(1,i,dataToPlot(i)+.2,t);
+    set(th,'FontSize',15,'Color','cyan');
+end
+
 grid on
 plotTitle=sprintf('Network %s',network.shape);
 title({plotTitle,'Median of Error Statistic','for radii making network with connectivity > 10'});

@@ -22,6 +22,7 @@ n=size(realPoints,1);
 %   That is, Z = tr.b * Y * tr.T + tr.c.
 X=realPoints(anchorNodes,:);
 Y=patchedPoints(anchorNodes,1:2);
+
 YComplete=patchedPoints(:,1:2);
 [d, Z, tr] = procrustes(X, Y);
 tr.c=repmat(tr.c(1,:),n,1); % expand tr.c for all points
@@ -41,7 +42,7 @@ switch operations
         Z = YComplete * tr.T + tr.c;
     case 1
         %NO ROTATION/REFLECTION
-        tr.T = ones(size(tr.T));
+        tr.T = eye(size(tr.T));
         Z = tr.b * YComplete * tr.T + tr.c;
 end
 end 

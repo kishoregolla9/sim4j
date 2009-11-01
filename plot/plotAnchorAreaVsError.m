@@ -20,7 +20,7 @@ for s=1:numAnchorSets
     d(3)=network.distanceMatrix(anchorNodes(3),anchorNodes(1));
     areas(s,1)=heron(d(1),d(2),d(3));
     c=centroid(network.points(anchorNodes(:),:));
-    distances(s,1)=distance([network.height/2 network.height/2],c);
+    distances(s,1)=distance([network.height/2 network.width/2],c);
     
     A=areas(s,1);
     h=zeros(3,1);
@@ -33,7 +33,7 @@ for s=1:numAnchorSets
 end
 
 hold off
-figure('Name','Anchor Triangle Area vs Error','visible','off');
+fig=figure('Name','Anchor Triangle Area vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Area of Triangle made by Anchors vs Localization Error',...
     plotTitle});
@@ -48,15 +48,18 @@ for r=1:size(results,2)
     
     dataToPlot=[areas, distances, errorPerAnchorSet];
     dataToPlot=sortrows(dataToPlot,1);    
-    scatter(dataToPlot(:,1),dataToPlot(:,3),...     % X,Y of circles
+    scatter(dataToPlot(:,1),dataToPlot(:,3),... % X,Y of circles
          dataToPlot(:,2).*10,...        % size of circles
          dataToPlot(:,2));              % color of circles
     grid on
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
 legend(labels,'Location','Best');
-xlabel('Area of Triangle Anchors');
+xlabel({'Area of Triangle Anchors',...
+    'Color/Size corresponds to distance of centroid to centre of networks'});
 ylabel('Median Location Error');
+axes1=get(fig,'CurrentAxes');
+set(axes1,'XScale','log');
 hold off
 
 filename=sprintf('AnchorTriangleAreaVsError-%s-Radius%.1f-to-%.1f',...
