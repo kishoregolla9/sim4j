@@ -25,7 +25,7 @@ for s=1:numAnchorSets
     angles(s,3)=min(a);
 end
 
-figure('Name','Average Anchor-Triangle Angle vs Error');
+figure('Name','Average Anchor-Triangle Angle vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Average Anchor-Triangle Angle vs Localization Error',...
     plotTitle});

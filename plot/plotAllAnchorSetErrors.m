@@ -6,7 +6,7 @@ if nargin<3, prefix=''; end
 
 for r=1:size(results,2)
     figureName=sprintf('The Results for Radius %.1f by Start Node and Anchor Set',results(r).radius);
-    h=figure('Name',figureName); %,'visible','off');
+    h=figure('Name',figureName,'visible','off');
     hold off
 
     grid on

@@ -5,7 +5,7 @@ numAnchorSets=size(resultsByOperation(1).errors,1);
 
 hold off
 close all
-figure1=figure('Name','Errors by Transform');
+figure1=figure('Name','Errors by Transform','visible','off');
 hold all
 % grid on
 labels=cell(1,4);

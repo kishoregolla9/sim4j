@@ -11,7 +11,7 @@ maximize(h);
 filename=sprintf('%s/png/%s.png',folder,name);
 [pathstr]=fileparts(filename);
 if exist(pathstr,'file')==0
-    mkdir(pathstr);
+    [a,b]=mkdir(pathstr); %#ok<NASGU>
 end
 fprintf(1,'Saving %s\n',filename);
 print('-dpng',filename);

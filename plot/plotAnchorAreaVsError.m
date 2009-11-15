@@ -35,10 +35,10 @@ end
 hold off
 fig=figure('Name','Anchor Triangle Area vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
-title({'Area of Triangle made by Anchors vs Localization Error',...
-    plotTitle});
 grid on
 labels=cell(1, size(results,2));
+title({'Area of Triangle made by Anchors vs Localization Error',...
+    plotTitle});
 for r=1:size(results,2)
     errorPerAnchorSet=zeros(numAnchorSets,1);
     for s=1:numAnchorSets
@@ -49,14 +49,14 @@ for r=1:size(results,2)
     dataToPlot=[areas, distances, errorPerAnchorSet];
     dataToPlot=sortrows(dataToPlot,1);    
     scatter(dataToPlot(:,1),dataToPlot(:,3),... % X,Y of circles
-         dataToPlot(:,2).*10,...        % size of circles
-         dataToPlot(:,2));              % color of circles
+         5,...              % size of circles
+         dataToPlot(:,2));  % color of circles
     grid on
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
 legend(labels,'Location','Best');
 xlabel({'Area of Triangle Anchors',...
-    'Color/Size corresponds to distance of centroid to centre of networks'});
+    'Color corresponds to distance of centroid to centre of networks'});
 ylabel('Median Location Error');
 axes1=get(fig,'CurrentAxes');
 set(axes1,'XScale','log');

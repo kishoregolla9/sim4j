@@ -27,7 +27,7 @@ dataToPlot=[spread mean(results(2).meanErrorPerAnchorSet,2)];
 dataToPlot=sortrows(dataToPlot);
 
 
-h=figure('Name','The Results by Anchor Spread');
+h=figure('Name','The Results by Anchor Spread','visible','off');
 plot(dataToPlot(:,1),dataToPlot(:,2),'-d');
 
 grid on

@@ -1,5 +1,5 @@
 function [Z] = transformMap(realPoints, patchedPoints, anchorNodes, ...
-    operations)
+    operations,folder,label)
 % Transform the map using the procrustes algorithm
 % realPoints: the input points (only anchor nodes are used)
 % patchedPoints: the local map points, so far
@@ -25,6 +25,9 @@ Y=patchedPoints(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
 [d, Z, tr] = procrustes(X, Y);
+
+plotAnchorTransform(folder,label,X,Y,Z);
+
 tr.c=repmat(tr.c(1,:),n,1); % expand tr.c for all points
 switch operations
     case 4
@@ -46,4 +49,17 @@ switch operations
         Z = tr.b * YComplete * tr.T + tr.c;
 end
 end 
+
+function [h] =plotAnchorTransform(folder,label,X,Y,Z)
+    filename=sprintf('transforms/anchorTransformMap-%s',label);
+    h=figure('Name','Anchor Transform Map','visible','off');
+    hold all;
+    px=plot(X(:,1),X(:,2),'-db','MarkerSize',3);
+    py=plot(Y(:,1),Y(:,2),'-dg','MarkerSize',3);
+    pz=plot(Z(:,1),Z(:,2),'-dr','MarkerSize',3);
+    legend([px py pz],{'Real Points','Local','Global (transformed)'},'Location','bestOUTSIDE');
+    grid on;
+    saveFigure(folder, filename);
+    hold off;
+end
 

@@ -8,7 +8,7 @@ network=results(1).network;
 % distances=network.distanceMatrix;
 numAnchorSets=size(anchors,1);
 
-figure('Name','Anchor Neighbors vs Error');
+figure('Name','Anchor Neighbors vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Number of Neighbors per Anchor vs Localization Error',plotTitle});
 
