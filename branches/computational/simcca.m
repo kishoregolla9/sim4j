@@ -4,42 +4,77 @@ addpath('cca')
 addpath('network')
 addpath('plot')
 
-tic;
 networkconstants;
 
-minRadius=2.5*1000000;
-step=1;
-numSteps=1;
-maxRadius=minRadius+(step*(numSteps+1));
-
-radii=minRadius:step:maxRadius;
+% allows for console loop to set networkScale
+if exist('networkScale','var') == 0 || networkScale == 0
+    networkScale=1; % do not scale by default
+end
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-% numNodes=100;
-% networkEdge=10;
-numNodes=225;
-networkEdge=15;
-% MOD_RANDOM_ANCHORS=50;
+networkEdge=15 %#ok<NOPTS>
+numNodes=225 %#ok<NOPTS>
+shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
+
+if exist('folder','var') == 0
+    if exist('sourceFolder','var') == 0
+      folder=sprintf('results/computational/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
+    else
+      folder=sourceFolder;
+    end
+end
+if networkScale > 1
+    save('temp.mat','sourceFolder','networkScale');
+    clear all
+    load('temp.mat');
+    folder=sprintf('%s-scale%.0e',sourceFolder,networkScale);
+    [a,b]=mkdir(folder); %#ok<NASGU>
+    src=sprintf('%s/sourceNetwork.mat',sourceFolder);
+    dst=sprintf('%s/sourceNetwork.mat',folder);
+    copyfile(src,dst);
+    src=sprintf('%s/anchors.mat',sourceFolder);
+    dst=sprintf('%s/anchors.mat',folder);
+    copyfile(src,dst);
+    clear src dst;
+else
+    sourceFolder=folder;
+end
+[a,b]=mkdir(folder); %#ok<NASGU>
+f=sprintf('%s/eps',folder);
+[a,b]=mkdir(f); %#ok<NASGU>
+f=sprintf('%s/png',folder);
+[a,b]=mkdir(f); %#ok<NASGU>
+f=sprintf('%s/localMaps',folder);
+[a,b]=mkdir(f); %#ok<NASGU>
+f=sprintf('%s/patchedMaps',folder);
+[a,b]=mkdir(f); %#ok<NASGU>
+clear a b;
+
+diaryfile=sprintf('%s/diary.log',folder);
+diary(diaryfile);
+
+% mark the diary
+sprintf('SIMCCA STARTED %i-%i-%i_%i_%i_%i-%s for network scale: %i',fix(clock),networkScale)
+
+simccaStart=tic;
+
+doOperations=false;
+minRadius=2.5*networkScale;
+radiusStep=1*networkScale;
+numRadii=1;
+maxRadius=minRadius+(radiusStep*(numRadii-1));
+
+% Print some parameters to the diary
+networkScale  %#ok<NOPTS>
+radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
 ranging=0; % range-free
-numAnchorsPerSet=3;
-numAnchorSets=100;
-numStartNodes=3;
+numAnchorsPerSet=3 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
+numStartNodes=3 %#ok<NOPTS>
 
-shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes);
-if exist('folder','var') == 0
-    folder=sprintf('results/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
-    mkdir(folder);
-    f=sprintf('%s/eps',folder);
-    mkdir(f);
-    f=sprintf('%s/png',folder);
-    mkdir(f);
-    f=sprintf('%s/localMaps',folder);
-    mkdir(f);    
-    f=sprintf('%s/patchedMaps',folder);
-    mkdir(f);
-end
+
 
 filename=sprintf('%s/sourceNetwork.mat',folder);
 if (exist(filename,'file') ~= 0)
@@ -69,9 +104,14 @@ else
     end
     
     save(filename, 'sourceNetwork','numNodes','placement','ranging','shape');
-    clear minRadius maxRadius step networkEdge;
+    clear radiusStep networkEdge;
     close(gcf);
 end
+
+sourceNetwork.points=sourceNetwork.points.*networkScale;
+sourceNetwork.width=sourceNetwork.width*networkScale;
+sourceNetwork.height=sourceNetwork.height*networkScale;
+
 
 %% Build Networks
 netfilename=sprintf('%s/networks.mat',folder);
@@ -79,12 +119,12 @@ if (exist(netfilename,'file') ~= 0)
     fprintf(1,'Loading networks from %s\n',netfilename);
     load(netfilename);
 else
-    [ networks ] = buildNetworks(sourceNetwork, radii, numSteps, folder);
-    save(netfilename, 'networks', 'radii', 'numSteps');
+    [ networks ] = buildNetworks(sourceNetwork, radii, numRadii, folder);
+    save(netfilename, 'networks', 'radii', 'numRadii');
 end
 
 %% Build Local Maps
-for i=1 : numSteps
+for i=1 : numRadii
     localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
     if (exist(localMapsFilename,'file') == 0)
         network=networks(i);
@@ -127,25 +167,29 @@ startNodeIncrement=floor(numNodes/numStartNodes);
 startNodes=1:startNodeIncrement:size(networks(1).points,1);
 
 %% MAP PATCHING
-for operations=4:-1:1  % To perform the operations, 4:-1:1
+lastOp=4;
+if doOperations
+    lastOp=1;
+end
+for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     prefix=getPrefix(operations);
     FILE_PREFIX=prefix;
 
-    for i=numSteps:-1:1
+    for i=numRadii:-1:1
         localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
         load(localMapsFilename);
         network=networks(i);
         allMaps(i,:)=localMaps;  %#ok<AGROW>
         
-        resultFilename=sprintf('%s/%sresult-%i.mat',folder,prefix,i);
+        resultFilename=sprintf('%s/%sresult-%.1f.mat',folder,prefix,network.radius);
         if (exist(resultFilename,'file') == 2)
             fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
-                i,numSteps,network.radius,resultFilename);
+                i,numRadii,network.radius,resultFilename);
             load(resultFilename);
         else
             disp('------------------------------------')
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
-                numSteps,network.radius);
+                numRadii,network.radius);
             result=mapPatch(network,localMaps,startNodes,anchors,...
                 network.radius,patchNumber,folder,operations);
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
@@ -155,7 +199,7 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
         
         if ~exist('results','var')
             % preallocate
-            results(size(numSteps,1))=result; %#ok<AGROW>
+            results(size(numRadii,1))=result; %#ok<AGROW>
         end
         results(i)=result; %#ok<AGROW>
     end
@@ -168,16 +212,18 @@ for operations=4:-1:1  % To perform the operations, 4:-1:1
 end
 
 %% Plot Results By Transform
-filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
-    network.shape,minRadius,maxRadius);
-plotErrorsPerTransform(resultsByOperation,folder,filename);
+if doOperations == true
+    filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
+        network.shape,minRadius,maxRadius);
+    plotErrorsPerTransform(resultsByOperation,folder,filename);
+end
 
 
 %% Done
-
-totalTime=toc;
+totalTime=toc(simccaStart);
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
-    numSteps,totalTime/60,totalTime/numSteps,totalTime/(numSteps*numNodes))
+    numRadii,totalTime/60,totalTime/numRadii,totalTime/(numRadii*numNodes))
 
 %plotNetworks(anchors, results, networks, folder);
 
+diary off;

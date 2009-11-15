@@ -8,7 +8,7 @@ network=results(1).network;
 points=network.points;
 numAnchorSets=size(anchors,1);
 
-figure('Name','Distance to Anchor vs Error');
+figure('Name','Distance to Anchor vs Error','visible','off');
 
 for i=1:numAnchorSets
     hold off

@@ -66,8 +66,9 @@ for startNodeIndex=1:numStartNodes   % for each starting node
     for anchorSetIndex=1:numAnchorSets % for each anchorSets set
         startAnchor=tic;
         anchorNodes=anchorSets(anchorSetIndex,:);
+        label=sprintf('StartNode%i_AnchorSet%i',startNodeIndex,anchorSetIndex);
         mappedResult=transformMap(network.points, refineResult, ...
-            anchorNodes, operations);
+            anchorNodes, operations,folder,label);
         resultNode=compareMaps(network, localMaps(startNodeIndex), ...
             mappedResult, radius);
         

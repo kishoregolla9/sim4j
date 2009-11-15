@@ -7,7 +7,7 @@ maxRadius=radii(size(radii,2));
 network=results(1).network;
 numAnchorSets=size(anchors,1);
 
-figure('Name','Hop Count to Anchor vs Error');
+figure('Name','Hop Count to Anchor vs Error','visible','off');
 
 for i=1:numAnchorSets
     hold off

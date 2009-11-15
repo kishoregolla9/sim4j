@@ -9,7 +9,7 @@ network=results(1).network;
 numAnchorSets=size(anchors,1);
 
 %% Plot By Number Covered Nodes
-figure('Name','Num Anchor Neighbors vs Error');
+figure('Name','Num Anchor Neighbors vs Error','visible','off');
 plotTitle=sprintf('Network %s',network.shape);
 title({'Number of Anchor Neighbors vs Localization Error',...
     plotTitle});

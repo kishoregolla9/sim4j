@@ -4,7 +4,7 @@ network=results(1).network;
 numAnchorSets=size(anchors,1);
 numResults=size(results,2);
 
-figure('Name','Histograms');
+figure('Name','Histograms','visible','off');
 p=1;
 for r=1:numResults
     for i=1:numAnchorSets

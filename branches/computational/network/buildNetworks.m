@@ -1,8 +1,8 @@
-function [ networks ] = buildNetworks( sourceNetwork, radii, numSteps, folder)
+function [ networks ] = buildNetworks( sourceNetwork, radii, numRadii, folder)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-for i=1 : numSteps
+for i=1 : numRadii
     % Build and check the network
     radius=radii(i);
     fprintf(1,'Radius: %.1f\n', radius);
@@ -12,7 +12,7 @@ for i=1 : numSteps
 
     if ~exist('networks','var')
         % preallocate
-        networks(numSteps)=struct(network); %#ok<AGROW>
+        networks(numRadii)=struct(network); %#ok<AGROW>
     end
     networks(i)=network; %#ok<AGROW>
     

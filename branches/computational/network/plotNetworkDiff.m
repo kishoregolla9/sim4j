@@ -8,7 +8,7 @@ NUM_MAX_TO_SHOW=3;
 r=result.radius;
 network=result.network;
 plottitle=sprintf('%s Radius %.1f',network.shape,r);
-h=figure('Name',['Network Difference' plottitle]);
+h=figure('Name',['Network Difference' plottitle],'visible','off');
 numAnchorSets=size(allAnchors,1);
 
 % Plot a network diff diagram for each anchor set

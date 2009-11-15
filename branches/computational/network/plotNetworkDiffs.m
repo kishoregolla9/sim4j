@@ -13,9 +13,16 @@ numAnchorSets=size(allAnchors,1);
 patchedMaps=result.patchedMap;
 realPoints=network.points;
 shape=network.shape;
-errors=result.errors;
+
 % Plot a network diff diagram for each anchor set
+errors=result.errors;
 for j=1:numAnchorSets
+    filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
+%     if figureExists(folder,filename) ~= 0
+%         fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
+%         continue;
+%     end
+    
     startPlotting=tic;
     h=figure('Name',['Network Difference' plottitle],'visible','off');
     fprintf('Plotting Network Difference for Anchor Set #%i %s',j,prefix);
@@ -31,48 +38,68 @@ for j=1:numAnchorSets
     
     title({subplotTitle,prefix,stats});
     hold all
+    
+    % Include connectivity in plots
+%     dataToPlot=[realPoints(:,1) realPoints(:,2)];
+%     gplot(network.connectivity, dataToPlot,':db');
+%     foo=findobj('type','line');
+%     set(foo,'MarkerSize',3);
+%     
+%     dataToPlot=[mappedPoints(:,1) mappedPoints(:,2)];
+%     gplot(network.connectivity, dataToPlot,':oc');
+%     foo=findobj('type','line');
+%     set(foo,'MarkerSize',3);
+    
     % Show a line from each real to each mapped point (red circles)
     for i=1:size(realPoints,1)
-        plot([realPoints(i,1),mappedPoints(i,1)],...
+        pa=plot([realPoints(i,1),mappedPoints(i,1)],...
             [realPoints(i,2),mappedPoints(i,2)],'-or','MarkerSize',3);
     end
+    labels={'Difference'};
+
     % Overlay the real points with blue diamonds
     % to distinguish them from the mapped points
-    plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
+    pb=plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
+    labels{end+1} = 'Real Points';  %#ok<AGROW>
+
     % Overlay the mapped points with cyan circles
     % to distinguish them from the mapped points
-    plot(mappedPoints(:,1),mappedPoints(:,2),'oc','MarkerSize',3);
+    pc=plot(mappedPoints(:,1),mappedPoints(:,2),'oc','MarkerSize',3);
+    labels{end+1} = 'Mapped Points';  %#ok<AGROW>
     
     % Show the worst (max error) points with stars
     differenceVector=patchedMaps(j).differenceVector;
     m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
         %p=pentagram(star),k=black
-        plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',12);
+        pd=plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',12);
     end
+    labels{end+1} = 'Max Error';  %#ok<AGROW>
     m=getMinErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
         %p=pentagram(star),g=green
-        plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',12);
+        pe=plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',12);
     end
+    labels{end+1} = 'Min Error';  %#ok<AGROW>
     
     % Show a circle of the radius around each anchor point
     % and Draw the Anchor Triangle
     for a=1:size(anchors,2)
         xa=realPoints(anchors(:,a),1);
         ya=realPoints(anchors(:,a),2);
-        plot(xa,ya,'-d',...
+        pf=plot(xa,ya,'-d',...
             'MarkerEdgeColor','k',...
             'MarkerFaceColor','g',...
             'MarkerSize',5);
         rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1]);
         
         % A line of the triangle
-        b=mod(a,size(anchors,2))+1;
-        xb=realPoints(anchors(:,b),1);
-        yb=realPoints(anchors(:,b),2);
+        triLine=mod(a,size(anchors,2))+1;
+        xb=realPoints(anchors(:,triLine),1);
+        yb=realPoints(anchors(:,triLine),2);
         line([xa,xb],[ya,yb],'LineWidth',1,'Color','green');
     end
+    labels{end+1} = 'Anchor Node';  %#ok<AGROW>
 
     % Draw a rectangle around the "real" area
     width=ceil(max(realPoints(:,1)));
@@ -88,10 +115,13 @@ for j=1:numAnchorSets
     maxAll=max(maxX,maxY);
     axis([minAll maxAll minAll maxAll]);
     grid on
+    
+    legend([pa pb pc pd pe pf],labels,'Location','bestOUTSIDE');
+    
     hold off    
     
-    fprintf(' - done in %.2f seconds\n',minX,minY,maxX,maxY,toc(startPlotting));
-    filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
+    fprintf(' - done in %.2f seconds\n',toc(startPlotting));
+    
     saveFigure(folder,filename,h);
     hold off
     close

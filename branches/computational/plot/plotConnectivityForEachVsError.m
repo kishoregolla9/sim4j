@@ -5,7 +5,7 @@ network=results.network;
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 
-h=figure('Name','The Results by Connectivity');
+h=figure('Name','The Results by Connectivity','visible','off');
 hold off
 
 sigma=zeros(size(results,2),2);
