@@ -12,12 +12,11 @@ plottitle=sprintf('%s Radius %.1f',network.shape,r);
 numAnchorSets=size(allAnchors,1);
 patchedMaps=result.patchedMap;
 realPoints=network.points;
-shape=network.shape;
 
 % Plot a network diff diagram for each anchor set
 errors=result.errors;
 for j=1:numAnchorSets
-    filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
+    filename=sprintf('networkdiffs/NetDiff-Radius%.1f-AnchorSet%i-%s',r,j,prefix);
     if figureExists(folder,filename) ~= 0
         fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
         continue;
@@ -84,22 +83,10 @@ for j=1:numAnchorSets
     
     % Show a circle of the radius around each anchor point
     % and Draw the Anchor Triangle
-    for a=1:size(anchors,2)
-        xa=realPoints(anchors(:,a),1);
-        ya=realPoints(anchors(:,a),2);
-        pf=plot(xa,ya,'-d',...
-            'MarkerEdgeColor','k',...
-            'MarkerFaceColor','g',...
-            'MarkerSize',5);
-        rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1]);
-        
-        % A line of the triangle
-        triLine=mod(a,size(anchors,2))+1;
-        xb=realPoints(anchors(:,triLine),1);
-        yb=realPoints(anchors(:,triLine),2);
-        line([xa,xb],[ya,yb],'LineWidth',1,'Color','green');
-    end
-    labels{end+1} = 'Anchor Node';  %#ok<AGROW>
+    pf=plotAnchorTriangle(anchors,realPoints,r,'green');
+    labels{end+1} = 'Anchor Node (real)';  %#ok<AGROW>
+    pg=plotAnchorTriangle(anchors,mappedPoints,r,'magenta');
+    labels{end+1} = 'Anchor Node (mapped)';  %#ok<AGROW>
 
     % Draw a rectangle around the "real" area
     width=ceil(max(realPoints(:,1)));
@@ -116,7 +103,7 @@ for j=1:numAnchorSets
     axis([minAll maxAll minAll maxAll]);
     grid on
     
-    legend([pa pb pc pd pe pf],labels,'Location','bestOUTSIDE');
+    legend([pa pb pc pd pe pf pg],labels,'Location','bestOUTSIDE');
     
     hold off    
     
@@ -156,4 +143,25 @@ for i=1:size(differenceVector,1)
 end
 
 end
+
+function [h]=plotAnchorTriangle(anchors,points,r,color)
+for a=1:size(anchors,2)
+    xa=points(anchors(:,a),1);
+    ya=points(anchors(:,a),2);
+    h=plot(xa,ya,'-d',...
+        'MarkerEdgeColor','black',...
+        'MarkerFaceColor',color,...
+        'MarkerSize',5);
+    rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1],'EdgeColor',color,'LineStyle','--');
+
+    % A line of the triangle
+    triLine=mod(a,size(anchors,2))+1;
+    xb=points(anchors(:,triLine),1);
+    yb=points(anchors(:,triLine),2);
+    line([xa,xb],[ya,yb],'LineWidth',1,'Color',color);
+end
+
+end
+    
+
 
