@@ -36,7 +36,6 @@ switch operations
         Z = tr.b * YComplete * tr.T;
     case 2
         %NO SCALING
-        tr.b = 1;
         tr.c = mean(X) - mean(Y) * tr.T;
         tr.c = repmat(tr.c(1,:),n,1); % expand tr.c for all points
         Z = YComplete * tr.T + tr.c;

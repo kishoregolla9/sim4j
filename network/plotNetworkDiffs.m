@@ -90,8 +90,8 @@ for j=1:numAnchorSets
     grid on
     hold off    
     
-    fprintf(' - done in %.2f seconds\n',minX,minY,maxX,maxY,toc(startPlotting));
-    filename=sprintf('networkdiffs/NetworkDifference-%s-Radius%.1f-AnchorSet%i-%s',shape,r,j,prefix);
+    fprintf(' - done in %.2f seconds\n',toc(startPlotting));
+    filename=sprintf('networkdiffs/NetDiff-Radius%i-AnchorSet%i-%s',r,j,prefix);
     saveFigure(folder,filename,h);
     hold off
     close
