@@ -6,8 +6,8 @@ addpath('plot')
 
 tic;
 networkconstants;
-
-minRadius=2.5*1000000;
+scale=1000000;
+minRadius=2.5*scale;
 step=1;
 numSteps=1;
 maxRadius=minRadius+(step*(numSteps+1));
@@ -18,13 +18,13 @@ shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
 % numNodes=100;
 % networkEdge=10;
-numNodes=225;
-networkEdge=15;
+numNodes=144;
+networkEdge=12*scale;
 % MOD_RANDOM_ANCHORS=50;
 
 ranging=0; % range-free
 numAnchorsPerSet=3;
-numAnchorSets=100;
+numAnchorSets=200;
 numStartNodes=3;
 
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes);
@@ -53,9 +53,9 @@ else
     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
     for i=1:4
         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
-        sourceNetwork.points(n,:)=[base(1)-1,base(2)];
-        sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
-        sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+        sourceNetwork.points(n,:)=[base(1)-1*scale,base(2)];
+        sourceNetwork.points(n+1,:)=[base(1)+2*scale,base(2)-1*scale];
+        sourceNetwork.points(n+2,:)=[base(1)+1*scale,base(2)+1*scale];
         n=n+3;
     end
     root=[sourceNetwork.width/8,sourceNetwork.height/8];
@@ -69,7 +69,7 @@ else
     end
     
     save(filename, 'sourceNetwork','numNodes','placement','ranging','shape');
-    clear minRadius maxRadius step networkEdge;
+    clear step networkEdge;
     close(gcf);
 end
 
