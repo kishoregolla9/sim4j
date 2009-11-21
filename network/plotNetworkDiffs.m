@@ -17,10 +17,10 @@ realPoints=network.points;
 errors=result.errors;
 for j=1:numAnchorSets
     filename=sprintf('networkdiffs/NetDiff-Radius%.1f-AnchorSet%i-%s',r,j,prefix);
-%     if figureExists(folder,filename) ~= 0
-%         fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
-%         continue;
-%     end
+    if figureExists(folder,filename) ~= 0
+        fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
+        continue;
+    end
     
     startPlotting=tic;
     h=figure('Name',['Network Difference' plottitle],'visible','off');
