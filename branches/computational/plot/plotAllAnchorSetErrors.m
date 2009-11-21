@@ -47,12 +47,35 @@ for r=1:size(results,2)
     d=sprintf('%s (Max)',anchorSetLegend);
     e=sprintf('%s (Mean)',anchorSetLegend);
     f=sprintf('%s (Min)',anchorSetLegend);    
-    legend(plots,d,e,f,'Location','Best');
-   
+
+    cosTheta=zeros(size(results(r).transform,2),1);
+    for s=1:numAnchorSets
+        T=results(r).transform(s).T;
+        if int32(T(1,1)) == -int32(T(2,2))
+            fprintf('Anchor Set #%i Reflected\n',s);
+        else
+            cosTheta(s)=T(1,1);
+        end
+    end
+
+    ax1 = gca;
+    ax2 = axes();
+    plots(4)=plot(ax2,acos(cosTheta),'-o','Color','m');
+    g=sprintf('Rotation Angle');
+    
+    set(ax2,'ActivePositionProperty',get(ax1,'ActivePositionProperty'));
+    set(ax2,'Position',get(ax1,'Position'));
+    set(ax2,'OuterPosition',get(ax1,'OuterPosition'));
+    set(ax2,'Color','none');
+    set(ax2,'YAxisLocation','right');
+    set(ax2,'XColor','k','YColor','k');
+    set(ax2,'Box','off');
+
+    legend(plots,d,e,f,g,'Location','Best');
+    
     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
         network.shape,results(r).radius);
     saveFigure(folder,filename,h);
 
     hold off
-    close
 end

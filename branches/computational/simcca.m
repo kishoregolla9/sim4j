@@ -1,5 +1,4 @@
 %% BuildSourceNetwork
-hold off
 addpath('cca')
 addpath('network')
 addpath('plot')
@@ -73,8 +72,6 @@ ranging=0; % range-free
 numAnchorsPerSet=3 %#ok<NOPTS>
 numAnchorSets=100 %#ok<NOPTS>
 numStartNodes=3 %#ok<NOPTS>
-
-
 
 filename=sprintf('%s/sourceNetwork.mat',folder);
 if (exist(filename,'file') ~= 0)
