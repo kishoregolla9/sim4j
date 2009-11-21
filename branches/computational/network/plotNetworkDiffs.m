@@ -17,10 +17,10 @@ realPoints=network.points;
 errors=result.errors;
 for j=1:numAnchorSets
     filename=sprintf('networkdiffs/NetDiff-Radius%.1f-AnchorSet%i-%s',r,j,prefix);
-    if figureExists(folder,filename) ~= 0
-        fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
-        continue;
-    end
+%     if figureExists(folder,filename) ~= 0
+%         fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',j,prefix);
+%         continue;
+%     end
     
     startPlotting=tic;
     h=figure('Name',['Network Difference' plottitle],'visible','off');
@@ -104,8 +104,14 @@ for j=1:numAnchorSets
     grid on
     
     legend([pa pb pc pd pe pf pg],labels,'Location','bestOUTSIDE');
+
+    transform=result.transform(j);
+    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]',...
+        transform.T(1,1),transform.T(1,2),...
+        transform.T(2,1),transform.T(2,2));
+    text(maxAll+1,0,tString);
     
-    hold off    
+    hold off
     
     fprintf(' - done in %.2f seconds\n',toc(startPlotting));
     
