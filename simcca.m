@@ -147,7 +147,8 @@ if (exist(anchorsfilename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',anchorsfilename);
     load(anchorsfilename);
 else
-    [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,numAnchorsPerSet,numAnchorSets);
+    [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,...
+        numAnchorsPerSet,numAnchorSets);
     a=1;
     for i=1:4
         for j=1:3
@@ -168,7 +169,7 @@ startNodes=1:startNodeIncrement:size(networks(1).points,1);
 
 %% MAP PATCHING
 lastOp=4;
-if doOperations
+if doOperations==true
     lastOp=1;
 end
 for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
