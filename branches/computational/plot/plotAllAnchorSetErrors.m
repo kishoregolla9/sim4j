@@ -8,9 +8,9 @@ for r=1:size(results,2)
     hold off
     
     grid on
-    plotTitle=sprintf('Network %s',network.shape);
+    plotTitle=sprintf('%s - Network %s',figureName,network.shape);
     xlabel({'Sorted by Mean Error'});
-    ylabel('Location Error (factor of radius)');
+    addaxislabel(1,'Location Error (factor of radius)');
     hold all
     
     numStartNodes=size(results(r).errors,2);
@@ -33,10 +33,10 @@ for r=1:size(results,2)
         
         if int32(T(1,1)) == int32(T(2,2))
             % Not Reflected
-            data(a,6)=0;
+            data(a,6)=-1;
         else
             fprintf('Anchor Set %i reflected\n',a);
-            data(a,6)=90;
+            data(a,6)=1;
         end
         
         % Anchor Error
@@ -47,7 +47,7 @@ for r=1:size(results,2)
                 sum(results(r).patchedMap(a).differenceVector(anchors(a,i),:));
             triangle(i,:)=results(r).network.points(anchors(a,i),:);
         end
-        data(a,7)=mean(anchorError);
+        data(a,7)=max(anchorError);
         data(a,8)=triangleArea(triangle);
     end
     
@@ -64,6 +64,7 @@ for r=1:size(results,2)
     plots(3)=p(3);
     legends{3}=sprintf('Min');
     plots(4)=p(4);
+    set(plots(4),'LineStyle','-.','Marker','v');
     legends{4}=sprintf('Anchor Error');
     
 %     ax2 = axes();
@@ -71,35 +72,35 @@ for r=1:size(results,2)
 %     hold(ax2,'all')
 %     hold(ax3,'all')
     X=1:size(data,1);
-    plots(5)=addaxis(X,data(:,5),'-d','Color','m');
+    plots(5)=addaxis(X,data(:,5),'-pm');
     legends{5}=sprintf('Rotation Angle');
     addaxislabel(2,'Rotation Angle');
     
-    plots(6)=addAxis(X,data(:,6),'*','MarkerSize',10);
-    legends{6}=sprintf('Is Reflected');
-    addaxislabel(3,'Is Reflected');
-
-    plots(7)=addaxis(X,data(:,8),':s'); % Triangle Area
+    plots(7)=addaxis(X,data(:,8),':^m'); % Triangle Area
     legends{7}=sprintf('Triangle Area');
     addaxislabel(3,'Triangle Area');
     
-%     overlapAxes(ax1,ax2,'Transform Rotation Angle');
-%     overlapAxes(ax2,ax3,'Triangle Area');
-
+    [plots(6),ax]=addaxis(X,data(:,6),[0,2],'*r','MarkerSize',10);
+    legends{6}=sprintf('Is Reflected');
+    addaxislabel(4,'Is Reflected');
+    set(ax,'YTick',0:1:2)
+    set(ax,'YTickLabel',{'','Reflected',''})
+    
     fiveBest=sprintf('Best: %i %i %i %i %i',data(1:5,1));
     fifthWorst=size(data,1)-4;
     fiveWorst=sprintf('Worst: %i %i %i %i %i',data(end:-1:fifthWorst,1));
     temp=sprintf('%s %s',fiveBest, fiveWorst);
-    title({figureName,plotTitle,temp});
-    legendHandle=legend(plots,legends,'Location','NorthEast');
+    title({plotTitle,temp});
+    legendHandle=legend(plots,legends,'Location','NorthEast','FontSize',6);
     l=get(legendHandle,'Position');
-    set(legendHandle,'Position',[l(1)+.05,l(2)+.15,l(3),l(4)]);
+    set(legendHandle,'Position',[l(1)+.05,l(2),l(3),l(4)]);
     
     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
         network.shape,results(r).radius);
     saveFigure(folder,filename,h);
     
-    hold off
+    hold off;
+    close(h);
 end
 
 end
