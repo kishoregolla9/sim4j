@@ -12,8 +12,8 @@ end
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-networkEdge=20 %#ok<NOPTS>
-numNodes=200 %#ok<NOPTS>
+networkEdge=15 %#ok<NOPTS>
+numNodes=225 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
 
 if exist('folder','var') == 0
