@@ -2,6 +2,7 @@
 addpath('cca')
 addpath('network')
 addpath('plot')
+addpath('plot/addaxis')
 
 networkconstants;
 

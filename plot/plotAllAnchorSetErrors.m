@@ -1,4 +1,4 @@
-function [  ] = plotAllAnchorSetErrors( results,anchors,folder)
+function [ h ] = plotAllAnchorSetErrors( results,anchors,folder)
 
 network=results.network;
 
@@ -6,7 +6,7 @@ for r=1:size(results,2)
     figureName=sprintf('The Results for Radius %.1f by Anchor Set',results(r).radius);
     h=figure('Name',figureName,'visible','off');
     hold off
-
+    
     grid on
     plotTitle=sprintf('Network %s',network.shape);
     xlabel({'Sorted by Mean Error'});
@@ -22,75 +22,84 @@ for r=1:size(results,2)
     end
     
     numAnchorSets=size(results(r).errors,1);
-    anchorSetData=zeros(numAnchorSets,7);
+    data=zeros(numAnchorSets,8);
     for a=1:numAnchorSets
-        anchorSetData(a,1)=a;
-        anchorSetData(a,2)=results(r).errorsPerAnchorSet(a).max;
-        anchorSetData(a,3)=results(r).errorsPerAnchorSet(a).mean;
-        anchorSetData(a,4)=results(r).errorsPerAnchorSet(a).min;
+        data(a,1)=a;
+        data(a,2)=results(r).errorsPerAnchorSet(a).max;
+        data(a,3)=results(r).errorsPerAnchorSet(a).mean;
+        data(a,4)=results(r).errorsPerAnchorSet(a).min;
         T=results(r).transform(a).T;
-        anchorSetData(a,5)=acos(T(1,1)) * 180/pi;
+        data(a,5)=acos(T(1,1)) * 180/pi;
         
         if int32(T(1,1)) == int32(T(2,2))
-           % Not Reflected
-           anchorSetData(a,6)=0;
+            % Not Reflected
+            data(a,6)=0;
         else
             fprintf('Anchor Set %i reflected\n',a);
-            anchorSetData(a,6)=90;
+            data(a,6)=90;
         end
         
         % Anchor Error
         anchorError=zeros(size(anchors,2),1);
+        triangle=zeros(3,2);
         for i=1:size(anchors,2)
             anchorError(i)=...
                 sum(results(r).patchedMap(a).differenceVector(anchors(a,i),:));
+            triangle(i,:)=results(r).network.points(anchors(a,i),:);
         end
-        anchorSetData(a,7)=mean(anchorError);
-        
+        data(a,7)=mean(anchorError);
+        data(a,8)=triangleArea(triangle);
     end
-
-    anchorSetData=sortrows(anchorSetData, -3);
+    
+    data=sortrows(data, -3);
     
     ax1 = gca;
-    plots(1)=plot(anchorSetData(:,2),'-o');
-    plots(2)=plot(anchorSetData(:,3),'-o');
-    plots(3)=plot(anchorSetData(:,4),'-o');
-    plots(6)=plot(anchorSetData(:,7),'-o');
-    
-    ax2 = axes();
-    hold(ax2,'all')
-    plots(4)=plot(ax2,anchorSetData(:,5),'-d','Color','m');
-    plots(5)=plot(ax2,anchorSetData(:,6),'*','MarkerSize',10);
-    
-    set(ax2,'ActivePositionProperty',get(ax1,'ActivePositionProperty'));
-    set(ax2,'Position',get(ax1,'Position'));
-    set(ax2,'OuterPosition',get(ax1,'OuterPosition'));
-    set(ax2,'Color','none');
-    set(ax2,'YAxisLocation','right');
-    set(ax2,'XColor','k','YColor','k');
-    set(ax2,'Box','off');
-    ylabel(ax2,'Transform Rotation Angle');
-    legends=cell(4,1);
-    legends{1}=sprintf('Max');
-    legends{2}=sprintf('Mean');
-    legends{3}=sprintf('Min');    
-    legends{4}=sprintf('Rotation Angle');
-    legends{5}=sprintf('Is Reflected');
-    
-    legend(plots,legends,'Location','Best');
-    
     set(ax1,'XScale','log');
-    set(ax2,'XScale','log');
+    legends=cell(7,1);
+    p=plot([data(:,2),data(:,3),data(:,4),data(:,7)],'-o');
+    plots(1)=p(1);
+    legends{1}=sprintf('Max');
+    plots(2)=p(2);
+    legends{2}=sprintf('Mean');
+    plots(3)=p(3);
+    legends{3}=sprintf('Min');
+    plots(4)=p(4);
+    legends{4}=sprintf('Anchor Error');
     
-    fiveBest=sprintf('Best: %i %i %i %i %i',anchorSetData(1:5,1));
-    fifthWorst=size(anchorSetData,1)-4;
-    fiveWorst=sprintf('Worst: %i %i %i %i %i',anchorSetData(end:-1:fifthWorst,1));
+%     ax2 = axes();
+%     ax3 = axes();
+%     hold(ax2,'all')
+%     hold(ax3,'all')
+    X=1:size(data,1);
+    plots(5)=addaxis(X,data(:,5),'-d','Color','m');
+    legends{5}=sprintf('Rotation Angle');
+    addaxislabel(2,'Rotation Angle');
+    
+    plots(6)=addAxis(X,data(:,6),'*','MarkerSize',10);
+    legends{6}=sprintf('Is Reflected');
+    addaxislabel(3,'Is Reflected');
+
+    plots(7)=addaxis(X,data(:,8),':s'); % Triangle Area
+    legends{7}=sprintf('Triangle Area');
+    addaxislabel(3,'Triangle Area');
+    
+%     overlapAxes(ax1,ax2,'Transform Rotation Angle');
+%     overlapAxes(ax2,ax3,'Triangle Area');
+
+    fiveBest=sprintf('Best: %i %i %i %i %i',data(1:5,1));
+    fifthWorst=size(data,1)-4;
+    fiveWorst=sprintf('Worst: %i %i %i %i %i',data(end:-1:fifthWorst,1));
     temp=sprintf('%s %s',fiveBest, fiveWorst);
     title({figureName,plotTitle,temp});
+    legendHandle=legend(plots,legends,'Location','NorthEast');
+    l=get(legendHandle,'Position');
+    set(legendHandle,'Position',[l(1)+.05,l(2)+.15,l(3),l(4)]);
     
     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
         network.shape,results(r).radius);
     saveFigure(folder,filename,h);
-
+    
     hold off
+end
+
 end
