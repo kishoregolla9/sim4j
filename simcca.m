@@ -194,7 +194,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
         end
-        plotNetworkDiffs(result,anchors, folder,prefix);
+%         plotNetworkDiffs(result,anchors, folder,prefix);
         
         if ~exist('results','var')
             % preallocate
