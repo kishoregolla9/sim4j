@@ -15,11 +15,11 @@ if exist(pathstr,'file')==0
 end
 fprintf(1,'Saving %s\n',filename);
 print('-dpng',filename);
-% 
-% filename=sprintf('%s/eps/%s.eps',folder,name);
-% [pathstr]=fileparts(filename);
-% if exist(pathstr,'file')==0
-%     [a,b]=mkdir(pathstr); %#ok<NASGU>
-% end
-% fprintf(1,'Saving %s\n',filename);
-% print('-depsc',filename);
+
+filename=sprintf('%s/eps/%s.eps',folder,name);
+[pathstr]=fileparts(filename);
+if exist(pathstr,'file')==0
+    [a,b]=mkdir(pathstr); %#ok<NASGU>
+end
+fprintf(1,'Saving %s\n',filename);
+print('-depsc',filename);
