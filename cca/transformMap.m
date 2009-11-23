@@ -26,7 +26,7 @@ Y=patchedPoints(anchorNodes,1:2);
 YComplete=patchedPoints(:,1:2);
 [d, Z, tr] = procrustes(X, Y);
 
-plotAnchorTransform(folder,label,X,Y,Z);
+% plotAnchorTransform(folder,label,X,Y,Z);
 
 tr.c=repmat(tr.c(1,:),n,1); % expand tr.c for all points
 switch operations
