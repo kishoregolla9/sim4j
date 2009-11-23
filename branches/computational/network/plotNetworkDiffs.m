@@ -29,13 +29,7 @@ for j=1:numAnchorSets
     anchors=allAnchors(j,:);
     
     subplotTitle=sprintf('Anchor Set %i',j);
-
-    stats=sprintf('Max: %.2f Mean: %.2f Min: %.2f',...
-        mean([errors(j,:).max]),...
-        mean([errors(j,:).mean]),...
-        mean([errors(j,:).min]));
-    
-    title({subplotTitle,prefix,stats});
+    title({subplotTitle,prefix});
     hold all
     
     % Include connectivity in plots
@@ -106,10 +100,17 @@ for j=1:numAnchorSets
     legend([pa pb pc pd pe pf pg],labels,'Location','bestOUTSIDE');
 
     transform=result.transform(j);
-    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]',...
+    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f',...
         transform.T(1,1),transform.T(1,2),...
-        transform.T(2,1),transform.T(2,2));
+        transform.T(2,1),transform.T(2,2),...
+        det(T));
     text(maxAll+1,0,tString);
+    
+    stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
+        errorsPerAnchorSet(j).max,...
+        errorsPerAnchorSet(j).mean,...
+        errorsPerAnchorSet(j).min);
+    text(maxAll+2,0,stats);
     
     hold off
     saveFigure(folder,filename,h);

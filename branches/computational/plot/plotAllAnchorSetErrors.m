@@ -31,11 +31,12 @@ for r=1:size(results,2)
         T=results(r).transform(a).T;
         data(a,5)=acos(T(1,1)) * 180/pi;
         
-        if int32(T(1,1)) == int32(T(2,2))
+        if (det(T)>0)
             % Not Reflected
+            fprintf('Anchor Set %i not reflected (det=%.4f) \n',a,det(T));
             data(a,6)=-1;
         else
-            fprintf('Anchor Set %i reflected\n',a);
+            fprintf('Anchor Set %i reflected (det=%.4f) \n',a,det(T));
             data(a,6)=1;
         end
         
@@ -57,32 +58,32 @@ for r=1:size(results,2)
     set(ax1,'XScale','log');
     legends=cell(7,1);
     p=plot([data(:,2),data(:,3),data(:,4),data(:,7)],'-o');
+    
     plots(1)=p(1);
     legends{1}=sprintf('Max');
+    
     plots(2)=p(2);
     legends{2}=sprintf('Mean');
+    
     plots(3)=p(3);
     legends{3}=sprintf('Min');
-    plots(4)=p(4);
+    set(plots(3),'visible','off');
+    
+    plots(4)=p(4);    
     set(plots(4),'LineStyle','-.','Marker','v');
     legends{4}=sprintf('Anchor Error');
     
-%     ax2 = axes();
-%     ax3 = axes();
-%     hold(ax2,'all')
-%     hold(ax3,'all')
     X=1:size(data,1);
     plots(5)=addaxis(X,data(:,5),'-pm');
     legends{5}=sprintf('Rotation Angle');
     addaxislabel(2,'Rotation Angle');
     
-    plots(7)=addaxis(X,data(:,8),':^m'); % Triangle Area
-    legends{7}=sprintf('Triangle Area');
+    plots(6)=addaxis(X,data(:,8),':^m'); % Triangle Area
+    legends{6}=sprintf('Triangle Area');
     addaxislabel(3,'Triangle Area');
     
-    [plots(6),ax]=addaxis(X,data(:,6),[0,2],'*r','MarkerSize',10);
-    legends{6}=sprintf('Is Reflected');
-    addaxislabel(4,'Is Reflected');
+    [plots(7),ax]=addaxis(X,data(:,6),[0,2],'*r','MarkerSize',10);
+    legends{7}=sprintf('Is Reflected');
     set(ax,'YTick',0:1:2)
     set(ax,'YTickLabel',{'','Reflected',''})
     
