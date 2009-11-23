@@ -112,11 +112,9 @@ for j=1:numAnchorSets
     text(maxAll+1,0,tString);
     
     hold off
+    saveFigure(folder,filename,h);
     
     fprintf(' - done in %.2f seconds\n',toc(startPlotting));
-    
-    saveFigure(folder,filename,h);
-    hold off
     close
 end
 
