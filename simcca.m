@@ -204,9 +204,9 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     end
     resultsByOperation(operations)=results;%#ok<AGROW>
     %% PLOT RESULT
-     resultFolder=sprintf('%s/%s',folder,prefix);
-     if exist('folder','var') == 0, mkdir(resultFolder); end
-     plotResult(results,anchors,radii,resultFolder,allMaps);
+    resultFolder=sprintf('%s/%s',folder,prefix);
+    if exist('folder','var') == 0, mkdir(resultFolder); end
+    plotResult(results,anchors,radii,resultFolder,allMaps);
 
 end
 
