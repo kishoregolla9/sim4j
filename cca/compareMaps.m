@@ -6,7 +6,7 @@ distanceMatrix=network.distanceMatrix;
 node.patched_network_transform=mappedResult;
 D_C = sqrt(disteusq(mappedResult,mappedResult,'x'));
 
-differenceVector=abs(mappedResult-network.points);
+differenceVector=abs(mappedResult-double(network.points));
 
 D_dist_mean = mean((mean(abs(D_C-distanceMatrix)))');
 D_dist_mean=D_dist_mean/radius;

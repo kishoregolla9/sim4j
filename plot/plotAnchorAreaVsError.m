@@ -79,5 +79,5 @@ c=[(v(1,1)+v(2,1)+v(3,1)) / 3 (v(1,2)+v(2,2)+v(3,2)) / 3];
 end
 
 function [d] = distance(a,b)
-d=sqrt((b(1)-a(1))^2 + (b(2)-a(2))^2);
+d=sqrt(double((b(1)-a(1))^2 + (b(2)-a(2))^2));
 end

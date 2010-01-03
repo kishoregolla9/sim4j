@@ -91,8 +91,8 @@ for j=1:numAnchorSets
     minY=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
     maxX=ceil(max(max(realPoints(:,1),max(mappedPoints(:,1)))));
     maxY=ceil(max(max(realPoints(:,2),max(mappedPoints(:,2)))));
-    minAll=min(minX,minY);
-    maxAll=max(maxX,maxY);
+    minAll=double(min(minX,minY));
+    maxAll=double(max(maxX,maxY));
     axis([minAll maxAll minAll maxAll]);
     grid on
     
