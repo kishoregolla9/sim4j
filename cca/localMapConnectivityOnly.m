@@ -213,13 +213,14 @@ end
     X(1,:)=local_network(N1,:);
     X(2,:)=local_network(N2,:);
     X(3,:)=local_network(N3,:);
-    [d, Z, transform] = procrustes(X, Y);
-    Cx=transform.c;
-    for i=1:(N_local-size(transform.c,1))
-          Cx=[Cx;transform.c(1,:)];
-    end
-    C_transform=transform.b*nodes(node_k).local_network_c * transform.T+Cx;
 
+    [d, Z, tr] = procrustes(X, Y);
+    %     Cx=repmat(tr.c(1,:),N_local,1);
+    %     C_transform=transform.b*nodes(node_k).local_network_c * transform.T+Cx;
+    tr.c=repmat(tr.c(1,:),N_local,1); % expand tr.c for all points
+    C_transform = tr.b * nodes(node_k).local_network_c * tr.T + tr.c;
+    
+    
     % [Z,Cx]= mapTrans(X1,X2,X3,Y1,Y2,Y3,N);
     % C_transform=(Z*local_network_c'+Cx)';
     nodes(node_k).local_network_transform=C_transform;

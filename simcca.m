@@ -8,13 +8,13 @@ networkconstants;
 
 % allows for console loop to set networkScale
 if exist('networkScale','var') == 0 || networkScale == 0
-    networkScale=1; % do not scale by default
+    networkScale=1.0; % do not scale by default
 end
 
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-networkEdge=15 %#ok<NOPTS>
-numNodes=225 %#ok<NOPTS>
+networkEdge=10 %#ok<NOPTS>
+numNodes=100 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
 
 if exist('folder','var') == 0
@@ -24,9 +24,9 @@ if exist('folder','var') == 0
       folder=sourceFolder;
     end
 end
-if networkScale > 1 && exist(folder,'dir') ~= 0
+if networkScale > 1 && exist(folder,'dir') == 7
     save('temp.mat','sourceFolder','networkScale');
-    clear all
+    clear variables
     load('temp.mat');
     folder=sprintf('%s-scale%.0e',sourceFolder,networkScale);
     [a,b]=mkdir(folder); %#ok<NASGU>
@@ -35,8 +35,11 @@ if networkScale > 1 && exist(folder,'dir') ~= 0
     copyfile(src,dst);
     src=sprintf('%s/anchors.mat',sourceFolder);
     dst=sprintf('%s/anchors.mat',folder);
-    copyfile(src,dst);
+    if exist(src,'file') ~= 0
+        copyfile(src,dst);
+    end
     clear src dst;
+    delete('temp.mat');
 else
     sourceFolder=folder;
 end
@@ -61,7 +64,7 @@ simccaStart=tic;
 
 doOperations=false;
 minRadius=2.5*networkScale;
-radiusStep=1*networkScale;
+radiusStep=1.0*networkScale;
 numRadii=1;
 maxRadius=minRadius+(radiusStep*(numRadii-1));
 
@@ -70,13 +73,13 @@ networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
 if (networkScale > 1)
-    radii=int32(radii);
+    radii=radii;
 end
        
 ranging=0; % range-free
 numAnchorsPerSet=3 %#ok<NOPTS>
 numAnchorSets=100 %#ok<NOPTS>
-numStartNodes=3 %#ok<NOPTS>
+numStartNodes=1 %#ok<NOPTS>
 
 filename=sprintf('%s/sourceNetwork.mat',folder);
 if (exist(filename,'file') ~= 0)
@@ -115,9 +118,9 @@ sourceNetwork.width=sourceNetwork.width*networkScale;
 sourceNetwork.height=sourceNetwork.height*networkScale;
 
 if (networkScale > 1)
-   sourceNetwork.points=int32(sourceNetwork.points);
-   sourceNetwork.width=int32(sourceNetwork.width);
-   sourceNetwork.height=int32(sourceNetwork.height);
+   sourceNetwork.points=sourceNetwork.points;
+   sourceNetwork.width=sourceNetwork.width;
+   sourceNetwork.height=sourceNetwork.height;
 end
 
 %% Build Networks
