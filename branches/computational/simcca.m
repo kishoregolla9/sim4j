@@ -24,7 +24,7 @@ if exist('folder','var') == 0
       folder=sourceFolder;
     end
 end
-if networkScale > 1
+if networkScale > 1 && exist(folder,'dir') ~= 0
     save('temp.mat','sourceFolder','networkScale');
     clear all
     load('temp.mat');
@@ -69,6 +69,10 @@ maxRadius=minRadius+(radiusStep*(numRadii-1));
 networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
+if (networkScale > 1)
+    radii=int32(radii);
+end
+       
 ranging=0; % range-free
 numAnchorsPerSet=3 %#ok<NOPTS>
 numAnchorSets=100 %#ok<NOPTS>
@@ -110,6 +114,11 @@ sourceNetwork.points=sourceNetwork.points.*networkScale;
 sourceNetwork.width=sourceNetwork.width*networkScale;
 sourceNetwork.height=sourceNetwork.height*networkScale;
 
+if (networkScale > 1)
+   sourceNetwork.points=int32(sourceNetwork.points);
+   sourceNetwork.width=int32(sourceNetwork.width);
+   sourceNetwork.height=int32(sourceNetwork.height);
+end
 
 %% Build Networks
 netfilename=sprintf('%s/networks.mat',folder);
@@ -181,11 +190,11 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         allMaps(i,:)=localMaps;  %#ok<AGROW>
         
         resultFilename=sprintf('%s/%sresult-%.1f.mat',folder,prefix,network.radius);
-        if (exist(resultFilename,'file') == 2)
-            fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
-                i,numRadii,network.radius,resultFilename);
-            load(resultFilename);
-        else
+%         if (exist(resultFilename,'file') == 2)
+%             fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
+%                 i,numRadii,network.radius,resultFilename);
+%             load(resultFilename);
+%         else
             disp('------------------------------------')
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
                 numRadii,network.radius);
@@ -193,8 +202,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 network.radius,patchNumber,folder,operations);
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
-        end
-%         plotNetworkDiffs(result,anchors, folder,prefix);
+%         end
+        plotNetworkDiffs(result,anchors, folder,prefix);
         
         if ~exist('results','var')
             % preallocate
