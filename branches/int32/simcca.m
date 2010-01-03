@@ -8,7 +8,7 @@ networkconstants;
 
 % allows for console loop to set networkScale
 if exist('networkScale','var') == 0 || networkScale == 0
-    networkScale=1.0; % do not scale by default
+    networkScale=1000;
 end
 
 shape=NET.SHAPE_SQUARE;
@@ -19,7 +19,7 @@ shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %
 
 if exist('folder','var') == 0
     if exist('sourceFolder','var') == 0
-      folder=sprintf('results/computational/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
+      folder=sprintf('results/int32/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
     else
       folder=sourceFolder;
     end
@@ -27,6 +27,7 @@ end
 if networkScale > 1 && exist(folder,'dir') == 7
     save('temp.mat','sourceFolder','networkScale');
     clear variables
+    networkconstants;
     load('temp.mat');
     folder=sprintf('%s-scale%.0e',sourceFolder,networkScale);
     [a,b]=mkdir(folder); %#ok<NASGU>
@@ -64,7 +65,7 @@ simccaStart=tic;
 
 doOperations=false;
 minRadius=2.5*networkScale;
-radiusStep=1.0*networkScale;
+radiusStep=1*networkScale;
 numRadii=1;
 maxRadius=minRadius+(radiusStep*(numRadii-1));
 
@@ -73,7 +74,7 @@ networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
 if (networkScale > 1)
-    radii=radii;
+    radii=int32(radii);
 end
        
 ranging=0; % range-free
@@ -118,9 +119,9 @@ sourceNetwork.width=sourceNetwork.width*networkScale;
 sourceNetwork.height=sourceNetwork.height*networkScale;
 
 if (networkScale > 1)
-   sourceNetwork.points=sourceNetwork.points;
-   sourceNetwork.width=sourceNetwork.width;
-   sourceNetwork.height=sourceNetwork.height;
+   sourceNetwork.points=int32(sourceNetwork.points);
+   sourceNetwork.width=int32(sourceNetwork.width);
+   sourceNetwork.height=int32(sourceNetwork.height);
 end
 
 %% Build Networks
@@ -132,6 +133,11 @@ else
     [ networks ] = buildNetworks(sourceNetwork, radii, numRadii, folder);
     save(netfilename, 'networks', 'radii', 'numRadii');
 end
+
+class(radii)
+class(sourceNetwork.points)
+class(networks.points)
+
 
 %% Build Local Maps
 for i=1 : numRadii

@@ -228,11 +228,11 @@ end
     D_dist_mean = mean((mean(abs(D_C-local_distance_deployed)))');
     D_dist_mean=D_dist_mean/radius;
     nodes(node_k).D_dist_mean_true=D_dist_mean;
-    D_coordinates_mean=mean(abs(C_transform-local_network));
-    D_coordinates_mean=D_coordinates_mean/radius;
-    D_coordinates_median=median(abs(C_transform-local_network));
-    D_coordinates_median=D_coordinates_median/radius;
-    C_delta=C_transform - local_network;
+    D_coordinates_mean=mean(abs(C_transform-double(local_network)));
+    D_coordinates_mean=D_coordinates_mean/double(radius);
+    D_coordinates_median=median(abs(C_transform-double(local_network)));
+    D_coordinates_median=D_coordinates_median/double(radius);
+    C_delta=C_transform - double(local_network);
     nodes(node_k).local_coordinates_error_mean=D_coordinates_mean;
     nodes(node_k).local_coordinates_error_median=D_coordinates_median;
     
