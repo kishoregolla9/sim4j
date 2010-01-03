@@ -14,7 +14,6 @@ patchedMaps=result.patchedMap;
 realPoints=network.points;
 
 % Plot a network diff diagram for each anchor set
-errors=result.errors;
 for j=1:numAnchorSets
     filename=sprintf('networkdiffs/NetDiff-Radius%.1f-AnchorSet%i-%s',r,j,prefix);
     if figureExists(folder,filename) ~= 0
@@ -97,20 +96,40 @@ for j=1:numAnchorSets
     axis([minAll maxAll minAll maxAll]);
     grid on
     
-    legend([pa pb pc pd pe pf pg],labels,'Location','bestOUTSIDE');
+    legend([pa pb pc pd pe pf pg],labels,'Location','BestOutside');
 
     transform=result.transform(j);
-    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f',...
+    rot=(acos(transform.T(1,1)))*180/pi;
+    ref=(acos(transform.T(1,1))/2)*180/pi;
+    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f',...
         transform.T(1,1),transform.T(1,2),...
         transform.T(2,1),transform.T(2,2),...
-        det(T));
+        det(transform.T),rot,ref);
     text(maxAll+1,0,tString);
     
+    tString=sprintf(' %.2f ',transform.c(1,:));
+    tString=sprintf('Translate:\n[%s]',tString);
+    text(maxAll+1,3,tString);
+    
+    tString=sprintf('Scalar: %.2f ',transform.b);
+    text(maxAll+1,4,tString);
+    
+    triangle=zeros(3,2);
+    for i=1:size(anchors,2)
+        triangle(i,:)=network.points(anchors(1,i),:);
+    end
+    
+    [d,slopes]=deviationOfSlopes(triangle);
+    tString=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDev: %.2f',...
+        triangleArea(triangle),...
+        slopes,d);
+   text(maxAll+1,7,tString);
+    
     stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
-        errorsPerAnchorSet(j).max,...
-        errorsPerAnchorSet(j).mean,...
-        errorsPerAnchorSet(j).min);
-    text(maxAll+2,0,stats);
+        result.errorsPerAnchorSet(j).max,...
+        result.errorsPerAnchorSet(j).mean,...
+        result.errorsPerAnchorSet(j).min);
+    text(maxAll+1,10,stats);
     
     hold off
     saveFigure(folder,filename,h);

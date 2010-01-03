@@ -1,4 +1,4 @@
-function [Z,tr] = transformMap(realPoints, patchedPoints, anchorNodes, ...
+function [Z,tr,dissimilarity] = transformMap(realPoints, patchedPoints, anchorNodes, ...
     operations,folder,label)
 % Transform the map using the procrustes algorithm
 % realPoints: the input points (only anchor nodes are used)
@@ -8,6 +8,8 @@ function [Z,tr] = transformMap(realPoints, patchedPoints, anchorNodes, ...
 %             3 - no translation
 %             2 - no scaling
 %             1 - no rotation/reflection
+% dissimilarity measure see
+% http://www.mathworks.com/access/helpdesk/help/toolbox/stats/br3txrn-1.html
 
 if nargin < 4
     operations=4;
@@ -24,7 +26,7 @@ X=realPoints(anchorNodes,:);
 Y=patchedPoints(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
-[d, Z, tr] = procrustes(X, Y);
+[dissimilarity, Z, tr] = procrustes(X, Y);
 
 % plotAnchorTransform(folder,label,X,Y,Z);
 

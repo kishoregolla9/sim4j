@@ -67,13 +67,14 @@ for startNodeIndex=1:numStartNodes   % for each starting node
         startAnchor=tic;
         anchorNodes=anchorSets(anchorSetIndex,:);
         label=sprintf('StartNode%i_AnchorSet%i',startNodeIndex,anchorSetIndex);
-        [mappedResult,tr]=transformMap(network.points, refineResult, ...
+        [mappedResult,tr,dissimilarity]=transformMap(network.points, refineResult, ...
             anchorNodes, operations,folder,label);
         resultNode=compareMaps(network, localMaps(startNodeIndex), ...
             mappedResult, radius);
         
         differenceVector=resultNode.differenceVector;
         result.patchedMap(anchorSetIndex)=resultNode;
+        result.dissimilarity=dissimilarity;
         result.transform(anchorSetIndex)=tr;
         % Remove the anchor node differences
 %         for i=1:size(anchorNodes,2)

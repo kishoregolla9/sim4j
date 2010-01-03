@@ -22,23 +22,15 @@ for r=1:size(results,2)
     end
     
     numAnchorSets=size(results(r).errors,1);
-    data=zeros(numAnchorSets,8);
+    data=zeros(numAnchorSets,12);
     for a=1:numAnchorSets
         data(a,1)=a;
         data(a,2)=results(r).errorsPerAnchorSet(a).max;
-        data(a,3)=results(r).errorsPerAnchorSet(a).mean;
+        data(a,3)=results(r).errorsPerAnchorSet(a).median;
         data(a,4)=results(r).errorsPerAnchorSet(a).min;
-        T=results(r).transform(a).T;
+        tr=results(r).transform(a);
+        T=tr.T;
         data(a,5)=acos(T(1,1)) * 180/pi;
-        
-        if (det(T)>0)
-            % Not Reflected
-            fprintf('Anchor Set %i not reflected (det=%.4f) \n',a,det(T));
-            data(a,6)=-1;
-        else
-            fprintf('Anchor Set %i reflected (det=%.4f) \n',a,det(T));
-            data(a,6)=1;
-        end
         
         % Anchor Error
         anchorError=zeros(size(anchors,2),1);
@@ -50,6 +42,15 @@ for r=1:size(results,2)
         end
         data(a,7)=max(anchorError);
         data(a,8)=triangleArea(triangle);
+        
+        data(a,9)=deviationOfSlopes(triangle);
+
+        
+        data(a,6)=2*(det(T)<0); % if det(T)<0, then reflected
+        data(a,10)=4*(tr.c(1,1)<0 | tr.c(1,2)<0);
+        data(a,11)=3*(tr.b<0);
+        
+        data(a,12)=results(r).dissimilarity;
     end
     
     data=sortrows(data, -3);
@@ -63,7 +64,7 @@ for r=1:size(results,2)
     legends{1}=sprintf('Max');
     
     plots(2)=p(2);
-    legends{2}=sprintf('Mean');
+    legends{2}=sprintf('Median');
     
     plots(3)=p(3);
     legends{3}=sprintf('Min');
@@ -81,16 +82,32 @@ for r=1:size(results,2)
     plots(6)=addaxis(X,data(:,8),':^m'); % Triangle Area
     legends{6}=sprintf('Triangle Area');
     addaxislabel(3,'Triangle Area');
+
+    plots(7)=addaxis(X,data(:,9),':sr'); % Slopes
+    legends{7}=sprintf('Std of Slopes');
+    addaxislabel(4,'Std of Slopes');
     
-    [plots(7),ax]=addaxis(X,data(:,6),[0,2],'*r','MarkerSize',10);
-    legends{7}=sprintf('Is Reflected');
-    set(ax,'YTick',0:1:2)
-    set(ax,'YTickLabel',{'','Reflected',''})
+    [plots(8),ax]=addaxis(X,data(:,6),[1,5],'*r','MarkerSize',10);
+    legends{8}=sprintf('Is Reflected');
+    addaxislabel(5,'Transformation Properties');
+    set(ax,'YTick',1:1:5)
+    set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
+
+    plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
+    legends{9}=sprintf('Is translation negative');
     
-    fiveBest=sprintf('Best: %i %i %i %i %i',data(1:5,1));
-    fifthWorst=size(data,1)-4;
-    fiveWorst=sprintf('Worst: %i %i %i %i %i',data(end:-1:fifthWorst,1));
-    temp=sprintf('%s %s',fiveBest, fiveWorst);
+    plots(10)=plot(X,data(:,11),'sg','MarkerSize',10); % is tr.b negative?
+    legends{10}=sprintf('Is scalar negative');
+
+%     plots(11)=addaxis(X,data(:,12),':sr'); 
+%     legends{11}=sprintf('Procrustes Dissimilarity Measure');
+%     addaxislabel(6,'Procrustes Dissimilarity Measure');
+   
+    n=10;
+    nWorst=sprintf('%i ',data(1:n,1));
+    nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
+    temp=sprintf('Best: %s\nWorst: %s',nBest,nWorst);
+    nWorst
     title({plotTitle,temp});
     legendHandle=legend(plots,legends,'Location','NorthEast','FontSize',6);
     l=get(legendHandle,'Position');
