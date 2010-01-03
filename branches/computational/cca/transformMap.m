@@ -27,6 +27,7 @@ Y=patchedPoints(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
 [dissimilarity, Z, tr] = procrustes(X, Y);
+% [dissimilarity, Z, tr] = procrustes(X, Y,'reflection','false');
 
 % plotAnchorTransform(folder,label,X,Y,Z);
 
@@ -50,6 +51,7 @@ switch operations
         tr.T = eye(size(tr.T));
         Z = tr.b * YComplete * tr.T + tr.c;
 end
+
 end 
 
 function [h] =plotAnchorTransform(folder,label,X,Y,Z)
