@@ -190,11 +190,11 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         allMaps(i,:)=localMaps;  %#ok<AGROW>
         
         resultFilename=sprintf('%s/%sresult-%.1f.mat',folder,prefix,network.radius);
-%         if (exist(resultFilename,'file') == 2)
-%             fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
-%                 i,numRadii,network.radius,resultFilename);
-%             load(resultFilename);
-%         else
+        if (exist(resultFilename,'file') == 2)
+            fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
+                i,numRadii,network.radius,resultFilename);
+            load(resultFilename);
+        else
             disp('------------------------------------')
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
                 numRadii,network.radius);
@@ -202,7 +202,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 network.radius,patchNumber,folder,operations);
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
-%         end
+        end
         plotNetworkDiffs(result,anchors, folder,prefix);
         
         if ~exist('results','var')

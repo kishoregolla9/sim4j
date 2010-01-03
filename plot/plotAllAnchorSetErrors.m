@@ -9,7 +9,6 @@ for r=1:size(results,2)
     
     grid on
     plotTitle=sprintf('%s - Network %s',figureName,network.shape);
-    xlabel({'Sorted by Mean Error'});
     addaxislabel(1,'Location Error (factor of radius)');
     hold all
     
@@ -88,7 +87,7 @@ for r=1:size(results,2)
     addaxislabel(4,'Std of Slopes');
     
     [plots(8),ax]=addaxis(X,data(:,6),[1,5],'*r','MarkerSize',10);
-    legends{8}=sprintf('Is Reflected');
+    legends{8}=sprintf('Transformation Properties');
     addaxislabel(5,'Transformation Properties');
     set(ax,'YTick',1:1:5)
     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
@@ -106,9 +105,11 @@ for r=1:size(results,2)
     n=10;
     nWorst=sprintf('%i ',data(1:n,1));
     nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
-    temp=sprintf('Best: %s\nWorst: %s',nBest,nWorst);
-    nWorst
+    temp=sprintf('Best: %s',nBest,nWorst);
+    nWorst %#ok<NOPRT>
     title({plotTitle,temp});
+    temp=sprintf('Sorted by Mean Error\nWorst: %s',nWorst);
+    xlabel(temp);
     legendHandle=legend(plots,legends,'Location','NorthEast','FontSize',6);
     l=get(legendHandle,'Position');
     set(legendHandle,'Position',[l(1)+.05,l(2),l(3),l(4)]);
