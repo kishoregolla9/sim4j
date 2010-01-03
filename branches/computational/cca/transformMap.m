@@ -15,7 +15,6 @@ if nargin < 4
     operations=4;
 end
 
-
 n=size(realPoints,1);
 %      c:  the translation component (a n x 2 matrix, where each row is
 %      identical)

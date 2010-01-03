@@ -25,7 +25,7 @@ for r=1:size(results,2)
     for a=1:numAnchorSets
         data(a,1)=a;
         data(a,2)=results(r).errorsPerAnchorSet(a).max;
-        data(a,3)=results(r).errorsPerAnchorSet(a).median;
+        data(a,3)=results(r).errorsPerAnchorSet(a).mean;
         data(a,4)=results(r).errorsPerAnchorSet(a).min;
         tr=results(r).transform(a);
         T=tr.T;
@@ -63,7 +63,7 @@ for r=1:size(results,2)
     legends{1}=sprintf('Max');
     
     plots(2)=p(2);
-    legends{2}=sprintf('Median');
+    legends{2}=sprintf('Mean');
     
     plots(3)=p(3);
     legends{3}=sprintf('Min');
