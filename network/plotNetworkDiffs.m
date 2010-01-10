@@ -97,11 +97,35 @@ for j=1:numAnchorSets
     grid on
     
     legend([pa pb pc pd pe pf pg],labels,'Location','BestOutside');
+    
+    textLeft=1.0;
+    
+    %% Error Stats
+    stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
+        result.errorsPerAnchorSet(j).max,...
+        result.errorsPerAnchorSet(j).mean,...
+        result.errorsPerAnchorSet(j).min);
+    text(textLeft,0.7,stats,...
+        'Units','normalized ','VerticalAlignment','Top');
 
+    %% Triangle Stats
+    triangle=zeros(3,2);
+    for i=1:size(anchors,2)
+        triangle(i,:)=network.points(anchors(1,i),:);
+    end
+    [d,slopes]=deviationOfSlopes(triangle);
+    stats=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDevSlopes: %.2f',...
+        triangleArea(triangle),...
+        slopes,d);
+    text(textLeft,0.6,'Triangle Stats',...
+        'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
+    text(textLeft,0.56,stats,...
+        'Units','normalized ','VerticalAlignment','Top');
+
+    %% Transform Stats
     transform=result.transform(j);
     rot=(acos(transform.T(1,1)))*180/pi;
     ref=(acos(transform.T(1,1))/2)*180/pi;
-
     scalarString=sprintf('Scalar: %.2f ',transform.b);
     rotateString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f',...
         transform.T(1,1),transform.T(1,2),...
@@ -109,18 +133,12 @@ for j=1:numAnchorSets
         det(transform.T),rot,ref);
     translateString=sprintf(' %.2f ',transform.c(1,:));
     transformString=sprintf('%s\nTranslate:\n[%s]\n%s',scalarString,translateString,rotateString);
-    text(maxAll+0.5,3,transformString);
+    text(textLeft,0.4,'Transform',...
+        'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
+    text(textLeft,0.36,transformString,...
+        'Units','normalized ','VerticalAlignment','Top');
     
-    triangle=zeros(3,2);
-    for i=1:size(anchors,2)
-        triangle(i,:)=network.points(anchors(1,i),:);
-    end
-    
-    [d,slopes]=deviationOfSlopes(triangle);
-    stats=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDevSlopes: %.2f',...
-        triangleArea(triangle),...
-        slopes,d);
-    text(maxAll+0.5,5.5,stats);
+    %% Anchor Stats
     anchorString='';
     for a=1:size(anchors,2)
       xDiff=realPoints(anchors(a),1)-mappedPoints(anchors(a),1);
@@ -131,15 +149,12 @@ for j=1:numAnchorSets
           mappedPoints(anchors(a),:)',...
           xDiff,yDiff);
     end
-    text(maxAll+0.5,0.75,'Anchors (R=real, M=mapped)','FontWeight','bold');
-    text(maxAll+0.5,0.5,anchorString,'VerticalAlignment','Top');
+    text(textLeft,0.1,'Anchors (R=real, M=mapped)',...
+        'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
+    text(textLeft,0.06,anchorString,...
+        'Units','normalized ','VerticalAlignment','Top');
     
-    stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
-        result.errorsPerAnchorSet(j).max,...
-        result.errorsPerAnchorSet(j).mean,...
-        result.errorsPerAnchorSet(j).min);
-    text(maxAll+0.5,7,stats);
-    
+    %% FINISH
     hold off
     saveFigure(folder,filename,h);
     
