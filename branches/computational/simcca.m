@@ -19,7 +19,7 @@ shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %
 
 if exist('folder','var') == 0
     if exist('sourceFolder','var') == 0
-      folder=sprintf('results/computational/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
+      folder=sprintf('results/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
     else
       folder=sourceFolder;
     end
