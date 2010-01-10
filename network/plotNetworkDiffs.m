@@ -101,18 +101,15 @@ for j=1:numAnchorSets
     transform=result.transform(j);
     rot=(acos(transform.T(1,1)))*180/pi;
     ref=(acos(transform.T(1,1))/2)*180/pi;
-    tString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f',...
+
+    scalarString=sprintf('Scalar: %.2f ',transform.b);
+    rotateString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f',...
         transform.T(1,1),transform.T(1,2),...
         transform.T(2,1),transform.T(2,2),...
         det(transform.T),rot,ref);
-    text(maxAll+1,0,tString);
-    
-    tString=sprintf(' %.2f ',transform.c(1,:));
-    tString=sprintf('Translate:\n[%s]',tString);
-    text(maxAll+1,3,tString);
-    
-    tString=sprintf('Scalar: %.2f ',transform.b);
-    text(maxAll+1,4,tString);
+    translateString=sprintf(' %.2f ',transform.c(1,:));
+    transformString=sprintf('%s\nTranslate:\n[%s]\n%s',scalarString,translateString,rotateString);
+    text(maxAll+0.5,3,transformString);
     
     triangle=zeros(3,2);
     for i=1:size(anchors,2)
@@ -120,16 +117,28 @@ for j=1:numAnchorSets
     end
     
     [d,slopes]=deviationOfSlopes(triangle);
-    tString=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDev: %.2f',...
+    stats=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDevSlopes: %.2f',...
         triangleArea(triangle),...
         slopes,d);
-   text(maxAll+1,7,tString);
+    text(maxAll+0.5,5.5,stats);
+    anchorString='';
+    for a=1:size(anchors,2)
+      xDiff=realPoints(anchors(a),1)-mappedPoints(anchors(a),1);
+      yDiff=realPoints(anchors(a),2)-mappedPoints(anchors(a),2);
+      anchorString=sprintf('%sR:%.2f,%.2f M:%.2f,%.2f diff:%.2f,%.2f\n',...
+          anchorString,...
+          realPoints(anchors(a),:)',...
+          mappedPoints(anchors(a),:)',...
+          xDiff,yDiff);
+    end
+    text(maxAll+0.5,0.75,'Anchors (R=real, M=mapped)','FontWeight','bold');
+    text(maxAll+0.5,0.5,anchorString,'VerticalAlignment','Top');
     
     stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
         result.errorsPerAnchorSet(j).max,...
         result.errorsPerAnchorSet(j).mean,...
         result.errorsPerAnchorSet(j).min);
-    text(maxAll+1,10,stats);
+    text(maxAll+0.5,7,stats);
     
     hold off
     saveFigure(folder,filename,h);
