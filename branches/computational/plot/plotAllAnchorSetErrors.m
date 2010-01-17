@@ -111,7 +111,7 @@ for r=1:size(results,2)
     n=10;
     nWorst=sprintf('%i ',data(1:n,1));
     nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
-    temp=sprintf('Best: %s',nBest,nWorst);
+    temp=sprintf('Best: %s',nBest);
     nWorst %#ok<NOPRT>
     title({plotTitle,temp});
     temp=sprintf('Sorted by Mean Error\nWorst: %s',nWorst);
