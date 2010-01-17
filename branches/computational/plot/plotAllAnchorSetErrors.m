@@ -33,16 +33,19 @@ for r=1:size(results,2)
         
         % Anchor Error
         anchorError=zeros(size(anchors,2),1);
-        triangle=zeros(3,2);
+        realTriangle=zeros(3,2);
+        mappedTriangle=zeros(3,2);
         for i=1:size(anchors,2)
             anchorError(i)=...
-                sum(results(r).patchedMap(a).differenceVector(anchors(a,i),:));
-            triangle(i,:)=results(r).network.points(anchors(a,i),:);
+                max(results(r).patchedMap(a).differenceVector(anchors(a,i),:));
+            realTriangle(i,:)=results(r).network.points(anchors(a,i),:);
+            mappedTriangle(i,:)=results(r).patchedMap(a).mappedPoints(anchors(a,i),:);
         end
-        data(a,7)=max(anchorError);
-        data(a,8)=triangleArea(triangle);
+        data(a,7)=min(anchorError);
+        [data(a,14),data(a,15)]=triangleArea(realTriangle);
+        [data(a,16),data(a,17)]=triangleArea(mappedTriangle);
         
-        data(a,9)=deviationOfSlopes(triangle);
+        data(a,9)=deviationOfSlopes(mappedTriangle);
 
         
         data(a,6)=2*(det(T)<0); % if det(T)<0, then reflected
@@ -59,7 +62,7 @@ for r=1:size(results,2)
     ax1 = gca;
     set(ax1,'XScale','log');
     legends=cell(7,1);
-    p=plot([data(:,2),data(:,3),data(:,4),data(:,7)],'-o');
+    p=plot([data(:,2)/2,data(:,3)/2,data(:,4)/2,data(:,7)],'-o');
     
     plots(1)=p(1);
     legends{1}=sprintf('Max');
@@ -74,17 +77,18 @@ for r=1:size(results,2)
     plots(4)=p(4);    
     set(plots(4),'LineStyle','-.','Marker','v');
     legends{4}=sprintf('Anchor Error');
+    set(plots(4),'visible','off');
     
     X=1:size(data,1);
     plots(5)=addaxis(X,data(:,5),'-pm');
     legends{5}=sprintf('Rotation Angle');
     addaxislabel(2,'Rotation Angle');
     
-    plots(6)=addaxis(X,data(:,8),':^m'); % Triangle Area
-    legends{6}=sprintf('Triangle Area');
-    addaxislabel(3,'Triangle Area');
+    plots(6)=addaxis(X,data(:,14)./data(:,15),':^m'); % Triangle Area
+    legends{6}=sprintf('Real:Mapped triangle area');
+    addaxislabel(3,'Triangle Area Ratio');
     
-    plots(7)=addaxis(X,data(:,13),':sr'); % anchor node errors
+    plots(7)=addaxis(X,data(:,7),'-.vc'); % anchor node errors
     legends{7}=sprintf('Anchor Node Error');
     addaxislabel(4,'Anchor Node Error');
     
@@ -98,6 +102,10 @@ for r=1:size(results,2)
     set(ax,'YTick',1:1:5)
     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
+    plots(9)=addaxis(X,data(:,15)./data(:,16),':vb'); % Triangle Edge
+    legends{9}=sprintf('Real:Mapped triangle max edge');
+    addaxislabel(6,'Triangle Edge Ratio');    
+    
 %     plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
 %     legends{9}=sprintf('Is translation negative');
     
