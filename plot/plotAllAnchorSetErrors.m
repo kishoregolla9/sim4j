@@ -50,6 +50,8 @@ for r=1:size(results,2)
         data(a,11)=3*(tr.b<0);
         
         data(a,12)=results(r).dissimilarity;
+        
+        data(a,13)=results(r).anchorErrors(a).mean;
     end
     
     data=sortrows(data, -3);
@@ -81,10 +83,14 @@ for r=1:size(results,2)
     plots(6)=addaxis(X,data(:,8),':^m'); % Triangle Area
     legends{6}=sprintf('Triangle Area');
     addaxislabel(3,'Triangle Area');
-
-    plots(7)=addaxis(X,data(:,9),':sr'); % Slopes
-    legends{7}=sprintf('Std of Slopes');
-    addaxislabel(4,'Std of Slopes');
+    
+    plots(7)=addaxis(X,data(:,13),':sr'); % anchor node errors
+    legends{7}=sprintf('Anchor Node Error');
+    addaxislabel(4,'Anchor Node Error');
+    
+%     plots(7)=addaxis(X,data(:,9),':sr'); % Slopes
+%     legends{7}=sprintf('Std of Slopes');
+%     addaxislabel(4,'Std of Slopes');
     
     [plots(8),ax]=addaxis(X,data(:,6),[1,5],'*r','MarkerSize',10);
     legends{8}=sprintf('Transformation Properties');
