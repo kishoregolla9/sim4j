@@ -1,4 +1,4 @@
-function [triangleArea,maxEdge] = triangleArea(a,b,c)
+function [triangleArea,d] = triangleArea(a,b,c)
 % Heron's Area of a Triangle formula
 % Returns the area of the triangle created by the length of the 3 points
 % heron(a,b,c) for 3 points
@@ -15,7 +15,6 @@ d(1)=distance(a,b);
 d(2)=distance(b,c);
 d(3)=distance(c,a);
 triangleArea=heron(d(1),d(2),d(3));
-maxEdge=max(d);
 end
 
 %% Heron's Area of a Triangle formula
