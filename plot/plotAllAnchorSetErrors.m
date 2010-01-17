@@ -92,11 +92,11 @@ for r=1:size(results,2)
     set(ax,'YTick',1:1:5)
     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
-    plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
-    legends{9}=sprintf('Is translation negative');
+%     plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
+%     legends{9}=sprintf('Is translation negative');
     
-    plots(10)=plot(X,data(:,11),'sg','MarkerSize',10); % is tr.b negative?
-    legends{10}=sprintf('Is scalar negative');
+%     plots(10)=plot(X,data(:,11),'sg','MarkerSize',10); % is tr.b negative?
+%     legends{10}=sprintf('Is scalar negative');
 
 %     plots(11)=addaxis(X,data(:,12),':sr'); 
 %     legends{11}=sprintf('Procrustes Dissimilarity Measure');
