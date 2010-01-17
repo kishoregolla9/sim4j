@@ -42,11 +42,10 @@ for r=1:size(results,2)
             mappedTriangle(i,:)=results(r).patchedMap(a).mappedPoints(anchors(a,i),:);
         end
         data(a,7)=min(anchorError);
-        [data(a,14),data(a,15)]=triangleArea(realTriangle);
-        [data(a,16),data(a,17)]=triangleArea(mappedTriangle);
+        [data(a,14),realEdges(a,:)]=triangleArea(realTriangle);
+        [data(a,16),mappedEdges(a,:)]=triangleArea(mappedTriangle);
         
         data(a,9)=deviationOfSlopes(mappedTriangle);
-
         
         data(a,6)=2*(det(T)<0); % if det(T)<0, then reflected
         data(a,10)=4*(tr.c(1,1)<0 | tr.c(1,2)<0);
@@ -102,9 +101,10 @@ for r=1:size(results,2)
     set(ax,'YTick',1:1:5)
     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
-    plots(9)=addaxis(X,data(:,15)./data(:,16),':vb'); % Triangle Edge
-    legends{9}=sprintf('Real:Mapped triangle max edge');
-    addaxislabel(6,'Triangle Edge Ratio');    
+%     plots(9)=addaxis(X,max(data(:,15))./max(data(:,16)),':vb'); % Triangle Edges
+%     legends{9}=sprintf('Real:Mapped triangle max edge');
+%     addaxislabel(6,'Triangle Edge Ratio');
+    plotVsError(results,r,'Min Triangle Edge - mapped',min(realEdges,2),folder);
     
 %     plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
 %     legends{9}=sprintf('Is translation negative');
