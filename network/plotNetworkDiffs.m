@@ -45,13 +45,13 @@ for j=1:numAnchorSets
     % Show a line from each real to each mapped point (red circles)
     for i=1:size(realPoints,1)
         pa=plot([realPoints(i,1),mappedPoints(i,1)],...
-            [realPoints(i,2),mappedPoints(i,2)],'-or','MarkerSize',3);
+            [realPoints(i,2),mappedPoints(i,2)],'-r','MarkerSize',3);
     end
     labels={'Difference'};
 
     % Overlay the real points with blue diamonds
     % to distinguish them from the mapped points
-    pb=plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
+    pb=plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',5);
     labels{end+1} = 'Real Points';  %#ok<AGROW>
 
     % Overlay the mapped points with cyan circles
@@ -76,9 +76,9 @@ for j=1:numAnchorSets
     
     % Show a circle of the radius around each anchor point
     % and Draw the Anchor Triangle
-    pf=plotAnchorTriangle(anchors,realPoints,r,'green');
+    pf=plotAnchorTriangle(anchors,realPoints,r,'green','-d');
     labels{end+1} = 'Anchor Node (real)';  %#ok<AGROW>
-    pg=plotAnchorTriangle(anchors,mappedPoints,r,'magenta');
+    pg=plotAnchorTriangle(anchors,mappedPoints,r,'magenta','-o');
     labels{end+1} = 'Anchor Node (mapped)';  %#ok<AGROW>
 
     % Draw a rectangle around the "real" area
@@ -101,9 +101,14 @@ for j=1:numAnchorSets
     textLeft=1.0;
     
     %% Error Stats
-    stats=sprintf('Max: %.3f\nMean: %.3f\nMin: %.3f',...
-        result.errorsPerAnchorSet(j).max,...
-        result.errorsPerAnchorSet(j).mean,...
+    stats=sprintf('Max:  x=%.3f y=%.3f (%.3f)\n',...
+        result.coordinateErrors(j,:).max,...
+        result.errorsPerAnchorSet(j).max);
+    stats=sprintf('%sMean: x=%.3f y=%.3f (%.3f)\n',stats,...
+        result.coordinateErrors(j,:).mean,...
+        result.errorsPerAnchorSet(j).mean);
+    stats=sprintf('%sMin:  x=%.3f y=%.3f (%.3f)\n',stats,...
+        result.coordinateErrors(j,:).min,...
         result.errorsPerAnchorSet(j).min);
     text(textLeft,0.7,stats,...
         'Units','normalized ','VerticalAlignment','Top');
@@ -192,11 +197,11 @@ end
 
 end
 
-function [h]=plotAnchorTriangle(anchors,points,r,color)
+function [h]=plotAnchorTriangle(anchors,points,r,color,lineStyle)
 for a=1:size(anchors,2)
     xa=points(anchors(:,a),1);
     ya=points(anchors(:,a),2);
-    h=plot(xa,ya,'-d',...
+    h=plot(xa,ya,lineStyle,...
         'MarkerEdgeColor','black',...
         'MarkerFaceColor',color,...
         'MarkerSize',5);
