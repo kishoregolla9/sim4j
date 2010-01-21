@@ -44,6 +44,8 @@ for r=1:size(results,2)
         data(a,7)=min(anchorError);
         [data(a,14),realEdges(a,:)]=triangleArea(realTriangle);
         [data(a,16),mappedEdges(a,:)]=triangleArea(mappedTriangle);
+        realHeight(a)=(2*data(a,14))/max(realEdges(a,:));
+        mappedHeight(a)=(2*data(a,14))/max(mappedEdges(a,:));
         
         data(a,9)=deviationOfSlopes(mappedTriangle);
         
@@ -83,9 +85,11 @@ for r=1:size(results,2)
     legends{5}=sprintf('Rotation Angle');
     addaxislabel(2,'Rotation Angle');
     
-    plots(6)=addaxis(X,data(:,14)./data(:,15),':^m'); % Triangle Area
+    [plots(6),ax]=addaxis(X,data(:,14)./data(:,16),':^m'); % Triangle Area
     legends{6}=sprintf('Real:Mapped triangle area');
     addaxislabel(3,'Triangle Area Ratio');
+    set(ax,'YTick',0:0.2:1);
+    set(ax,'YLim',[0 1]);
     
     plots(7)=addaxis(X,data(:,7),'-.vc'); % anchor node errors
     legends{7}=sprintf('Anchor Node Error');
@@ -101,10 +105,20 @@ for r=1:size(results,2)
     set(ax,'YTick',1:1:5)
     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
+    real=realHeight(:)./max(realEdges,[],2);
+    mapped=mappedHeight(:)./max(mappedEdges,[],2);
+%     plots(9)=addaxis(X,abs(real-mapped),'^r','MarkerSize',8);
+%     legends{9}=sprintf('Base/Height difference');
+%     addaxislabel(6,'Base/Height difference');
+    
+    plots(9)=addaxis(X,mappedHeight,'^r','MarkerSize',8);
+    legends{9}=sprintf('height');
+    addaxislabel(6,'height');
+   
 %     plots(9)=addaxis(X,max(data(:,15))./max(data(:,16)),':vb'); % Triangle Edges
 %     legends{9}=sprintf('Real:Mapped triangle max edge');
 %     addaxislabel(6,'Triangle Edge Ratio');
-    plotVsError(results,r,'Min Triangle Edge - mapped',min(realEdges,2),folder);
+%     plotVsError(results,r,'Min Triangle Edge - mapped',min(realEdges,2),folder);
     
 %     plots(9)=plot(X,data(:,10),'sc','MarkerSize',10); % is tr.c negative?
 %     legends{9}=sprintf('Is translation negative');
@@ -133,7 +147,7 @@ for r=1:size(results,2)
     saveFigure(folder,filename,h);
     
     hold off;
-    close(h);
+%     close(h);
 end
 
 end

@@ -114,13 +114,18 @@ for j=1:numAnchorSets
         'Units','normalized ','VerticalAlignment','Top');
 
     %% Triangle Stats
-    triangle=zeros(3,2);
+    realTriangle=zeros(3,2);
     for i=1:size(anchors,2)
-        triangle(i,:)=network.points(anchors(1,i),:);
+        realTriangle(i,:)=network.points(anchors(1,i),:);
+        mappedTriangle(i,:)=result.patchedMap(i).mappedPoints(anchors(1,i),:);
     end
-    [d,slopes]=deviationOfSlopes(triangle);
-    stats=sprintf('Area: %.2f\nSlopes: %.2f %.2f %.2f\nDevSlopes: %.2f',...
-        triangleArea(triangle),...
+    [d,slopes]=deviationOfSlopes(realTriangle);
+    [realArea,realEdges]=triangleArea(realTriangle);
+    [mapArea,mapEdges]=triangleArea(mappedTriangle);
+    realHeight=2*realArea/max(realEdges);
+    mapHeight=2*realArea/max(mapEdges);
+    stats=sprintf('Area: r%.2f m%.2f\nHeight:%.2f %.2f\nSlopes: %.2f %.2f %.2f\nDevSlopes: %.2f',...
+        realArea,mapArea,realHeight,mapHeight,...
         slopes,d);
     text(textLeft,0.6,'Triangle Stats',...
         'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
