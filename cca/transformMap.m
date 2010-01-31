@@ -1,5 +1,5 @@
 function [Z,tr,dissimilarity] = transformMap(realPoints, patchedPoints, anchorNodes, ...
-    operations,folder,label)
+    operations,doReflection, folder,label)
 % Transform the map using the procrustes algorithm
 % realPoints: the input points (only anchor nodes are used)
 % patchedPoints: the local map points, so far
@@ -25,7 +25,7 @@ X=realPoints(anchorNodes,:);
 Y=patchedPoints(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
-[dissimilarity, Z, tr] = procrustes(X, Y);
+[dissimilarity, Z, tr] = procrustes(X, Y,'reflection',doReflection);
 % [dissimilarity, Z, tr] = procrustes(X, Y,'reflection','false');
 
 % plotAnchorTransform(folder,label,X,Y,Z);

@@ -73,7 +73,7 @@ networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
 if (networkScale > 1)
-    radii=radii;
+    radii=radii*networkScale;
 end
        
 ranging=0; % range-free
@@ -141,7 +141,7 @@ for i=1 : numRadii
         radius=radii(i);
         fprintf(1,'Generating local maps for radius %.2f\n',radius);
         localMapStart=tic;
-        [localMaps]=localMapComputing(network,radius,ranging,folder);
+        [localMaps]=localMapComputing(network,radius,ranging,folder); %#ok<NASGU>saved to file below
         fprintf(1,'Done generating local maps for radius %.2f in %f sec\n',radius,toc(localMapStart));
         clear localMapStart;
         
@@ -151,8 +151,11 @@ for i=1 : numRadii
     end
 end
 
+clear results localMaps
+
 %% BuildAnchors
-anchorsfilename=sprintf('%s/anchors.mat',folder);
+anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
+    folder,numAnchorsPerSet,numAnchorSets);
 if (exist(anchorsfilename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',anchorsfilename);
     load(anchorsfilename);
@@ -191,35 +194,57 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         load(localMapsFilename);
         network=networks(i);
         allMaps(i,:)=localMaps;  %#ok<AGROW>
+
+        folderForce=sprintf('%s/forceReflection',folder);
+        folderForceNo=sprintf('%s/forceNoReflection',folder);
+        mkdir(folderForce);
+        mkdir(folderForceNo);
         
-        resultFilename=sprintf('%s/%sresult-%.1f.mat',folder,prefix,network.radius);
+        resultFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
+            folder,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
+        resultForceFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
+            folderForce,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
+        resultForceNoFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
+            folderForceNo,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
         if (exist(resultFilename,'file') == 2)
             fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
                 i,numRadii,network.radius,resultFilename);
             load(resultFilename);
+            load(resultForceFilename);
+            load(resultForceNoFilename);
         else
             disp('------------------------------------')
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
                 numRadii,network.radius);
             result=mapPatch(network,localMaps,startNodes,anchors,...
-                network.radius,patchNumber,folder,operations);
+                network.radius,patchNumber,folder,operations,'best');
+            resultForce=mapPatch(network,localMaps,startNodes,anchors,...
+                network.radius,patchNumber,folder,operations,true);
+            resultForceNo=mapPatch(network,localMaps,startNodes,anchors,...
+                network.radius,patchNumber,folder,operations,false);
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
+            save(resultForceFilename,'resultForce');
+            save(resultForceNoFilename,'resultForceNo');
         end
-        plotNetworkDiffs(result,anchors, folder,prefix);
-        
+        plotNetworkDiffs(result,anchors,folder,prefix);
+        plotNetworkDiffs(resultForce,anchors,folderForce,prefix);
+        plotNetworkDiffs(resultForceNo,anchors,folderForceNo,prefix);
+
         if ~exist('results','var')
             % preallocate
             results(size(numRadii,1))=result; %#ok<AGROW>
+            resultsForce(size(numRadii,1))=resultForce; %#ok<AGROW>
+            resultsForceNo(size(numRadii,1))=resultForceNo; %#ok<AGROW>
         end
         results(i)=result; %#ok<AGROW>
+        resultsForce(i)=resultForce; %#ok<AGROW>
     end
     resultsByOperation(operations)=results;%#ok<AGROW>
     %% PLOT RESULT
     resultFolder=sprintf('%s/%s',folder,prefix);
-    if exist('folder','var') == 0, mkdir(resultFolder); end
     plotResult(results,anchors,radii,resultFolder,allMaps);
-
+    
 end
 
 %% Plot Results By Transform
@@ -238,3 +263,4 @@ fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',.
 %plotNetworks(anchors, results, networks, folder);
 
 diary off;
+

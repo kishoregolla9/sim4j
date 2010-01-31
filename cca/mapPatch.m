@@ -2,7 +2,7 @@
 %     mapPatch(network,localMaps,startNodes,anchorSets)
 
 function [result]=mapPatch(network,localMaps,startNodes,anchorSets,...
-    radius,patchNumber,folder,operations)
+    radius,patchNumber,folder,operations,doReflection)
 
 %This function patches local maps into the global map for all the local maps
 %computed for each radius value stored in the localMaps.
@@ -80,7 +80,7 @@ for startNodeIndex=1:numStartNodes   % for each starting node
         anchorNodes=anchorSets(anchorSetIndex,:);
         label=sprintf('StartNode%i_AnchorSet%i',startNodeIndex,anchorSetIndex);
         [result,e,ae,ce]=calculateErrors(network, radius,localMaps(startNodeIndex),...
-            refineResult,operations,folder,label,...
+            refineResult,operations,doReflection,folder,label,...
             result,anchorSetIndex,anchorNodes);
         errors(anchorSetIndex,startNodeIndex)=e;
         anchorErrors(anchorSetIndex,startNodeIndex)=ae;
@@ -126,11 +126,11 @@ return
 end
 
 function [result,errors,anchorErrors,coordinatesError] = calculateErrors(network, radius,localMaps,...
-    refineResult,operations,folder,label,...
+    refineResult,operations,doReflection,folder,label,...
     result,anchorSetIndex,anchorNodes)
 
     [mappedResult,tr,dissimilarity]=transformMap(network.points, refineResult, ...
-        anchorNodes, operations,folder,label);
+        anchorNodes, operations,doReflection,folder,label);
     resultNode=compareMaps(network, localMaps, ...
         mappedResult, radius);
     
