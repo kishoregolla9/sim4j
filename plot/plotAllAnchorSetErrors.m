@@ -21,7 +21,7 @@ for r=1:size(results,2)
     end
     
     numAnchorSets=size(results(r).errors,1);
-    data=zeros(numAnchorSets,13);
+    data=zeros(numAnchorSets,16);
     realHeight=zeros(numAnchorSets,1);
     realEdges=zeros(numAnchorSets,3);
     mappedHeight=zeros(numAnchorSets,1);
@@ -64,14 +64,14 @@ for r=1:size(results,2)
         %     heightOverBase=realHeight(:)./max(realEdges,[],2);
         %     mapped=mappedHeight(:)./max(mappedEdges,[],2);
         
-        data(a,14)=realHeight(a);
+%         data(a,14)=realHeight(a);
     end
     
     data=sortrows(data, -3);
     
     ax1 = gca;
     set(ax1,'XScale','log');
-    legends=cell(7,1);
+    legends=cell(6,1);
     p=plot([data(:,2)/2,data(:,3)/2,data(:,4)/2,data(:,7)],'-o');
     
     plots(1)=p(1);
@@ -114,10 +114,10 @@ for r=1:size(results,2)
 %     set(ax,'YTick',1:1:5)
 %     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
-    [plots(7),ax]=addaxis(X,data(:,14),'--^r','MarkerSize',8);
-    legends{7}=sprintf('Std of edges');
-    addaxislabel(4,'Std of edges');
-    set(ax,'XGrid','on')
+%     [plots(7),ax]=addaxis(X,data(:,14),'--^r','MarkerSize',8);
+%     legends{7}=sprintf('Std of edges');
+%     addaxislabel(4,'Std of edges');
+%     set(ax,'XGrid','on')
     
 %      plots(7)=addaxis(X,mappedHeight,'^-g','MarkerSize',8);
 %      legends{7}=sprintf('height');
