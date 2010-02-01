@@ -77,7 +77,7 @@ if (networkScale > 1)
 end
        
 ranging=0; % range-free
-numAnchorsPerSet=3 %#ok<NOPTS>
+numAnchorsPerSet=4 %#ok<NOPTS>
 numAnchorSets=100 %#ok<NOPTS>
 numStartNodes=1 %#ok<NOPTS>
 
@@ -194,24 +194,13 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         load(localMapsFilename);
         network=networks(i);
         allMaps(i,:)=localMaps;  %#ok<AGROW>
-
-        folderForce=sprintf('%s/forceReflection',folder);
-        folderForceNo=sprintf('%s/forceNoReflection',folder);
-        mkdir(folderForce);
-        mkdir(folderForceNo);
         
         resultFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
             folder,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
-        resultForceFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
-            folderForce,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
-        resultForceNoFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
-            folderForceNo,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
         if (exist(resultFilename,'file') == 2)
             fprintf(1,'Map patch #%i of %i for Radius %.1f - Loading from %s\n',...
                 i,numRadii,network.radius,resultFilename);
             load(resultFilename);
-            load(resultForceFilename);
-            load(resultForceNoFilename);
         else
             disp('------------------------------------')
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
@@ -222,23 +211,33 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 network.radius,patchNumber,folder,operations,true);
             resultForceNo=mapPatch(network,localMaps,startNodes,anchors,...
                 network.radius,patchNumber,folder,operations,false);
+            
+            bestMean=max([result.errorsPerAnchorSet(:).mean]);
+            forceMean=max([resultForce.errorsPerAnchorSet(:).mean]);
+            forceNoMean=max([resultForceNo.errorsPerAnchorSet(:).mean]);
+            [m,I]=min([bestMean,forceMean,forceNoMean]);
+            switch(I)
+                case 1
+                    result.reflect='best';
+                case 2
+                    result=resultForce;
+                    result.reflect='true';
+                case 3
+                    result=resultForceNo;
+                    result.reflect='false';                    
+            end
+            clear resultForce resultForceNo;
+            
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
-            save(resultForceFilename,'resultForce');
-            save(resultForceNoFilename,'resultForceNo');
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
-        plotNetworkDiffs(resultForce,anchors,folderForce,prefix);
-        plotNetworkDiffs(resultForceNo,anchors,folderForceNo,prefix);
 
         if ~exist('results','var')
             % preallocate
             results(size(numRadii,1))=result; %#ok<AGROW>
-            resultsForce(size(numRadii,1))=resultForce; %#ok<AGROW>
-            resultsForceNo(size(numRadii,1))=resultForceNo; %#ok<AGROW>
         end
         results(i)=result; %#ok<AGROW>
-        resultsForce(i)=resultForce; %#ok<AGROW>
     end
     resultsByOperation(operations)=results;%#ok<AGROW>
     %% PLOT RESULT
