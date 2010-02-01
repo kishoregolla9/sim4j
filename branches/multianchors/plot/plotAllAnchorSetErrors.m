@@ -21,7 +21,11 @@ for r=1:size(results,2)
     end
     
     numAnchorSets=size(results(r).errors,1);
-    data=zeros(numAnchorSets,12);
+    data=zeros(numAnchorSets,13);
+    realHeight=zeros(numAnchorSets,1);
+    realEdges=zeros(numAnchorSets,3);
+    mappedHeight=zeros(numAnchorSets,1);
+    mappedEdges=zeros(numAnchorSets,3);
     for a=1:numAnchorSets
         data(a,1)=a;
         data(a,2)=results(r).errorsPerAnchorSet(a).max;
@@ -53,9 +57,14 @@ for r=1:size(results,2)
         data(a,10)=4*(tr.c(1,1)<0 | tr.c(1,2)<0);
         data(a,11)=3*(tr.b<0);
         
-        data(a,12)=results(r).dissimilarity;
+        data(a,12)=results(r).dissimilarity(a);
         
         data(a,13)=results(r).anchorErrors(a).mean;
+        
+        %     heightOverBase=realHeight(:)./max(realEdges,[],2);
+        %     mapped=mappedHeight(:)./max(mappedEdges,[],2);
+        
+        data(a,14)=realHeight(a);
     end
     
     data=sortrows(data, -3);
@@ -81,39 +90,38 @@ for r=1:size(results,2)
     set(plots(4),'visible','off');
     
     X=1:size(data,1);
-    plots(5)=addaxis(X,data(:,5),'-pm');
-    legends{5}=sprintf('Rotation Angle');
-    addaxislabel(2,'Rotation Angle');
+    plots(5)=addaxis(X,data(:,12),'-pm');
+    legends{5}=sprintf('Dissimiliarity');
+    addaxislabel(2,'Dissimiliarity');
     
-    [plots(6),ax]=addaxis(X,data(:,14)./data(:,16),':^m'); % Triangle Area
+    [plots(6),ax]=addaxis(X,data(:,14)./data(:,16),':^c'); % Triangle Area
     legends{6}=sprintf('Real:Mapped triangle area');
     addaxislabel(3,'Triangle Area Ratio');
     set(ax,'YTick',0:0.2:1);
     set(ax,'YLim',[0 1]);
     
-    plots(7)=addaxis(X,data(:,7),'-.vc'); % anchor node errors
-    legends{7}=sprintf('Anchor Node Error');
-    addaxislabel(4,'Anchor Node Error');
+%     plots(7)=addaxis(X,data(:,7),'-.vr'); % anchor node errors
+%     legends{7}=sprintf('Anchor Node Error');
+%     addaxislabel(4,'Anchor Node Error');
     
 %     plots(7)=addaxis(X,data(:,9),':sr'); % Slopes
 %     legends{7}=sprintf('Std of Slopes');
 %     addaxislabel(4,'Std of Slopes');
     
-    [plots(8),ax]=addaxis(X,data(:,6),[1,5],'*r','MarkerSize',10);
-    legends{8}=sprintf('Transformation Properties');
-    addaxislabel(5,'Transformation Properties');
-    set(ax,'YTick',1:1:5)
-    set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
+%     [plots(7),ax]=addaxis(X,data(:,6),[1,5],'*r','MarkerSize',10);
+%     legends{7}=sprintf('Transformation Properties');
+%     addaxislabel(4,'Transformation Properties');
+%     set(ax,'YTick',1:1:5)
+%     set(ax,'YTickLabel',{'','det(T)<1','tr.c<1','tr.b<1'})
 
-    real=realHeight(:)./max(realEdges,[],2);
-    mapped=mappedHeight(:)./max(mappedEdges,[],2);
-%     plots(9)=addaxis(X,abs(real-mapped),'^r','MarkerSize',8);
-%     legends{9}=sprintf('Base/Height difference');
-%     addaxislabel(6,'Base/Height difference');
+    [plots(7),ax]=addaxis(X,data(:,14),'--^r','MarkerSize',8);
+    legends{7}=sprintf('Std of edges');
+    addaxislabel(4,'Std of edges');
+    set(ax,'XGrid','on')
     
-    plots(9)=addaxis(X,mappedHeight,'^r','MarkerSize',8);
-    legends{9}=sprintf('height');
-    addaxislabel(6,'height');
+%      plots(7)=addaxis(X,mappedHeight,'^-g','MarkerSize',8);
+%      legends{7}=sprintf('height');
+%      addaxislabel(4,'height');
    
 %     plots(9)=addaxis(X,max(data(:,15))./max(data(:,16)),':vb'); % Triangle Edges
 %     legends{9}=sprintf('Real:Mapped triangle max edge');
@@ -136,11 +144,11 @@ for r=1:size(results,2)
     temp=sprintf('Best: %s',nBest);
     nWorst %#ok<NOPRT>
     title({plotTitle,temp});
-    temp=sprintf('Sorted by Mean Error\nWorst: %s',nWorst);
+    temp=sprintf('Sorted by Mean Error - %s\nWorst: %s',results(r).reflect,nWorst);
     xlabel(temp);
-    legendHandle=legend(plots,legends,'Location','NorthEast','FontSize',6);
+    legendHandle=legend(plots,legends,'Location','NorthWestOutside','FontSize',6);
     l=get(legendHandle,'Position');
-    set(legendHandle,'Position',[l(1)+.05,l(2),l(3),l(4)]);
+    set(legendHandle,'Position',[l(1)+.05,l(2)+0.05,l(3),l(4)]);
     
     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
         network.shape,results(r).radius);
