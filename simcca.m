@@ -24,10 +24,18 @@ if exist('folder','var') == 0
       folder=sourceFolder;
     end
 end
+
+numAnchorsPerSet=4 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
+anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
+    folder,numAnchorsPerSet,numAnchorSets);
+
 if networkScale > 1 && exist(folder,'dir') == 7
-    save('temp.mat','sourceFolder','networkScale');
+    save('temp.mat','sourceFolder','networkScale',...
+        'numAnchorsPerSet','numAnchorSets','anchorsfilename');
     clear variables
     load('temp.mat');
+    networkconstants;
     folder=sprintf('%s-scale%.0e',sourceFolder,networkScale);
     [a,b]=mkdir(folder); %#ok<NASGU>
     src=sprintf('%s/sourceNetwork.mat',sourceFolder);
@@ -72,13 +80,9 @@ maxRadius=minRadius+(radiusStep*(numRadii-1));
 networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
-if (networkScale > 1)
-    radii=radii*networkScale;
-end
-       
 ranging=0; % range-free
-numAnchorsPerSet=4 %#ok<NOPTS>
-numAnchorSets=100 %#ok<NOPTS>
+numAnchorsPerSet %#ok<NOPTS>
+numAnchorSets %#ok<NOPTS>
 numStartNodes=1 %#ok<NOPTS>
 
 filename=sprintf('%s/sourceNetwork.mat',folder);
@@ -116,13 +120,6 @@ end
 sourceNetwork.points=sourceNetwork.points.*networkScale;
 sourceNetwork.width=sourceNetwork.width*networkScale;
 sourceNetwork.height=sourceNetwork.height*networkScale;
-
-if (networkScale > 1)
-   sourceNetwork.points=sourceNetwork.points;
-   sourceNetwork.width=sourceNetwork.width;
-   sourceNetwork.height=sourceNetwork.height;
-end
-
 %% Build Networks
 netfilename=sprintf('%s/networks.mat',folder);
 if (exist(netfilename,'file') ~= 0)
@@ -154,8 +151,6 @@ end
 clear results localMaps
 
 %% BuildAnchors
-anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
-    folder,numAnchorsPerSet,numAnchorSets);
 if (exist(anchorsfilename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',anchorsfilename);
     load(anchorsfilename);

@@ -25,8 +25,27 @@ X=realPoints(anchorNodes,:);
 Y=patchedPoints(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
-[dissimilarity, Z, tr] = procrustes(X, Y,'reflection',doReflection);
-% [dissimilarity, Z, tr] = procrustes(X, Y,'reflection','false');
+[dissimilarity1, Z1, tr1] = procrustes(X, Y,'reflection','best');
+[dissimilarity2, Z2, tr2] = procrustes(X, Y,'reflection',true);
+[dissimilarity3, Z3, tr3] = procrustes(X, Y,'reflection',false);
+
+[m,i]=min([dissimilarity1, dissimilarity2, dissimilarity3]);
+switch i 
+    case 1
+        dissimilarity = dissimilarity1;
+        Z = Z1;
+        tr = tr1;
+    case 2
+        dissimilarity = dissimilarity2;
+        Z = Z2;
+        tr = tr2;        
+    case 3
+        dissimilarity = dissimilarity3;
+        Z = Z3;
+        tr = tr3;
+end
+
+clear dissimilarity1 dissimilarity2 Z1 Z2 tr1 tr2;
 
 % plotAnchorTransform(folder,label,X,Y,Z);
 
