@@ -16,8 +16,10 @@ for i=1 : numRadii
     end
     networks(i)=network; %#ok<AGROW>
     
-%     plotNetwork(network,zeros(0),folder,'');
-%     close all;
+    h=plotNetwork(network,zeros(0),folder,'');
+    filename=sprintf('network-%i',i);
+    saveFigure(folder,filename,h);
+    close all;
     
     clear network;
 end

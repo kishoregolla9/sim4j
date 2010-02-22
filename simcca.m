@@ -11,10 +11,12 @@ if exist('networkScale','var') == 0 || networkScale == 0
     networkScale=1.0; % do not scale by default
 end
 
-shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_RANDOM;
+shape=NET.SHAPE_RECTANGLE;
+placement=NET.NODE_GRID;
 networkEdge=10 %#ok<NOPTS>
-numNodes=100 %#ok<NOPTS>
+networkHeight=2*networkEdge/10;
+networkWidth=networkEdge*10;
+numNodes=200 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
 
 if exist('folder','var') == 0
@@ -25,7 +27,7 @@ if exist('folder','var') == 0
     end
 end
 
-numAnchorsPerSet=4 %#ok<NOPTS>
+numAnchorsPerSet=3 %#ok<NOPTS>
 numAnchorSets=100 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
@@ -90,28 +92,28 @@ if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading source network from %s\n',filename);
     load(filename);
 else
-    [sourceNetwork]=buildNetwork(shape,placement,networkEdge,networkEdge,numNodes);
+    [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
+   
     % 4 identical triangles, replacing real nodes 1-12
-    n=1;
-    root=[sourceNetwork.width/4,sourceNetwork.height/4];
-    transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
-    for i=1:4
-        base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
-        sourceNetwork.points(n,:)=[base(1)-1,base(2)];
-        sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
-        sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
-        n=n+3;
-    end
-    root=[sourceNetwork.width/8,sourceNetwork.height/8];
-    transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
-    for i=1:4
-        base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
-        sourceNetwork.points(n,:)=[base(1)-1,base(2)];
-        sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
-        sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
-        n=n+3;
-    end
-    
+%     n=1;
+%     root=[sourceNetwork.width/4,sourceNetwork.height/4];
+%     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
+%     for i=1:4
+%         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
+%         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
+%         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
+%         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+%         n=n+3;
+%     end
+%     root=[sourceNetwork.width/8,sourceNetwork.height/8];
+%     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
+%     for i=1:4
+%         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
+%         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
+%         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
+%         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+%         n=n+3;
+%     end
     save(filename, 'sourceNetwork','numNodes','placement','ranging','shape');
     clear radiusStep networkEdge;
     close(gcf);
