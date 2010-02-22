@@ -151,13 +151,13 @@ height=ceil(max(realPoints(:,2)));
 rectangle('Position',[0,0,width,height],'Curvature',[0,0],...
     'LineWidth',2,'LineStyle','--');
 
-minX=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
-minY=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
-maxX=ceil(max(max(realPoints(:,1),max(mappedPoints(:,1)))));
-maxY=ceil(max(max(realPoints(:,2),max(mappedPoints(:,2)))));
-minAll=min(minX,minY);
-maxAll=max(maxX,maxY);
-axis([minAll maxAll minAll maxAll]);
+% minX=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
+% minY=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
+% maxX=ceil(max(max(realPoints(:,1),max(mappedPoints(:,1)))));
+% maxY=ceil(max(max(realPoints(:,2),max(mappedPoints(:,2)))));
+% minAll=min(minX,minY);
+% maxAll=max(maxX,maxY);
+% axis([minAll maxAll minAll maxAll]);
 grid on
 
 legend([pa pb pc pd pe pf pg],labels,'Location','BestOutside');

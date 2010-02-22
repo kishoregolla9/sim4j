@@ -95,26 +95,29 @@ switch shape
                 network.shape=sprintf('Rectangle-Random-%ix%i',width,length);
                 network.points=zeros(N,2);
                 for j = 1:N
-                    new_points = rand(1,2);
-                    while (new_points(2) > width)
-                        new_points = rand(1,2);
-                    end
-                    network.points(j,:) = new_points*length;
+                    x=rand(1,1)*width;
+                    y=rand(1,1)*length;
+%                     new_points = rand(1,2);
+%                     while (new_points(2) > width)
+%                         new_points = rand(1,2);
+%                     end
+                    network.points(j,:) = [x,y];
                 end
+                network.numberOfNodes=N;
 
             case NET.NODE_GRID % Rectangle grid with 20% placement error
-                network.shape=sprintf('Rectangle-Grid(20\%error)-%ix%i',width,length);
-                deploy_width=width;
-                network.points=zeros(deploy_width,2);
-                for i=1:deploy_width
-                    a_fixed=1:N;
-                    delta =(rand(1,N)-0.5*ones(1,N))*0.4;
-                    a=a_fixed+delta;
-                    b_fixed =zeros(1,N);
-                    delta =(rand(1,N)-0.5*ones(1,N))*0.4;
-                    b=b_fixed+delta+i;
-                    network.points=[network; a' b'];
+                network.shape=sprintf('Rectangle-Grid(20error)-%ix%i',width,length);
+                network.points=zeros(N,2);
+                k=1;
+                for i=0:width-1
+                    for j=0:length-1
+                        x=i + (rand-0.5)*0.4;
+                        y=j; % + (rand-0.5)*0.4;
+                        network.points(k,:)=[x,y];
+                        k = k + 1;
+                    end
                 end
+                network.numberOfNodes=N;
         end
     case NET.SHAPE_L
         switch placement
