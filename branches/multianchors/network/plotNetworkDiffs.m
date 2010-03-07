@@ -18,12 +18,12 @@ data(:,2)=[result.errorsPerAnchorSet(:).mean];
 data=sortrows(data,2);
 
 % Plot a network diff diagram for 10best and 10worst anchor sets
-for j=1:10
+for j=1:20
     doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
         network,result,allAnchors,folder,prefix);
 end
 
-for j=numAnchorSets-9:numAnchorSets
+for j=numAnchorSets-39:numAnchorSets
     doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
         network,result,allAnchors,folder,prefix);
 end
