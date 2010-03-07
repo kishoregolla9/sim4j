@@ -19,16 +19,20 @@ networkWidth=networkEdge*10;
 numNodes=100 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
 
+if exist('name','var') == 0
+    name='';
+end
+
 if exist('folder','var') == 0
     if exist('sourceFolder','var') == 0
-      folder=sprintf('results/%i-%i-%i_%i_%i_%i-%s',fix(clock),shapeLabel);
+        folder=sprintf('results/%s%i-%i-%i_%i_%i_%i-%s',name,fix(clock),shapeLabel);
     else
-      folder=sourceFolder;
+        folder=sourceFolder;
     end
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=1000 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
@@ -72,7 +76,7 @@ sprintf('SIMCCA STARTED %i-%i-%i_%i_%i_%i-%s for network scale: %i',fix(clock),n
 
 simccaStart=tic;
 
-doOperations=true;
+doOperations=false;
 minRadius=2.5*networkScale;
 radiusStep=1.0*networkScale;
 numRadii=1;
@@ -93,27 +97,27 @@ if (exist(filename,'file') ~= 0)
     load(filename);
 else
     [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
-   
+    
     % 4 identical triangles, replacing real nodes 1-12
-%     n=1;
-%     root=[sourceNetwork.width/4,sourceNetwork.height/4];
-%     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
-%     for i=1:4
-%         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
-%         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
-%         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
-%         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
-%         n=n+3;
-%     end
-%     root=[sourceNetwork.width/8,sourceNetwork.height/8];
-%     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
-%     for i=1:4
-%         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
-%         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
-%         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
-%         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
-%         n=n+3;
-%     end
+    %     n=1;
+    %     root=[sourceNetwork.width/4,sourceNetwork.height/4];
+    %     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
+    %     for i=1:4
+    %         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
+    %         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
+    %         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
+    %         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+    %         n=n+3;
+    %     end
+    %     root=[sourceNetwork.width/8,sourceNetwork.height/8];
+    %     transforms=[[1,1];[-1,1];[1,-1];[-1,-1]];
+    %     for i=1:4
+    %         base=(root.*transforms(i,:)) + [sourceNetwork.width/2,sourceNetwork.height/2];
+    %         sourceNetwork.points(n,:)=[base(1)-1,base(2)];
+    %         sourceNetwork.points(n+1,:)=[base(1)+2,base(2)-1];
+    %         sourceNetwork.points(n+2,:)=[base(1)+1,base(2)+1];
+    %         n=n+3;
+    %     end
     save(filename, 'sourceNetwork','numNodes','placement','ranging','shape');
     clear radiusStep networkEdge;
     close(gcf);
@@ -185,7 +189,7 @@ end
 for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     prefix=getPrefix(operations);
     FILE_PREFIX=prefix;
-
+    
     for i=numRadii:-1:1
         localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
         load(localMapsFilename);
@@ -221,7 +225,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                     result.reflect='true';
                 case 3
                     result=resultForceNo;
-                    result.reflect='false';                    
+                    result.reflect='false';
             end
             clear resultForce resultForceNo;
             
@@ -229,7 +233,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             save(resultFilename,'result');
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
-
+        
         if ~exist('results','var')
             % preallocate
             results(size(numRadii,1))=result; %#ok<AGROW>

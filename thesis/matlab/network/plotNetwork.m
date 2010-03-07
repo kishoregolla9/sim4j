@@ -21,19 +21,6 @@ else
     end
     dataToPlot=[network.points(:,1) network.points(:,2) zData];
     gplot(network.connectivity, dataToPlot,'-sb');
-    hold all
-    xData=network.points(:,1);
-    yData=network.points(:,2);
-    
-    %     fprintf(1,'x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
-    plot3(xData,yData,zData);
-    %     ,'o',...
-    %         'MarkerEdgeColor','k',...
-    %         'MarkerFaceColor','g');%,...
-    %'MarkerSize',ms);
-    %     maximize(h);
-    %     hgsave(h,filename);
-    %     set(h,'visible','off');
 end
 
 hold all
