@@ -14,7 +14,7 @@ end
 shape=NET.SHAPE_RECTANGLE;
 placement=NET.NODE_GRID;
 networkEdge=10 %#ok<NOPTS>
-networkHeight=2*networkEdge/10;
+networkHeight=networkEdge/10;
 networkWidth=networkEdge*10;
 numNodes=200 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
@@ -72,7 +72,7 @@ sprintf('SIMCCA STARTED %i-%i-%i_%i_%i_%i-%s for network scale: %i',fix(clock),n
 
 simccaStart=tic;
 
-doOperations=false;
+doOperations=true;
 minRadius=2.5*networkScale;
 radiusStep=1.0*networkScale;
 numRadii=1;

@@ -148,6 +148,8 @@ labels{end+1} = 'Anchor Node (mapped)';
 % Draw a rectangle around the "real" area
 width=ceil(max(realPoints(:,1)));
 height=ceil(max(realPoints(:,2)));
+if (width == 0); width = 1; end
+if (height == 0); height = 1; end
 rectangle('Position',[0,0,width,height],'Curvature',[0,0],...
     'LineWidth',2,'LineStyle','--');
 
