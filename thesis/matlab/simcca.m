@@ -11,13 +11,13 @@ if exist('networkScale','var') == 0 || networkScale == 0
     networkScale=1.0; % do not scale by default
 end
 
-shape=NET.SHAPE_RECTANGLE;
+shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_GRID;
 networkEdge=10 %#ok<NOPTS>
-networkHeight=networkEdge/10;
-networkWidth=networkEdge*10;
+networkHeight=networkEdge;
+networkWidth=networkEdge;
 numNodes=100 %#ok<NOPTS>
-shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
+shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if exist('name','var') == 0
     name='';
