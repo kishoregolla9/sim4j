@@ -112,7 +112,7 @@ switch shape
                 for i=0:width-1
                     for j=0:length-1
                         x=i + (rand-0.5)*0.4;
-                        y=j; % + (rand-0.5)*0.4;
+                        y=j + (rand-0.5)*0.4;
                         network.points(k,:)=[x,y];
                         k = k + 1;
                     end

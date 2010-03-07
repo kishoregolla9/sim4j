@@ -94,11 +94,11 @@ for r=1:size(results,2)
     legends{5}=sprintf('Dissimiliarity');
     addaxislabel(2,'Dissimiliarity');
     
-    [plots(6),ax]=addaxis(X,data(:,14)./data(:,16),':^c'); % Triangle Area
-    legends{6}=sprintf('Real:Mapped triangle area');
-    addaxislabel(3,'Triangle Area Ratio');
-    set(ax,'YTick',0:0.2:1);
-    set(ax,'YLim',[0 1]);
+    [plots(6),ax]=addaxis(X,data(:,14),':^c'); % Triangle Area
+%     set(ax,'YLim',[0 0.2]);
+%     set(ax,'YTick',0:0.05:0.2);
+    legends{6}=sprintf('Triangle area');
+    addaxislabel(3,'Triangle area ');
     
 %     plots(7)=addaxis(X,data(:,7),'-.vr'); % anchor node errors
 %     legends{7}=sprintf('Anchor Node Error');

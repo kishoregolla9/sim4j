@@ -16,7 +16,7 @@ placement=NET.NODE_GRID;
 networkEdge=10 %#ok<NOPTS>
 networkHeight=networkEdge/10;
 networkWidth=networkEdge*10;
-numNodes=200 %#ok<NOPTS>
+numNodes=100 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkEdge,numNodes) %#ok<NOPTS>
 
 if exist('folder','var') == 0
@@ -28,7 +28,7 @@ if exist('folder','var') == 0
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=100 %#ok<NOPTS>
+numAnchorSets=1000 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
