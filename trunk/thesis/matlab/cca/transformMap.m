@@ -21,10 +21,14 @@ n=size(realPoints,1);
 %      T:  the orthogonal rotation and reflection component (2x2 matrix)
 %      b:  the scale component (a scalar)
 %   That is, Z = tr.b * Y * tr.T + tr.c.
+[M,mu,sigma]=zscore(patchedPoints);
+
 X=realPoints(anchorNodes,:);
-Y=patchedPoints(anchorNodes,1:2);
+X=(X-repmat(mu,size(X,1),1))./repmat(sigma,size(X,1),1);
+Y=M(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
+YComplete=(YComplete-repmat(mu,size(YComplete,1),1))./repmat(sigma,size(YComplete,1),1);
 [dissimilarity1, Z1, tr1] = procrustes(X, Y,'reflection','best');
 [dissimilarity2, Z2, tr2] = procrustes(X, Y,'reflection',true);
 [dissimilarity3, Z3, tr3] = procrustes(X, Y,'reflection',false);
@@ -45,7 +49,9 @@ switch i
         tr = tr3;
 end
 
-clear dissimilarity1 dissimilarity2 Z1 Z2 tr1 tr2;
+clear dissimilarity1 dissimilarity2 dissimilarity3 Z1 Z2 Z3 tr1 tr2 tr3;
+
+Z=Z.*repmat(sigma,size(Z,1),1) + repmat(mu,size(Z,1),1);
 
 % plotAnchorTransform(folder,label,X,Y,Z);
 
