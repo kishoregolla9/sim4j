@@ -54,7 +54,7 @@ for r=1:size(results,2)
         data(a,9)=deviationOfSlopes(mappedTriangle);
         
         data(a,6)=2*(det(T)<0); % if det(T)<0, then reflected
-        data(a,10)=4*(tr.c(1,1)<0 | tr.c(1,2)<0);
+%         data(a,10)=4*(tr.c(1,1)<0 | tr.c(1,2)<0);
         data(a,11)=3*(tr.b<0);
         
         data(a,12)=results(r).dissimilarity(a);

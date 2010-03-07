@@ -116,12 +116,12 @@ labels={'Difference'};
 % Overlay the real points with blue diamonds
 % to distinguish them from the mapped points
 pb=plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',5);
-labels{end+1} = 'Real Points';  
+labels{end+1} = 'Real Points';
 
 % Overlay the mapped points with cyan circles
 % to distinguish them from the mapped points
 pc=plot(mappedPoints(:,1),mappedPoints(:,2),'oc','MarkerSize',3);
-labels{end+1} = 'Mapped Points';  
+labels{end+1} = 'Mapped Points';
 
 % Show the worst (max error) points with stars
 differenceVector=patchedMaps(s).differenceVector;
@@ -130,20 +130,20 @@ for i=1:size(m,1)
     %p=pentagram(star),k=black
     pd=plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',12);
 end
-labels{end+1} = 'Max Error';  
+labels{end+1} = 'Max Error';
 m=getMinErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
 for i=1:size(m,1)
     %p=pentagram(star),g=green
     pe=plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',12);
 end
-labels{end+1} = 'Min Error';  
+labels{end+1} = 'Min Error';
 
 % Show a circle of the radius around each anchor point
 % and Draw the Anchor Triangle
 pf=plotAnchorTriangle(anchors,realPoints,r,'green','-d');
-labels{end+1} = 'Anchor Node (real)';  
+labels{end+1} = 'Anchor Node (real)';
 pg=plotAnchorTriangle(anchors,mappedPoints,r,'magenta','-o');
-labels{end+1} = 'Anchor Node (mapped)';  
+labels{end+1} = 'Anchor Node (mapped)';
 
 % Draw a rectangle around the "real" area
 width=ceil(max(realPoints(:,1)));
@@ -203,11 +203,16 @@ transform=result.transform(s);
 rot=(acos(transform.T(1,1)))*180/pi;
 ref=(acos(transform.T(1,1))/2)*180/pi;
 scalarString=sprintf('Scalar: %.2f ',transform.b);
-rotateString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f\ndissimiliariy=%.2f',...
-    transform.T(1,1),transform.T(1,2),...
-    transform.T(2,1),transform.T(2,2),...
-    det(transform.T),rot,ref,...
-    result.dissimilarity(s));
+if (size(transform,1) == 2)
+    rotateString=sprintf('Rotate/Reflect:\n[ %.4f %.4f ] \n[ %.4f %.4f ]\ndet=%.2f ref=%.2f rot=%.2f\ndissimiliariy=%.2f',...
+        transform.T(1,1),transform.T(1,2),...
+        transform.T(2,1),transform.T(2,2),...
+        det(transform.T),rot,ref,...
+        result.dissimilarity(s));
+else
+    rotateString=sprintf('Rotate/Reflect:\n[ %.4f ]\ndet=%.2f ref=%.2f rot=%.2f\ndissimiliariy=%.2f',...
+        transform.T(1,1),det(transform.T),rot,ref,result.dissimilarity(s));
+end
 translateString=sprintf(' %.2f ',transform.c(1,:));
 transformString=sprintf('%s\nTranslate:\n[%s]\n%s',scalarString,translateString,rotateString);
 text(textLeft,0.4,'Transform',...

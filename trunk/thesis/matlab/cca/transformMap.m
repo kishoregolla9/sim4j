@@ -21,45 +21,40 @@ n=size(realPoints,1);
 %      T:  the orthogonal rotation and reflection component (2x2 matrix)
 %      b:  the scale component (a scalar)
 %   That is, Z = tr.b * Y * tr.T + tr.c.
-[M,mu,sigma]=zscore(patchedPoints);
-
-X=realPoints(anchorNodes,:);
-X=(X-repmat(mu,size(X,1),1))./repmat(sigma,size(X,1),1);
-Y=M(anchorNodes,1:2);
 
 YComplete=patchedPoints(:,1:2);
-YComplete=(YComplete-repmat(mu,size(YComplete,1),1))./repmat(sigma,size(YComplete,1),1);
-[dissimilarity1, Z1, tr1] = procrustes(X, Y,'reflection','best');
-[dissimilarity2, Z2, tr2] = procrustes(X, Y,'reflection',true);
-[dissimilarity3, Z3, tr3] = procrustes(X, Y,'reflection',false);
+dissimilarity=zeros(2,1);
+tr(2)=struct('T',0,'b',0.0,'c',zeros(3,1));
+for dimension=1:2
+    X=realPoints(anchorNodes,dimension);
+    Y=patchedPoints(anchorNodes,dimension);
 
-[m,i]=min([dissimilarity1, dissimilarity2, dissimilarity3]);
-switch i 
-    case 1
-        dissimilarity = dissimilarity1;
-        Z = Z1;
-        tr = tr1;
-    case 2
-        dissimilarity = dissimilarity2;
-        Z = Z2;
-        tr = tr2;        
-    case 3
-        dissimilarity = dissimilarity3;
-        Z = Z3;
-        tr = tr3;
+    d=zeros(3,1);
+    transform(3)=struct('T',0,'b',0.0,'c',zeros(3,1));
+    [d(1), ~, transform(1)] = procrustes(X, Y,'reflection','best','scaling',true);
+    [d(2), ~, transform(2)] = procrustes(X, Y,'reflection',true,'scaling',true);
+    [d(3), ~, transform(3)] = procrustes(X, Y,'reflection',false,'scaling',true);
+    [d(4), ~, transform(4)] = procrustes(X, Y,'reflection','best','scaling',false);
+    [d(5), ~, transform(5)] = procrustes(X, Y,'reflection',true,'scaling',false);
+    [d(6), ~, transform(6)] = procrustes(X, Y,'reflection',false,'scaling',false);
+
+    [~,i]=min(d);
+    dissimilarity(dimension) = d(i);
+    tr(dimension) = transform(i);
+   
+    clear d transform;
+
 end
-
-clear dissimilarity1 dissimilarity2 dissimilarity3 Z1 Z2 Z3 tr1 tr2 tr3;
-
-Z=Z.*repmat(sigma,size(Z,1),1) + repmat(mu,size(Z,1),1);
 
 % plotAnchorTransform(folder,label,X,Y,Z);
 
-tr.c=repmat(tr.c(1,:),n,1); % expand tr.c for all points
+tr(1).c=repmat(tr(1).c(1,:),n,1); % expand tr.c for all points
+tr(2).c=repmat(tr(2).c(1,:),n,1); % expand tr.c for all points
 switch operations
     case 4
         % All operations
-        Z = tr.b * YComplete * tr.T + tr.c;
+        Z(:,1) = tr(1).b * YComplete(:,1) * tr(1).T + tr(1).c;
+        Z(:,2) = tr(2).b * YComplete(:,2) * tr(2).T + tr(2).c;
     case 3
         %NO TRANSLATION
         tr.c = ones(size(tr.c));

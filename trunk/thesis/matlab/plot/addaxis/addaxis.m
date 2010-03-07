@@ -43,7 +43,7 @@ function [hplts,h_ax] = addaxis(varargin)
   cah = gca;
   
 
-  if nargin>=3 & ~isstr(varargin{3}) 
+  if nargin>=3 && ~ischar(varargin{3}) 
     yl2 = varargin{3};
     indkeep = setdiff(1:nargin,3);
     [varargintemp{1:nargin-1}] = deal(varargin{indkeep});
@@ -105,6 +105,7 @@ function [hplts,h_ax] = addaxis(varargin)
 
   h_ax = axes('position',[xpos, cpos(2), cpos(3)*.015, cpos(4)]);
 %  plot in new axis to get the automatically generated ylimits
+
   hplt = plot(varargin{:});  
 
   if ~exist('yl2')

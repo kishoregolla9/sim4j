@@ -136,8 +136,8 @@ function [result,errors,anchorErrors,coordinatesError] = calculateErrors(network
     
     differenceVector=resultNode.differenceVector;
     result.patchedMap(anchorSetIndex)=resultNode;
-    result.dissimilarity(anchorSetIndex)=dissimilarity;
-    result.transform(anchorSetIndex)=tr;
+    result.dissimilarity(anchorSetIndex)=mean(dissimilarity);
+    result.transform(anchorSetIndex)=tr(1);
     % Remove the anchor node differences
     %         for i=1:size(anchorNodes,2)
     %             % Assumes anchorNodes are in order
