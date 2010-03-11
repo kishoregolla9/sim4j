@@ -92,7 +92,7 @@ mappedPoints=patchedMaps(s).mappedPoints;
 anchors=allAnchors(s,:);
 
 subplotTitle=sprintf('Anchor Set %i (Rank %i of %i)',s,j,size(allAnchors,1));
-title({subplotTitle,prefix});
+title({subplotTitle,prefix,result.reflect});
 hold all
 
 % Include connectivity in plots

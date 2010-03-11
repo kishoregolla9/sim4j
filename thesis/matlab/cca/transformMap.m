@@ -1,5 +1,5 @@
-function [Z,tr,dissimilarity] = transformMap(realPoints, patchedPoints, anchorNodes, ...
-    operations,doReflection, folder,label)
+function [Z,tr,dissimilarity,reflect] = transformMap(realPoints, patchedPoints, anchorNodes, ...
+    operations,folder,label)
 % Transform the map using the procrustes algorithm
 % realPoints: the input points (only anchor nodes are used)
 % patchedPoints: the local map points, so far
@@ -39,6 +39,20 @@ transform(3)=struct('T',0,'b',0.0,'c',zeros(3,1));
 [~,i]=min(d);
 dissimilarity = d(i);
 tr = transform(i);
+switch i
+    case 1
+        reflect='best with scaling';
+    case 2
+        reflect='forced reflection with scaling';
+    case 3
+        reflect='no reflection with scaling';
+    case 4
+        reflect='best with no scaling';
+    case 5
+        reflect='forced reflection with no scaling';
+    case 6
+        reflect='no reflection with no scaling';
+end
 
 clear d transform;
 

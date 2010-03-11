@@ -25,7 +25,7 @@ end
 
 if exist('folder','var') == 0
     if exist('sourceFolder','var') == 0
-        folder=sprintf('results/%s%i-%i-%i_%i_%i_%i-%s',name,fix(clock),shapeLabel);
+        folder=sprintf('../results/%s%i-%i-%i_%i_%i_%i-%s',name,fix(clock),shapeLabel);
     else
         folder=sourceFolder;
     end
@@ -207,27 +207,9 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             patchNumber=sprintf('Map patch #%i of %i for Radius %.1f',i,...
                 numRadii,network.radius);
             result=mapPatch(network,localMaps,startNodes,anchors,...
-                network.radius,patchNumber,folder,operations,'best');
-            resultForce=mapPatch(network,localMaps,startNodes,anchors,...
-                network.radius,patchNumber,folder,operations,true);
-            resultForceNo=mapPatch(network,localMaps,startNodes,anchors,...
-                network.radius,patchNumber,folder,operations,false);
+                network.radius,patchNumber,folder,operations);
             
             bestMean=max([result.errorsPerAnchorSet(:).mean]);
-            forceMean=max([resultForce.errorsPerAnchorSet(:).mean]);
-            forceNoMean=max([resultForceNo.errorsPerAnchorSet(:).mean]);
-            [m,I]=min([bestMean,forceMean,forceNoMean]);
-            switch(I)
-                case 1
-                    result.reflect='best';
-                case 2
-                    result=resultForce;
-                    result.reflect='true';
-                case 3
-                    result=resultForceNo;
-                    result.reflect='false';
-            end
-            clear resultForce resultForceNo;
             
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             save(resultFilename,'result');
