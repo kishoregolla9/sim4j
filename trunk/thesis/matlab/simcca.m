@@ -194,7 +194,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
         load(localMapsFilename);
         network=networks(i);
-        allMaps(i,:)=localMaps;  %#ok<AGROW>
+        allMaps(i,:)=localMaps;  
         
         resultFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
             folder,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
@@ -209,6 +209,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             result=mapPatch(network,localMaps,startNodes,anchors,...
                 network.radius,patchNumber,folder,operations);
             
+            result=addAnchorStats(result,anchors);
+            
             bestMean=max([result.errorsPerAnchorSet(:).mean]);
             
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
@@ -218,11 +220,11 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         
         if ~exist('results','var')
             % preallocate
-            results(size(numRadii,1))=result; %#ok<AGROW>
+            results(size(numRadii,1))=result; 
         end
-        results(i)=result; %#ok<AGROW>
+        results(i)=result; 
     end
-    resultsByOperation(operations)=results;%#ok<AGROW>
+    resultsByOperation(operations)=results;
     %% PLOT RESULT
     resultFolder=sprintf('%s/%s',folder,prefix);
     plotResult(results,anchors,radii,resultFolder,allMaps);
