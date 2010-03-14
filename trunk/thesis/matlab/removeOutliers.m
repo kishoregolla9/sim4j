@@ -1,4 +1,4 @@
-function [ y ] = removeOutliers( x )
+function [ y,outliers ] = removeOutliers( x )
 
 mu = mean(x);
 sigma = std(x);
@@ -13,8 +13,8 @@ SigmaMat = repmat(sigma,n,1);
 % the location of outliers
 outliers = abs(x - MeanMat) > 3*SigmaMat;
 
-y=x;
-y(find(outliers))=[]; % remove the outliers from x
+y=x;  
+y(outliers)=[]; % remove the outliers from x
 
 
 end
