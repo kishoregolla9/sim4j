@@ -8,9 +8,9 @@ maxRadius=radii(size(radii,2));
 h=figure('Name','The Results by Connectivity','visible','off');
 hold off
 
-sigma=zeros(size(results,2),2);
+sigma=zeros(size(results,2),1);
 for i=1:size(results,2)
-    sigma(i,:)=std(results(i).patchedMap(1).differenceVector);
+    sigma(i,:)=std(results(i).patchedMap(1).distanceVector);
 end
 
 % labels=cell(1, size(results,2));

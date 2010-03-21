@@ -12,11 +12,11 @@ for r=1:numResults
         subplot(numResults,numAnchorSets,p);
         p=p+1;
         hold all
-        diffVector=results(r).patchedMap(i).differenceVector;
-        standardDeviation=std(median(diffVector,2));
+        distanceVector=results(r).patchedMap(i).distanceVector;
+        standardDeviation=std(median(distanceVector,2));
         t=sprintf('Radius %.2f - Anchor Set %i\nStdDev=%.3f',results(r).radius,i,standardDeviation);
         title(t);
-        hist(diffVector);
+        hist(distanceVector);
     end
 end
 hold off

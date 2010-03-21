@@ -30,11 +30,11 @@ end
 
 end
 
-function [m]=getMaxErrorPoints(differenceVector,num)
+function [m]=getMaxErrorPoints(distanceVector,num)
 m=zeros(num,1);
 errors=zeros(num,1);
-for i=1:size(differenceVector,1)
-    thisError=sum(differenceVector(i,:));
+for i=1:size(distanceVector,1)
+    thisError=sum(distanceVector(i,:));
     [c,minIndex]=min(errors);
     if thisError > c
         m(minIndex)=i;
@@ -43,12 +43,12 @@ for i=1:size(differenceVector,1)
 end
 end
 
-function [m]=getMinErrorPoints(differenceVector,num)
+function [m]=getMinErrorPoints(distanceVector,num)
 m=ones(num,1);
 errors=ones(num,1);
 errors=errors.*1000000;
-for i=1:size(differenceVector,1)
-    thisError=sum(differenceVector(i,:));
+for i=1:size(distanceVector,1)
+    thisError=sum(distanceVector(i,:));
     [c,maxIndex]=max(errors);
     if thisError < c
         m(maxIndex)=i;
@@ -124,14 +124,14 @@ pc=plot(mappedPoints(:,1),mappedPoints(:,2),'oc','MarkerSize',3);
 labels{end+1} = 'Mapped Points';
 
 % Show the worst (max error) points with stars
-differenceVector=patchedMaps(s).differenceVector;
-m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
+distanceVector=patchedMaps(s).distanceVector;
+m=getMaxErrorPoints(distanceVector,NUM_MAX_TO_SHOW);
 for i=1:size(m,1)
     %p=pentagram(star),k=black
     pd=plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',12);
 end
 labels{end+1} = 'Max Error';
-m=getMinErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
+m=getMinErrorPoints(distanceVector,NUM_MAX_TO_SHOW);
 for i=1:size(m,1)
     %p=pentagram(star),g=green
     pe=plot(realPoints(m(i),1),realPoints(m(i),2),'pg','MarkerSize',12);

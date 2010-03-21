@@ -15,7 +15,7 @@ else
     hold off
     h=figure('Name',figurename,'visible','off');
     if (size(anchors,1) > 0)
-        zData=mean(result.patchedMap(anchorIndex).differenceVector,2);
+        zData=mean(result.patchedMap(anchorIndex).distanceVector);
     else
         zData=zeros(size(network.points(:,1),1));
     end
@@ -41,7 +41,7 @@ for s=1:size(anchors,1)
     for a=1:size(anchors,2)
         xData=network.points(anchors(s,a),1);
         yData=network.points(anchors(s,a),2);
-        zData=mean(result.patchedMap(anchorIndex).differenceVector(anchors(s,a)),2);
+        zData=mean(result.patchedMap(anchorIndex).distanceVector(anchors(s,a)),2);
         %         fprintf(1,'Anchors: x: %i %i y: %i %i z: %i %i\n',size(xData),size(yData),size(zData));
         plot3(xData,yData,zData,'^',...
             'MarkerEdgeColor','k',...

@@ -14,7 +14,7 @@ for a=1:numAnchorSets
     result.anchorStats.mappedTriangle=zeros(3,2);
     for i=1:size(anchors,2)
         result.anchorStats.anchorError(i)=...
-            max(result.patchedMap(a).differenceVector(anchors(a,i),:));
+            result.patchedMap(a).distanceVector(anchors(a,i),:);
         result.anchorStats.realTriangle(i,:)=result.network.points(anchors(a,i),:);
         result.anchorStats.mappedTriangle(i,:)=result.patchedMap(a).mappedPoints(anchors(a,i),:);
     end
@@ -31,7 +31,7 @@ for a=1:numAnchorSets
         max(result.anchorStats.mappedEdges(a,:));
     
     
-    removeOutliers(x);
+%     removeOutliers(x);
 end
 
 end
