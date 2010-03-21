@@ -21,7 +21,7 @@ for r=1:size(results,2)
     end
     
     numAnchorSets=size(results(r).errors,1);
-    data=zeros(numAnchorSets,16);
+    data=zeros(numAnchorSets,18);
     realHeight=zeros(numAnchorSets,1);
     realEdges=zeros(numAnchorSets,3);
     mappedHeight=zeros(numAnchorSets,1);
@@ -34,7 +34,6 @@ for r=1:size(results,2)
         tr=results(r).transform(a);
         T=tr.T;
         data(a,5)=acos(T(1,1)) * 180/pi;
-        
         % Anchor Error3
         anchorError=zeros(size(anchors,2),1);
         realTriangle=zeros(3,2);
@@ -71,6 +70,8 @@ for r=1:size(results,2)
         data(a,17)=results(r).ixy.errorsPerAnchorSet(a).min;
     end
     
+    data(:,18)=jackknife(@var,data(:,3));
+    
     data=sortrows(data, -3);
     
     ax1 = gca;
@@ -98,6 +99,10 @@ for r=1:size(results,2)
 %     set(ax,'YTick',0:0.05:0.2);
     legends{5}=sprintf('Triangle area');
     addaxislabel(3,'Triangle area ');
+    
+    plots(6)=addaxis(X,data(:,18),'-s');
+    legends{6}=sprintf('Jackknife');
+    addaxislabel(4,'Jackknife');
     
 %     plots(7)=addaxis(X,data(:,7),'-.vr'); % anchor node errors
 %     legends{7}=sprintf('Anchor Node Error');
