@@ -1,4 +1,8 @@
-function [ y,outliers ] = removeOutliers( x )
+function [ y,outliers ] = removeOutliers( x , factorOfStd )
+
+if ( nargin == 1)
+    factorOfStd = 3;
+end
 
 mu = mean(x);
 sigma = std(x);
@@ -11,7 +15,7 @@ MeanMat = repmat(mu,n,1);
 SigmaMat = repmat(sigma,n,1);
 % Create a matrix of zeros and ones, where ones indicate
 % the location of outliers
-outliers = abs(x - MeanMat) > 3*SigmaMat;
+outliers = abs(x - MeanMat) > factorOfStd*SigmaMat;
 
 y=x;  
 y(outliers)=[]; % remove the outliers from x
