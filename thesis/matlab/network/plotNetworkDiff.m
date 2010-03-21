@@ -32,8 +32,8 @@ for j=1:numAnchorSets
     plot(realPoints(:,1),realPoints(:,2),'db','MarkerSize',3);
     
     % Show the worst (max error) points with stars
-    differenceVector=result.patchedMap(j).differenceVector;
-    m=getMaxErrorPoints(differenceVector,NUM_MAX_TO_SHOW);
+    distanceVector=result.patchedMap(j).distanceVector;
+    m=getMaxErrorPoints(distanceVector,NUM_MAX_TO_SHOW);
     for i=1:size(m,1)
         %p=pentagram(star),k=black
         plot(realPoints(m(i),1),realPoints(m(i),2),'pk','MarkerSize',7);
@@ -88,11 +88,11 @@ foo=sprintf('%s.png',filename);
 print('-dpng',foo);
 end
 
-function [m]=getMaxErrorPoints(differenceVector,num)
+function [m]=getMaxErrorPoints(distanceVector,num)
 m=zeros(num,1);
 errors=zeros(num,1);
-for i=1:size(differenceVector,1)
-    thisError=sum(differenceVector(i,:));
+for i=1:size(distanceVector,1)
+    thisError=sum(distanceVector(i,:));
     [c,minIndex]=min(errors);
     if thisError > c
         m(minIndex)=i;
@@ -109,9 +109,9 @@ function []=plotHopsToNearestAnchorVsError(network,result,allAnchors,r)
             network.points,...
             network.shortestHopMatrix);
         
-        diffVector=result.patchedMap(j).differenceVector;
+        distanceVector=result.patchedMap(j).distanceVector;
         l=sprintf('Anchor Set %i',j);
-        subPlotHopCountVsError( result, r, diffVector, minHopCount, l );
+        subPlotHopCountVsError( result, r, distanceVector, minHopCount, l );
     end
     grid on;
     labels=cell(numAnchorSets,1);

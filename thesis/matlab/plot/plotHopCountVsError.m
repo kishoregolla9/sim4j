@@ -20,11 +20,11 @@ for i=1:numAnchorSets
         network.points,...
         network.shortestHopMatrix);
     
-    diffVector=results.patchedMap(i).differenceVector;
+    distanceVector=results.patchedMap(i).distanceVector;
     radius=results.radius;
     
     subPlotHopCountVsError( results, radius, ...
-        diffVector, minHopCount )
+        distanceVector, minHopCount )
     
     maximize(gcf);
     

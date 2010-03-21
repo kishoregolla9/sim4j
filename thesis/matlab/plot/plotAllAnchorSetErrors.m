@@ -41,7 +41,7 @@ for r=1:size(results,2)
         mappedTriangle=zeros(3,2);
         for i=1:size(anchors,2)
             anchorError(i)=...
-                max(results(r).patchedMap(a).differenceVector(anchors(a,i),:));
+                results(r).patchedMap(a).distanceVector(anchors(a,i),:);
             realTriangle(i,:)=results(r).network.points(anchors(a,i),:);
             mappedTriangle(i,:)=results(r).patchedMap(a).mappedPoints(anchors(a,i),:);
         end
@@ -79,10 +79,10 @@ for r=1:size(results,2)
     p=plot([data(:,2),data(:,3),data(:,7)],'-o');
     
     plots(1)=p(1);
-    legends{1}=sprintf('Max (Sum XY)');
+    legends{1}=sprintf('Max (Euclidean)');
     
     plots(2)=p(2);
-    legends{2}=sprintf('Mean (Sum XY)');
+    legends{2}=sprintf('Mean (Euclidean)');
    
     plots(3)=p(3);    
     set(plots(3),'LineStyle','-.','Marker','v');

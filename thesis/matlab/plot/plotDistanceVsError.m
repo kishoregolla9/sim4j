@@ -31,7 +31,7 @@ for i=1:numAnchorSets
     
     labels=cell(4, size(results,2));
     for r=1:size(results,2)
-        errors=sum(results(r).patchedMap(i).differenceVector,2)/results(r).radius;
+        errors=results(r).patchedMap(i).distanceVector/results(r).radius;
         dataToPlot=sortrows([meanDistanceToAnchors,errors]);
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
