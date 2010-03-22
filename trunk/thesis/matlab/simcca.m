@@ -230,6 +230,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     plotResult(results,anchors,radii,resultFolder,allMaps);
     plotRegressions(results,anchors,radii,resultFolder);
     plotJackknife(results,anchors,radii,resultFolder);
+    
 end
 
 %% Plot Results By Transform
