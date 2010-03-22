@@ -23,13 +23,11 @@ end
 
 function doPlotJackknife(x,xLabel,factorOfStd)
 a=1:size(x,2);
-% [x,outliers]=removeOutliers(x,factorOfStd);
+[x,outliers]=removeOutliers(x,factorOfStd);
 y=jackknife(@var,x);
-% a(outliers)=[];
+a(outliers)=[];
 
 data=sortrows([a;x;y']',-2);
-
-% plot(data(:,2),'--s');
 
 [ax,h1,h2]=plotyy(1:size(x,2),data(:,2),1:size(x,2),data(:,3));
 set(h1,'LineStyle','--','Marker','*')
@@ -42,6 +40,3 @@ set(get(ax(2),'Ylabel'),'String','Jackknife');
 t=sprintf('Jackknife removing outliers greater than %i std',factorOfStd);
 title(t);
 end
-
-
-
