@@ -1,35 +1,27 @@
-function plotHistograms( results,anchors,folder )
+function [h] = plotHistograms(results,anchors,radii,folder)
 
-network=results(1).network;
-numAnchorSets=size(anchors,1);
-numResults=size(results,2);
+network=results.network;
 
-figure('Name','Histograms','visible','off');
-p=1;
-for r=1:numResults
-    for i=1:numAnchorSets
-        hold off
-        subplot(numResults,numAnchorSets,p);
-        p=p+1;
-        hold all
-        distanceVector=results(r).patchedMap(i).distanceVector;
-        standardDeviation=std(median(distanceVector,2));
-        t=sprintf('Radius %.2f - Anchor Set %i\nStdDev=%.3f',results(r).radius,i,standardDeviation);
-        title(t);
-        hist(distanceVector);
-    end
+for r=1:size(results,2)
+    result=results(r);
+    figureName=sprintf('The Histogram of Results for Radius %.1f',...
+        result.radius);
+    h=figure('Name',figureName,'visible','off');
+    hold off
+    
+    hold all;
+    [n,xout] = hist(removeOutliers([result.errors.max]),25);
+    bar(xout,n,'b','LineWidth',1);
+    [n,xout] = hist(removeOutliers([result.errors.mean]),25);
+    bar(xout,n,'c','LineWidth',1);
+    legend({'Max Error','Mean Error'});
+    hold off;
+    
+    filename=sprintf('Histogram-%s-Radius%.1f',...
+        network.shape,result.radius);
+    saveFigure(folder,filename,h);
+    
 end
-hold off
-
-maximize(gcf);
-
-filename=sprintf('%s/Histogram-%s.eps',...
-    folder,network.shape);
-print('-depsc',filename);
-filename=sprintf('%s/Histogram-%s.png',...
-    folder,network.shape);
-print('-dpng',filename);
-
-hold off
 
 end
+
