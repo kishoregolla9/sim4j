@@ -32,7 +32,7 @@ if exist('folder','var') == 0
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=100 %#ok<NOPTS>
+numAnchorSets=1000 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
@@ -230,7 +230,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     plotResult(results,anchors,radii,resultFolder,allMaps);
     plotRegressions(results,anchors,radii,resultFolder);
     plotJackknife(results,anchors,radii,resultFolder);
-    
+    plotHistograms(results,anchors,radii,resultFolder);
+    plotCdf(results,anchors,radii,resultFolder);
 end
 
 %% Plot Results By Transform
