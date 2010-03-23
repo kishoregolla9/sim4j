@@ -76,7 +76,7 @@ for r=1:size(results,2)
     
     ax1 = gca;
     set(ax1,'XScale','log');
-    legends=cell(5,1);
+    legends=cell(4,1);
     p=plot([data(:,2),data(:,3),data(:,7)],'-o');
     
     plots(1)=p(1);
@@ -88,21 +88,22 @@ for r=1:size(results,2)
     plots(3)=p(3);    
     set(plots(3),'LineStyle','-.','Marker','v');
     legends{3}=sprintf('Anchor Error');
-    
+
     X=1:size(data,1);
-    plots(4)=addaxis(X,data(:,12),'-pm');
-    legends{4}=sprintf('Dissimiliarity');
-    addaxislabel(2,'Dissimiliarity');
-    
-    [plots(5),ax]=addaxis(X,data(:,14),':^c'); % Triangle Area
+    [plots(4),ax]=addaxis(X,data(:,14),':^c'); % Triangle Area
 %     set(ax,'YLim',[0 0.2]);
 %     set(ax,'YTick',0:0.05:0.2);
-    legends{5}=sprintf('Triangle area');
-    addaxislabel(3,'Triangle area ');
+    legends{4}=sprintf('Triangle area');
+    addaxislabel(2,'Triangle area ');
     
-    plots(6)=addaxis(X,data(:,18),'-s');
-    legends{6}=sprintf('Jackknife');
-    addaxislabel(4,'Jackknife');
+%     plots(5)=addaxis(X,data(:,12),'-pm');
+%     legends{5}=sprintf('Dissimiliarity');
+%     addaxislabel(3,'Dissimiliarity');
+    
+   
+%     plots(6)=addaxis(X,data(:,18),'-s');
+%     legends{6}=sprintf('Jackknife');
+%     addaxislabel(4,'Jackknife');
     
 %     plots(7)=addaxis(X,data(:,7),'-.vr'); % anchor node errors
 %     legends{7}=sprintf('Anchor Node Error');
