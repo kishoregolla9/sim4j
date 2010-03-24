@@ -25,9 +25,6 @@ function doPlotJackknife(x,xLabel,factorOfStd)
 a=1:size(x,2);
 [x,outliers]=removeOutliers(x,factorOfStd);
  
-Y=cdf('norm',[result.errors.mean]);
-    find(Y<0.95);
-
 y=jackknife(@var,x);
 a(outliers)=[];
 
