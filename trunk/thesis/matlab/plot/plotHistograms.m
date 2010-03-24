@@ -10,11 +10,17 @@ for r=1:size(results,2)
     hold off
     
     hold all;
-    [n,xout] = hist(removeOutliers([result.errors.max]),25);
+    grid on;
+    x=removeOutliers([result.errors.max]);
+    [n,xout] = hist(x,sqrt(length(x)));
     bar(xout,n,'b','LineWidth',1);
-    [n,xout] = hist(removeOutliers([result.errors.mean]),25);
+    x=removeOutliers([result.errors.mean]);
+    [n,xout] = hist(x,sqrt(length(x)));
     bar(xout,n,'c','LineWidth',1);
-    legend({'Max Error','Mean Error'});
+    x=removeOutliers([result.errors.min]);
+    [n,xout] = hist(x,sqrt(length(x)));
+    bar(xout,n,'r','LineStyle','none');    
+    legend({'Max Error','Mean Error','Min Error'});
     hold off;
     
     filename=sprintf('Histogram-%s-Radius%.1f',...
