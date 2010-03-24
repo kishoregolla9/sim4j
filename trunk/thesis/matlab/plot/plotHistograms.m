@@ -11,25 +11,32 @@ for r=1:size(results,2)
     
     hold all;
     grid on;
-    [x,outliers]=removeOutliers([result.errors.max]);
-    [n,xout] = hist(x,sqrt(length(x)));
-    bar(xout,n,'b','LineWidth',1);
+%     [x,outliers]=removeOutliers([result.errors.max]);
+%     [n,xout] = hist(x,sqrt(length(x)));
+%     bar(xout,n,'b','LineWidth',1);
     
-    x=[result.errors.mean];
-    x(outliers)=[];
+%     x=[result.errors.mean];
+%     x(outliers)=[];
+    [x,outliers]=removeOutliers([result.errors.mean]);
     [n,xout] = hist(x,sqrt(length(x)));
     
-    threshold=0.2;
-    pLess=sum(n(xout<threshold))/sum(n);
+    threshold=[0.25 0.5 1 2];
+    pLess=zeros(length(threshold),1);
+    for i=1:length(threshold)
+        pLess(i)=sum(n(xout<threshold(i)))/sum(n);
+    end
     
     bar(xout,n,'c','LineWidth',1);
     x=[result.errors.min];
     x(outliers)=[];
     [n,xout] = hist(x,sqrt(length(x)));
     bar(xout,n,'r','LineStyle','none');    
-    legend({'Max Error','Mean Error','Min Error'});
-    t=sprintf('Probability of Mean Error less than %0.2f is %0.3f%c',...
-        threshold,pLess*100,'%');
+    legend({'Mean Error','Min Error'});
+    t='';
+    for i=1:length(threshold)
+        t=sprintf('%sProbability of Mean Error less than %0.2f is %0.3f%c\n',...
+        t,threshold(i),pLess(i)*100,'%');
+    end
     title(t);
     hold off;
     
