@@ -12,7 +12,7 @@ if exist('networkScale','var') == 0 || networkScale == 0
 end
 
 shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_GRID;
+placement=NET.NODE_RANDOM;
 networkEdge=10 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
