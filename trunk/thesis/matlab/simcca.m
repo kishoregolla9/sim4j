@@ -32,7 +32,7 @@ if exist('folder','var') == 0
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=1000 %#ok<NOPTS>
+numAnchorSets=2000 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
