@@ -32,7 +32,7 @@ if exist('folder','var') == 0
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=2000 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
@@ -194,7 +194,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         localMapsFilename=sprintf('%s/localMaps/localMaps-%i.mat',folder,i);
         load(localMapsFilename);
         network=networks(i);
-        allMaps(i,:)=localMaps;  
+        allMaps(i,:)=localMaps;  %#ok
         
         resultFilename=sprintf('%s/%sresult-r%.1f-%iper%isets.mat',...
             folder,prefix,network.radius,numAnchorsPerSet,numAnchorSets);
@@ -214,17 +214,45 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             bestMean=max([result.errorsPerAnchorSet(:).mean]);
             
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
-            save(resultFilename,'result');
+            
+            allStartsFolder=sprintf('%s/allStarts/',folder);
+            if (exist(allStartsFolder,'dir') == 0)
+                mkdir(allStartsFolder); 
+            end
+            x=[result.errors.mean];
+            for z=5:-1:1
+                f=sprintf('%s/index%i',allStartsFolder,z);
+                if (exist(f,'dir') == 0); mkdir(f); end;
+                [minValue,minIndex]=min(x);
+                allStarts(z)=mapPatch(network,localMaps,1:length(network.points),...
+                    anchors(minIndex,:),network.radius,patchNumber,f,operations);%#ok
+                x(minIndex)=10000000;
+            end
+            hold all
+            for z=1:5
+                plot(sort([allStarts(z).errorsPerStart.mean]))
+            end
+            hold off
+            
+            [maxValue,maxIndex]=max([result.errors.mean]);
+            worstFolder=sprintf('%s/worst',folder);
+            mkdir(worstFolder);
+            worst=mapPatch(network,localMaps,1:length(network.points),...
+                anchors(maxIndex,:),network.radius,patchNumber,worstFolder,operations);
+            
+            save(resultFilename,'result','allStarts');
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
         
         if ~exist('results','var')
             % preallocate
-            results(size(numRadii,1))=result; 
+            results(size(numRadii,1))=result; %#ok
         end
-        results(i)=result; 
+        results(i)=result; %#ok
+        
+
     end
-    resultsByOperation(operations)=results;
+    resultsByOperation(operations)=results;%#ok
     %% PLOT RESULT
     resultFolder=sprintf('%s/%s',folder,prefix);
     plotResult(results,anchors,radii,resultFolder,allMaps);
@@ -234,7 +262,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     plotCdf(results,anchors,radii,resultFolder);
 end
 
-%% Plot Results By Transform
+%% Plot Results By Transform Operation
 if doOperations == true
     filename=sprintf('ErrorByTransform-%s-Radius%.1f-to-%.1f',...
         network.shape,minRadius,maxRadius);

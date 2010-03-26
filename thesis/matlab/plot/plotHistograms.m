@@ -18,14 +18,24 @@ for r=1:size(results,2)
     
     %     x=[result.errors.mean];
     %     x(outliers)=[];
-    x=removeOutliers([result.errors.mean]);
+%     x=removeOutliers([result.errors.mean]);
+    x=[result.errors.mean];
     %         nbins=sqrt(length(x))
     %     nbins=2*nthroot(3,1/3)*nthroot(pi,1/6)*std(x),nthroot(length(x),-1/3)
     nbins=optBINS(x,10,length(x));
     
     [n,xout] = hist(x,nbins);
-    bar(xout,n,'c','LineWidth',1);
+    bh=bar(xout,n,'c','LineWidth',1);
     xlabel(sprintf('%i bins',nbins));
+    lab=num2cell(n);
+    xd=get(bh,'children');
+    xd=get(xd,'xdata');
+    xd=cat(2,xd);
+    xdd=diff(xd);
+    xd=sort(xd(1,:)+.5*xdd(2,1));
+    yl=get(gca,'ylim');
+    set(gca,'ylim',[yl(1),yl(2)+3]);
+    text(xd,repmat(11,1,numel(xd)),lab.','horizontalalignment','center');
     
     threshold=[0.25 0.5 1 2];
     pLess=zeros(length(threshold),1);
@@ -90,7 +100,7 @@ for M = minM:maxM
     part2 = - M*gammaln(1/2) + sum(gammaln(n+0.5));
     logp(M) = part1 + part2;
 end
-[~, optM] = max(logp);
+[ignore, optM] = max(logp);
 end
 
 
