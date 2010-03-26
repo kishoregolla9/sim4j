@@ -32,14 +32,14 @@ for dimension=1:2
 
     d=zeros(3,1);
     transform(3)=struct('T',0,'b',0.0,'c',zeros(3,1));
-    [d(1), ~, transform(1)] = procrustes(X, Y,'reflection','best','scaling',true);
-    [d(2), ~, transform(2)] = procrustes(X, Y,'reflection',true,'scaling',true);
-    [d(3), ~, transform(3)] = procrustes(X, Y,'reflection',false,'scaling',true);
-    [d(4), ~, transform(4)] = procrustes(X, Y,'reflection','best','scaling',false);
-    [d(5), ~, transform(5)] = procrustes(X, Y,'reflection',true,'scaling',false);
-    [d(6), ~, transform(6)] = procrustes(X, Y,'reflection',false,'scaling',false);
+    [d(1), a, transform(1)] = procrustes(X, Y,'reflection','best','scaling',true);
+    [d(2), a, transform(2)] = procrustes(X, Y,'reflection',true,'scaling',true);
+    [d(3), a, transform(3)] = procrustes(X, Y,'reflection',false,'scaling',true);
+    [d(4), a, transform(4)] = procrustes(X, Y,'reflection','best','scaling',false);
+    [d(5), a, transform(5)] = procrustes(X, Y,'reflection',true,'scaling',false);
+    [d(6), a, transform(6)] = procrustes(X, Y,'reflection',false,'scaling',false);
 
-    [~,i]=min(d);
+    [a,i]=min(d);
     dissimilarity(dimension) = d(i);
     tr(dimension) = transform(i);
 
