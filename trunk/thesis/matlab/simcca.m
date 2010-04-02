@@ -220,9 +220,9 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 mkdir(allStartsFolder); 
             end
             x=[result.errors.mean];
-            legends=cell(10,1);
+            legends=cell(6,1);
             allStartNodes=1:length(network.points);
-            for z=1:5
+            for z=1:3
                 if (exist(f,'dir') == 0); mkdir(f); end;
                 [minValue,minIndex]=min(x);
                 f=sprintf('%s/rank%i-anchorSet%i',allStartsFolder,z,minIndex);
@@ -234,8 +234,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 legends{z}=sprintf('Rank %i - Anchor Set %i',z,minIndex);
             end
             x=[result.errors.mean];
-            l=10;
-            for z=length(x):-1:length(x)-4
+            l=6;
+            for z=length(x):-1:length(x)-3
                 if (exist(f,'dir') == 0); mkdir(f); end;
                 [maxValue,maxIndex]=max(x);
                 f=sprintf('%s/rank%i-anchorSet%i',z,allStartsFolder,maxIndex);
@@ -249,15 +249,14 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             end            
             h=figure('Name','AllStartNodes','visible','off');
             hold all
-            for z=1:10
+            for z=1:6
                 plot(sort([allStarts(z).errorsPerStart.mean]),'-o')
             end
             legend(legends);
             grid on
             saveFigure(allStartsFolder,'AllStarts',h);
             hold off
-            
-         
+        
             save(resultFilename,'result','allStarts');
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
