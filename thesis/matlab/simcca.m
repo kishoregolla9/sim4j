@@ -234,8 +234,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 legends{z}=sprintf('Rank %i - Anchor Set %i',z,minIndex);
             end
             x=[result.errors.mean];
-            l=6;
-            for z=length(x)-5:length(x)
+            l=10;
+            for z=length(x):-1:length(x)-4
                 if (exist(f,'dir') == 0); mkdir(f); end;
                 [maxValue,maxIndex]=max(x);
                 f=sprintf('%s/rank%i-anchorSet%i',z,allStartsFolder,maxIndex);
@@ -245,7 +245,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                     network.radius,patchNumber,f,operations);%#ok
                 x(maxIndex)=-1;
                 legends{l}=sprintf('Rank %i - Anchor Set %i',z,maxIndex);
-                l = l + 1;
+                l = l - 1;
             end            
             h=figure('Name','AllStartNodes','visible','off');
             hold all
