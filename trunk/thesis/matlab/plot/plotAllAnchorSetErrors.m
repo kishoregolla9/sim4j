@@ -65,9 +65,9 @@ for r=1:size(results,2)
         
         %         data(a,14)=realHeight(a);
         
-        data(a,15)=results(r).ixy.errorsPerAnchorSet(a).max;
-        data(a,16)=results(r).ixy.errorsPerAnchorSet(a).mean;
-        data(a,17)=results(r).ixy.errorsPerAnchorSet(a).min;
+%         data(a,15)=results(r).ixy.errorsPerAnchorSet(a).max;
+%         data(a,16)=results(r).ixy.errorsPerAnchorSet(a).mean;
+%         data(a,17)=results(r).ixy.errorsPerAnchorSet(a).min;
     end
     
     data(:,18)=jackknife(@var,data(:,3));

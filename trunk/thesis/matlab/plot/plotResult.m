@@ -8,7 +8,7 @@ end
 plotAllAnchorSetErrors(results,anchors,folder);
 close all
 hold off
-plotIndependentXY(results,anchors,folder);
+% plotIndependentXY(results,anchors,folder);
 close all
 hold off
 plotSingleStartNode(results,folder);
