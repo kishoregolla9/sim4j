@@ -220,22 +220,36 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 mkdir(allStartsFolder); 
             end
             x=[result.errors.mean];
-            legends=cell(5,1);
+            legends=cell(10,1);
             allStartNodes=1:length(network.points);
-            for z=5:-1:1
+            for z=1:5
                 if (exist(f,'dir') == 0); mkdir(f); end;
                 [minValue,minIndex]=min(x);
-                f=sprintf('%s/anchorSet%i',allStartsFolder,minIndex);
+                f=sprintf('%s/rank%i-anchorSet%i',allStartsFolder,z,minIndex);
                 allStarts(z)=mapPatch(network,localMaps,...
                     allStartNodes,...%start nodes
                     anchors(minIndex,:),...%anchor sets
                     network.radius,patchNumber,f,operations);%#ok
                 x(minIndex)=10000000;
-                legends{z}=sprintf('Anchor Set %i',minIndex);
+                legends{z}=sprintf('Rank %i - Anchor Set %i',z,minIndex);
             end
+            x=[result.errors.mean];
+            l=6;
+            for z=length(x)-5:length(x)
+                if (exist(f,'dir') == 0); mkdir(f); end;
+                [maxValue,maxIndex]=max(x);
+                f=sprintf('%s/rank%i-anchorSet%i',z,allStartsFolder,maxIndex);
+                allStarts(l)=mapPatch(network,localMaps,...
+                    allStartNodes,...%start nodes
+                    anchors(maxIndex,:),...%anchor sets
+                    network.radius,patchNumber,f,operations);%#ok
+                x(maxIndex)=-1;
+                legends{l}=sprintf('Rank %i - Anchor Set %i',z,maxIndex);
+                l = l + 1;
+            end            
             h=figure('Name','AllStartNodes','visible','off');
             hold all
-            for z=1:5
+            for z=1:10
                 plot(sort([allStarts(z).errorsPerStart.mean]),'-o')
             end
             legend(legends);
@@ -243,12 +257,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             saveFigure(allStartsFolder,'AllStarts',h);
             hold off
             
-            [maxValue,maxIndex]=max([result.errors.mean]);
-            worstFolder=sprintf('%s/worst',folder);
-            mkdir(worstFolder);
-            worst=mapPatch(network,localMaps,1:length(network.points),...
-                anchors(maxIndex,:),network.radius,patchNumber,worstFolder,operations);
-            
+         
             save(resultFilename,'result','allStarts');
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
