@@ -220,18 +220,27 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 mkdir(allStartsFolder); 
             end
             x=[result.errors.mean];
+            legends=cell(5,1);
+            allStartNodes=1:length(network.points);
             for z=5:-1:1
-                f=sprintf('%s/index%i',allStartsFolder,z);
                 if (exist(f,'dir') == 0); mkdir(f); end;
                 [minValue,minIndex]=min(x);
-                allStarts(z)=mapPatch(network,localMaps,1:length(network.points),...
-                    anchors(minIndex,:),network.radius,patchNumber,f,operations);%#ok
+                f=sprintf('%s/anchorSet%i',allStartsFolder,minIndex);
+                allStarts(z)=mapPatch(network,localMaps,...
+                    allStartNodes,...%start nodes
+                    anchors(minIndex,:),...%anchor sets
+                    network.radius,patchNumber,f,operations);%#ok
                 x(minIndex)=10000000;
+                legends{z}=sprintf('Anchor Set %i',minIndex);
             end
+            h=figure('Name','AllStartNodes','visible','off');
             hold all
             for z=1:5
-                plot(sort([allStarts(z).errorsPerStart.mean]))
+                plot(sort([allStarts(z).errorsPerStart.mean]),'-o')
             end
+            legend(legends);
+            grid on
+            saveFigure(allStartsFolder,'AllStarts',h);
             hold off
             
             [maxValue,maxIndex]=max([result.errors.mean]);
@@ -248,8 +257,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             % preallocate
             results(size(numRadii,1))=result; %#ok
         end
-        results(i)=result; %#ok
-        
+        results(i)=result; %#ok        
 
     end
     resultsByOperation(operations)=results;%#ok
