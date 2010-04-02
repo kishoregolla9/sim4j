@@ -10,13 +10,13 @@ networkconstants;
 if exist('networkScale','var') == 0 || networkScale == 0
     networkScale=1.0; % do not scale by default
 end
-
+doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_RANDOM;
-networkEdge=10 %#ok<NOPTS>
+placement=NET.NODE_GRID;
+networkEdge=8 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=100 %#ok<NOPTS>
+numNodes=64 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if exist('name','var') == 0
@@ -97,6 +97,12 @@ if (exist(filename,'file') ~= 0)
     load(filename);
 else
     [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
+    
+    if (exist('anchorPoints','var') ~= 0)
+        for i=1:length(anchorPoints)
+            sourceNetwork(anchorPoints(i,1))=anchorPoints(i,2:3);
+        end
+    end
     
     % 4 identical triangles, replacing real nodes 1-12
     %     n=1;
@@ -215,49 +221,53 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             
             fprintf(1,'Done in %f sec for %s\n',result.mapPatchTime,patchNumber);
             
-            allStartsFolder=sprintf('%s/allStarts/',folder);
-            if (exist(allStartsFolder,'dir') == 0)
-                mkdir(allStartsFolder); 
-            end
-            x=[result.errors.mean];
-            legends=cell(6,1);
-            allStartNodes=1:length(network.points);
-            for z=1:3
-                if (exist(f,'dir') == 0); mkdir(f); end;
-                [minValue,minIndex]=min(x);
-                f=sprintf('%s/rank%i-anchorSet%i',allStartsFolder,z,minIndex);
-                allStarts(z)=mapPatch(network,localMaps,...
-                    allStartNodes,...%start nodes
-                    anchors(minIndex,:),...%anchor sets
-                    network.radius,patchNumber,f,operations);%#ok
-                x(minIndex)=10000000;
-                legends{z}=sprintf('Rank %i - Anchor Set %i',z,minIndex);
-            end
-            x=[result.errors.mean];
-            l=6;
-            for z=length(x):-1:length(x)-3
-                if (exist(f,'dir') == 0); mkdir(f); end;
-                [maxValue,maxIndex]=max(x);
-                f=sprintf('%s/rank%i-anchorSet%i',z,allStartsFolder,maxIndex);
-                allStarts(l)=mapPatch(network,localMaps,...
-                    allStartNodes,...%start nodes
-                    anchors(maxIndex,:),...%anchor sets
-                    network.radius,patchNumber,f,operations);%#ok
-                x(maxIndex)=-1;
-                legends{l}=sprintf('Rank %i - Anchor Set %i',z,maxIndex);
-                l = l - 1;
-            end            
-            h=figure('Name','AllStartNodes','visible','off');
-            hold all
-            for z=1:6
-                plot(sort([allStarts(z).errorsPerStart.mean]),'-o')
-            end
-            legend(legends);
-            grid on
-            saveFigure(allStartsFolder,'AllStarts',h);
-            hold off
-        
-            save(resultFilename,'result','allStarts');
+            if (doAllStarts)
+                allStartsFolder=sprintf('%s/allStarts/',folder);
+                if (exist(allStartsFolder,'dir') == 0)
+                    mkdir(allStartsFolder);
+                end
+                x=[result.errors.mean];
+                legends=cell(6,1);
+                allStartNodes=1:length(network.points);
+                for z=1:3
+                    if (exist(f,'dir') == 0); mkdir(f); end;
+                    [minValue,minIndex]=min(x);
+                    f=sprintf('%s/rank%i-anchorSet%i',allStartsFolder,z,minIndex);
+                    allStarts(z)=mapPatch(network,localMaps,...
+                        allStartNodes,...%start nodes
+                        anchors(minIndex,:),...%anchor sets
+                        network.radius,patchNumber,f,operations);%#ok
+                    x(minIndex)=10000000;
+                    legends{z}=sprintf('Rank %i - Anchor Set %i',z,minIndex);
+                end
+                x=[result.errors.mean];
+                l=6;
+                for z=length(x):-1:length(x)-3
+                    if (exist(f,'dir') == 0); mkdir(f); end;
+                    [maxValue,maxIndex]=max(x);
+                    f=sprintf('%s/rank%i-anchorSet%i',z,allStartsFolder,maxIndex);
+                    allStarts(l)=mapPatch(network,localMaps,...
+                        allStartNodes,...%start nodes
+                        anchors(maxIndex,:),...%anchor sets
+                        network.radius,patchNumber,f,operations);%#ok
+                    x(maxIndex)=-1;
+                    legends{l}=sprintf('Rank %i - Anchor Set %i',z,maxIndex);
+                    l = l - 1;
+                end
+                h=figure('Name','AllStartNodes','visible','off');
+                hold all
+                for z=1:6
+                    plot(sort([allStarts(z).errorsPerStart.mean]),'-o')
+                end
+                legend(legends);
+                grid on
+                saveFigure(allStartsFolder,'AllStarts',h);
+                hold off
+                save(resultFilename,'result','allStarts');
+            else % end doAllStarts
+                save(resultFilename,'result');
+            end 
+            
         end
         plotNetworkDiffs(result,anchors,folder,prefix);
         
