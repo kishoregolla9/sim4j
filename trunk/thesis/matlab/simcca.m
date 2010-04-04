@@ -23,11 +23,23 @@ if exist('name','var') == 0
     name='';
 end
 
-if exist('folder','var') == 0
+if exist('folderpath','var') == 0  % does not exist
+    folderpath='../results';
+end
+
+if exist('folder','var') == 0  % does not exist
     if exist('sourceFolder','var') == 0
-        folder=sprintf('../results/%s%i-%i-%i_%i_%i_%i-%s',name,fix(clock),shapeLabel);
+        folder=sprintf('%s/%s%i-%i-%i_%i_%i_%i-%s',...
+            folderpath,name,fix(clock),shapeLabel);
     else
         folder=sourceFolder;
+    end
+elseif exist('anchorPoints','var') ~= 0
+    i=1;
+    folder=sprintf('%s-%i',folder,i);
+    while exist('folder','dir') ~= 0
+        i=i+1;
+        folder=sprintf('%s-%i',folder,i);
     end
 end
 
@@ -100,8 +112,9 @@ else
     
     if (exist('anchorPoints','var') ~= 0)
         for i=1:length(anchorPoints)
-            sourceNetwork(anchorPoints(i,1))=anchorPoints(i,2:3);
+            sourceNetwork.points(anchorPoints(i,1),:)=anchorPoints(i,2:3);
         end
+        anchors=anchorPoints(:,1)';
     end
     
     % 4 identical triangles, replacing real nodes 1-12
@@ -167,14 +180,18 @@ if (exist(anchorsfilename,'file') ~= 0)
     fprintf(1,'Loading anchors from %s\n',anchorsfilename);
     load(anchorsfilename);
 else
-    [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,...
-        numAnchorsPerSet,numAnchorSets);
-    a=1;
-    for i=1:4
-        for j=1:3
-            anchors(i,j)=a;
-            a=a+1;
+    if (exist('anchors','var') == 0)
+        [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,...
+            numAnchorsPerSet,numAnchorSets);
+        a=1;
+        for i=1:4
+            for j=1:3
+                anchors(i,j)=a;
+                a=a+1;
+            end
         end
+    else
+        numAnchorSets=length(anchors);
     end
     save(anchorsfilename, 'anchors','numAnchorSets');
 end
@@ -280,12 +297,14 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     end
     resultsByOperation(operations)=results;%#ok
     %% PLOT RESULT
-    resultFolder=sprintf('%s/%s',folder,prefix);
-    plotResult(results,anchors,radii,resultFolder,allMaps);
-    plotRegressions(results,anchors,radii,resultFolder);
-    plotJackknife(results,anchors,radii,resultFolder);
-    plotHistograms(results,anchors,radii,resultFolder);
-    plotCdf(results,anchors,radii,resultFolder);
+    if (size(anchors,1) > 1)
+        resultFolder=sprintf('%s/%s',folder,prefix);
+        plotResult(results,anchors,radii,resultFolder,allMaps);
+        plotRegressions(results,anchors,radii,resultFolder);
+        plotJackknife(results,anchors,radii,resultFolder);
+        plotHistograms(results,anchors,radii,resultFolder);
+        plotCdf(results,anchors,radii,resultFolder);
+    end
 end
 
 %% Plot Results By Transform Operation
