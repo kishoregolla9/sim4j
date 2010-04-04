@@ -10,9 +10,12 @@ anchorSet=sorted(length(sorted)/2,1);
 % Column1:the index, Column2-3: the points (x,y)
 anchorPoints=[anchors(anchorSet,:)',...
     network.points(anchors(anchorSet,:),:)];
-folders=cell(5,1);
+
+numNetworks=50;
+
+folders=cell(numNetworks,1);
 folders{1}=folder;
-for i=2:5
+for i=2:numNetworks
     save('anchorPoints.mat','anchorPoints','folders','anchorSet','i');
     clear
     load('anchorPoints.mat');
