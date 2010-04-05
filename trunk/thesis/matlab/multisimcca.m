@@ -27,14 +27,14 @@ anchorSet=sorted(length(sorted)/2,1);
 anchorPoints=[anchors(anchorSet,:)',...
     result.network.points(anchors(anchorSet,:),:)];
 
-numNetworks=50;
+numNetworks=10;
 
 folders=cell(numNetworks,1);
 folders{1}=folder;
 for i=2:numNetworks
     index=i;
     save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-        'index','numNetworks');
+        'index','numNetworks','folderpath');
     clear
     load('anchorPoints.mat');
     i=index; %#ok
@@ -47,7 +47,7 @@ for i=2:numNetworks
     folders{index}=folder; 
 end
 save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-    'index','numNetworks');
+    'index','numNetworks','folderpath');
 
 clear
 load('anchorPoints.mat');
@@ -100,5 +100,17 @@ for j=1:length(files)
         load(f);
     end
 end
-
+maxSpread=max(maxErrors)-min(maxErrors);
+meanSpread=max(meanErrors)-min(meanErrors);
+h=figure('Name','Location Error','visible','off');
+x=[[result.errors.max];[result.errors.mean]]';
+sorted=sortrows(x,-2)
+spread=repmat(maxSpread/2,1,size(sorted,1));
+errorbar(sorted(:,1),spread,'-^');
+hold all
+repmat(meanSpread/2, size(sorted,1),size(sorted,2));
+errorbar(sorted(:,2),spread,'-o');
+legend({'Max','Mean'});
+xlabel('Anchor Set Index (sorted by mean error)')
+saveFigure(folderAll,'ErrorBars',h);
 
