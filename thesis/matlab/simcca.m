@@ -13,10 +13,10 @@ end
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_GRID;
-networkEdge=8 %#ok<NOPTS>
+networkEdge=4 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=64 %#ok<NOPTS>
+numNodes=16 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if exist('name','var') == 0
@@ -35,11 +35,12 @@ if exist('folder','var') == 0  % does not exist
         folder=sourceFolder;
     end
 elseif exist('anchorPoints','var') ~= 0
-    i=1;
+    i=2;
+    foo=folder;
     folder=sprintf('%s-%i',folder,i);
-    while exist('folder','dir') ~= 0
+    while exist(folder,'dir') ~= 0
         i=i+1;
-        folder=sprintf('%s-%i',folder,i);
+        folder=sprintf('%s-%i',foo,i);
     end
 end
 
