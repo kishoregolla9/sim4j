@@ -27,7 +27,7 @@ anchorSet=sorted(length(sorted)/2,1);
 anchorPoints=[anchors(anchorSet,:)',...
     result.network.points(anchors(anchorSet,:),:)];
 
-numNetworks=5;
+numNetworks=50;
 
 folders=cell(numNetworks,1);
 folders{1}=folder;
