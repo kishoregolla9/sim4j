@@ -1,4 +1,5 @@
 % Run simcca multiple times, but preserving a single anchor set each time
+multiStart=tic;
 if (exist('folderpath','var') == 0)
     folderpath=sprintf('../results/multi-%i-%i-%i_%i_%i_%i',fix(clock));
     mkdir(folderpath);
@@ -27,14 +28,14 @@ anchorSet=sorted(length(sorted)/2,1);
 anchorPoints=[anchors(anchorSet,:)',...
     result.network.points(anchors(anchorSet,:),:)];
 
-numNetworks=10;
+numNetworks=100;
 
 folders=cell(numNetworks,1);
 folders{1}=folder;
 for i=2:numNetworks
     index=i;
     save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-        'index','numNetworks','folderpath');
+        'index','numNetworks','folderpath','multiStart');
     clear
     load('anchorPoints.mat');
     i=index; %#ok
@@ -43,11 +44,16 @@ for i=2:numNetworks
     fprintf(1,'%i Folder %s\n',i,f);
     if exist(f,'dir') == 0
         simcca
+    else
+        folder=f;
     end
     folders{index}=folder; 
 end
 save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-    'index','numNetworks','folderpath');
+    'index','numNetworks','folderpath','multiStart');
+f=sprintf('%s/anchorPoints.mat',folderpath);
+save(f,'anchorPoints','folders','anchorSet',...
+    'index','numNetworks','folderpath','multiStart');
 
 clear
 load('anchorPoints.mat');
@@ -88,9 +94,8 @@ hold off
 close
 
 %% Plot Errors with Error Bars
-hold on
-figure('Name','Location Error','visible','off');
-
+%Load the original data
+i=1;
 files=dir(folders{i});
 for j=1:length(files)
     if strcmp(sscanf(files(j).name,'%6s',1),'result') == true || ...
@@ -100,17 +105,24 @@ for j=1:length(files)
         load(f);
     end
 end
+hold on
+figure('Name','Location Error','visible','off');
 maxSpread=max(maxErrors)-min(maxErrors);
 meanSpread=max(meanErrors)-min(meanErrors);
 h=figure('Name','Location Error','visible','off');
 x=[[result.errors.max];[result.errors.mean]]';
-sorted=sortrows(x,-2)
+% Sort by mean (column 2)
+sorted=sortrows(x,-2);
 spread=repmat(maxSpread/2,1,size(sorted,1));
+subplot(2,1,1);
 errorbar(sorted(:,1),spread,'-^');
+legend('Max');
 hold all
 repmat(meanSpread/2, size(sorted,1),size(sorted,2));
-errorbar(sorted(:,2),spread,'-o');
-legend({'Max','Mean'});
+subplot(2,1,2);
+errorbar(sorted(:,2),spread,'-og');
+legend('Mean');
+% legend({'Max','Mean'});
 xlabel('Anchor Set Index (sorted by mean error)')
 saveFigure(folderAll,'ErrorBars',h);
-
+timeElapsed=toc(multiStart);
