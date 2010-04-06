@@ -22,14 +22,14 @@ if (size(allAnchors,1) == 1)
         network,result,allAnchors,folder,prefix);
 else
     % Plot a network diff diagram for 10best and 10worst anchor sets
-    for j=1:10
+    for j=1:5
         doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
             network,result,allAnchors,folder,prefix);
     end
     j=size(data,1)/2;
     doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
         network,result,allAnchors,folder,prefix);
-    for j=numAnchorSets-9:numAnchorSets
+    for j=numAnchorSets-4:numAnchorSets
         doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
             network,result,allAnchors,folder,prefix);
     end
