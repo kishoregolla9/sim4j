@@ -12,11 +12,11 @@ if exist('networkScale','var') == 0 || networkScale == 0
 end
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_GRID;
-networkEdge=4 %#ok<NOPTS>
+placement=NET.NODE_RANDOM;
+networkEdge=10 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=16 %#ok<NOPTS>
+numNodes=100 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if exist('name','var') == 0

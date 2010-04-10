@@ -1,4 +1,9 @@
 % Run simcca multiple times, but preserving a single anchor set each time
+addpath('cca')
+addpath('network')
+addpath('plot')
+addpath('plot/addaxis')
+
 multiStart=tic;
 if (exist('folderpath','var') == 0)
     folderpath=sprintf('../results/multi-%i-%i-%i_%i_%i_%i',fix(clock));
@@ -82,10 +87,21 @@ for i=1:length(folders)
     
 end
 clear result anchors;
+%% Plot Same-Anchors Data
 h=figure('Name','Different Networks around Same Anchors','visible','off');
-plot(maxErrors,'-^');
+plot(maxErrors,'-^b');
 hold all
-plot(meanErrors,'-o');
+plot(meanErrors,'-og');
+
+
+[lower,upper]=getConfidenceInterval(confidence,maxErrors);
+plot([0 length(maxErrors)], [lower, lower],'b');
+plot([0 length(maxErrors)], [upper, upper],'b');
+
+[lower,upper]=getConfidenceInterval(confidence,meanErrors);
+plot([0 length(maxErrors)], [lower, lower],'g');
+plot([0 length(maxErrors)], [upper, upper],'g');
+
 xlabel('Network Index');
 ylabel('Location Error');
 legend({'Max','Mean'});
@@ -93,8 +109,8 @@ saveFigure(folderAll,'SameAnchors',h);
 hold off
 close
 
-%% Plot Errors with Error Bars
-%Load the original data
+
+%% Load the original data
 i=1;
 files=dir(folders{i});
 for j=1:length(files)
@@ -105,24 +121,35 @@ for j=1:length(files)
         load(f);
     end
 end
+%% Plot Errors with Error Bars
 hold on
-figure('Name','Location Error','visible','off');
-maxSpread=max(maxErrors)-min(maxErrors);
-meanSpread=max(meanErrors)-min(meanErrors);
+confidence=0.05;
 h=figure('Name','Location Error','visible','off');
 x=[[result.errors.max];[result.errors.mean]]';
 % Sort by mean (column 2)
 sorted=sortrows(x,-2);
-spread=repmat(maxSpread/2,1,size(sorted,1));
 subplot(2,1,1);
-errorbar(sorted(:,1),spread,'-^');
-legend('Max');
+plot(sorted(:,1),'-^');
 hold all
-repmat(meanSpread/2, size(sorted,1),size(sorted,2));
+[ci]=getConfidenceInterval(confidence,maxErrors);
+mu=mean(removeOutliers(sorted(:,1)));
+lower=mu-ci;
+upper=mu+ci;
+plot([0 length(maxErrors)], [lower, lower],'r');
+plot([0 length(maxErrors)], [upper, upper],'r');
+legend('Max');
 subplot(2,1,2);
-errorbar(sorted(:,2),spread,'-og');
+plot(sorted(:,2),'-og');
+hold all
+[ci]=getConfidenceInterval(confidence,meanErrors);
+mu=mean(removeOutliers(sorted(:,2)));
+lower=mu-ci;
+upper=mu+ci;
+plot([0 length(meanErrors)], [lower, lower],'r');
+plot([0 length(meanErrors)], [upper, upper],'r');
 legend('Mean');
 % legend({'Max','Mean'});
 xlabel('Anchor Set Index (sorted by mean error)')
 saveFigure(folderAll,'ErrorBars',h);
 timeElapsed=toc(multiStart);
+
