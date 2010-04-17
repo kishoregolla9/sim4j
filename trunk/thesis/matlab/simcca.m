@@ -12,36 +12,30 @@ if exist('networkScale','var') == 0 || networkScale == 0
 end
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_RANDOM;
-networkEdge=10 %#ok<NOPTS>
+placement=NET.NODE_GRID;
+networkEdge=5 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=100 %#ok<NOPTS>
+numNodes=25 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
-if exist('name','var') == 0
+if ~exist('name','var')
     name='';
 end
 
-if exist('folderpath','var') == 0  % does not exist
+if ~exist('folderpath','var') 
     folderpath='../results';
 end
 
-if exist('folder','var') == 0  % does not exist
-    if exist('sourceFolder','var') == 0
+if ~exist('folder','var') 
+    if ~exist('sourceFolder','var') 
         folder=sprintf('%s/%s%i-%i-%i_%i_%i_%i-%s',...
             folderpath,name,fix(clock),shapeLabel);
     else
         folder=sourceFolder;
     end
-elseif exist('anchorPoints','var') ~= 0
-    i=2;
-    foo=folder;
-    folder=sprintf('%s-%i',folder,i);
-    while exist(folder,'dir') ~= 0
-        i=i+1;
-        folder=sprintf('%s-%i',foo,i);
-    end
+elseif exist('anchorPointsFolder','var')
+    folder=anchorPointsFolder;
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
