@@ -26,43 +26,48 @@ else
 end
 x=[result.errors.mean];
 errorsWithIndex=[1:length(x);x];
-sorted=sortrows(errorsWithIndex',2);
-% Take a random midpoint
-anchorSet=sorted(length(sorted)/2,1);
-% Column1:the index, Column2-3: the points (x,y)
-anchorPoints=[anchors(anchorSet,:)',...
-    result.network.points(anchors(anchorSet,:),:)];
+numNetworks=10;
 
-numNetworks=100;
-
-folders=cell(numNetworks,1);
-folders{1}=folder;
-for i=2:numNetworks
-    index=i;
-    save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-        'index','numNetworks','folderpath','multiStart');
-    clear
-    load('anchorPoints.mat');
-    i=index; %#ok
-    folder=folders{1};
-    f=sprintf('%s-%i',folder,index);
-    fprintf(1,'%i Folder %s\n',i,f);
-    if exist(f,'dir') == 0
-        simcca
-    else
-        folder=f;
+folders=cell(length(anchors),numNetworks);
+folders{1,1}=folder;
+originalAnchors=anchors;
+for anchorSetIndex=1:numAnchorSets
+    % Column1:the index, Column2-3: the points (x,y)
+    anchorPoints=[originalAnchors(j,:)',...
+        result.network.points(originalAnchors(j,:),:)];
+    for networkIndex=2:numNetworks
+        save('anchorPoints.mat','anchorPoints','folders',...
+            'networkIndex','anchorSetIndex','numNetworks','numAnchorSets',...
+            'folderpath','multiStart','originalAnchors');
+        clear
+        load('anchorPoints.mat');
+        networkIndex=networkIndex; %#ok 
+        anchorSetIndex=anchorSetIndex; %#ok
+        folder=folders{1,1};
+        f=sprintf('%s/AnchorSet%i/Network%i',folderpath,...
+            anchorSetIndex,networkIndex);
+        fprintf(1,'%i Folder %s\n',networkIndex,f);
+        if ~exist(f,'dir')
+            fprintf(1,'**** Running simcca for network #%i of %i\n',...
+                i,numNetworks)
+            anchorPointsFolder=f;
+            simcca
+        else
+            fprintf(1,'**** Run simcca for network #%i already done\n',i)
+            folder=f;
+        end
+        folders{anchorSetIndex,i}=folder;
     end
-    folders{index}=folder; 
 end
-save('anchorPoints.mat','anchorPoints','folders','anchorSet',...
-    'index','numNetworks','folderpath','multiStart');
+save('anchorPoints.mat','anchorPoints','folders','anchorSetIndex',...
+    'networkIndex','numNetworks','folderpath','multiStart','originalAnchors','numAnchorSets');
 f=sprintf('%s/anchorPoints.mat',folderpath);
-save(f,'anchorPoints','folders','anchorSet',...
-    'index','numNetworks','folderpath','multiStart');
+save(f,'anchorPoints','folders','anchorSetIndex',...
+    'networkIndex','numNetworks','folderpath','multiStart','originalAnchors','numAnchorSets');
 
 clear
 load('anchorPoints.mat');
-folderAll=sprintf('%s-all',folders{1});
+folderAll=sprintf('%s-all',folders{1,1});
 mkdir(folderAll);
 %% Load and Plot Total Results
 meanErrors=zeros(length(folders),1);
@@ -84,6 +89,14 @@ for i=1:length(folders)
         meanErrors(i)=result.errors.mean;
         maxErrors(i)=result.errors.max;
     end
+
+    if (i > 1)
+        source=sprintf('%s/png/networkdiffs/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
+            folders{i});
+        destination=sprintf('%s/png/%.2fNetworkDiff-%i.png',...
+            folderAll,meanErrors(i),i);
+        copyfile(source,destination);
+    end
     
 end
 clear result anchors;
@@ -93,12 +106,19 @@ plot(maxErrors,'-^b');
 hold all
 plot(meanErrors,'-og');
 
+confidence=0.05;
 
-[lower,upper]=getConfidenceInterval(confidence,maxErrors);
+[ci]=getConfidenceInterval(confidence,maxErrors);
+mu=mean(removeOutliers(maxErrors));
+lower=mu-ci;
+upper=mu+ci;
 plot([0 length(maxErrors)], [lower, lower],'b');
 plot([0 length(maxErrors)], [upper, upper],'b');
 
-[lower,upper]=getConfidenceInterval(confidence,meanErrors);
+[ci]=getConfidenceInterval(confidence,meanErrors);
+mu=mean(removeOutliers(meanErrors));
+lower=mu-ci;
+upper=mu+ci;
 plot([0 length(maxErrors)], [lower, lower],'g');
 plot([0 length(maxErrors)], [upper, upper],'g');
 
@@ -108,6 +128,12 @@ legend({'Max','Mean'});
 saveFigure(folderAll,'SameAnchors',h);
 hold off
 close
+
+%% Histogram of Moving Anchors
+h=figure('Name','Histogram','visible','off');
+hist(meanErrors,20);
+saveFigure(folderAll,'HistogramSameAnchors',h);
+
 
 
 %% Load the original data
@@ -128,28 +154,57 @@ h=figure('Name','Location Error','visible','off');
 x=[[result.errors.max];[result.errors.mean]]';
 % Sort by mean (column 2)
 sorted=sortrows(x,-2);
-subplot(2,1,1);
-plot(sorted(:,1),'-^');
+
+% Plot max
+% subplot(2,1,1);
 hold all
 [ci]=getConfidenceInterval(confidence,maxErrors);
 mu=mean(removeOutliers(sorted(:,1)));
 lower=mu-ci;
 upper=mu+ci;
-plot([0 length(maxErrors)], [lower, lower],'r');
-plot([0 length(maxErrors)], [upper, upper],'r');
+% rectangle('Position',[0,lower,length(maxErrors),upper-lower],'FaceColor',[0 0 0.5]);
+plot(sorted(:,1),'-^b','MarkerSize',3);
 legend('Max');
-subplot(2,1,2);
-plot(sorted(:,2),'-og');
-hold all
+
+plot([0 length(maxErrors)], [lower, lower],'b');
+plot([0 length(maxErrors)], [upper, upper],'b');
+plot([0 length(maxErrors)], [mu, mu],'b--');
+plot(repmat(length(maxErrors)/2, length(maxErrors), 1), maxErrors,...
+    'o','MarkerSize',1);
+
+y=sort(maxErrors);
+plot([0 length(meanErrors)], [y(3), y(3)],'r');
+plot([0 length(meanErrors)], [y(length(x)-3), y(length(x)-3)],'r');
+
+
+% Plot mean
+% subplot(2,1,2);
 [ci]=getConfidenceInterval(confidence,meanErrors);
 mu=mean(removeOutliers(sorted(:,2)));
 lower=mu-ci;
 upper=mu+ci;
-plot([0 length(meanErrors)], [lower, lower],'r');
-plot([0 length(meanErrors)], [upper, upper],'r');
+% rectangle('Position',[0,lower,length(meanErrors),upper-lower],'FaceColor',[0 0.5 0]);
+plot(sorted(:,2),'-og','MarkerSize',3);
 legend('Mean');
-% legend({'Max','Mean'});
+hold all
+plot([0 length(meanErrors)], [lower, lower],'g');
+plot([0 length(meanErrors)], [upper, upper],'g');
+
+plot([0 length(meanErrors)], [mu, mu],'g--');
+
+y=sort(meanErrors);
+plot([0 length(meanErrors)], [y(3), y(3)],'r');
+plot([0 length(meanErrors)], [y(length(x)-3), y(length(x)-3)],'r');
+
+% plot all meanErrors, vertically at the anchorSet point
+plot(repmat(length(meanErrors)/2, length(meanErrors), 1), meanErrors,...
+    'o','MarkerSize',1);
+
+hold off
 xlabel('Anchor Set Index (sorted by mean error)')
 saveFigure(folderAll,'ErrorBars',h);
+
+%% Done
 timeElapsed=toc(multiStart);
+fprintf(1,'Done in %.2f sec\n',timeElapsed);
 
