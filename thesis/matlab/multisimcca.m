@@ -56,7 +56,7 @@ for anchorSetIndex=1:numAnchorSets
             fprintf(1,'**** Run simcca for network #%i already done\n',i)
             folder=f;
         end
-        folders{anchorSetIndex,i}=folder;
+        folders{anchorSetIndex,networkIndex}=folder;
     end
 end
 save('anchorPoints.mat','anchorPoints','folders','anchorSetIndex',...
