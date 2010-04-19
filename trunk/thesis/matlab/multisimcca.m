@@ -26,19 +26,20 @@ else
 end
 x=[result.errors.mean];
 errorsWithIndex=[1:length(x);x];
-numNetworks=10;
+numNetworks=3;
 
 folders=cell(length(anchors),numNetworks);
 folders{1,1}=folder;
 originalAnchors=anchors;
+points=result.network.points;
 for anchorSetIndex=1:numAnchorSets
     % Column1:the index, Column2-3: the points (x,y)
     anchorPoints=[originalAnchors(anchorSetIndex,:)',...
-        result.network.points(originalAnchors(anchorSetIndex,:),:)];
+        points(originalAnchors(anchorSetIndex,:),:)];
     for networkIndex=2:numNetworks
         save('anchorPoints.mat','anchorPoints','folders',...
             'networkIndex','anchorSetIndex','numNetworks','numAnchorSets',...
-            'folderpath','multiStart','originalAnchors');
+            'folderpath','multiStart','originalAnchors','points');
         clear
         load('anchorPoints.mat');
         networkIndex=networkIndex; %#ok 
@@ -60,7 +61,8 @@ for anchorSetIndex=1:numAnchorSets
     end
 end
 save('anchorPoints.mat','anchorPoints','folders','anchorSetIndex',...
-    'networkIndex','numNetworks','folderpath','multiStart','originalAnchors','numAnchorSets');
+    'networkIndex','numNetworks','folderpath','multiStart',...
+    'originalAnchors','numAnchorSets','points');
 f=sprintf('%s/anchorPoints.mat',folderpath);
 save(f,'anchorPoints','folders','anchorSetIndex',...
     'networkIndex','numNetworks','folderpath','multiStart','originalAnchors','numAnchorSets');
@@ -70,34 +72,43 @@ load('anchorPoints.mat');
 folderAll=sprintf('%s-all',folders{1,1});
 mkdir(folderAll);
 %% Load and Plot Total Results
-meanErrors=zeros(length(folders),1);
-maxErrors=zeros(length(folders),1);
-for i=1:length(folders)
-    files=dir(folders{i});
-    for j=1:length(files)
-        if strcmp(sscanf(files(j).name,'%6s',1),'result') == true || ...
-          strcmp(sscanf(files(j).name,'%7s',1),'anchors') == true
-            f=sprintf('%s/%s',folders{i},files(j).name);
-            fprintf(1,'%i Loading \"%s\" ...\n',i,f);
-            load(f);
+meanErrors=zeros(numAnchorSets,numNetworks);
+maxErrors=zeros(numAnchorSets,numNetworks);
+for anchorSet=1:numAnchorSets
+    for i=1:numNetworks
+        if i == 1
+            folder=folders{1,1};
+        else
+            folder=sprintf('%s/AnchorSet%i/Network%i',folderpath,...
+                anchorSet,i);
         end
+        files=dir(folder);
+        for j=1:length(files)
+            if strcmp(sscanf(files(j).name,'%6s',1),'result') == true || ...
+                    strcmp(sscanf(files(j).name,'%7s',1),'anchors') == true
+                f=sprintf('%s/%s',folder,files(j).name);
+                fprintf(1,'%i Loading \"%s\" ...\n',i,f);
+                load(f);
+            end
+        end
+        if (length(result.errors) > 1)
+            meanErrors(anchorSet,i)=result.errors(anchorSet).mean;
+            maxErrors(anchorSet,i)=result.errors(anchorSet).max;
+        else
+            meanErrors(anchorSet,i)=result.errors.mean;
+            maxErrors(anchorSet,i)=result.errors.max;
+        end
+        
+        if (i > 1)
+            source=sprintf('%s/png/networkdiffs/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
+                folder);
+            destination=sprintf('%s/%.2f-AS%i-NetworkDiff%i.png',...
+                folderAll,meanErrors(i),anchorSet,i);
+            fprintf(1,'Copy %s\n to  %s\n',source,destination);
+            copyfile(source,destination);
+        end
+        
     end
-    if (length(result.errors) > 1)
-        meanErrors(i)=result.errors(anchorSet).mean;
-        maxErrors(i)=result.errors(anchorSet).max;
-    else
-        meanErrors(i)=result.errors.mean;
-        maxErrors(i)=result.errors.max;
-    end
-
-    if (i > 1)
-        source=sprintf('%s/png/networkdiffs/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
-            folders{i});
-        destination=sprintf('%s/png/%.2fNetworkDiff-%i.png',...
-            folderAll,meanErrors(i),i);
-        copyfile(source,destination);
-    end
-    
 end
 clear result anchors;
 %% Plot Same-Anchors Data
@@ -133,8 +144,6 @@ close
 h=figure('Name','Histogram','visible','off');
 hist(meanErrors,20);
 saveFigure(folderAll,'HistogramSameAnchors',h);
-
-
 
 %% Load the original data
 i=1;
@@ -175,7 +184,6 @@ plot(repmat(length(maxErrors)/2, length(maxErrors), 1), maxErrors,...
 y=sort(maxErrors);
 plot([0 length(meanErrors)], [y(3), y(3)],'r');
 plot([0 length(meanErrors)], [y(length(x)-3), y(length(x)-3)],'r');
-
 
 % Plot mean
 % subplot(2,1,2);
