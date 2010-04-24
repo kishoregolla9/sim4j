@@ -9,7 +9,7 @@ networkconstants;
 % allows for console loop to set networkScale
 if exist('networkScale','var') == 0 || networkScale == 0
     networkScale=1.0; % do not scale by default
-end
+end 
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_GRID;
