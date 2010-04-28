@@ -112,19 +112,19 @@ for anchorSet=1:numAnchorSets
 end
 clear result anchors;
 %% Plot Same-Anchors Data
-h=figure('Name','Different Networks around Same Anchors','visible','off');
-plot(maxErrors,'-^b');
+h=figure('Name','Different Networks around Same Anchors');%,'visible','off');
+% plot(maxErrors,'-^b');
 hold all
-plot(meanErrors,'-og');
+% plot(meanErrors,'-og');
 
 confidence=0.05;
 
-[ci]=getConfidenceInterval(confidence,maxErrors);
-mu=mean(removeOutliers(maxErrors));
-lower=mu-ci;
-upper=mu+ci;
-plot([0 length(maxErrors)], [lower, lower],'b');
-plot([0 length(maxErrors)], [upper, upper],'b');
+[ci]=getConfidenceInterval(confidence,maxErrors');
+mu=mean(maxErrors,2);
+errorbar(mu,ci);
+%% foo
+
+
 
 [ci]=getConfidenceInterval(confidence,meanErrors);
 mu=mean(removeOutliers(meanErrors));
@@ -196,6 +196,7 @@ plot(sorted(:,2),'-og','MarkerSize',3);
 legend('Mean');
 hold all
 plot([0 length(meanErrors)], [lower, lower],'g');
+plot([0 length(meanErrors)], [mu, mu],'g--');
 plot([0 length(meanErrors)], [upper, upper],'g');
 
 plot([0 length(meanErrors)], [mu, mu],'g--');
