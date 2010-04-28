@@ -26,7 +26,7 @@ else
         doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
             network,result,allAnchors,folder,prefix);
     end
-    j=size(data,1)/2;
+    j=floor(size(data,1)/2);
     doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
         network,result,allAnchors,folder,prefix);
     for j=numAnchorSets-4:numAnchorSets
