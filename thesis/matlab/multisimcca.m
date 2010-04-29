@@ -112,7 +112,7 @@ for anchorSet=1:numAnchorSets
 end
 clear result anchors;
 %% Plot Same-Anchors Data
-h=figure('Name','Different Networks around Same Anchors');%,'visible','off');
+h=figure('Name','Different Networks around Same Anchors','visible','off');
 % plot(maxErrors,'-^b');
 hold all
 % plot(meanErrors,'-og');
