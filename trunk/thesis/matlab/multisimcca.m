@@ -122,16 +122,10 @@ confidence=0.05;
 [ci]=getConfidenceInterval(confidence,maxErrors');
 mu=mean(maxErrors,2);
 errorbar(mu,ci);
-%% foo
 
-
-
-[ci]=getConfidenceInterval(confidence,meanErrors);
-mu=mean(removeOutliers(meanErrors));
-lower=mu-ci;
-upper=mu+ci;
-plot([0 length(maxErrors)], [lower, lower],'g');
-plot([0 length(maxErrors)], [upper, upper],'g');
+[ci]=getConfidenceInterval(confidence,meanErrors');
+mu=mean(meanErrors,2);
+errorbar(mu,ci);
 
 xlabel('Network Index');
 ylabel('Location Error');
