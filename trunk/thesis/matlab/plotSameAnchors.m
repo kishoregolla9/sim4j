@@ -8,10 +8,10 @@ confidence=0.05;
 
 [ci]=getConfidenceInterval(confidence,maxErrors');
 mu=mean(maxErrors,2);
-errorbar(mu,ci);
+errorbar(mu,ci,'-x');
 
 [ci]=getConfidenceInterval(confidence,meanErrors');
-mu=mean(meanErrors,2);
+mu=mean(meanErrors,2,'-o');
 errorbar(mu,ci);
 
 xlabel('Network Index');
