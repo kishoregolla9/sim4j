@@ -8,14 +8,15 @@ confidence=0.05;
 
 [ci]=getConfidenceInterval(confidence,maxErrors');
 mu=mean(maxErrors,2);
-errorbar(mu,ci,'-x');
+errorbar(mu,ci,'x');
 
 [ci]=getConfidenceInterval(confidence,meanErrors');
-mu=mean(meanErrors,2,'-o');
-errorbar(mu,ci);
+mu=mean(meanErrors,2');
+errorbar(mu,ci,'o');
 
 xlabel('Network Index');
 ylabel('Location Error');
+axis( [0 100 0 1] )
 legend({'Max','Mean'});
 saveFigure(folderAll,'SameAnchors',h);
 hold off

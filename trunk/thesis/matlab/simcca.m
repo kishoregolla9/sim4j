@@ -13,10 +13,10 @@ end
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_GRID;
-networkEdge=5 %#ok<NOPTS>
+networkEdge=10 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=25 %#ok<NOPTS>
+numNodes=100 %#ok<NOPTS>
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if ~exist('name','var')
