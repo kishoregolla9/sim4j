@@ -39,7 +39,7 @@ elseif exist('anchorPointsFolder','var')
 end
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=15 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 
