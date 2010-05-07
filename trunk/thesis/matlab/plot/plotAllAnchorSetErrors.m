@@ -148,7 +148,7 @@ for r=1:size(results,2)
     %     legends{11}=sprintf('Procrustes Dissimilarity Measure');
     %     addaxislabel(6,'Procrustes Dissimilarity Measure');
     
-    n=10;
+    n=2;
     nWorst=sprintf('%i ',data(1:n,1));
     nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
     temp=sprintf('Best: %s',nBest);

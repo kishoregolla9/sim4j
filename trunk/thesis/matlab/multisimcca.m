@@ -26,7 +26,7 @@ else
 end
 x=[result.errors.mean];
 errorsWithIndex=[1:length(x);x];
-numNetworks=20;
+numNetworks=12;
 
 folders=cell(length(anchors),numNetworks);
 folders{1,1}=folder;
