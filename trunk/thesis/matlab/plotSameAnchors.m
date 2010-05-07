@@ -1,5 +1,5 @@
 %% Plot Same-Anchors Data
-h=figure('Name','Different Networks around Same Anchors');%,'visible','off');
+h=figure('Name','Different Networks around Same Anchors','visible','off');
 % plot(maxErrors,'-^b');
 hold all
 % plot(meanErrors,'-og');
@@ -21,7 +21,7 @@ end
 xlabel('Anchor Index');
 ylabel('Location Error');
 numAnchorSets
-axis( [0 size(maxErrors,1) 0 1] )
+%axis( [0 size(maxErrors,1) 0 1] )
 legend({'Mean'});
 saveFigure(folderAll,'SameAnchors',h);
 hold off
