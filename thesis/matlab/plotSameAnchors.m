@@ -1,28 +1,24 @@
 %% Plot Same-Anchors Data
-h=figure('Name','Different Networks around Same Anchors','visible','off');
-% plot(maxErrors,'-^b');
-hold all
-% plot(meanErrors,'-og');
-
+ccaconfig
 confidence=0.05;
+h=figure('Name','Different Networks around Same Anchors');%,'visible','off');
+hold all
+t=sprintf('%s\n%i networks, %i anchor sets',shapeLabel,numNetworks,numAnchorSets);
+title(t);
 
 % [ci]=getConfidenceInterval(confidence,maxErrors');
 % mu=mean(maxErrors,2);
 % errorbar(mu,ci,'x');
 
-[ci]=getConfidenceInterval(confidence,meanErrors');
-mu=mean(meanErrors,2);
-errorbar(mu,ci,'o');
-
-for i=1:size(meanErrors,1)
-   plot(repmat(i,size(meanErrors,2)),meanErrors(i,:),'rx')'
-end
+hMax=doPlotErrorBars(maxErrors,confidence,'c*');
+hMean=doPlotErrorBars(meanErrors,confidence,'rx');
 
 xlabel('Anchor Index');
 ylabel('Location Error');
 numAnchorSets
-%axis( [0 size(maxErrors,1) 0 1] )
-legend({'Mean'});
+% axis( [0 size(maxErrors,1) 0 1] )
+legend([hMax, hMean],{'Max','Mean'});
 saveFigure(folderAll,'SameAnchors',h);
 hold off
 % close
+
