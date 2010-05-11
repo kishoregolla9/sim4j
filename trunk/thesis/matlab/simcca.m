@@ -3,21 +3,16 @@ addpath('cca')
 addpath('network')
 addpath('plot')
 addpath('plot/addaxis')
-
 networkconstants;
+% if exist('numAnchorSets','var') == 0
+    ccaconfig
+% end
+shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 % allows for console loop to set networkScale
 if exist('networkScale','var') == 0 || networkScale == 0
     networkScale=1.0; % do not scale by default
 end 
-doAllStarts=false;
-shape=NET.SHAPE_SQUARE;
-placement=NET.NODE_RANDOM;
-networkEdge=6 %#ok<NOPTS>
-networkHeight=networkEdge;
-networkWidth=networkEdge;
-numNodes=36 %#ok<NOPTS>
-shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 if ~exist('name','var')
     name='';
@@ -38,8 +33,6 @@ elseif exist('anchorPointsFolder','var')
     folder=anchorPointsFolder;
 end
 
-numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=100 %#ok<NOPTS>
 anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
 

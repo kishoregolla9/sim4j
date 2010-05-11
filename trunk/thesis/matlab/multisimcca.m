@@ -3,13 +3,22 @@ addpath('cca')
 addpath('network')
 addpath('plot')
 addpath('plot/addaxis')
-
+networkconstants;
 multiStart=tic;
 if (exist('folderpath','var') == 0)
-    folderpath=sprintf('../results/multi-%i-%i-%i_%i_%i_%i',fix(clock));
+    ccaconfig
+    shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
+    folderpath=sprintf('../results/%s-%iSets-%iNets_%i%i%i_%i%i%i',...
+        shapeLabel,numAnchorSets,numNetworks,...
+        fix(clock));
     mkdir(folderpath);
+    dst=sprintf('%s/ccaconfig.m',folderpath);
+    copyfile('ccaconfig.m',dst);
     simcca
 else
+    configfile=sprintf('%s/ccaconfig.m',folderpath);
+    networkconstants;
+    run(configfile);
     files=dir(folderpath);
     d=files(3);
     folder=sprintf('%s/%s',folderpath,d.name);
@@ -26,7 +35,6 @@ else
 end
 x=[result.errors.mean];
 errorsWithIndex=[1:length(x);x];
-numNetworks=12;
 
 folders=cell(length(anchors),numNetworks);
 folders{1,1}=folder;
@@ -37,11 +45,15 @@ for anchorSetIndex=1:numAnchorSets
     anchorPoints=[originalAnchors(anchorSetIndex,:)',...
         points(originalAnchors(anchorSetIndex,:),:)];
     for networkIndex=2:numNetworks
-        save('anchorPoints.mat','anchorPoints','folders',...
+        dst=sprintf('%s/anchorPoints.mat',folderpath);
+        save(dst,'anchorPoints','folders',...
             'networkIndex','anchorSetIndex','numNetworks','numAnchorSets',...
             'folderpath','multiStart','originalAnchors','points');
+        save('folderpath.mat','folderpath');
         clear
-        load('anchorPoints.mat');
+        load('folderpath.mat');
+        dst=sprintf('%s/anchorPoints.mat',folderpath);
+        load(dst);
         networkIndex=networkIndex; %#ok 
         anchorSetIndex=anchorSetIndex; %#ok
         folder=folders{1,1};
@@ -52,6 +64,9 @@ for anchorSetIndex=1:numAnchorSets
             fprintf(1,'**** Running simcca for network #%i of %i\n',...
                 i,numNetworks)
             anchorPointsFolder=f;
+            load('folderpath.mat');
+            dst=sprintf('%s/anchorPoints.mat',folderpath);
+            load(dst);
             simcca
         else
             fprintf(1,'**** Run simcca for network #%i already done\n',i)
@@ -60,7 +75,8 @@ for anchorSetIndex=1:numAnchorSets
         folders{anchorSetIndex,networkIndex}=folder;
     end
 end
-save('anchorPoints.mat','anchorPoints','folders','anchorSetIndex',...
+
+save(dst,'anchorPoints','folders','anchorSetIndex',...
     'networkIndex','numNetworks','folderpath','multiStart',...
     'originalAnchors','numAnchorSets','points');
 f=sprintf('%s/anchorPoints.mat',folderpath);
@@ -68,7 +84,12 @@ save(f,'anchorPoints','folders','anchorSetIndex',...
     'networkIndex','numNetworks','folderpath','multiStart','originalAnchors','numAnchorSets');
 
 clear
-load('anchorPoints.mat');
+load('folderpath.mat');
+dst=sprintf('%s/anchorPoints.mat',folderpath);
+load(dst);
+configfile=sprintf('%s/ccaconfig.m',folderpath);
+networkconstants;
+run(configfile);
 folderAll=sprintf('%s-all',folders{1,1});
 mkdir(folderAll);
 %% Load and Plot Total Results
@@ -112,6 +133,7 @@ for anchorSet=1:numAnchorSets
 end
 clear result anchors;
  %%
+ shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 plotSameAnchors;
 
 %% Histogram of Moving Anchors
