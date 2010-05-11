@@ -6,9 +6,9 @@ switch shape
     case NET.SHAPE_SQUARE
         switch placement
             case NET.NODE_RANDOM
-                shape=sprintf('Square-Random-%ix%i',width,width,N);
+                shape=sprintf('Square-Random-%ix%i',width,width);
             case NET.NODE_GRID
-                shape=sprintf('Square-Grid-%ix%i',width,width,N);
+                shape=sprintf('Square-Grid-%ix%i',width,width);
         end
 
     case NET.SHAPE_C
@@ -29,7 +29,7 @@ switch shape
     case NET.SHAPE_L
         switch placement
             case NET.NODE_RANDOM %L random
-                shape=sprintf('L-Random-%ix%i',N,length);
+                shape=sprintf('L-Random-%ix%i',width,length);
             case NET.NODE_GRID %In L grid case, we get about 51 nodes
                 shape=sprintf('L-Grid-%ix%i',width,length);
         end

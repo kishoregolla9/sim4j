@@ -133,7 +133,7 @@ for anchorSet=1:numAnchorSets
 end
 clear result anchors;
  %%
- shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
+shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 plotSameAnchors;
 
 %% Histogram of Moving Anchors
