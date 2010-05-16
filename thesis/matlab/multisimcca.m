@@ -7,6 +7,7 @@ networkconstants;
 multiStart=tic;
 if (exist('loadFolderpath.m','file') ~= 1)
     loadFolderpath;
+    fprintf(1,'Using previous folderpath: %s',folderpath);
 end
     
 if (exist('folderpath','var') == 0)
