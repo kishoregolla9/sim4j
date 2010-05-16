@@ -5,6 +5,10 @@ addpath('plot')
 addpath('plot/addaxis')
 networkconstants;
 multiStart=tic;
+if (exist('loadFolderpath.m','file') ~= 1)
+    loadFolderpath;
+end
+    
 if (exist('folderpath','var') == 0)
     ccaconfig
     shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
