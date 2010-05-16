@@ -1,14 +1,14 @@
 
-numNetworks=4 %#ok<NOPTS>
+numNetworks=15 %#ok<NOPTS>
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=10 %#ok<NOPTS>
+numAnchorSets=50 %#ok<NOPTS>
 
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;
 placement=NET.NODE_RANDOM;
-networkEdge=6 %#ok<NOPTS>
+networkEdge=5 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=36 %#ok<NOPTS>
+numNodes=25 %#ok<NOPTS>
 
