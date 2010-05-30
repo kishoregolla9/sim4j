@@ -44,7 +44,7 @@ folders=cell(length(anchors),numNetworks);
 folders{1,1}=folder;
 originalAnchors=anchors;
 points=result.network.points;
-parfor anchorSetIndex=1:numAnchorSets
+for anchorSetIndex=1:numAnchorSets
     % Column1:the index, Column2-3: the points (x,y)
     anchorPoints=[originalAnchors(anchorSetIndex,:)',...
         points(originalAnchors(anchorSetIndex,:),:)];
