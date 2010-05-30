@@ -4,9 +4,11 @@ addpath('network')
 addpath('plot')
 addpath('plot/addaxis')
 networkconstants;
-% if exist('numAnchorSets','var') == 0
+if exist('ccaconfig','var')
+    run(ccaconfig);
+else
     ccaconfig
-% end
+end
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 % allows for console loop to set networkScale
@@ -72,7 +74,8 @@ diaryfile=sprintf('%s/diary.log',folder);
 diary(diaryfile);
 
 % mark the diary
-sprintf('SIMCCA STARTED %i-%i-%i_%i_%i_%i-%s for network scale: %i',fix(clock),networkScale)
+sprintf('SIMCCA STARTED %04i-%02i-%02i_%02i_%02i_%02i-%0.2d for scale: %i',...
+    fix(clock),networkScale)
 
 simccaStart=tic;
 
@@ -87,7 +90,7 @@ networkScale  %#ok<NOPTS>
 radii=minRadius:radiusStep:maxRadius %#ok<NOPTS>
 
 ranging=0; % range-free
-numAnchorsPerSet %#ok<NOPTS>
+numAnchorsPerSet 
 numAnchorSets %#ok<NOPTS>
 numStartNodes=1 %#ok<NOPTS>
 
@@ -98,7 +101,7 @@ if (exist(filename,'file') ~= 0)
 else
     [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
     
-    if (exist('anchorPoints','var') ~= 0)
+    if (exist('anchorPoints','var'))
         for i=1:length(anchorPoints)
             sourceNetwork.points(anchorPoints(i,1),:)=anchorPoints(i,2:3);
         end
@@ -164,11 +167,11 @@ end
 clear results localMaps
 
 %% BuildAnchors
-if (exist(anchorsfilename,'file') ~= 0)
+if (exist(anchorsfilename,'file'))
     fprintf(1,'Loading anchors from %s\n',anchorsfilename);
     load(anchorsfilename);
 else
-    if (exist('anchors','var') == 0)
+    if (~exist('anchors','var'))
         [anchors]=buildAnchors(sourceNetwork,NET.ANCHORS_RANDOM,...
             numAnchorsPerSet,numAnchorSets);
         a=1;

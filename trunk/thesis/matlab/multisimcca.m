@@ -13,9 +13,8 @@ end
 if (exist('folderpath','var') == 0)
     ccaconfig
     shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
-    folderpath=sprintf('../results/%s-%iSets-%iNets_%i%i%i_%i%i%i',...
-        shapeLabel,numAnchorSets,numNetworks,...
-        fix(clock));
+    folderpath=sprintf('../results/%04i%02i%02i_%02i%02i%02i_%s-%iSets-%iNets',...
+        fix(clock),shapeLabel,numAnchorSets,numNetworks);
     mkdir(folderpath);
     dst=sprintf('%s/ccaconfig.m',folderpath);
     copyfile('ccaconfig.m',dst);
@@ -45,40 +44,12 @@ folders=cell(length(anchors),numNetworks);
 folders{1,1}=folder;
 originalAnchors=anchors;
 points=result.network.points;
-for anchorSetIndex=1:numAnchorSets
+parfor anchorSetIndex=1:numAnchorSets
     % Column1:the index, Column2-3: the points (x,y)
     anchorPoints=[originalAnchors(anchorSetIndex,:)',...
         points(originalAnchors(anchorSetIndex,:),:)];
-    for networkIndex=2:numNetworks
-        dst=sprintf('%s/anchorPoints.mat',folderpath);
-        save(dst,'anchorPoints','folders',...
-            'networkIndex','anchorSetIndex','numNetworks','numAnchorSets',...
-            'folderpath','multiStart','originalAnchors','points');
-        save('folderpath.mat','folderpath');
-        clear
-        load('folderpath.mat');
-        dst=sprintf('%s/anchorPoints.mat',folderpath);
-        load(dst);
-        networkIndex=networkIndex; %#ok 
-        anchorSetIndex=anchorSetIndex; %#ok
-        folder=folders{1,1};
-        f=sprintf('%s/AnchorSet%i/Network%i',folderpath,...
-            anchorSetIndex,networkIndex);
-        fprintf(1,'%i Folder %s\n',networkIndex,f);
-        if ~exist(f,'dir')
-            fprintf(1,'**** Running simcca for network #%i of %i\n',...
-                i,numNetworks)
-            anchorPointsFolder=f;
-            load('folderpath.mat');
-            dst=sprintf('%s/anchorPoints.mat',folderpath);
-            load(dst);
-            simcca
-        else
-            fprintf(1,'**** Run simcca for network #%i already done\n',i)
-            folder=f;
-        end
-        folders{anchorSetIndex,networkIndex}=folder;
-    end
+    runCCA(folders, folderpath,...
+        anchorSetIndex, anchorPoints, numNetworks);
 end
 
 save(dst,'anchorPoints','folders','anchorSetIndex',...
