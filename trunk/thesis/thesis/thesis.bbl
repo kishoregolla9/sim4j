@@ -1,0 +1,11 @@
+\begin{thebibliography}{1}
+
+\bibitem{Smith}
+W.~Smith and H.~Johnson, ``A title of an article,'' {\em Journal of Applied
+  Stuff}, vol.~17, pp.~735--744, 1978.
+
+\bibitem{doe2}
+J.~Doe and W.~Smith, ``A conference paper,'' in {\em IEEE Conference on
+  Nothing}, pp.~375--380, 1988.
+
+\end{thebibliography}
