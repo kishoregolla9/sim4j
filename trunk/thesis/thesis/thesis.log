@@ -1,332 +1,267 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2009.1.3)  5 JAN 2009 21:49
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdftex 2010.5.30)  30 MAY 2010 13:34
 entering extended mode
 **thesis.tex
-(./thesis.tex
-LaTeX2e <2003/12/01>
-Babel <v3.8d> and hyphenation patterns for american, french, german, ngerman, b
-ahasa, basque, bulgarian, catalan, croatian, czech, danish, dutch, esperanto, e
-stonian, finnish, greek, icelandic, irish, italian, latin, magyar, norsk, polis
-h, portuges, romanian, russian, serbian, slovak, slovene, spanish, swedish, tur
-kish, ukrainian, nohyphenation, loaded.
-(/usr/share/texmf-tetex/tex/latex/base/report.cls
-Document Class: report 2004/02/16 v1.4f Standard LaTeX document class
-(/usr/share/texmf-tetex/tex/latex/base/size12.clo
-File: size12.clo 2004/02/16 v1.4f Standard LaTeX file (size option)
-)
-\c@part=\count79
-\c@chapter=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-) (./cuthesis.sty
-Package: cuthesis 2003/04/04  v 1.2
-\c@myfigcount=\count88
-\c@mytablecount=\count89
-\c@myeqncount=\count90
-\c@mychapcitecount=\count91
-\c@mychaptercount=\count92
-\c@myappendixcount=\count93
-)
-(/usr/share/texmf-tetex/tex/latex/base/cite.sty
-LaTeX Info: Redefining \cite on input line 149.
-LaTeX Info: Redefining \nocite on input line 214.
-Package: cite 2003/11/04  v 4.01
-)
-(/usr/share/texmf-tetex/tex/latex/tools/array.sty
-Package: array 2003/12/17 v2.4a Tabular extension package (FMi)
-\col@sep=\dimen103
-\extrarowheight=\dimen104
-\NC@list=\toks14
-\extratabsurround=\skip43
-\backup@length=\skip44
-)
-(/usr/share/texmf-tetex/tex/latex/graphics/graphicx.sty
-Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(M:\thesis\thesis\thesis.tex
+! Undefined control sequence.
+l.1 \documentclass
+                  [12pt,letterpaper]{report}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/graphics/keyval.sty
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
-\KV@toks@=\toks15
-)
-(/usr/share/texmf-tetex/tex/latex/graphics/graphics.sty
-Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+! Undefined control sequence.
+l.5 \usepackage
+               [1committee,phd,nonsequential]{cuthesis}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/graphics/trig.sty
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
-)
-(/usr/share/texmf-tetex/tex/latex/graphics/graphics.cfg
-File: graphics.cfg 2005/02/03 v1.3 graphics configuration of teTeX/TeXLive
-)
-Package graphics Info: Driver file: dvips.def on input line 80.
+! Undefined control sequence.
+l.6 \usepackage
+               {cite}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/graphics/dvips.def
-File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
-))
-\Gin@req@height=\dimen105
-\Gin@req@width=\dimen106
-)
-(/usr/share/texmf-tetex/tex/latex/subfigure/subfigure.sty
-Package: subfigure 2002/07/30 v2.1.4 subfigure package
-\subfigtopskip=\skip45
-\subfigcapskip=\skip46
-\subfigcaptopadj=\dimen107
-\subfigbottomskip=\skip47
-\subfigcapmargin=\dimen108
-\subfiglabelskip=\skip48
-\c@subfigure=\count94
-\c@lofdepth=\count95
-\c@subtable=\count96
-\c@lotdepth=\count97
+! Undefined control sequence.
+l.7 \usepackage
+               {array}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-****************************************
-* Local config file subfigure.cfg used *
-****************************************
-(/usr/share/texmf-tetex/tex/latex/subfigure/subfigure.cfg)
-\subfig@top=\skip49
-\subfig@bottom=\skip50
-)
-(/usr/share/texmf-tetex/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2000/07/18 v2.13 AMS math features
-\@mathmargin=\skip51
+! Undefined control sequence.
+l.8 \usepackage
+               {graphicx}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-For additional information on amsmath, use the `?' option.
-(/usr/share/texmf-tetex/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
+! Undefined control sequence.
+l.9 \usepackage
+               {subfigure}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks16
-\ex@=\dimen109
-))
-(/usr/share/texmf-tetex/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen110
-)
-(/usr/share/texmf-tetex/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count98
-LaTeX Info: Redefining \frac on input line 211.
-\uproot@=\count99
-\leftroot@=\count100
-LaTeX Info: Redefining \overline on input line 307.
-\classnum@=\count101
-\DOTSCASE@=\count102
-LaTeX Info: Redefining \ldots on input line 379.
-LaTeX Info: Redefining \dots on input line 382.
-LaTeX Info: Redefining \cdots on input line 467.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen111
-LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
-\macc@depth=\count103
-\c@MaxMatrixCols=\count104
-\dotsspace@=\muskip10
-\c@parentequation=\count105
-\dspbrk@lvl=\count106
-\tag@help=\toks17
-\row@=\count107
-\column@=\count108
-\maxfields@=\count109
-\andhelp@=\toks18
-\eqnshift@=\dimen112
-\alignsep@=\dimen113
-\tagshift@=\dimen114
-\tagwidth@=\dimen115
-\totwidth@=\dimen116
-\lineht@=\dimen117
-\@envbody=\toks19
-\multlinegap=\skip52
-\multlinetaggap=\skip53
-\mathdisplay@stack=\toks20
-LaTeX Info: Redefining \[ on input line 2666.
-LaTeX Info: Redefining \] on input line 2667.
-)
-(/usr/share/texmf-tetex/tex/latex/caption/caption2.sty
-Package: caption2 2004/05/10 v2.1c Customising captions (AS)
-\captionmargin=\dimen118
-\captionwidth=\dimen119
-\captionindent=\dimen120
-Package caption2 Info: Running in caption2 v2.0 compatibility mode on input lin
-e 197.
-\captionlinewidth=\dimen121
-\realcaptionwidth=\dimen122
-Package caption2 Info: subfigure package v2.1 (or newer) detected on input line
- 417.
-\subfigcapwidth=\dimen123
-\subcapindent=\dimen124
-)
-(/usr/share/texmf-tetex/tex/latex/rotating/rotating.sty
-Package: rotating 1997/09/26 v2.13 Rotation package
+! Undefined control sequence.
+l.10 \usepackage
+                {amsmath}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/base/ifthen.sty
-Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
-)
-\c@r@tfl@t=\count110
-\rot@float@box=\box28
-)
-(/usr/share/texmf-tetex/tex/latex/setspace/setspace.sty
-Package: setspace 2000/12/01 6.7 Contributed and Supported LaTeX2e package
+! Undefined control sequence.
+l.11 \usepackage
+                [indent,bf]{caption2}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-Package: `setspace' 6.7 <2000/12/01>
-) (/usr/share/texmf-tetex/tex/latex/tools/longtable.sty
-Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
-\LTleft=\skip54
-\LTright=\skip55
-\LTpre=\skip56
-\LTpost=\skip57
-\LTchunksize=\count111
-\LTcapwidth=\dimen125
-\LT@head=\box29
-\LT@firsthead=\box30
-\LT@foot=\box31
-\LT@lastfoot=\box32
-\LT@cols=\count112
-\LT@rows=\count113
-\c@LT@tables=\count114
-\c@LT@chunks=\count115
-\LT@p@ftn=\toks21
-) (./thesis.aux
-(./dedication.aux) (./chapter1.aux) (./chapter2.aux) (./appendixA.aux))
-\openout1 = `thesis.aux'.
+! Undefined control sequence.
+l.12 \usepackage
+                {rotating}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 74.
+! Undefined control sequence.
+l.13 \usepackage
+                {setspace}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(/usr/share/texmf-tetex/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 74.
- [1
+! Undefined control sequence.
+l.14 \usepackage
+                {longtable}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-]
-\openout12 = `thesisbib.aux'.
+! Undefined control sequence.
+l.17 \graphicspath
+                  {{results/}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- [2
+! Undefined control sequence.
+l.19 \begin
+           {document}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-] (./abstract.tex)
-[3
+! Undefined control sequence.
+l.26 \title
+           {Effect of Anchor Node Placement for Localization in Wireless Sen...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-]
-\openout2 = `dedication.aux'.
+! Undefined control sequence.
+l.27 \author
+            {Benjamin Tatham}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- (./dedication.tex
-Underfull \hbox (badness 10000) in paragraph at lines 1--2
+! Undefined control sequence.
+l.30 \submitdate
+                {June 2010} \copyrightyear{2010}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- []
+! Undefined control sequence.
+l.30 \submitdate{June 2010} \copyrightyear
+                                          {2010}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-) [4
+! Undefined control sequence.
+l.39 \supervisor
+                {Dr. Thomas Kunz, Supervisor}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-] (./acknowledgements.tex) [5
+! Undefined control sequence.
+l.46 \departmentchair
+                     {Dr. H.M. Schwartz, Department Chair}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
+! Undefined control sequence.
+l.48 \dept
+          {Systems and Computer Engineering}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-] (./thesis.toc)
-\tf@toc=\write3
-\openout3 = `thesis.toc'.
+! Undefined control sequence.
+l.52 \reffile
+             {references}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- [6
+! Undefined control sequence.
+l.55 \graphicspath
+                  {{figures/}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-] (./thesis.lof)
-\tf@lof=\write4
-\openout4 = `thesis.lof'.
+! Undefined control sequence.
+l.67 \abstract
+              {abstract}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- [7
+! Undefined control sequence.
+l.68 \acknowledgements
+                      {acknowledgements}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-]
-\openout2 = `chapter1.aux'.
+! Undefined control sequence.
+l.71 \dedication
+                {dedication}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
+! Undefined control sequence.
+l.74 \newchapter
+                {chapter1}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-(./chapter1.tex
-Chapter 1.
-File: ../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Ra
-dius.eps Graphic file (type eps)
+! Undefined control sequence.
+l.75 \newchapter
+                {chapter2}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-<../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.
-eps>
-File: results/45DegreeAxis_Random/NetworkConn-vs-Error-Random-6x6-Square-with-5
-0-nodes-1.6-to-3.4radius-50.eps Graphic file (type eps)
+! Undefined control sequence.
+l.78 \newappendix
+                 {appendixA}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-<results/45DegreeAxis_Random/NetworkConn-vs-Error-Random-6x6-Square-with-50-nod
-es-1.6-to-3.4radius-50.eps>
-File: results/45DegreeAxis_Random/AnchorSets-vs-Error-Random-6x6-Square-with-50
--nodes-1.6-to-3.4radius-50.eps Graphic file (type eps)
+[1
 
-<results/45DegreeAxis_Random/AnchorSets-vs-Error-Random-6x6-Square-with-50-node
-s-1.6-to-3.4radius-50.eps>
-File: results/45DegreeAxis_Grid/network-Grid-7x7-Square-with-49-nodes-Radius1.6
-.eps Graphic file (type eps)
+pdfTeX warning: pdftex (file pdftex.map): cannot open font map file
+] ) <C:\Users\btatham\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\public\cm\dpi600
+\cmr10.pk>
+Output written on thesis.pdf (1 page, 17630 bytes).
+PDF statistics:
+ 61 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-<results/45DegreeAxis_Grid/network-Grid-7x7-Square-with-49-nodes-Radius1.6.eps>
-File: results/45DegreeAxis_Grid/Connectivity-vs-Error-Grid-7x7-Square-with-49-n
-odes-1.6-to-3.4Radius.eps Graphic file (type eps)
-
-<results/45DegreeAxis_Grid/Connectivity-vs-Error-Grid-7x7-Square-with-49-nodes-
-1.6-to-3.4Radius.eps>
-File: results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x7-Square-with-49-nodes
--1.6-to-3.4Radius.eps Graphic file (type eps)
-
-<results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x7-Square-with-49-nodes-1.6-
-to-3.4Radius.eps>) [1
-
-
-] [2] [3]
-\openout2 = `chapter2.aux'.
-
- (./chapter2.tex
-Chapter 2.
-
-LaTeX Warning: Citation `Smith' on page 4 undefined on input line 15.
-
-
-LaTeX Warning: Citation `doe2' on page 4 undefined on input line 15.
-
-) [4
-
-
-
-] (./thesis.bbl)
-\openout2 = `appendixA.aux'.
-
- (./appendixA.tex
-Appendix A.
-) [5
-
-
-
-]
-No file thesisbib.bbl.
-(./thesis.aux (./dedication.aux) (./chapter1.aux) (./chapter2.aux)
-(./appendixA.aux))
-
-LaTeX Warning: There were undefined references.
-
- ) 
-Here is how much of TeX's memory you used:
- 1982 strings out of 94501
- 25085 string characters out of 1175795
- 77505 words of memory out of 1000000
- 5104 multiletter control sequences out of 10000+50000
- 9526 words of font info for 34 fonts, out of 500000 for 2000
- 580 hyphenation exceptions out of 8191
- 28i,12n,33p,370b,273s stack positions out of 1500i,500n,5000p,200000b,5000s
-
-Output written on thesis.dvi (12 pages, 7992 bytes).
