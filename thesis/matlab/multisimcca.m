@@ -5,7 +5,7 @@ addpath('plot')
 addpath('plot/addaxis')
 networkconstants;
 multiStart=tic;
-if (exist('loadFolderpath.m','file') ~= 1)
+if (exist('loadFolderpath.m','file') ~= 0)
     loadFolderpath;
     fprintf(1,'Using previous folderpath: %s',folderpath);
 end
