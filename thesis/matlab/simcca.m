@@ -4,8 +4,8 @@ addpath('network')
 addpath('plot')
 addpath('plot/addaxis')
 networkconstants;
-if exist('ccaconfig','var')
-    run(ccaconfig);
+if exist('ccaconfigfile','var')
+    run(ccaconfigfile);
 else
     ccaconfig
 end

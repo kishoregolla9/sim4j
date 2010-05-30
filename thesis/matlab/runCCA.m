@@ -40,7 +40,7 @@ if ~exist(f,'dir')
 %     load(dst);
     anchorPoints=theAnchorPoints; %#ok<NASGU> used in simcca
     folder=f;
-    ccaconfig=sprintf('%s/ccaconfig.m',folderpath); %#ok<NASGU> used in simcca
+    ccaconfigfile=sprintf('%s/ccaconfig.m',folderpath); %#ok<NASGU> used in simcca
     simcca
 else
     fprintf(1,'**** Run simcca for network #%i already done\n',...
