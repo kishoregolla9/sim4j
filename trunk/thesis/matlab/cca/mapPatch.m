@@ -72,7 +72,8 @@ for startNodeIndex=1:numStartNodes   % for each starting node
         mkdir(folderName);
     end
     if (exist(filename,'file') == 0)
-        fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, startNodes(startNodeIndex), startNodeIndex, numStartNodes);
+        fprintf(1,'+++ %s Start Node %i (%i of %i)\n', patchNumber, ...
+            startNodes(startNodeIndex), startNodeIndex, numStartNodes);
         [localMaps,rawResult]=mapVitPatch(network,localMaps,startNodeIndex);
         save(filename,'localMaps','rawResult');
     else

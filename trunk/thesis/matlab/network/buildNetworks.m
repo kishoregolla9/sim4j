@@ -10,7 +10,7 @@ for i=1 : numRadii
     [network]=checkNetwork(sourceNetwork,radius);
     if (~network.connected),
         fprintf(1,'Network not connected -- trying again');
-        networks=buildNetworks(sourceNetwork,radii,numRadii,folders);
+        networks=buildNetworks(sourceNetwork,radii,numRadii,folder);
         return;
     end
 
