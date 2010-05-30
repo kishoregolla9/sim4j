@@ -1,0 +1,14 @@
+[main]
+.\thesis.tex
+
+[texfiles]
+.\abstract.tex
+.\acknowledgements.tex
+.\appendixA.tex
+.\chapter1.tex
+.\chapter2.tex
+.\dedication.tex
+.\nomenclature.tex
+.\preface.tex
+.\references.bib
+
