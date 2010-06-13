@@ -4,8 +4,16 @@ Scientists, engineers, and researchers use wireless sensor networks (WSN) for a 
 
 Many protocols have been propopsed [TODO refs] to calculate relative positions amongst the nodes of a network.  They vary in the required network functionality in terms of radio ranging or range-free.  However, in all cases, in order to convert from relative to global coordinates, some of the nodes do require a local source of global coordinates by using GPS or some other source.  This can be achieved by operators recording the global coordinates during network deployment or by the device having GPS embedded in a subset of the nodes.  We call these enhanced nodes anchors.  Here, we explore the effect of anchor node placement within the network on the overall localization errors, on a network-wide basis. This provides network planners with a set of general rules to minimize the number of anchor nodes required while avoiding poor node localization, allowing scientists to assume a maximum position error during their own research.
 
-
 \section{Motivation} 
+During previous work designing localization protocols[TODO ref Li Li, etc], authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Figure [TODO] demonstrates this using a CCA simulation.  This phenomenon led to this quest to determine the best anchor node placement.
+
+//TODO Include result plot showing varying 
+
+\section[Methodology]
+Many localization protocols and algorithms provide a set of relative coordinates that are then transformed into global coordinates.  For the purpose of this research, we chose CCA [TODO] as the algorithm to provide simualtions results.  A Matlab\copyright simulation of this algorithm already existed [TODO], and was modified to provide the necessary output statistics presented here.  CCA is described in more detail in [TODO reference Background - CCA].
+
+
+
 
 %\begin{figure} % % Requires \usepackage{graphicx} % \centering %
 %\includegraphics[width=4in]{../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.eps}\\
