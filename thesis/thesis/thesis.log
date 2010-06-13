@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=latex 2010.5.16)  16 MAY 2010 16:04
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.6.13)  13 JUN 2010 11:31
 entering extended mode
 **thesis.tex
 (C:\Users\OliveAndBen\Documents\thesis\thesis\thesis.tex
@@ -61,10 +61,11 @@ Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 ("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\00miktex\graphics.cfg"
 File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 )
-Package graphics Info: Driver file: dvips.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 91.
 
-("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\graphics\dvips.def"
-File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2010/02/14 v0.04n Graphics/color for pdfTeX
+\Gread@gobject=\count94
 ))
 \Gin@req@height=\dimen105
 \Gin@req@width=\dimen106
@@ -77,10 +78,10 @@ Package: subfigure 2002/07/30 v2.1.4 subfigure package
 \subfigbottomskip=\skip47
 \subfigcapmargin=\dimen108
 \subfiglabelskip=\skip48
-\c@subfigure=\count94
-\c@lofdepth=\count95
-\c@subtable=\count96
-\c@lotdepth=\count97
+\c@subfigure=\count95
+\c@lofdepth=\count96
+\c@subtable=\count97
+\c@lotdepth=\count98
 
 ****************************************
 * Local config file subfigure.cfg used *
@@ -109,13 +110,13 @@ Package: amsbsy 1999/11/29 v1.2d
 ("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\ams\math\amsopn.sty"
 Package: amsopn 1999/12/14 v2.01 operator names
 )
-\inf@bad=\count98
+\inf@bad=\count99
 LaTeX Info: Redefining \frac on input line 211.
-\uproot@=\count99
-\leftroot@=\count100
+\uproot@=\count100
+\leftroot@=\count101
 LaTeX Info: Redefining \overline on input line 307.
-\classnum@=\count101
-\DOTSCASE@=\count102
+\classnum@=\count102
+\DOTSCASE@=\count103
 LaTeX Info: Redefining \ldots on input line 379.
 LaTeX Info: Redefining \dots on input line 382.
 LaTeX Info: Redefining \cdots on input line 467.
@@ -124,15 +125,15 @@ LaTeX Info: Redefining \cdots on input line 467.
 \big@size=\dimen111
 LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
-\macc@depth=\count103
-\c@MaxMatrixCols=\count104
+\macc@depth=\count104
+\c@MaxMatrixCols=\count105
 \dotsspace@=\muskip10
-\c@parentequation=\count105
-\dspbrk@lvl=\count106
+\c@parentequation=\count106
+\dspbrk@lvl=\count107
 \tag@help=\toks17
-\row@=\count107
-\column@=\count108
-\maxfields@=\count109
+\row@=\count108
+\column@=\count109
+\maxfields@=\count110
 \andhelp@=\toks18
 \eqnshift@=\dimen112
 \alignsep@=\dimen113
@@ -184,7 +185,7 @@ Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
 ("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\base\ifthen.sty"
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\c@r@tfl@t=\count110
+\c@r@tfl@t=\count111
 \rotFPtop=\skip54
 \rotFPbot=\skip55
 \rot@float@box=\box28
@@ -200,16 +201,16 @@ Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
 \LTright=\skip57
 \LTpre=\skip58
 \LTpost=\skip59
-\LTchunksize=\count111
+\LTchunksize=\count112
 \LTcapwidth=\dimen128
 \LT@head=\box29
 \LT@firsthead=\box30
 \LT@foot=\box31
 \LT@lastfoot=\box32
-\LT@cols=\count112
-\LT@rows=\count113
-\c@LT@tables=\count114
-\c@LT@chunks=\count115
+\LT@cols=\count113
+\LT@rows=\count114
+\c@LT@tables=\count115
+\c@LT@chunks=\count116
 \LT@p@ftn=\toks22
 )
 (C:\Users\OliveAndBen\Documents\thesis\thesis\thesis.aux
@@ -229,18 +230,31 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
 LaTeX Font Info:    ... okay on input line 19.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
 LaTeX Font Info:    ... okay on input line 19.
+
+("C:\Program Files (x86)\MiKTeX 2.8\tex\context\base\supp-pdf.tex"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count117
+\scratchdimen=\dimen129
+\scratchbox=\box33
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count120
+\MPscratchDim=\dimen130
+\MPnumerator=\count121
+\everyMPtoPDFconversion=\toks24
+)
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 74.
-
-("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\base\omscmr.fd"
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 75.
+ ("C:\Program Files (x86)\MiKTeX 2.8\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 74.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 75.
  [1
 
-] [2
+{C:/ProgramData/MiKTeX/2.8/pdftex/config/pdftex.map}] [2
 
 ]
 (C:\Users\OliveAndBen\Documents\thesis\thesis\abstract.tex) [3
@@ -253,7 +267,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--2
 
 ) [4
 
-] (C:\Users\OliveAndBen\Documents\thesis\thesis\acknowledgments.tex)
+] (C:\Users\OliveAndBen\Documents\thesis\thesis\acknowledgements.tex)
 [5
 
 
@@ -262,293 +276,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--2
  [6
 
 ]
-(C:\Users\OliveAndBen\Documents\thesis\thesis\thesis.lof)
-\tf@lof=\write4
- [7
-
-]
 (C:\Users\OliveAndBen\Documents\thesis\thesis\chapter1.tex
 Chapter 1.
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Random/networkRandom6x6Squarew
-ith50nodes1-6Radius.eps' not found on input line 9.
+[1
 
 
-! LaTeX Error: File `../cca/results/45DegreeAxis_Random/networkRandom6x6Squarew
-ith50nodes1-6Radius.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.9 ...orkRandom6x6Squarewith50nodes1-6Radius.eps}
-                                                  \\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Random/networkRandom6x6Squarewith50nodes1-6Radius.eps (no BoundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.9 ...orkRandom6x6Squarewith50nodes1-6Radius.eps}
-                                                  \\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Ra
-dius.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.
-eps>
-! Extra }, or forgotten \endgroup.
-\color@endbox ->\egroup 
-                        
-l.12 \end{figure}
-                 
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Random/NetworkConn-vs-Error-Ra
-ndom-6x6-Square-with-50-nodes-1.6-to-3.4radius-50.eps' not found on input line 
-21.
-
-
-! LaTeX Error: File `../cca/results/45DegreeAxis_Random/NetworkConn-vs-Error-Ra
-ndom-6x6-Square-with-50-nodes-1.6-to-3.4radius-50.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.21 ...-with-50-nodes-1.6-to-3.4radius-50.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Random/NetworkConn-vs-Error-Random-6x6-Square-with-50-nodes-1.6-to-3.4radius-50
-.eps (no BoundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.21 ...-with-50-nodes-1.6-to-3.4radius-50.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Random/NetworkConn-vs-Error-Random-6x6-Square
--with-50-nodes-1.6-to-3.4radius-50.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Random/NetworkConn-vs-Error-Random-6x6-Square-with
--50-nodes-1.6-to-3.4radius-50.eps>
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Random/AnchorSets-vs-Error-Ran
-dom-6x6-Square-with-50-nodes-1.6-to-3.4radius-50.eps' not found on input line 2
-1.
-
-
-! LaTeX Error: File `../cca/results/45DegreeAxis_Random/AnchorSets-vs-Error-Ran
-dom-6x6-Square-with-50-nodes-1.6-to-3.4radius-50.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.21 ...-with-50-nodes-1.6-to-3.4radius-50.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Random/AnchorSets-vs-Error-Random-6x6-Square-with-50-nodes-1.6-to-3.4radius-50.
-eps (no BoundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.21 ...-with-50-nodes-1.6-to-3.4radius-50.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Random/AnchorSets-vs-Error-Random-6x6-Square-
-with-50-nodes-1.6-to-3.4radius-50.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Random/AnchorSets-vs-Error-Random-6x6-Square-with-
-50-nodes-1.6-to-3.4radius-50.eps>
-! Extra }, or forgotten \endgroup.
-\color@endbox ->\egroup 
-                        
-l.23 \end{figure}
-                 
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Grid/network-Grid-7x7-Square-w
-ith-49-nodes-Radius1.6.eps' not found on input line 30.
-
-
-! LaTeX Error: File `../cca/results/45DegreeAxis_Grid/network-Grid-7x7-Square-w
-ith-49-nodes-Radius1.6.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.30 ...id-7x7-Square-with-49-nodes-Radius1.6.eps}
-                                                  \\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Grid/network-Grid-7x7-Square-with-49-nodes-Radius1.6.eps (no BoundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.30 ...id-7x7-Square-with-49-nodes-Radius1.6.eps}
-                                                  \\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Grid/network-Grid-7x7-Square-with-49-nodes-Ra
-dius1.6.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Grid/network-Grid-7x7-Square-with-49-nodes-Radius1
-.6.eps>
-! Extra }, or forgotten \endgroup.
-\color@endbox ->\egroup 
-                        
-l.33 \end{figure}
-                 
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Grid/Connectivity-vs-Error-Gri
-d-7x7-Square-with-49-nodes-1.6-to-3.4Radius.eps' not found on input line 41.
-
-
-! LaTeX Error: File `../cca/results/45DegreeAxis_Grid/Connectivity-vs-Error-Gri
-d-7x7-Square-with-49-nodes-1.6-to-3.4Radius.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 ...are-with-49-nodes-1.6-to-3.4Radius.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Grid/Connectivity-vs-Error-Grid-7x7-Square-with-49-nodes-1.6-to-3.4Radius.eps (
-no BoundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 ...are-with-49-nodes-1.6-to-3.4Radius.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Grid/Connectivity-vs-Error-Grid-7x7-Square-wi
-th-49-nodes-1.6-to-3.4Radius.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Grid/Connectivity-vs-Error-Grid-7x7-Square-with-49
--nodes-1.6-to-3.4Radius.eps>
-
-LaTeX Warning: File `../cca/results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x
-7-Square-with-49-nodes-1.6-to-3.4Radius.eps' not found on input line 41.
-
-
-! LaTeX Error: File `../cca/results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x
-7-Square-with-49-nodes-1.6-to-3.4Radius.eps' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 ...are-with-49-nodes-1.6-to-3.4Radius.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Cannot determine size of graphic in ../cca/results/45DegreeAxis_
-Grid/AnchorSetsVsError-Grid-7x7-Square-with-49-nodes-1.6-to-3.4Radius.eps (no B
-oundingBox).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 ...are-with-49-nodes-1.6-to-3.4Radius.eps}} }
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-File: ../cca/results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x7-Square-with-4
-9-nodes-1.6-to-3.4Radius.eps Graphic file (type eps)
-
-<../cca/results/45DegreeAxis_Grid/AnchorSetsVsError-Grid-7x7-Square-with-49-nod
-es-1.6-to-3.4Radius.eps>
-! Extra }, or forgotten \endgroup.
-\color@endbox ->\egroup 
-                        
-l.43 \end{figure}
-                 
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-) [1
-
-
-] [2] [3] (C:\Users\OliveAndBen\Documents\thesis\thesis\chapter2.tex
+]) [2] (C:\Users\OliveAndBen\Documents\thesis\thesis\chapter2.tex
 Chapter 2.
-
-LaTeX Warning: Citation `Smith' on page 4 undefined on input line 15.
-
-
-LaTeX Warning: Citation `doe2' on page 4 undefined on input line 15.
-
-) [4
+) [3
 
 
 
-] (C:\Users\OliveAndBen\Documents\thesis\thesis\thesis.bbl)
+] (C:\Users\OliveAndBen\Documents\thesis\thesis\thesis.bbl) [4
+
+
+]
 (C:\Users\OliveAndBen\Documents\thesis\thesis\appendixA.tex
 Appendix A.
 ) [5
-
 
 
 ]
@@ -557,18 +302,23 @@ No file thesisbib.bbl.
 (C:\Users\OliveAndBen\Documents\thesis\thesis\dedication.aux)
 (C:\Users\OliveAndBen\Documents\thesis\thesis\chapter1.aux)
 (C:\Users\OliveAndBen\Documents\thesis\thesis\chapter2.aux)
-(C:\Users\OliveAndBen\Documents\thesis\thesis\appendixA.aux))
-
-LaTeX Warning: There were undefined references.
-
- ) 
+(C:\Users\OliveAndBen\Documents\thesis\thesis\appendixA.aux)) ) 
 Here is how much of TeX's memory you used:
- 2521 strings out of 495286
- 37535 string characters out of 3179883
- 89146 words of memory out of 3000000
- 5668 multiletter control sequences out of 15000+200000
- 9526 words of font info for 34 fonts, out of 3000000 for 9000
+ 2860 strings out of 495285
+ 41018 string characters out of 3179860
+ 96010 words of memory out of 3000000
+ 6014 multiletter control sequences out of 15000+200000
+ 9873 words of font info for 35 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 36i,12n,38p,370b,278s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,12n,38p,976b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program File
+s (x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files 
+(x86)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x8
+6)/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)
+/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on thesis.pdf (11 pages, 69406 bytes).
+PDF statistics:
+ 54 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-Output written on thesis.dvi (12 pages, 10928 bytes).
