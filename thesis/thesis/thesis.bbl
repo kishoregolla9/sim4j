@@ -1,4 +1,25 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{DV-HOP}
+D.~Nicelescu and B.~Nath, ``Ad hoc positioning system (aps),'' in {\em Global
+  Telecommunications Conference (GLOBECOM 2001)}, vol.~5, (San Antonio, Texas),
+  pp.~2926--2931, November 2001.
+
+\bibitem{MDS-MAP}
+Y.~Shang, W.~Ruml, Y.~Zhang, and M.~Fromherz, ``Localization from connectivity
+  in sensor networks,'' {\em IEEE Transactions on Paralell and Distributed
+  Systems}, vol.~15, November 2004.
+
+\bibitem{CCA-MAP07}
+L.~Li and T.~Kunz, ``Localization applying an efficient neural network
+  mapping,'' in {\em Proceedings of the 1st international conference on
+  Autonomic computing and communication systems (Autonomics 2007)}, vol.~302,
+  (Rome, Italy), 2007.
+
+\bibitem{CCA-MAP09}
+L.~Li and T.~Kunz, ``Cooperative node localization using nonlinear data
+  projection,'' {\em ACM Transactions on Sensor Networks (TOSN)}, vol.~5,
+  February 2009.
 
 \bibitem{birds}
 J.~Kumagai, ``The secret life of birds,'' {\em {IEEE Spectrum}}, vol.~41,
@@ -31,20 +52,5 @@ D.~Nicelescu and B.~Nath, ``{Ad hoc positioning system (APS) using AOA},'' in
 N.~Patwari, A.~Hero, M.~Perkins, N.~Correal, and R.~O'Dea, ``Relative location
   estimation in wireless sensor networks,'' {\em IEEE Transactions on Signal
   Processing}, vol.~51, no.~8, pp.~2137--2148, 2003.
-
-\bibitem{DV-HOP}
-D.~Nicelescu and B.~Nath, ``Ad hoc positioning system (aps),'' in {\em Global
-  Telecommunications Conference (GLOBECOM 2001)}, vol.~5, (San Antonio, Texas),
-  pp.~2926--2931, November 2001.
-
-\bibitem{MDS-MAP}
-Y.~Shang, W.~Ruml, Y.~Zhang, and M.~Fromherz, ``Localization from connectivity
-  in sensor networks,'' {\em IEEE Transactions on Paralell and Distributed
-  Systems}, vol.~15, November 2004.
-
-\bibitem{CCA-MAP}
-L.~Li and T.~Kunz, ``Cooperative node localization using nonlinear data
-  projection,'' {\em ACM Transactions on Sensor Networks (TOSN)}, vol.~5,
-  February 2009.
 
 \end{thebibliography}
