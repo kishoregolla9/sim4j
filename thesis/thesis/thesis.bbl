@@ -1,7 +1,8 @@
 \begin{thebibliography}{1}
 
 \bibitem{birds}
-J.~Kumagai, ``The secret life of birds,'' {\em {IEEE Spectrum}}, April 2004.
+J.~Kumagai, ``The secret life of birds,'' {\em {IEEE Spectrum}}, vol.~41,
+  pp.~42--48, April 2004.
 \newblock This is the article that originally picqued my interest in WSN, and
   inspired me to pursue thesis research in this area.
 
@@ -9,12 +10,41 @@ J.~Kumagai, ``The secret life of birds,'' {\em {IEEE Spectrum}}, April 2004.
 ``{RUNES (Reconfigurable Ubiquitous Networked Embedded Systems) IST Project}.''
   http://www.ist-runes.org, 2004-2006.
 
-\bibitem{Smith}
-W.~Smith and H.~Johnson, ``A title of an article,'' {\em Journal of Applied
-  Stuff}, vol.~17, pp.~735--744, 1978.
+\bibitem{Wellenhoff}
+B.~Wellenhoff, H.~Lictenegger, and J.~Collins, {\em Global Positioning System:
+  Theory and Practice}.
+\newblock Berlin, Germany: Springer, 4th~ed., 1997.
 
-\bibitem{doe2}
-J.~Doe and W.~Smith, ``A conference paper,'' in {\em IEEE Conference on
-  Nothing}, pp.~375--380, 1988.
+\bibitem{Savvides}
+A.~Savvides, C.~Han, and M.~Strivastava, ``Dynamic finegrained localization in
+  ad-hoc networks of sensors,'' in {\em Proceedings of the 7th Annual
+  International Conference on Mobile Computing and Networking (MobiCom'01},
+  (Rome, Italy), pp.~166--169, July 2001.
+
+\bibitem{Niculescu}
+D.~Nicelescu and B.~Nath, ``{Ad hoc positioning system (APS) using AOA},'' in
+  {\em Twenty-Second Annual Joint Conference of the IEEE Computer and
+  Communications (INFOCOM 2003)}, vol.~3, (San Francisco, California),
+  pp.~1734--1743, April 2003.
+
+\bibitem{Patwari}
+N.~Patwari, A.~Hero, M.~Perkins, N.~Correal, and R.~O'Dea, ``Relative location
+  estimation in wireless sensor networks,'' {\em IEEE Transactions on Signal
+  Processing}, vol.~51, no.~8, pp.~2137--2148, 2003.
+
+\bibitem{DV-HOP}
+D.~Nicelescu and B.~Nath, ``Ad hoc positioning system (aps),'' in {\em Global
+  Telecommunications Conference (GLOBECOM 2001)}, vol.~5, (San Antonio, Texas),
+  pp.~2926--2931, November 2001.
+
+\bibitem{MDS-MAP}
+Y.~Shang, W.~Ruml, Y.~Zhang, and M.~Fromherz, ``Localization from connectivity
+  in sensor networks,'' {\em IEEE Transactions on Paralell and Distributed
+  Systems}, vol.~15, November 2004.
+
+\bibitem{CCA-MAP}
+L.~Li and T.~Kunz, ``Cooperative node localization using nonlinear data
+  projection,'' {\em ACM Transactions on Sensor Networks (TOSN)}, vol.~5,
+  February 2009.
 
 \end{thebibliography}

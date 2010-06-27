@@ -1,15 +1,28 @@
 \chapter{Wireless Sensor Networks and Localization}
 \section{Wireless Sensor Networks}
 
-A wireless sensor network (WSN) consists of a set of nodes tasked with sensing environmental phenomenon at or near each node.  Nodes communicate wirelessly to send their data back to a central acquisition system.  Nodes are typically small, cheap devices and are designed with power efficiency in mind to prolong the lifetime of the network's ability to collect data.  Nodes are often distributed in the field of interest randomly, sometimes even by dropping them from the air, as on a military battlefield.  Other times, they are placed in specifici, but unknown apriori, locations, as in placing them in bird nests\cite{birds}.  They may be rolled into a transportation tunnel to give firefighters and emergecny crews a current information about heat and oxygen levents \cite{runes}. 
+A wireless sensor network (WSN) consists of a set of nodes tasked with sensing environmental phenomenon at or near each node.  Nodes communicate wirelessly to send their data back to a central acquisition system.  Nodes are typically small, cheap devices and are designed with power efficiency in mind to prolong the lifetime of the network's ability to collect data.  Nodes are often distributed in the field of interest randomly, sometimes even by dropping them from the air, as on a military battlefield.  Other times, they are placed in specifici, but unknown apriori, locations, as in placing them in bird nests\cite{birds}.  Or, they may be rolled into a transportation tunnel to give firefighters and emergecny crews a current information about heat and oxygen levents \cite{runes}.  The list of applications goes on and on.
+
+A number of issues arise when designing a WSN.  Each node must be able to communicate with each other and send data to a central collection site.  Each node must know what time it is, for purposes of data sampling, and often for routing protocols as well.  Further, each node must know where it is so spatial data can be properly correlated.  Location can also be useful for geographic routing protocols.  This thesis focuses on determining location of each node.
+
 \section{Localization Protocols}
 
-\subsection{Sub-Section Heading}
-Sample text.
+There are two general classes of localalization protocols: ranging and range-free.  
 
-new paragraph.
+\subsection{Ranging Protocols}A
+Ranging protocols rely on information from the radio. With this information, a fairly accurate network topology can be built.  Ranging techniques can use a variety of metrics to build the network topology.  These include Time-of-Arrival (TOA), like GPS\cite{Wellenhoff},  Time-Differential-of-Arrial (TDOA)\cite{Savvides}, Angle-of-Arrival (AOA)\cite{Niculescu}, or Received-Signal-Strength-Indicator (RSSI)\cite{Patwari}.  
 
-\subsubsection{Sub-Sub-Section Heading}
-Sample text.
+However, the special hardware and power requirement to perform these ranging techniques is counter to the goal of low-cost, low-power nodes, and thus we exclude ranging protocols from our study.  Regardless, if a ranging protocol does build a relative map, and then does a post processing step by mapping this relative map to a global map based on a subset of anchor nodes, the results of this thesis apply to ranging as well as range-free protocols.
 
-Sorry no details available \cite{Smith,doe2}.
+\subsubsection{Range-Free Protocols}
+Range-Free protocols do not rely on any specialized hardware for additional information.  Rather, they rely solely on network connectivity, specifically knowledge of their direct neighbors.  Often, a node will collect information about their direct neighbors' neighbors as well, known as one-hop information.  Other papers have shown that getting even further neighbor information as drastically diminishing returns.  
+
+
+\subsubsection{DV-HOP}
+\cite{DV-HOP}
+
+\subsubsection{MDS-MAP}
+\cite{MDS-MAP}
+
+\subsubsection{CCA-MAP}
+\cite{CCA-MAP}
