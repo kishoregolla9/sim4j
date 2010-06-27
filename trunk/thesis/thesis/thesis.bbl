@@ -1,5 +1,14 @@
 \begin{thebibliography}{1}
 
+\bibitem{birds}
+J.~Kumagai, ``The secret life of birds,'' {\em {IEEE Spectrum}}, April 2004.
+\newblock This is the article that originally picqued my interest in WSN, and
+  inspired me to pursue thesis research in this area.
+
+\bibitem{runes}
+``{RUNES (Reconfigurable Ubiquitous Networked Embedded Systems) IST Project}.''
+  http://www.ist-runes.org, 2004-2006.
+
 \bibitem{Smith}
 W.~Smith and H.~Johnson, ``A title of an article,'' {\em Journal of Applied
   Stuff}, vol.~17, pp.~735--744, 1978.
