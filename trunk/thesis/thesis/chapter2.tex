@@ -9,24 +9,19 @@ A number of issues arise when designing a WSN.  Each node must be able to commun
 
 There are two general classes of localization protocols: ranging and range-free.  
 
-\subsection{Ranging Protocols}A
 Ranging protocols rely on information from the radio. With this information, a fairly accurate network topology can be built.  Ranging techniques can use a variety of metrics to build the network topology.  These include Time-of-Arrival (TOA), like GPS\cite{Wellenhoff},  Time-Differential-of-Arrial (TDOA)\cite{Savvides}, Angle-of-Arrival (AOA)\cite{Niculescu}, or Received-Signal-Strength-Indicator (RSSI)\cite{Patwari}.  
 
 However, the special hardware and power requirement to perform these ranging techniques is counter to the goal of low-cost, low-power nodes, and thus we exclude ranging protocols from our study.  Regardless, if a ranging protocol does build a relative map, and then does a post processing step by mapping this relative map to a global map based on a subset of anchor nodes, the results of this thesis apply to ranging as well as range-free protocols.
 
-\subsubsection{Range-Free Protocols}
 Range-Free protocols do not rely on any specialized hardware for additional information.  Rather, they rely solely on network connectivity, specifically knowledge of their direct neighbors.  Often, a node will collect information about their direct neighbors' neighbors as well, known as one-hop information.  
 
-\subsubsection{Ad Hoc Positioning System}
-\cite{APS}
-Nicelsu, et al. propose a distributed localization algorithm known as Ad Hoc Positioning System (APS).  It is similar to GPS in that is uses triangulation to determine node position.  In APS, each node maintains a table of distances to each anchor.  The distance can be represented as a hop count, estimated distance using RSSI, or Euclidean distance in cooperation with its neighbors, using propogation methods DV-HOP, DV-Distance or Euclidean, respectively.  As a distributed algorithm, each node determines its own position based on the distances to the anchor nodes.  Thus, APS does not perform well in anisotropic network, that is networks with wholes or "C" shapes in the topology.  
+\subsection{Ad Hoc Positioning System}
+Nicelsu, et al. propose a distributed localization algorithm known as Ad Hoc Positioning System (APS)\cite{APS}.  It is similar to GPS in that is uses triangulation to determine node position.  In APS, each node maintains a table of distances to each anchor.  The distance can be represented as a hop count, estimated distance using RSSI, or Euclidean distance in cooperation with its neighbors, using propogation methods DV-HOP, DV-Distance or Euclidean, respectively.  As a distributed algorithm, each node determines its own position based on the distances to the anchor nodes.  Thus, APS does not perform well in anisotropic network, that is networks with wholes or "C" shapes in the topology.  
 
-\subsubsection{MDS-MAP}
-\cite{MDS-MAP}
-Shang, et al. attempt to correct the errors introduced by APS and other distributed algorithms through a centralized localization algorithm called MDS-MAP.  MDS-MAP is divided into three phases.  In phase one, shortest path distances or hop counts are exchanged via distance vector exchange.  This provides a rough estimate of the distance between each pair of sensors.  In phase two, multi-dimensional scaling (MDS) is applied, resulting in a relative map.  MDS is a general data analysis tool originating from psychophysics to transform data from many to few dimensions.  In this case, the relative map conforms closely to the pair-wise distances provided.  In phase three of MDS-MAP, the relative map is transformed into the global coordinate system using at least three anchors.  
+\subsection{MDS-MAP}
+Shang, et al. attempt to correct the errors introduced by APS and other distributed algorithms through a centralized localization algorithm called MDS-MAP\cite{MDS-MAP}.  MDS-MAP is divided into three phases.  In phase one, shortest path distances or hop counts are exchanged via distance vector exchange.  This provides a rough estimate of the distance between each pair of sensors.  In phase two, multi-dimensional scaling (MDS) is applied, resulting in a relative map.  MDS is a general data analysis tool originating from psychophysics to transform data from many to few dimensions.  In this case, the relative map conforms closely to the pair-wise distances provided.  In phase three of MDS-MAP, the relative map is transformed into the global coordinate system using at least three anchors.  
 
 The authors provided a modified, distributed version, MDS-MAP(P)\cite{MDS-MAP(P)}.  This variation simply divides the network into smaller, more manageable secions to the algorithm can be performed locally, with the limited node resources available.  Each local map is then merged together, although this part of the algorithm is not distributed.
 
-\subsubsection{CCA-MAP} \label{sec:CCA-MAP}
-\cite{CCA-MAP07,CCA-MAP09}
-Li, et al, propose a similar style algorithm to MDS-MAP called CCA-MAP.  It is similar in the it generates relative, local maps of sections of the network and then patches them together into a global coordinate system.  
+\subsection{CCA-MAP} \label{sec:CCA-MAP}
+Li, et al, propose a similar style algorithm to MDS-MAP called CCA-MAP\cite{CCA-MAP07,CCA-MAP09}.  It is similar in the it generates relative, local maps of sections of the network and then patches them together into a global coordinate system.  
