@@ -1,14 +1,14 @@
 \begin{thebibliography}{10}
 
 \bibitem{APS}
-D.~Nicelescu and B.~Nath, ``Ad hoc positioning system (aps),'' in {\em Global
+D.~Nicelescu and B.~Nath, ``{Ad Hoc Positioning System (APS)},'' in {\em Global
   Telecommunications Conference (GLOBECOM 2001)}, vol.~5, (San Antonio, Texas),
   pp.~2926--2931, November 2001.
 
 \bibitem{MDS-MAP}
-Y.~Shang, W.~Ruml, Y.~Zhang, and M.~Fromherz, ``Localization from connectivity
-  in sensor networks,'' {\em IEEE Transactions on Paralell and Distributed
-  Systems}, vol.~15, November 2004.
+Y.~Shang, W.~Rumi, Y.~Zhang, and M.~Fromherz, ``Localization from connectivity
+  in sensor networks,'' {\em Parallel and Distributed Systems, IEEE
+  Transactions on}, vol.~15, pp.~961 -- 974, nov. 2004.
 
 \bibitem{CCA-MAP07}
 L.~Li and T.~Kunz, ``Localization applying an efficient neural network
@@ -54,13 +54,37 @@ N.~Patwari, A.~Hero, M.~Perkins, N.~Correal, and R.~O'Dea, ``Relative location
   Processing}, vol.~51, no.~8, pp.~2137--2148, 2003.
 
 \bibitem{MDS-MAP-P}
-Y.~Shang, W.~Ruml, and Y.~Zhang, ``Improved mds-based localization,'' in {\em
-  Proceedings of 23rd Conference of the IEEE Communications Society (INFOCOM
-  2004)}, (Hong Kong), pp.~2640--2651, 2004.
+Y.~Shang and W.~Ruml, ``Improved mds-based localization,'' in {\em INFOCOM
+  2004. Twenty-third AnnualJoint Conference of the IEEE Computer and
+  Communications Societies}, vol.~4, pp.~2640 -- 2651 vol.4, 7-11 2004.
 
 \bibitem{CCA}
 P.~Demartines and J.~Herault, ``Curvilinear component analysis: a
   self-organizing neural network for nonlinear mapping of data sets,'' {\em
   Neural Networks, IEEE Transactions on}, vol.~8, pp.~148 --154, jan 1997.
+
+\bibitem{Doherty}
+L.~Doherty, K.~Pister, and L.~El~Ghaoui, ``Convex position estimation in
+  wireless sensor networks,'' in {\em INFOCOM 2001. Twentieth Annual Joint
+  Conference of the IEEE Computer and Communications Societies. Proceedings.
+  IEEE}, vol.~3, pp.~1655 --1663 vol.3, 2001.
+
+\bibitem{Hara}
+S.~Hara and T.~Fukumura, ``Determination of the placement of anchor nodes
+  satisfying a required localization accuracy,'' in {\em Wireless Communication
+  Systems. 2008. ISWCS '08. IEEE International Symposium on}, pp.~128 --132,
+  21-24 2008.
+
+\bibitem{Zemek}
+R.~Zemek, M.~Takashima, S.~Hara, K.~Yanagihara, K.~Fukui, S.~Fukunaga, and
+  K.~Kitayama, ``An effect of anchor nodes placement on a target location
+  estimation performance,'' in {\em TENCON 2006. 2006 IEEE Region 10
+  Conference}, pp.~1 --4, 14-17 2006.
+
+\bibitem{Ash}
+J.~Ash and R.~Moses, ``On optimal anchor node placement in sensor localization
+  by optimization of subspace principal angles,'' in {\em Acoustics, Speech and
+  Signal Processing, 2008. ICASSP 2008. IEEE International Conference on},
+  pp.~2289 --2292, march 2008.
 
 \end{thebibliography}
