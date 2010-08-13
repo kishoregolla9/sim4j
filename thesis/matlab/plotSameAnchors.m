@@ -43,14 +43,9 @@ for i=1:size(errors,1)
   d=errors(i,:);
   d=d(d<threshold);
   doPlotErrorBars(d,confidence,pointSpec,i);
-end
-
-hold on;
-for i=1:size(errors,1)
-    d=errors(i,:);
-    d=d(d<threshold);
-    m=mean(d);
-    plot([0 size(d,2)],[m,m],':');
+  
+  m=mean(d);
+  plot([0 numAnchorSets],[m,m],':');
 end
 
 xlabel('Anchor Index');
