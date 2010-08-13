@@ -10,5 +10,4 @@ placement=NET.NODE_RANDOM;
 networkEdge=10 %#ok<NOPTS>
 networkHeight=networkEdge;
 networkWidth=networkEdge;
-numNodes=100 %#ok<NOPTS>
-
+numNodes=networkHeight*networkWidth; 
