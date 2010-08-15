@@ -6,7 +6,7 @@ for r=1:size(results,2)
     figureName=sprintf('Location Error - Radius %.1f by Anchor Set',results(r).radius);
     h=figure('Name',figureName,'visible','off');
     hold off
-    
+   
     grid on
     plotTitle=sprintf('Location Error\n%s Radius %.1f',...
         strrep(network.shape,'-',' '),results(r).radius);
@@ -83,13 +83,13 @@ for r=1:size(results,2)
     set(p(1),'Marker','^','Color','black');
     set(p(3),'Marker','s','Color','black');
     plots(1)=p(1);
-    legends{1}=sprintf('Max (Euclidean)');
+    legends{1}=sprintf('Max error');
     
     plots(2)=p(2);
-    legends{2}=sprintf('Mean (Euclidean)');
+    legends{2}=sprintf('Mean error');
     
     plots(3)=p(3);
-    legends{3}=sprintf('Min (Euclidean)');
+    legends{3}=sprintf('Min error');
     
 %     plots(3)=p(3);
 %     set(plots(3),'LineStyle','-.','Marker','v');
@@ -156,9 +156,9 @@ for r=1:size(results,2)
 %     title({plotTitle,temp});
     title(plotTitle);
 %     temp=sprintf('Sorted by Mean Error - %s\nWorst: %s',results(r).reflect,nWorst);
-    temp=sprintf('Anchor Set - Sorted by Mean Error');
+    temp=sprintf('Anchor Set (randomly chosen) - sorted by mean error');
     xlabel(temp);
-    legendHandle=legend(plots,legends,'Location','Best','FontSize',10);
+    legendHandle=legend(plots,legends,'Location','NorthEast');
     l=get(legendHandle,'Position');
     set(legendHandle,'Position',[l(1)+.05,l(2)+0.05,l(3),l(4)]);
     

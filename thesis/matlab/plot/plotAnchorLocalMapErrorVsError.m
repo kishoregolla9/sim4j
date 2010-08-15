@@ -8,6 +8,7 @@ h=figure('Name','Anchor Set Local Map Error vs Final Error','visible','off');
 hold off
 
 numAnchorSets=size(anchors,1);
+anchorsPerSet=size(anchors,2);
 labels=cell(size(results,2),1);
 for r=1:size(results,2)
     hold all
@@ -21,7 +22,7 @@ for r=1:size(results,2)
         end
         errorPerAnchorSet(s)=mean([results(r).errors(s,:).mean],2);
     end
-    dataToPlot=[sumLocalMapError./3 errorPerAnchorSet];
+    dataToPlot=[sumLocalMapError./anchorsPerSet errorPerAnchorSet];
     dataToPlot=sortrows(dataToPlot,1);
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius %.2f', results(r).radius);
@@ -31,8 +32,8 @@ end
 grid on
 plotTitle=sprintf('Network %s',network.shape);
 title({'Anchor Node Local Map Error vs Final Location Error',plotTitle});
-xlabel('Mean of Local Map Errors for each Anchor Set');
-ylabel('Location Error (factor of radius)');
+xlabel('Mean Local Map Errors for each Anchor Set');
+ylabel('Mean Location Error (factor of radius)');
 legend(labels);
 hold off;
 
