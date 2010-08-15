@@ -1,8 +1,8 @@
 
-numNetworks=35 %#ok<NOPTS>
+numNetworks=5 %#ok<NOPTS>
 
 numAnchorsPerSet=3 %#ok<NOPTS>
-numAnchorSets=40 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
 
 doAllStarts=false;
 shape=NET.SHAPE_SQUARE;

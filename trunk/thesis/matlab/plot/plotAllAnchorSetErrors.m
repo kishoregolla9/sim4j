@@ -3,12 +3,13 @@ function [ h ] = plotAllAnchorSetErrors( results,anchors,folder)
 network=results.network;
 
 for r=1:size(results,2)
-    figureName=sprintf('The Results for Radius %.1f by Anchor Set',results(r).radius);
+    figureName=sprintf('Location Error - Radius %.1f by Anchor Set',results(r).radius);
     h=figure('Name',figureName,'visible','off');
     hold off
     
     grid on
-    plotTitle=sprintf('%s - Network %s',figureName,network.shape);
+    plotTitle=sprintf('Location Error\n%s Radius %.1f',...
+        strrep(network.shape,'-',' '),results(r).radius);
     addaxislabel(1,'Location Error (factor of radius)');
     hold all
     
@@ -78,9 +79,9 @@ for r=1:size(results,2)
     set(ax1,'XScale','log');
     legends=cell(3,1);
     %     p=plot([data(:,2),data(:,3),data(:,7)],'-o');
-    p=plot([data(:,2),data(:,3),data(:,4)],'-o');
-    set(p(1),'Marker','^');
-    set(p(3),'Marker','v');
+    p=plot([data(:,2),data(:,3),data(:,4)],'-ok');
+    set(p(1),'Marker','^','Color','black');
+    set(p(3),'Marker','s','Color','black');
     plots(1)=p(1);
     legends{1}=sprintf('Max (Euclidean)');
     
@@ -148,15 +149,16 @@ for r=1:size(results,2)
     %     legends{11}=sprintf('Procrustes Dissimilarity Measure');
     %     addaxislabel(6,'Procrustes Dissimilarity Measure');
     
-    n=2;
-    nWorst=sprintf('%i ',data(1:n,1));
-    nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
-    temp=sprintf('Best: %s',nBest);
-    nWorst %#ok<NOPRT>
-    title({plotTitle,temp});
-    temp=sprintf('Sorted by Mean Error - %s\nWorst: %s',results(r).reflect,nWorst);
+%     n=2;
+%     nWorst=sprintf('%i ',data(1:n,1));
+%     nBest=sprintf('%i ',data(end:-1:size(data,1)-n-1,1));
+%     temp=sprintf('Best: %s',nBest);
+%     title({plotTitle,temp});
+    title(plotTitle);
+%     temp=sprintf('Sorted by Mean Error - %s\nWorst: %s',results(r).reflect,nWorst);
+    temp=sprintf('Anchor Set - Sorted by Mean Error');
     xlabel(temp);
-    legendHandle=legend(plots,legends,'Location','NorthWestOutside','FontSize',6);
+    legendHandle=legend(plots,legends,'Location','Best','FontSize',10);
     l=get(legendHandle,'Position');
     set(legendHandle,'Position',[l(1)+.05,l(2)+0.05,l(3),l(4)]);
     
