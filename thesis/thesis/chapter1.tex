@@ -7,7 +7,12 @@ Many protocols have been proposed\cite{APS,MDS-MAP,CCA-MAP07} to calculate relat
 \section{Motivation} 
 During previous work designing localization protocols\cite[p. 11]{CCA-MAP09}, authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Figure [TODO] demonstrates this using a CCA simulation.  This phenomenon led to this quest to determine the best anchor node placement.
 
-//TODO Include result plot showing varying errors for same network with different anchors
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/AnchorSetsVsError-Random-10x10-Square-with-100-nodes.eps}
+\caption{Location error for 100 anchor set choices in the same network}
+\label{fig:Motivation}
+\end{figure}
 
 In practical applications, scientists and engineers do not have the luxury of running their localization protocols multiple times to determine the best location.  In fact, this would defeat the purpose of the localization protocol in the first place.  Therefore, it is critical to be able to assign a maximum location error to all the nodes in a network so that data processing that relies on location can effectively take the location error into account.  
 
