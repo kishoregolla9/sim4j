@@ -7,7 +7,7 @@ maxRadius=radii(size(radii,2));
 network=results(1).network;
 numAnchorSets=size(anchors,1);
 
-angles=zeros(numAnchorSets,3);
+angles=zeros(numAnchorSets,2);
 for s=1:numAnchorSets
     anchorNodes=anchors(s,:);
     numAnchors=size(anchorNodes,2);
@@ -21,37 +21,44 @@ for s=1:numAnchorSets
     z=acos( (d(1)^2 + d(2)^2 - d(3)^2) / (2*d(1)*d(2)) );
     a=[x y z].*(180/pi);
     angles(s,1)=max(a);
-    angles(s,2)=median(a);
-    angles(s,3)=min(a);
+    %angles(s,2)=median(a);
+    angles(s,2)=min(a);
 end
 
-figure('Name','Average Anchor-Triangle Angle vs Error','visible','off');
-plotTitle=sprintf('Network %s',network.shape);
+figure('Name','Anchor-Triangle Angle vs Error','visible','off');
+plotTitle=sprintf('Network %s',strrep(network.shape,'-',' '));
 title({'Average Anchor-Triangle Angle vs Localization Error',...
     plotTitle});
 hold all
 grid on
-labels=cell(1, size(results,2));
+labels=cell(1, 4);
 li=1;
 for r=1:size(results,2)
-    errorPerAnchorSet=zeros(numAnchorSets,1);
+    errorPerAnchorSet=zeros(numAnchorSets,2);
     for s=1:numAnchorSets
         % For one start node
-        errorPerAnchorSet(s)=[results(r).errors(s,1).median];
+        errorPerAnchorSet(s,1)=[results(r).errors(s,1).max];
+        errorPerAnchorSet(s,2)=[results(r).errors(s,1).mean];
     end    
     
-    stats={'Max','Median','Min'};
-    for i=1:3
-        dataToPlot=[angles(:,i), errorPerAnchorSet];
-        dataToPlot=sortrows(dataToPlot,1);
-        plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
-        labels{li}=sprintf('%s angle radius=%.1f',stats{i},results(r).radius);
-        li=li+1;
-    end
+    dataToPlot=[angles(:,1),errorPerAnchorSet(:,1),errorPerAnchorSet(:,2)];
+    dataToPlot=sortrows(dataToPlot,1);
+    plot(dataToPlot(:,1),dataToPlot(:,2),'-^k');
+    plot(dataToPlot(:,1),dataToPlot(:,3),'--sk');
+    labels{1}=sprintf('Max angle, max error');
+    labels{2}=sprintf('Max angle, mean error');
+    
+    dataToPlot=[angles(:,2), errorPerAnchorSet];
+    dataToPlot=sortrows(dataToPlot,1);
+    plot(dataToPlot(:,1),dataToPlot(:,2),'-vk');
+    plot(dataToPlot(:,1),dataToPlot(:,3),'--ok');
+    labels{3}=sprintf('Min angle, max error');
+    labels{4}=sprintf('Min angle, mean error');
+    
 end
 legend(labels,'Location','Best');
 xlabel('Angle (degrees)');
-ylabel('Location Error');
+ylabel('Location Error (factor of radius)');
 hold off
 
 filename=sprintf('AnchorTriangleAnglesVsError-%s-Radius%.1f-to-%.1f',...

@@ -30,7 +30,7 @@ if (size(anchors,1) > 1)
     plotAnchorAreaVsError(results,anchors,folder);
     plotAnchorTriangleHeightVsError(results,anchors,folder);
     plotNumAnchorNeighborsVsError(results,anchors,radii,folder);
-    plotAnchorAngleVsError(results,anchors,radii,folder);
+    
     plotAnchorDistanceVsError(results,anchors,radii,folder);
     
     close all
