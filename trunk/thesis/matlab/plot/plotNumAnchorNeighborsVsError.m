@@ -10,7 +10,7 @@ numAnchorSets=size(anchors,1);
 
 %% Plot By Number Covered Nodes
 figure('Name','Num Anchor Neighbors vs Error','visible','off');
-plotTitle=sprintf('Network %s',network.shape);
+plotTitle=sprintf('Network %s',strrep(network.shape,'-',' '));
 title({'Number of Anchor Neighbors vs Localization Error',...
     plotTitle});
 hold all
@@ -21,7 +21,7 @@ for r=1:size(results,2)
     numNeighbors=zeros(numAnchorSets,1);
     for s=1:numAnchorSets
         % For one start node
-        errorPerAnchorSet(s)=[results(r).errors(s,1).median];
+        errorPerAnchorSet(s)=[results(r).errors(s,1).mean];
         anchorNodes=anchors(s,:);
         n=getNumUnique(network,anchorNodes);
         numNeighbors(s,1)=numNeighbors(s,1) + n;
@@ -32,9 +32,9 @@ for r=1:size(results,2)
     plot(dataToPlot(:,1),dataToPlot(:,2),'-o');
     labels{r}=sprintf('Radius=%.1f',results(r).radius);
 end
-legend(labels,'Location','Best');
+%legend(labels,'Location','NorthEast');
 xlabel('Number of Anchors Unique Neighbors');
-ylabel('Median Location Error');
+ylabel('Mean Location Error');
 hold off
 
 filename=sprintf('AnchorNeighborsVsError-%s-Radius%.1f-to-%.1f',...
