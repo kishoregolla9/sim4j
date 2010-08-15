@@ -1,1 +1,30 @@
 \chapter{Survey of Anchor Node Placements}
+
+\section{Measuring Location Error}
+Before searching for the best anchor node placement we must first define what \emph{best} means, in terms of location error.  First of all, location error is measured as a factor of radio radius (or range).  Since this study addresses range-free networks, and thus relies solely on network connectivitiy, the actual units of distance do not matter for general study.  What is important is how many other nodes in the network fall within the radio range of a given node.  
+
+Every network has its own application requirements, and thus there are many options for what statistics to examine for accessing the quality of locations.  The simplest criteria are to look at the mean and maximum location error across all nodes in the network.  For the most part, this is the basis for the results in this study.  However, this assumes that all nodes in the network must be used in the final results.  If the network designers know which nodes have poor locations, they may wish to exclude these nodes from the final results.  Therefore, it may be beneficial to look at the best, for example,  80\% of nodes in the network.  In practice, the designers do not know which nodes to exclude, so this study also tries to identify the worst areas of a network for location accuracy, depending on the anchor node placement.  
+
+\section{Expected Best Placements}
+
+
+\begin{figure}
+  \centering
+    \includegraphics[width=4in]{figures/AnchorTriangleHeightVsError-Random-10x10-Square-with-100-nodes.eps}
+    \caption{Anchor Triangle Height vs Location Error}
+    \label{fig:Height1}
+\end{figure}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=4in]{figures/AnchorTriangleAreaVsError-Random-10x10-Square-with-100-nodes.eps}
+    \caption{Anchor Triangle Area vs Location Error}
+    \label{fig:Area}
+\end{figure}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=4in]{figures/AnchorNeighborsVsError-Random-10x10-Square-with-100-nodes.eps}
+    \caption{Number of Anchor Neighbors vs Location Error}
+    \label{fig:Neighbors1}
+\end{figure}
