@@ -12,7 +12,7 @@ Many protocols have been proposed\cite{APS,MDS-MAP,CCA-MAP07} to calculate relat
     \label{fig:Motivation}
 \end{figure}
 
-During previous work designing localization protocols\cite[p. 11]{CCA-MAP09}, authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Initial investigations and simulations that indeed the placement of anchor nodes in the network did have an often dramatic effect on the location error as shown in Figure~\ref{fig:Motivation}.  This phenomenon led to this quest to determine the best anchor node placement.
+During previous work designing localization protocols\cite[p. 11]{CCA-MAP09}\cite[p.2 ]{MDS-MAP}, authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Initial investigations and simulations that indeed the placement of anchor nodes in the network did have an often dramatic effect on the location error as shown in Figure~\ref{fig:Motivation}.  This phenomenon led to this quest to determine the best anchor node placement.
 
 In practical applications, scientists and engineers do not have the luxury of running their localization protocols multiple times to determine the best location.  In fact, this would defeat the purpose of the localization protocol in the first place.  Therefore, it is critical to be able to assign a maximum location error to all the nodes in a network so that data processing that relies on location can effectively take the location error into account.  
 
@@ -26,11 +26,6 @@ Many localization protocols and algorithms provide a set of relative coordinates
 
 \section{Thesis Organization}
 A brief background of Wireless Sensor Networks and localization protocols in general are presented in Chapter 2.  Chapter 3 presents the limited related work in anchor node placement.  Chapter 4 contains the various anchor node placements and summaries of how they perform.  The cause of the extreme edge cases comes to light in Chapter 5, along with a discussion of the Procrustes algorithm.  Chapter 6 presents conclusions and future work.
-
-%\begin{figure} % % Requires \usepackage{graphicx} % \centering %
-%\includegraphics[width=4in]{../cca/results/45DegreeAxis_Random/networkRandom6x6Squarewith50nodes1-6Radius.eps}\\
-% \caption{The random network used, showing the 6 position sets of anchors.} %
-%\label{fig:45DegreeAxisRandomNetwork} %\end{figure}
 
 %\begin{equation}\label{eqn:newton_law} %    F = Ma %\end{equation}
 %Paragraph referencing an equation \ref{eqn:newton_law}.
