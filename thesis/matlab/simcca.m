@@ -277,7 +277,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             end 
             
         end
-        plotNetworkDiffs(result,anchors,folder,prefix);
+        plotNetworkDiffs(result,anchors,folder,prefix,false);
         
         if ~exist('results','var')
             % preallocate
