@@ -1,3 +1,4 @@
+
 \chapter{Introduction}
 
 Scientists, engineers, and researchers use wireless sensor networks (WSN) for a wide array of applications. Many of these applications rely on knowledge on the precise position of each node. While some may only require relative coordinates within the network, most biological, geophysical, and other scientific applications require coordinates on a global coordinate system. Perhaps the obvious solution is for each node in the network to be equipped with GPS or other location positioning services.  However, constraints on cost, power consumption, as well as visibility of satellites forbids this.  
@@ -7,12 +8,14 @@ Many protocols have been proposed\cite{APS,MDS-MAP,CCA-MAP07} to calculate relat
 \section{Motivation} 
 \begin{figure}
   \centering
-    \includegraphics[width=4in]{figures/AnchorSetErrors-Random-10x10-Square-with-100-nodes.eps}
+    \subfloat[Anchor Set 1]{\includegraphics[width=0.3\textwidth]{motivation/plot1.eps}}
+    \subfloat[Anchor Set 2]{\includegraphics[width=0.3\textwidth]{motivation/plot2.eps}}
+    \subfloat[Anchor Set 3]{\includegraphics[width=0.3\textwidth]{motivation/plot3.eps}}
     \caption{Location error for 100 anchor set choices in the same network}
     \label{fig:Motivation}
 \end{figure}
 
-During previous work designing localization protocols\cite[p. 11]{CCA-MAP09}\cite[p.2 ]{MDS-MAP}, authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Initial investigations and simulations that indeed the placement of anchor nodes in the network did have an often dramatic effect on the location error as shown in Figure~\ref{fig:Motivation}.  This phenomenon led to this quest to determine the best anchor node placement.
+During previous work designing localization protocols\cite[p. 11]{CCA-MAP09}\cite[p.2 ]{MDS-MAP}, authors often choose anchors at random within the network.  Frequently, their simulations are run multiple times with different anchors in order to statistically exclude anchor node placement from their results. Initial investigations and simulations demonstrate that indeed the placement of anchor nodes in the network did have an often dramatic effect on the location error as shown in Figure~\ref{fig:Motivation}.  This phenomenon led to this quest to determine the best anchor node placement.
 
 In practical applications, scientists and engineers do not have the luxury of running their localization protocols multiple times to determine the best location.  In fact, this would defeat the purpose of the localization protocol in the first place.  Therefore, it is critical to be able to assign a maximum location error to all the nodes in a network so that data processing that relies on location can effectively take the location error into account.  
 
