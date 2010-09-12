@@ -181,6 +181,11 @@ if (showStats)
     
 end
 
+temp=sprintf('Max error: %.3fr Mean error: %.3fr',...
+    result.errorsPerAnchorSet(s).max,...
+    result.errorsPerAnchorSet(s).mean);
+xlabel(temp,'fontsize',15);
+
 %% FINISH
 hold off
 saveFigure(folder,filename,h);
