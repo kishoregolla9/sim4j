@@ -75,16 +75,33 @@ S.~Hara and T.~Fukumura, ``Determination of the placement of anchor nodes
   Systems. 2008. ISWCS '08. IEEE International Symposium on}, pp.~128 --132,
   21-24 2008.
 
-\bibitem{Zemek}
-R.~Zemek, M.~Takashima, S.~Hara, K.~Yanagihara, K.~Fukui, S.~Fukunaga, and
-  K.~Kitayama, ``An effect of anchor nodes placement on a target location
-  estimation performance,'' in {\em TENCON 2006. 2006 IEEE Region 10
-  Conference}, pp.~1 --4, 14-17 2006.
-
 \bibitem{Ash}
 J.~Ash and R.~Moses, ``On optimal anchor node placement in sensor localization
   by optimization of subspace principal angles,'' in {\em Acoustics, Speech and
   Signal Processing, 2008. ICASSP 2008. IEEE International Conference on},
   pp.~2289 --2292, march 2008.
+
+\bibitem{Karl}
+H.~Karl and A.~Willig, {\em Protocols and Architectures for Wireless Sensor
+  Networks}.
+\newblock John Wiley \& Sons, Ltd, 2005.
+
+\bibitem{Savarese}
+C.~Savarese, J.~M. Rabaey, and K.~Langendoen, ``Robust positioning algorithms
+  for distributed ad-hoc wireless sensor networks,'' in {\em ATEC '02:
+  Proceedings of the General Track of the annual conference on USENIX Annual
+  Technical Conference}, (Berkeley, CA, USA), pp.~317--327, USENIX Association,
+  2002.
+
+\bibitem{Cheng}
+K.-Y. Cheng, K.-S. Lui, and V.~Tam, ``Hybloc: Localization in sensor networks
+  with adverse anchor placement,'' {\em Sensors}, vol.~9, no.~1, pp.~253--280,
+  2009.
+
+\bibitem{Zemek}
+R.~Zemek, M.~Takashima, S.~Hara, K.~Yanagihara, K.~Fukui, S.~Fukunaga, and
+  K.~Kitayama, ``An effect of anchor nodes placement on a target location
+  estimation performance,'' in {\em TENCON 2006. 2006 IEEE Region 10
+  Conference}, pp.~1 --4, 14-17 2006.
 
 \end{thebibliography}
