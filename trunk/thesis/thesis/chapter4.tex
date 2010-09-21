@@ -22,15 +22,20 @@ One theory is that the nodes that are one-hop away from an anchor would have bet
 
 \subsection{Anchors Farther Apart}
 
+Another seemingly obvious optimal anchor placement would be to have the anchors as far apart as possible.  This should ensure that the resulting linear transformation generated takes into account as much of the network variation as possible.   TODO...
 
 \section{Significant Factors}
 
-\subsection{Height of Triangle Formed by Anchors}
+Some other network layout metrics do have a stark impact on the overall location accuracy.
+
+\subsection{Triangle Formed by Anchors}
 
 \begin{figure}
   \centering
-    \subfloat[Height]{\includegraphics[width=0.5\textwidth]{AnchorTriangleHeightVsError-Random-10x10-Square-with-100-nodes.eps}}
-    \subfloat[Area]{\includegraphics[width=0.5\textwidth]{AnchorTriangleAreaVsError-Random-10x10-Square-with-100-nodes.eps}}
-    \label{fig:Triangle1}
+    \subfloat[Triangle Height]{\includegraphics[width=0.5\textwidth]{AnchorTriangleHeightVsError-Random-10x10-Square-with-100-nodes.eps}}
+    \subfloat[Triangle Area]{\includegraphics[width=0.5\textwidth]{AnchorTriangleAreaVsError-Random-10x10-Square-with-100-nodes.eps}}
+    \caption{Anchor Triangle Height and Area}
+    \label{fig:TriangleAreaHeight1}
 \end{figure}
 
+The triangle formed by a set of three anchors turns out to be a good indicator of the worst case of anchor placement as shown in ~\ref{fig:TriangleAreaHeight1}.
