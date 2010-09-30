@@ -31,7 +31,7 @@ for r=1:size(results,2)
     errorPerAnchorSet=zeros(numAnchorSets,1);
     for s=1:numAnchorSets
         % For one start node
-        errorPerAnchorSet(s)=[results(r).errors(s,1).max];
+        errorPerAnchorSet(s)=[results(r).errors(s,1).mean];
     end    
     
     dataToPlot=[distances, errorPerAnchorSet];
@@ -41,7 +41,7 @@ for r=1:size(results,2)
 end
 legend(labels,'Location','Best');
 xlabel('Sum of Distance between Anchors');
-ylabel('Median Location Error');
+ylabel('Mean Location Error');
 hold off
 
 filename=sprintf('AnchorDistanceVsError-%s-Radius%.1f-to-%.1f',...
