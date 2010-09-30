@@ -28,12 +28,13 @@ A number of hypotheses of anchor node placement were attempted, but showed no si
 
 The first hypothesis is to choose nodes as anchors that themselves will have low position accuracy.  Since the range-free algorithms depend heavily on network connectivity, the theory is that nodes with more neighbors will have lower location errors.  The lower error in the anchors themselves should then translate into a more accurate transformation of the entire network.
 
-Figure~\ref{fig:Neighbors1} , the effect of the number of neighbors is random.  In the end, having more neighbors means that the error of the anchor node itself has a better calculated location accuracy as show in TODO, but this does not translate into better network-wide accuracy.
-
+Figure~\ref{fig:Neighbors1}(TODO:show confidence intervals) plots the sum of unique one-hop neighbors for all anchor nodes versus mean localization error.  The irregularity of the curve disproves the hypothesis. Having more neighbors means that the error of the anchor node itself has a better calculated location accuracy, but this does not translate into better network-wide accuracy.
 
 \subsection{Anchors Farther Apart}
 
-Another seemingly obvious optimal anchor placement would be to have the anchors as far apart as possible.  This should ensure that the resulting linear transformation generated takes into account as much of the network variation as possible.   TODO...
+Another seemingly obvious optimal anchor placement is to have the anchors as far apart as possible.  The thinking behind this hypothesis is that if a wider area of the network is covered by the anchor nodes, then the resulting calculated transformation will take into account more network variations.  
+
+TODO: plot sum of anchor distances vs localization error
 
 \section{Significant Factors}
 
