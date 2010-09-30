@@ -5,19 +5,30 @@ Before searching for the best anchor node placement we must first define what \e
 
 Every network has its own application requirements, and thus there are many options for what statistics to examine for accessing the quality of locations.  The simplest criteria are to look at the mean and maximum location error across all nodes in the network.  For the most part, this is the basis for the results in this study.  However, this assumes that all nodes in the network must be used in the final results.  If the network designers know which nodes have poor locations, they may wish to exclude these nodes from the final results.  Therefore, if the economics of the network deployment allow, it may be beneficial to look at the best, for example, 80\% of nodes in the network.  In practice, the designers do not know which nodes to exclude, so this study also attempts to identify the worst areas of a network for location accuracy, depending on the anchor node placement.  
 
+\section{Coordinate Transformation}
+To understand the various hypotheses for the best anchor placement, a basic understanding of how the transformation from local to global coordinate systems must be explained.  After the local networks have been calculated and patched together into a single cohesive network, the anchor nodes are then used. Using Procrustes~\cite{procrustes-matlab} analysis, a linear transformation of translation, reflection, orthogonal rotation, and scaling is determined for the anchor nodes from the calculated to known coordinates.  The transformation is then applied to all nodes in the network.
+
+\section{Methodology}
+For the purposes of testing each hypothesis, randomly generated networks of varying sizes are used.  Unless otherwise specified, all nodes are randomly placed within a square area with an overall density of one node per unit area.  For example, a ten by ten square area will have 100 randomly placed nodes.  Anchor sets are chosen by identifying all possible sets via \emph{n choose k}, where \emph{n} is the number of nodes in the network and \emph{k} is the number of nodes per anchor set.  From the total set, a random selection is made.  This excludes the possibility of choosing the same anchor set more than once.
+
+When possible and appropriate, simulations are run on multiple networks and 95\% confidence intervals shown for the statistic in question.  
+
+To find all the Matlab\copyright code for simulations and plots see Appendix~\ref{AppendixA}.
+
 \section{Insignificant Factors}
 A number of hypotheses of anchor node placement were attempted, but showed no significant correlation to location error.  The following is a summary of what some may assume matter, but in reality does not.
 
 \subsection{Number of Neighbors}
 \begin{figure}
   \centering
-      \subfloat[The Data]{\includegraphics[width=0.5\textwidth]{AnchorNeighborsVsError-Random-10x10-Square-with-100-nodes-Radius2.5-to-2.5.eps}}
-    \subfloat[The Network]{\includegraphics[width=0.5\textwidth]{NetDiff-R2.5-Rank98-AnchorSet12-.eps}}
+      \includegraphics[width=0.5\textwidth]{numneighbors/AnchorNeighborsVsError-Random-10x10-Square-with-100-nodes-Radius2.5-to-2.5.eps}
     \caption{Number of Anchor Neighbors vs Location Error}
     \label{fig:Neighbors1}
 \end{figure}
 
-One theory is that the nodes that are one-hop away from an anchor would have better location accuracy.  As shown in Figure ~\ref{fig:Neighbors1}, the effect of the number of neighbors is random.  Figure ~\ref{fig:Neighbors1Network} shows the best of the chosen anchor sets, in terms of mean node location error and the difference between the actual and calculated locations.  Further, the three nodes with the worst locations are within one hop of an anchor.  In the end, having more neighbors means that the error of the anchor node itself has a better calculated location accuracy as show in TODO, but this does not translate into better network-wide accuracy.
+The first hypothesis is to choose nodes as anchors that themselves will have low position accuracy.  Since the range-free algorithms depend heavily on network connectivity, the theory is that nodes with more neighbors will have lower location errors.  The lower error in the anchors themselves should then translate into a more accurate transformation of the entire network.
+
+Figure~\ref{fig:Neighbors1} , the effect of the number of neighbors is random.  In the end, having more neighbors means that the error of the anchor node itself has a better calculated location accuracy as show in TODO, but this does not translate into better network-wide accuracy.
 
 
 \subsection{Anchors Farther Apart}
