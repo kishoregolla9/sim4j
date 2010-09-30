@@ -7,8 +7,11 @@ networkconstants;
 if exist('ccaconfigfile','var')
     run(ccaconfigfile);
 else
+    ccaconfigfile='ccaconfig.m';
     ccaconfig
 end
+% copyfile(ccaconfigfile,folder);
+
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
 % allows for console loop to set networkScale
@@ -35,8 +38,13 @@ elseif exist('anchorPointsFolder','var')
     folder=anchorPointsFolder;
 end
 
-anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
+anchorsfilename=dir(sprintf('%s/anchors*per*sets.mat',folder));
+if(size(anchorsfilename,1)==0)
+  anchorsfilename=sprintf('%s/anchors%iper%isets.mat',...
     folder,numAnchorsPerSet,numAnchorSets);
+else
+    anchorsfilename=sprintf('%s/%s',folder,anchorsfilename.name);
+end
 
 if networkScale > 1 && exist(folder,'dir') == 7
     save('temp.mat','sourceFolder','networkScale',...
