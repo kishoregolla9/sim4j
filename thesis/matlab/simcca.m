@@ -7,7 +7,7 @@ networkconstants;
 if exist('ccaconfigfile','var')
     run(ccaconfigfile);
 else
-    ccaconfigfile='ccaconfig.m';
+    ccaconfigfile='ccaconfig';
     ccaconfig
 end
 % copyfile(ccaconfigfile,folder);
