@@ -9,6 +9,10 @@ if (size(anchors,1) > 1)
     plotAllAnchorSetErrors(results,anchors,folder);
     close all
     hold off
+    plotAnchorErrorsVsError(results,anchors,folder);
+    close all
+    hold off
+    
     % plotIndependentXY(results,anchors,folder);
     close all
     hold off

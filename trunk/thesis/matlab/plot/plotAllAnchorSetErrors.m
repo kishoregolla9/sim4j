@@ -73,23 +73,28 @@ for r=1:size(results,2)
     
     data(:,18)=jackknife(@var,data(:,3));
     
-    data=sortrows(data, -3);
+%     data=sortrows(data, -3);
     
     ax1 = gca;
-    set(ax1,'XScale','log');
-    legends=cell(3,1);
+%     set(ax1,'XScale','log');
+    legends=cell(1,1);
+    
+    legends{1}=sprintf('Mean of Anchor Node Error');
+    p=plot([data(:,13),data(:,3)],'-ok');
+    
+    
     %     p=plot([data(:,2),data(:,3),data(:,7)],'-o');
-    p=plot([data(:,2),data(:,3),data(:,4)],'-ok');
-    set(p(1),'Marker','^','Color','black');
-    set(p(3),'Marker','s','Color','black');
+%     p=plot([data(:,2),data(:,3),data(:,4)],'-ok');
+%     set(p(1),'Marker','^','Color','black');
+%     set(p(3),'Marker','s','Color','black');
     plots(1)=p(1);
-    legends{1}=sprintf('Max error');
+%     legends{1}=sprintf('Max error');
     
-    plots(2)=p(2);
-    legends{2}=sprintf('Mean error');
+%     plots(2)=p(2);
+%     legends{2}=sprintf('Mean error');
     
-    plots(3)=p(3);
-    legends{3}=sprintf('Min error');
+%     plots(3)=p(3);
+%     legends{3}=sprintf('Min error');
     
 %     plots(3)=p(3);
 %     set(plots(3),'LineStyle','-.','Marker','v');
@@ -156,11 +161,12 @@ for r=1:size(results,2)
 %     title({plotTitle,temp});
     title(plotTitle);
 %     temp=sprintf('Sorted by Mean Error - %s\nWorst: %s',results(r).reflect,nWorst);
-    temp=sprintf('Anchor Set (randomly chosen) - sorted by mean error');
-    xlabel(temp);
-    legendHandle=legend(plots,legends,'Location','NorthEast');
-    l=get(legendHandle,'Position');
-    set(legendHandle,'Position',[l(1)+.05,l(2)+0.05,l(3),l(4)]);
+%     temp=sprintf('Anchor Set (randomly chosen) - sorted by mean error');
+%     xlabel(temp);
+    xlabel('Mean Anchor Node Error');
+%     legendHandle=legend(plots,legends,'Location','NorthEast');
+%     l=get(legendHandle,'Position');
+%     set(legendHandle,'Position',[l(1)+.05,l(2)+0.05,l(3),l(4)]);
     
     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
         network.shape,results(r).radius);
