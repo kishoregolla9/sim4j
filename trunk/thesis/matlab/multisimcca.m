@@ -71,6 +71,7 @@ mkdir(folderAll);
 %% Load and Plot Total Results
 meanErrors=zeros(numAnchorSets,numNetworks);
 maxErrors=zeros(numAnchorSets,numNetworks);
+anchorErrors=zeros(numAnchorSets,numNetworks);
 for anchorSet=1:numAnchorSets
     for i=1:numNetworks
         if i == 1
@@ -91,13 +92,15 @@ for anchorSet=1:numAnchorSets
         if (length(result.errors) > 1)
             meanErrors(anchorSet,i)=result.errors(anchorSet).mean;
             maxErrors(anchorSet,i)=result.errors(anchorSet).max;
+            anchorErrors(anchorSet,i)=result.anchorErrors(anchorSet).mean;
         else
             meanErrors(anchorSet,i)=result.errors.mean;
             maxErrors(anchorSet,i)=result.errors.max;
+            anchorErrors(anchorSet,i)=result.anchorErrors.mean;
         end
         
         if (i > 1)
-            source=sprintf('%s/png/networkdiffs/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
+            source=sprintf('%s/png/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
                 folder);
             destination=sprintf('%s/%.2f-AS%i-NetworkDiff%i.png',...
                 folderAll,meanErrors(i),anchorSet,i);
@@ -111,6 +114,9 @@ clear result anchors;
  %%
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 plotSameAnchors(folderAll,ccaconfigfile,shapeLabel,numNetworks,numAnchorSets,maxErrors,meanErrors);
+
+plotMultiData(folderAll,shapeLabel,'Mean Anchor Error',numNetworks,numAnchorSets,maxErrors,meanErrors,anchorErrors);
+
 
 %% Histogram of Moving Anchors
 h=figure('Name','Histogram','visible','off');
@@ -148,8 +154,8 @@ upper=mu+ci;
 plot(sorted(:,1),'-^b','MarkerSize',3);
 legend('Max');
 
-plot([0 length(maxErrors)], [lower, lower],'b');
-plot([0 length(maxErrors)], [upper, upper],'b');
+% plot([0 length(maxErrors)], [lower, lower],'b');
+% plot([0 length(maxErrors)], [upper, upper],'b');
 plot([0 length(maxErrors)], [mu, mu],'b--');
 plot(repmat(length(maxErrors)/2, length(maxErrors), 1), maxErrors,...
     'o','MarkerSize',1);
@@ -168,9 +174,9 @@ upper=mu+ci;
 plot(sorted(:,2),'-og','MarkerSize',3);
 legend('Mean');
 hold all
-plot([0 length(meanErrors)], [lower, lower],'g');
-plot([0 length(meanErrors)], [mu, mu],'g--');
-plot([0 length(meanErrors)], [upper, upper],'g');
+% plot([0 length(meanErrors)], [lower, lower],'g');
+% plot([0 length(meanErrors)], [mu, mu],'g--');
+% plot([0 length(meanErrors)], [upper, upper],'g');
 
 plot([0 length(meanErrors)], [mu, mu],'g--');
 

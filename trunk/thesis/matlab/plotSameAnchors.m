@@ -24,7 +24,7 @@ confidence=0.05;
 networkconstants;
 run(ccaconfigfile);
 name=sprintf('Different Networks around Same Anchors - %s Error',desc);
-h=figure('Name',name);%,'visible','off');
+h=figure('Name',name,'visible','off');
 hold all
 if (threshold ~= 100)
     x=sprintf('Excluding values < %0.2f',threshold);
