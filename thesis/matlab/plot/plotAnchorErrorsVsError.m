@@ -10,16 +10,9 @@ for r=1:size(results,2)
     grid on
     plotTitle=sprintf('Mean Anchor Node Errors vs Network Location Error\n%s Radius %.1f',...
         strrep(network.shape,'-',' '),results(r).radius);
+    title(plotTitle);
     addaxislabel(1,'Location Error (factor of radius)');
     hold all
-    
-    numStartNodes=size(results(r).errors,2);
-    startNodeData=zeros(numStartNodes,3);
-    for s=1:numStartNodes
-        startNodeData(s,1)=mean([results(r).errors(:,s).max],2);
-        startNodeData(s,2)=mean([results(r).errors(:,s).mean],2);
-        startNodeData(s,3)=mean([results(r).errors(:,s).min],2);
-    end
     
     numAnchorSets=size(results(r).errors,1);
     data=zeros(numAnchorSets,5);
@@ -34,9 +27,12 @@ for r=1:size(results,2)
                 results(r).patchedMap(a).distanceVector(anchors(a,i),:);
         end
         
-        data(a,5)=results(r).anchorErrors(a).mean;
+%         data(a,5)=results(r).anchorErrors(a).mean;
+        data(a,5)=mean(anchorError);
     end
-    plot([data(:,5),data(:,3)],'-ok');
+    x=data(:,5);
+    y=data(:,3);
+    plot([x,y],'-ok');
     
     filename=sprintf('AnchorErrorsVsError-%s-Radius%.1f',...
         network.shape,results(r).radius);
