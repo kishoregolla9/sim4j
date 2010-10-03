@@ -7,7 +7,14 @@ maxRadius=results(end).radius;
 network=results(1).network;
 numAnchorSets=size(anchors,1);
 
-heights=triangleStats(network.distanceMatrix,anchors).heights;
+stats=triangleStats(network,anchors);
+heights=zeros(numAnchorSets,4);
+for s=1:numAnchorSets
+    heights(s,1)=stats.heights(s).max;
+    heights(s,2)=stats.heights(s).median;
+    heights(s,3)=stats.heights(s).min;
+    heights(s,4)=stats.heights(s).sum;
+end
 
 figure('Name','Anchor Triangle Height vs Error','visible','off');
 plotTitle=sprintf('Network %s',strrep(network.shape,'-',' '));
@@ -22,21 +29,18 @@ for r=1:size(results,2)
         % For one start node
         errorPerAnchorSet(s,1)=[results(r).errors(s,1).max];
         errorPerAnchorSet(s,2)=[results(r).errors(s,1).mean];
-    end    
+    end
     
     stats={'Max','Median','Min','Sum'};
-
+    
     hStddev=zeros(4,1);
     hRanges=zeros(4,1);
     
-    hStddev(1)=std(heights(:).max);
-    hRanges(1)=range(heights(:).max);
-    hRanges(2)=range(heights(:).median);
-    hRanges(2)=range(heights(:).median);
-    hRanges(3)=range(heights(:).min);
-    hRanges(3)=range(heights(:).min);
-    hRanges(4)=range(heights(:).sum);
-    hRanges(4)=range(heights(:).sum);
+    for i=1:4
+        hStddev(i)=std(heights(:,i));
+        hRanges(i)=range(heights(:,i));
+        fprintf(1,'Std Dev of %s: %.2f; Range:%.2f\n',stats{i},hStddev(i),hRanges(i));
+    end
     
     [m,index]=min(hStddev./hRanges);
     for i=index:index
