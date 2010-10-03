@@ -9,7 +9,7 @@ numAnchorSets=size(anchors,1);
 
 %% Plot by Area
 
-stats=triangleStats(network.distanceMatrix,anchors);
+stats=triangleStats(network,anchors);
 
 hold off
 fig=figure('Name','Anchor Triangle Area vs Error','visible','off');

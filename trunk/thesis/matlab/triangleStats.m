@@ -1,4 +1,4 @@
-function [stats] = triangleStats(distanceMatrix,anchors)
+function [stats] = triangleStats(network,anchors)
 
 numAnchorSets=size(anchors,1);    
 
@@ -12,14 +12,14 @@ heights=struct(...
     'min',0,...
     'sum',0);
 
-centroids=zeros(numAnchorSets,1);
+centroids=zeros(numAnchorSets,2);
 for s=1:numAnchorSets
     anchorNodes=anchors(s,:);
     numAnchors=size(anchorNodes,2);
     d=zeros(numAnchors*2-1,1);
-    d(1)=distanceMatrix(anchorNodes(1),anchorNodes(2));
-    d(2)=distanceMatrix(anchorNodes(2),anchorNodes(3));
-    d(3)=distanceMatrix(anchorNodes(3),anchorNodes(1));
+    d(1)=network.distanceMatrix(anchorNodes(1),anchorNodes(2));
+    d(2)=network.distanceMatrix(anchorNodes(2),anchorNodes(3));
+    d(3)=network.distanceMatrix(anchorNodes(3),anchorNodes(1));
     areas(s,1)=heron(d(1),d(2),d(3));
     c=centroid(network.points(anchorNodes(:),:));
     distances(s,1)=distance([network.height/2 network.width/2],c);
@@ -34,14 +34,14 @@ for s=1:numAnchorSets
     heights(s).mean=mean(h);
     heights(s).min=min(h);
     heights(s).sum=sum(h);
-    centroids(s)=c;
+    centroids(s,:)=c;
 end
 
 stats=struct();
 stats.heights=heights;
 stats.areas=areas;
 stats.distancesToCentroid=distances;
-stats.centroids;
+stats.centroids=centroids;
 
 end
 
