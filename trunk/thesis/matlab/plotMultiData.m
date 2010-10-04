@@ -47,7 +47,7 @@ d=sortrows(sortable);
 x=d(:,1);
 y=d(:,2);
 
-numBins=10;
+numBins=20;
 pointsPerBin=size(x,1)/numBins;
 bx=zeros(pointsPerBin,numBins);
 by=zeros(pointsPerBin,numBins);

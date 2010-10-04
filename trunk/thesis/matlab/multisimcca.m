@@ -72,6 +72,9 @@ mkdir(folderAll);
 meanErrors=zeros(numAnchorSets,numNetworks);
 maxErrors=zeros(numAnchorSets,numNetworks);
 anchorErrors=zeros(numAnchorSets,numNetworks);
+triangleHeights=zeros(numAnchorSets,numNetworks);
+triangleAreas=zeros(numAnchorSets,numNetworks);
+allAnchors=anchors;
 for anchorSet=1:numAnchorSets
     for i=1:numNetworks
         if i == 1
@@ -85,18 +88,23 @@ for anchorSet=1:numAnchorSets
             if strcmp(sscanf(files(j).name,'%6s',1),'result') == true || ...
                     strcmp(sscanf(files(j).name,'%7s',1),'anchors') == true
                 f=sprintf('%s/%s',folder,files(j).name);
-                fprintf(1,'%i Loading \"%s\" ...\n',i,f);
+                fprintf(1,'%i-%i Loading \"%s\" ...\n',anchorSet,i,f);
                 load(f);
             end
         end
+        stats=triangleStats(result.network,allAnchors(anchorSet,:));
         if (length(result.errors) > 1)
             meanErrors(anchorSet,i)=result.errors(anchorSet).mean;
             maxErrors(anchorSet,i)=result.errors(anchorSet).max;
             anchorErrors(anchorSet,i)=result.anchorErrors(anchorSet).mean;
+            triangleHeights(anchorSet,i)=stats.heights.min;
+            triangleAreas(anchorSet,i)=stats.areas;
         else
             meanErrors(anchorSet,i)=result.errors.mean;
             maxErrors(anchorSet,i)=result.errors.max;
             anchorErrors(anchorSet,i)=result.anchorErrors.mean;
+            triangleHeights(anchorSet,i)=stats.heights.min;
+            triangleAreas(anchorSet,i)=stats.areas;
         end
         
         if (i > 1)
@@ -111,11 +119,14 @@ for anchorSet=1:numAnchorSets
     end
 end
 clear result anchors;
- %%
+%%
+run(ccaconfigfile);
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 plotSameAnchors(folderAll,ccaconfigfile,shapeLabel,numNetworks,numAnchorSets,maxErrors,meanErrors);
 
 plotMultiData(folderAll,shapeLabel,'Mean Anchor Error',numNetworks,numAnchorSets,maxErrors,meanErrors,anchorErrors);
+plotMultiData(folderAll,shapeLabel,'Triangle Height',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleHeights);
+plotMultiData(folderAll,shapeLabel,'Triangle Area',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleAreas);
 
 
 %% Histogram of Moving Anchors
