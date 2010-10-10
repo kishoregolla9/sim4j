@@ -13,7 +13,7 @@ end
 if (exist('folderpath','var') == 0)
     ccaconfig
     shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
-    folderpath=sprintf('../results/%04i%02i%02i_%02i%02i%02i_%s-%iSets-%iNets',...
+    folderpath=sprintf('../results/multi-%04i%02i%02i_%02i%02i%02i_%s-%iSets-%iNets',...
         fix(clock),shapeLabel,numAnchorSets,numNetworks);
     mkdir(folderpath);
     dst=sprintf('%s/ccaconfig.m',folderpath);
@@ -127,6 +127,11 @@ plotSameAnchors(folderAll,ccaconfigfile,shapeLabel,numNetworks,numAnchorSets,max
 plotMultiData(folderAll,shapeLabel,'Mean Anchor Error',numNetworks,numAnchorSets,maxErrors,meanErrors,anchorErrors);
 plotMultiData(folderAll,shapeLabel,'Triangle Height',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleHeights);
 plotMultiData(folderAll,shapeLabel,'Triangle Area',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleAreas);
+
+threshold=1.2;
+plotMultiData(folderAll,shapeLabel,'Mean Anchor Error',numNetworks,numAnchorSets,maxErrors,meanErrors,anchorErrors,threshold);
+plotMultiData(folderAll,shapeLabel,'Triangle Height',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleHeights,threshold);
+plotMultiData(folderAll,shapeLabel,'Triangle Area',numNetworks,numAnchorSets,maxErrors,meanErrors,triangleAreas,threshold);
 
 
 %% Histogram of Moving Anchors
