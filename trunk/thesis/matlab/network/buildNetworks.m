@@ -8,10 +8,9 @@ for i=1 : numRadii
     fprintf(1,'Radius: %.1f\n', radius);
 
     [network]=checkNetwork(sourceNetwork,radius);
-    if (~network.connected),
-        fprintf(1,'Network not connected -- trying again');
-        networks=buildNetworks(sourceNetwork,radii,numRadii,folder);
-        return;
+    while (~network.connected),
+        fprintf(1,'Network not connected -- trying again\n');
+        [network]=checkNetwork(sourceNetwork,radius);
     end
 
     if ~exist('networks','var')
