@@ -38,6 +38,7 @@ if (size(anchors,1) > 1)
     plotNumAnchorNeighborsVsError(results,anchors,radii,folder,2);
     
     plotAnchorDistanceVsError(results,anchors,radii,folder);
+    plotAnchorDistanceVsError(results,anchors,radii,folder,2);
     
     close all
     hold off
