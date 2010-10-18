@@ -53,8 +53,10 @@ end
 % plot the actual y points
 plot(x,y,'.');
 
-r=corrcoef(x,y);
-coef=sprintf('Correlation Coefficient: %.2f',r(1,2));
+p = polyfit(x, y, 2);
+Output = polyval(p,x);
+correlation = corrcoef(y, Output);
+coef=sprintf(' Coefficient: %.2f',correlation(1,2));
 bottomlabel=sprintf('%s\n%s',description,coef);
 
 if (doConfidenceIntervals)

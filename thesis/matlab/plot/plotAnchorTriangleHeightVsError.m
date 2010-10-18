@@ -47,12 +47,20 @@ for r=1:size(results,2)
         heights=heights./network.radius;
         dataToPlot=[heights(:,i), errorPerAnchorSet(:,1), errorPerAnchorSet(:,2)];
         dataToPlot=sortrows(dataToPlot,1);
-        plot(dataToPlot(:,1),dataToPlot(:,2),'-^');
-        plot(dataToPlot(:,1),dataToPlot(:,3),'-o');
+        
+        correlation1=getCorrelation(dataToPlot(:,1),dataToPlot(:,2));
+        correlation2=getCorrelation(dataToPlot(:,1),dataToPlot(:,3));
+        
+        plot(dataToPlot(:,1),dataToPlot(:,2),'^');
+        plot(dataToPlot(:,1),dataToPlot(:,3),'o');
         li=li+1;
     end
 end
-legend({'Max error','Mean error'},'Location','NorthEast');
+
+l1=sprintf('Max error, correlation coefficient=%.2f',correlation1(1,2));
+l2=sprintf('Mean error, correlation coefficient=%.2f',correlation2(1,2));
+
+legend({l1,l2},'Location','NorthEast');
 xlabel('Height of triangle formed by anchor nodes (factor of radius)');
 ylabel('Location Error (factor of radius)');
 hold off
@@ -63,3 +71,8 @@ saveFigure(folder,filename);
 
 end
 
+function [correlation] = getCorrelation(x,y)
+        poly = polyfit(x, y, 2);
+        Output = polyval(poly,x);
+        correlation = corrcoef(y, Output);
+end

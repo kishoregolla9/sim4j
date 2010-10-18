@@ -313,7 +313,6 @@ if doOperations == true
     plotErrorsPerTransform(resultsByOperation,folder,filename);
 end
 
-
 %% Done
 totalTime=toc(simccaStart);
 fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',...
@@ -322,4 +321,3 @@ fprintf(1,'Done %i radius steps in %.3f min (%.3f sec/step) (%.3f sec/node)\n',.
 %plotNetworks(anchors, results, networks, folder);
 
 diary off;
-

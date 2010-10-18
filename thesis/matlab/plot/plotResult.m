@@ -7,6 +7,7 @@ if (size(results,1) > 1)
 end
 if (size(anchors,1) > 1)
     plotAllAnchorSetErrors(results,anchors,folder);
+    plotAllAnchorSetErrors(results,anchors,folder,2);
     close all
     hold off
     plotAnchorErrorsVsError(results,anchors,folder);
@@ -34,6 +35,7 @@ if (size(anchors,1) > 1)
     plotAnchorAreaVsError(results,anchors,folder);
     plotAnchorTriangleHeightVsError(results,anchors,folder);
     plotNumAnchorNeighborsVsError(results,anchors,radii,folder);
+    plotNumAnchorNeighborsVsError(results,anchors,radii,folder,2);
     
     plotAnchorDistanceVsError(results,anchors,radii,folder);
     
