@@ -78,8 +78,10 @@ for r=1:numRadii
         p=p+1;
     end
 end
+if (iscell(labels) && isstr(labels{1}))
+    legend(labels,'Location','NorthEast');
+end
 
-legend(labels,'Location','NorthEast');
 if (numRadii == 1 && exist('dataLabels','var')==0)
     dataName=sprintf('%s\nCorrelation Coefficient=%.2f',...
         dataName,correlation(1,2));
