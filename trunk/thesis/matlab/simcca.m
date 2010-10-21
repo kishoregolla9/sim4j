@@ -107,13 +107,19 @@ if (exist(filename,'file') ~= 0)
     fprintf(1,'Loading source network from %s\n',filename);
     load(filename);
 else
-    [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
-    attempt=1;
-    while (~sourceNetwork.connected),
-        fprintf(1,'Source Network not connected -- trying again %i\n',attempt);
-        [sourceNetwork]=checkNetwork(sourceNetwork,radius);
-        attempt=attempt+1;
-    end    
+    builtSource=false;
+    while (~builtSource)
+        [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
+        builtSource=true;
+        for r=1:numRadii
+            [a]=checkNetwork(sourceNetwork,radii(r));
+            if (~a.connected)
+              [sourceNetwork]=buildNetwork(shape,placement,networkWidth,networkHeight,numNodes);
+              builtSource=false;
+              break;
+            end
+        end
+    end
     
     if (exist('anchorPoints','var'))
         for i=1:length(anchorPoints)
