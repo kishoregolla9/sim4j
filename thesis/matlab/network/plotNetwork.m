@@ -3,7 +3,8 @@ function [h]=plotNetwork(network,anchors,folder,suffix,result,anchorIndex)
 
 radius=network.radius;
 radiusString=sprintf('Radio Range: %.1f',radius);
-figurename=sprintf('%s %s',network.shape,radiusString);
+shape=strrep(network.shape,'-',' ');
+figurename=sprintf('%s %s',shape,radiusString);
 hold off
 %% Plot Network
 filename=sprintf('%s/network-radius%.1f.fig',folder,radius);
@@ -20,7 +21,7 @@ else
         zData=zeros(size(network.points(:,1),1));
     end
     dataToPlot=[network.points(:,1) network.points(:,2) zData];
-    gplot(network.connectivity, dataToPlot,'-sb');
+    gplot(network.connectivity, dataToPlot,':sk');
 end
 
 hold all
@@ -32,7 +33,7 @@ if (size(anchors,1)>0)
 else
     stats='';
 end
-title({network.shape;radiusString;suffix;stats});
+title({shape;radiusString;suffix;stats});
 
 %% Plot Anchor Nodes
 hold all
