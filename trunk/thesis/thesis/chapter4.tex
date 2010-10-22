@@ -16,15 +16,15 @@ When possible and appropriate, simulations are run on multiple networks and 95\%
 To find all the Matlab\copyright code for simulations and plots see Appendix~\ref{AppendixA}.
 
 \section{Sequence of Hypotheses}
-Almost as important as knowing which factors effect localization is knowing which factors to ignore.
-The following is a summary of hypotheses of anchor node placement factors that show no or little significant correlation to location error.  The data in the following graphs is taken from a random selection of 1000 anchor sets of three nodes each for the network shown in \ref{fig:HypothesesNetwork}.
-
 \begin{figure}
 	\centering
 		\includegraphics[width=0.75\textwidth]{network1.eps}
-	\label{fig:HypothesesNetwork}
 	\caption{The sample network, showing connectivity between nodes}
+	\label{fig:HypothesesNetwork}
 \end{figure}
+
+Almost as important as knowing which factors effect localization is knowing which factors to ignore.
+The following is a summary of hypotheses of anchor node placement factors that show no or little significant correlation to location error.  The data in the following graphs is taken from a random selection of 1000 anchor sets of three nodes each for the network shown in Figure~\ref{fig:HypothesesNetwork}.
 
 \subsection{Anchor Node Error}
 The first hypothesis is to choose nodes as anchors that we expect to have high location accuracy. Because we are trying to provide an a priori design technique for network planners, the information chosen to reach the goal must be something the network planner can determine before any localization has been performed.  For this purpose we choose the number of one-hop neighbors.  Since the range-free algorithms depend heavily on network connectivity, the theory is that nodes with more neighbors will have lower location errors.  The lower error in the anchors themselves should then translate into a more accurate transformation of the entire network.
@@ -40,8 +40,8 @@ The first hypothesis is to choose nodes as anchors that we expect to have high l
 		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorNeighborsVsErrorExcluding.eps}}
 	\subfloat[Mean Anchor Error vs Location Error Excluding Outliers]{\label{fig:AnchorErrorExcluding}
 		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorSetErrorVsErrorExcluding.eps}}		
+	\caption{}	
 	\label{}
-	\caption{}
 \end{figure}
 
 Figure~\ref{fig:Neighbors} plots the sum of unique one-hop neighbors for all anchor nodes versus mean localization error.  The irregularity of the curve disproves the hypothesis. Further, the correlation coefficient is extremely low at less than 0.1. Having more neighbors means that the error of the anchor node itself has a better calculated location accuracy, but this does not translate into better network-wide accuracy.
@@ -60,22 +60,32 @@ Another seemingly obvious optimal anchor placement is to have the anchors as far
 		\includegraphics[width=0.5\textwidth]{distances/SumAnchorDistanceVsError.eps}}
 	\subfloat[Minimum Distance]{\label{fig:AnchorDistancesMinimum}
 		\includegraphics[width=0.5\textwidth]{distances/MinimumAnchorDistanceVsError.eps}}
-% 	\subfloat[Mean Distance between Anchors vs Location Error]{\label{fig:AnchorDistancesMean}
-% 		\includegraphics[width=0.5\textwidth]{distances/MeanAnchorDistanceVsError.eps}}		
 		\\
 	\subfloat[Sum of Distance, Excluding Outliers]{\label{fig:AnchorDistancesSumExcluding}
 		\includegraphics[width=0.5\textwidth]{distances/SumAnchorDistanceVsErrorExcluding.eps}}
 	\subfloat[Minimum Distance, Excluding Outliers]{\label{fig:AnchorDistancesMinimumExcluding}
 		\includegraphics[width=0.5\textwidth]{distances/MinimumAnchorDistanceVsErrorExcluding.eps}}
-% 	\subfloat[Mean Distance between Anchors vs Location Error Excluding Outliers]{\label{fig:AnchorDistancesMeanExcluding}
-% 		\includegraphics[width=0.5\textwidth]{distances/MeanAnchorDistanceVsErrorExcluding.eps}}
-    \label{fig:AnchorDistances}
 	\caption{Distance Between Anchors}
+    \label{fig:AnchorDistances}
 \end{figure}
 
-\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Regardless, the plot shows that again there is low correlation between the distance between anchors and the location calculation.  
+Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Regardless, the plot shows that again there is low correlation between the distance between anchors and the location calculation.  
 
-Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in \ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.24.  However, it does appear that the outliers are more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in \ref{fig:AnchorDistancesMinimumExcluding}, the coefficient doubles to 0.56 demonstrating that perhaps the trend in thinking through these hypotheses is correct.
+Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.24.  However, it does appear that the outliers are more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient doubles to 0.56 demonstrating that perhaps the trend in thinking through these hypotheses is correct.
+
+\subsection{Area of Anchor Triangle}
+
+\begin{figure}
+  \centering
+	\subfloat[All points]{\label{fig:AnchorAreaAll}
+		\includegraphics[width=0.5\textwidth]{areas/AnchorAreaVsError.eps}}
+	\subfloat[Excluding outliers]{\label{fig:AnchorAreaExcluding}
+		\includegraphics[width=0.5\textwidth]{areas/AnchorAreaVsErrorExcluding.eps}}
+	\caption{Area of Anchor Triangle vs Location Error}	    
+	\label{fig:AnchorArea}
+\end{figure}
+
+Continuing the trend of trying to show some increased correlation between the anchor coverage and location error, Figure~\ref{fig:AnchorArea} shows the 
 
 \section{Significant Factors}
 
