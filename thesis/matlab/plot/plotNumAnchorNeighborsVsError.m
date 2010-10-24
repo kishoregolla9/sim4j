@@ -21,12 +21,12 @@ for r=1:numResults
 end
 
 if (exist('threshold','var')==0)
-    plotSingleDataSet(figName,dataName,results,anchors,radii,numNeighbors,...
-        folder);
-else
-    plotSingleDataSet(figName,dataName,results,anchors,radii,numNeighbors,...
-        folder,threshold);
+    threshold=100;
 end
+
+plotSingleDataSet(figName,dataName,results,anchors,radii,numNeighbors,...
+    folder,threshold,{'Number of Anchor Neighbors'});
+
 end
 
 function [num] = getNumUnique(network,anchorSet)
