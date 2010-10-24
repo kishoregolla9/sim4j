@@ -210,5 +210,5 @@ saveFigure(folderAll,'ErrorBars',h);
 
 %% Done
 timeElapsed=toc(multiStart);
-fprintf(1,'Done in %.2f sec\n',timeElapsed);
+fprintf(1,'Done multisimcca in %.2f sec\n',timeElapsed);
 
