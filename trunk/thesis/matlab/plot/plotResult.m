@@ -6,8 +6,8 @@ if (size(results,1) > 1)
     hold off
 end
 if (size(anchors,1) > 1)
-    plotAllAnchorSetErrors(results,anchors,folder);
-    plotAllAnchorSetErrors(results,anchors,folder,2);
+    plotAllAnchorSetErrors(results,anchors,radii,folder);
+    plotAllAnchorSetErrors(results,anchors,radii,folder,2);
     close all
     hold off
     plotAnchorErrorsVsError(results,anchors,folder);

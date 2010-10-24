@@ -19,7 +19,7 @@ plotTitle=sprintf('Network %s',strrep(network.shape,'-',' '));
 if (threshold < 100)
     plotTitle=sprintf('%s\nExcluding errors >%0.1f',plotTitle,threshold);
 end
-title(plotTitle);
+title(plotTitle,'fontsize',15);
 hold all
 grid on
 
@@ -41,7 +41,7 @@ for r=1:numRadii
     outliers=find(y>threshold);
     y(outliers)=[];
     
-    markers={ 'o' 'v' 'd' };
+    markers={ '.' 'o' 'v' };
     
     for d=1:numData
         if iscell(allData)
@@ -57,37 +57,49 @@ for r=1:numRadii
         dataToPlot=[x, y];
         dataToPlot=sortrows(dataToPlot,1);
         ls=sprintf('%sk',markers{d});
-        plot(dataToPlot(:,1),dataToPlot(:,2),ls);
+        x=dataToPlot(:,1);
+        y=dataToPlot(:,2);
+%         plot(dataToPlot(:,1),dataToPlot(:,2),ls);
         
-        fit = polyfit(x, y, 2);
-        Output = polyval(fit,x);
-        correlation = corrcoef(y, Output);
+        [correlation,pvalue] = corrcoef(x,y);
+        fit = polyfit(x,y,1);
+        fitCurve = polyval(fit,x);
+        r2 = rsquare(y, fitCurve);
+        y2=polyval(fit,x);   % Evaluate the polynomial at x2
+        plot(x,y,ls,x,y2)    % Plot the fit on top of the data
+
+        correlation=correlation(1,2);
+        pvalue=pvalue(1,2);
+        
+        statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
+            correlation,pvalue);
         
         if (exist('dataLabels','var') == 1)
-            lab=sprintf('%s - Correlation=%.2f',...
-                dataLabels{d},correlation(1,2));
+            lab=sprintf('%s',...
+                statsString);
             if (numRadii > 1)
-                lab=sprintf('%s - Radius=%.1f',lab,results(r).radius);
+                lab=sprintf('%s: Radius=%.1f',lab,results(r).radius);
             end
             labels{p}=lab;
         elseif (numRadii > 1)
-            lab=sprintf('%s  - Radius=%.1f - Correlation=%.2f',...
-                results(r).radius,correlation(1,2));
+            lab=sprintf('%s: Radius=%.1f\n  ',...
+                results(r).radius,statsString);
             labels{p}=lab;
         end
-        p=p+1;
+        labels{p+1}=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
+        p=p+2;
     end
 end
-if (iscell(labels) && isstr(labels{1}))
-    legend(labels,'Location','NorthEast');
+if (iscell(labels) && ischar(labels{1}))
+    legend(labels,'Location','NorthEast','FontSize',15);
 end
 
 if (numRadii == 1 && exist('dataLabels','var')==0)
-    dataName=sprintf('%s\nCorrelation Coefficient=%.2f',...
-        dataName,correlation(1,2));
+    dataName=sprintf('%s\n%s',...
+        dataName,statsString);
 end
-xlabel(dataName);
-ylabel('Mean Location Error');
+xlabel(dataName,'fontsize',12);
+ylabel('Mean Location Error','fontsize',12);
 hold off
 prefix=strrep(figName,' ','_');
 filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...
