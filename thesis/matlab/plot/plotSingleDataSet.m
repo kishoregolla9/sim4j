@@ -62,11 +62,16 @@ for r=1:numRadii
 %         plot(dataToPlot(:,1),dataToPlot(:,2),ls);
         
         [correlation,pvalue] = corrcoef(x,y);
+        r2=zeros(2,1);
         fit = polyfit(x,y,1);
-        fitCurve = polyval(fit,x);
-        r2 = rsquare(y, fitCurve);
-        y2=polyval(fit,x);   % Evaluate the polynomial at x2
-        plot(x,y,ls,x,y2)    % Plot the fit on top of the data
+        y1=polyval(fit,x);
+        r2(1) = rsquare(y, y1);
+
+        fit = polyfit(x,y,2);
+        y2=polyval(fit,x);
+        r2(2) = rsquare(y, y2);
+
+        plot(x,y,ls,x,y1,'-',x,y2,'--');
 
         correlation=correlation(1,2);
         pvalue=pvalue(1,2);
@@ -86,8 +91,9 @@ for r=1:numRadii
                 results(r).radius,statsString);
             labels{p}=lab;
         end
-        labels{p+1}=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
-        p=p+2;
+        labels{p+1}=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2(1));
+        labels{p+2}=sprintf('Line of best fit, 2nd order (r^{2}: %.2f)',r2(2));
+        p=p+3;
     end
 end
 if (iscell(labels) && ischar(labels{1}))
