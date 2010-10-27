@@ -24,7 +24,7 @@ To find all the Matlab\copyright code for simulations and plots see Appendix~\re
 \end{figure}
 
 Almost as important as knowing which factors effect localization is knowing which factors to ignore.
-The following is a summary of hypotheses of anchor node placement factors that show no or little significant correlation to location error.  The data in the following graphs is taken from a random selection of 1000 anchor sets of three nodes each for the network shown in Figure~\ref{fig:HypothesesNetwork}.
+The following is a summary of hypotheses of anchor node placement factors that show no or little significant correlation to location error.  The data in the following graphs is taken from a random selection of 1000 anchor sets of three nodes each for the network shown in Figure~\ref{fig:HypothesesNetwork}.  The node placement is random within the 20 by 20 square unit area, and all nodes have a radio range of 2.5 units, providing a completely connected network.
 
 \subsection{Anchor Node Error}
 The first hypothesis is to choose nodes as anchors that we expect to have high location accuracy. Because we are trying to provide an a priori design technique for network planners, the information chosen to reach the goal must be something the network planner can determine before any localization has been performed.  For this purpose we choose the number of one-hop neighbors.  Since the range-free algorithms depend heavily on network connectivity, the theory is that nodes with more neighbors will have lower location errors.  The lower error in the anchors themselves should then translate into a more accurate transformation of the entire network.
@@ -44,9 +44,9 @@ The first hypothesis is to choose nodes as anchors that we expect to have high l
 	\label{}
 \end{figure}
 
-Figure~\ref{fig:Neighbors} plots the sum of unique one-hop neighbors for all anchor nodes versus mean localization error.  The irregularity of the curve disproves the hypothesis. Further, the correlation coefficient is extremely low at less than 0.1. Having more neighbors means that the error of the anchor node itself has a better calculated location accuracy, but this does not translate into better network-wide accuracy.
+Figure~\ref{fig:Neighbors} plots the sum of unique one-hop neighbors for all anchor nodes versus mean localization error.  The irregularity of the curve disproves the hypothesis. Further, the correlation coefficient is extremely low at less than 0.1. The corresponding low p-value of 0.03 tells us that the confidence in the correlation coefficient is extremely high. Having more neighbors means that the error of the anchor node itself has a better calculated location accuracy, but this does not translate into better network-wide accuracy.
 
-Further, Figure~\ref{fig:AnchorError} shows the mean error of the three anchor nodes versus the mean error for all nodes in the network. Again, we have an erratic plot which disproves even the foundation of this hypothesis, namely that the location of the anchor node itself has absolutely no bearing on the overall network error. And again, the correlation coefficient is less than 0.1, proving the lack of correlation statistically.
+Further, Figure~\ref{fig:AnchorError} shows the mean error of the three anchor nodes versus the mean error for all nodes in the network. Again, we have an erratic plot which disproves even the foundation of this hypothesis, namely that the location of the anchor node itself has absolutely no bearing on the overall network error. And again, the correlation coefficient is low at less than 0.15, proving the lack of correlation statistically.
 
 In both plots, it is clear that a small subset of the anchor placements lead to far greater error than the norm.  Later, we will explore the cause of these outliers, but for the time being, we exclude them from the analysis as shown in Figure~\ref{fig:NeighborsExcluding} and Figure~\ref{fig:AnchorErrorExcluding}. Determining which points are outliers is quite obvious since the gap between the normal case and the small set of outliers is distinct. Even after the outliers are excluded, though, no pattern emerges and the correlation coefficients remain extremely low.
 
@@ -73,7 +73,7 @@ Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anch
 
 Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.24.  However, it does appear that the outliers are more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient doubles to 0.56 demonstrating that perhaps the trend in thinking through these hypotheses is correct.
 
-\subsection{Area of Anchor Triangle}
+\subsection{Anchor Node Triangle}
 
 \begin{figure}
   \centering
@@ -85,20 +85,16 @@ Even if the sum of distances of the anchors is high, it is possible for two anch
 	\label{fig:AnchorArea}
 \end{figure}
 
-Continuing the trend of trying to show some increased correlation between the anchor coverage and location error, Figure~\ref{fig:AnchorArea} shows the 
-
-\section{Significant Factors}
-
-Some other network layout metrics do have a stark impact on the overall location accuracy.
-
-\subsection{Triangle Formed by Anchors}
-
 \begin{figure}
   \centering
-    \subfloat[Triangle Height]{\includegraphics[width=0.5\textwidth]{AnchorTriangleHeightVsError-Random-10x10-Square-with-100-nodes.eps}}
-    \subfloat[Triangle Area]{\includegraphics[width=0.5\textwidth]{AnchorTriangleAreaVsError-Random-10x10-Square-with-100-nodes.eps}}
-    \caption{Anchor Triangle Height and Area}
-    \label{fig:TriangleAreaHeight1}
+	\subfloat[All points]{\label{fig:AnchorHeightAll}
+		\includegraphics[width=0.5\textwidth]{heights/AnchorHeightVsError.eps}}
+	\subfloat[Excluding outliers]{\label{fig:AnchorAreaExcluding}
+		\includegraphics[width=0.5\textwidth]{heights/AnchorHeightVsErrorExcluding.eps}}
+	\caption{Minimum Height of Anchor Triangle vs Location Error}	    
+	\label{fig:AnchorHeight}
 \end{figure}
 
-The triangle formed by a set of three anchors turns out to be a good indicator of the worst case of anchor placement as shown in ~\ref{fig:TriangleAreaHeight1}.
+Continuing the trend of trying to show some increased correlation between the anchor coverage and location error, Figure~\ref{fig:AnchorArea} plots the area triangle formed by the three anchor nodes versus mean location error. Figure~\ref{fig:AnchorHeight} does the same for the shortest triangle height, or in other words, a measure of the collinearity of the three anchor nodes.
+
+While the correlation coefficients remain low, it is clear that the flatter the triangle, or the more collinear the anchor nodes, the higher chance of seeing outliers in the data with an extremely high location error. Further, after removing outliers, the slope of the best fit line is dramatically higher than other statistics, giving an indication that network planners should make the anchor node triangle as spread apart as possible, or more generally, make sure the points are not collinear.
