@@ -298,6 +298,8 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             
         end
         plotNetworkDiffs(result,anchors,folder,prefix,false);
+        plotNetworkDiffs(result,anchors,folder,prefix,true);
+        plotNetworkContours(result,anchors,folder,prefix);
         
         if ~exist('results','var')
             % preallocate

@@ -1,24 +1,24 @@
-function [ h ] = plotAllAnchorSetErrors( results,anchors,radii,folder,threshold)
+function [ ] = plotAllAnchorSetErrors( results,anchors,radii,folder,threshold)
 
-network=results.network;
+% network=results.network;
 
 if (exist('threshold','var')==0)
     threshold=100;
 end
 
 for r=1:size(results,2)
-    figureName=sprintf('Location Error - Radius %.1f by Anchor Set',results(r).radius);
-    h=figure('Name',figureName,'visible','off');
-    hold off
-   
-    grid on
-    plotTitle=sprintf('%s Radius %.1f',...
-        strrep(network.shape,'-',' '),results(r).radius);
-    if (threshold < 100)
-        plotTitle=sprintf('%s\nExcluding error <%0.1f',plotTitle,threshold);
-    end
-    ylabel('Location Error (factor of radius)');
-    hold all
+%     figureName=sprintf('Location Error - Radius %.1f by Anchor Set',results(r).radius);
+%     h=figure('Name',figureName,'visible','off');
+%     hold off
+%    
+%     grid on
+%     plotTitle=sprintf('%s Radius %.1f',...
+%         strrep(network.shape,'-',' '),results(r).radius);
+%     if (threshold < 100)
+%         plotTitle=sprintf('%s\nExcluding error <%0.1f',plotTitle,threshold);
+%     end
+%     ylabel('Location Error (factor of radius)');
+%     hold all
     
     numStartNodes=size(results(r).errors,2);
     startNodeData=zeros(numStartNodes,3);
@@ -64,19 +64,12 @@ for r=1:size(results,2)
         data(a,13)=results(r).anchorErrors(a).mean;
     end
     
-    figName='AnchorSetErrors';
-    dataName='Mean Anchor Nodes Error';
-    dataLabels={ 'Mean Anchor Nodes Error' };
-    
-    plotSingleDataSet(figName,dataName,results,anchors,radii,data(:,13)',...
-        folder,threshold,dataLabels);
-
-%     l='Mean of Anchor Node Error';
+    l='Mean of Anchor Node Error';
 %     if (threshold < 100)
 %         sprintf('%s excluding errors < %.1f,',l,threshold);
 %     end
-%     
-%     x=data(:,13);
+    
+     x=data(:,13);
 %     y=data(:,3);
 %     outliers=find(y>threshold);
 %     x(outliers)=[];
@@ -85,12 +78,16 @@ for r=1:size(results,2)
 %     poly = polyfit(x, y, 2);
 %     Output = polyval(poly,x);
 %     correlation = corrcoef(y, Output);
-% 
+    dataName=l;
+    figName='AnchorSetErrors';
+    plotSingleDataSet(figName,dataName,results,anchors,radii,x',...
+        folder,threshold);
+    
 %     title(plotTitle);
 %     bottom=sprintf('Mean Anchor Node Error\nCorrelation coeffecient=%.2f',...
 %         correlation(1,2));
 %     xlabel(bottom);
-%     
+    
 %     filename=sprintf('AnchorSetErrors-%s-Radius%.1f',...
 %         network.shape,results(r).radius);
 %     if (threshold < 100)
