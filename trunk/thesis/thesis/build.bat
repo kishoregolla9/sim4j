@@ -1,5 +1,5 @@
 del *.aux *.dvi *.lof *.ps *.toc *.tmp *.blg
-copyHypotheses.bat ..\results\2010-9-20_23_46_41-Square-Random-20x20
+call copyHypotheses.bat ..\results\2010-9-20_23_46_41-Square-Random-20x20
 latex thesis
 bibtex thesis
 latex thesis

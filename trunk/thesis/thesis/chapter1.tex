@@ -30,6 +30,8 @@ We establish that by avoiding certain poor anchor node placements, extremely poo
 
 While some papers have touched upon anchor node placement, we have yet to come across a comprehensive study of the optimal anchor node placement.  This paper provides a comprehensive study of possible anchor node placements and their differing effects on overall network localization accuracy.
 
+While this paper is a comprehensive study of anchor node placements, we focus on specific set of network design assumptions.  First, we assume the network planners want to minimize the number of anchors since they consume more power and cost more.  Therefore, we assume the minimum number of anchors of three to provide two-dimensional coordinates. Further, we assume that range-free algorithms are preferred to avoid dealing with multi-path and other radio effects as well as to limit the required hardware and power requirements on each node in the network.  
+
 \section{Methodology}
 Many localization protocols and algorithms provide a set of relative coordinates that are then transformed into global coordinates.  For the purpose of this research, we chose CCA-MAP\cite{CCA-MAP07,CCA-MAP09} as the algorithm to provide simulation results.  A Matlab~\copyright simulation of this algorithm already existed from Li Li\cite{CCA-MAP07}, and was modified to provide the necessary output statistics presented here.  CCA-MAP is described in more detail in \ref{sec:CCA-MAP} on page \pageref{sec:CCA-MAP}.
 
