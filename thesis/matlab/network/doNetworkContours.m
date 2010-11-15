@@ -5,19 +5,38 @@ set(0,'DefaultAxesColorOrder',[0 0 0]);
 set(gca,'box','on');
 
 r=result.radius;
-filename=sprintf('networkcontours/NetDiff-R%.1f-Rank%i-AnchorSet%i%s',...
+filename=sprintf('networkcontours/NetContours-R%.1f-Rank%i-AnchorSet%i%s',...
     r,j,s,prefix);
 if figureExists(folder,filename) ~= 0
-    fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',s,prefix);
+    fprintf('Plot for Network Contours for Anchor Set #%i %s already exists\n',s,prefix);
     return;
 end
 
 startPlotting=tic;
-h=figure('Name',['Network Difference' plottitle],'visible','off');
-fprintf('Plotting Network Difference for Anchor Set #%i %s',s,prefix);
-mappedPoints=patchedMaps(s).mappedPoints;
-anchors=allAnchors(s,:);
 hold off
+fprintf('Plotting Network Contours for Anchor Set #%i %s',s,prefix);
+h=plotAnchorTriangles(plottitle,realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),r);
+distanceVector=patchedMaps(s).distanceVector;
+x=network.points(:,1);
+y=network.points(:,2);
+z=sum(distanceVector,2);
+plotContours(x,y,z,cool(128),0.5);
+% saveFigure(folder,filename,h);
+% z=zeros(size(x,1),1);
+% for i=1:size(z,1)
+%     z(i,1)=size(network.nodes(i).neighbors,2);
+% end
+% plotContours(x,y,z,summer(128),0.5);
+% hold off
+saveFigure(folder,filename,h);
+
+fprintf(' - done in %.2f seconds\n',toc(startPlotting));
+close
+end
+
+function[h]=plotAnchorTriangles(plottitle,realPoints,mappedPoints,anchors,r)
+h=figure('Name',['Network Contours' plottitle],'visible','off');
+
 hold all
 % Show a line from each real to each mapped point (red circles)
 % for i=1:size(realPoints,1)
@@ -34,8 +53,6 @@ hold all
 % Overlay the mapped points with cyan circles
 % to distinguish them from the mapped points
 % pm=plot(mappedPoints(:,1),mappedPoints(:,2),'o','MarkerSize',4);
-
-distanceVector=patchedMaps(s).distanceVector;
 
 % Show a circle of the radius around each anchor point
 % and Draw the Anchor Triangle
@@ -65,62 +82,6 @@ ylim([0,height]);
 % maxAll=max(maxX,maxY);
 % axis([minAll maxAll minAll maxAll]);
 grid on
-
-x=network.points(:,1);
-y=network.points(:,2);
-z=sum(distanceVector,2);
-% Determine the minimum and the maximum x and y values:
-xmin = min(x); ymin = min(y);
-xmax = max(x); ymax = max(y); 
-% Define the resolution of the grid:
-res=80;
-% Define the range and spacing of the x- and y-coordinates,
-% and then fit them into X and Y
-xv = linspace(xmin, xmax, res);
-yv = linspace(ymin, ymax, res);
-[Xinterp,Yinterp] = meshgrid(xv,yv); 
-% Calculate Z in the X-Y interpolation space, which is an 
-% evenly spaced grid:
-Zinterp = griddata(x,y,z,Xinterp,Yinterp); 
-% Generate the mesh plot (CONTOUR can also be used):
-[C,ch]=contour(Xinterp,Yinterp,Zinterp,'k-');
-% clabel(C,ch);
-% colormap(summer(128))
-% colorbar('location','southoutside')
-xlabel X; ylabel Y; zlabel Z;
-
-% xa=zeros(size(anchors,2),1);
-% ya=zeros(size(anchors,2),1);
-% za=zeros(size(anchors,2),1);
-% for a=1:size(anchors,2)
-%     xa(a)=network.points(anchors(:,a),1);
-%     ya(a)=network.points(anchors(:,a),2);
-%     za(a)=z(anchors(:,a),1);
-% end
-% plot3(xa,ya,za,'ok');
-
-transform=result.transform(s);
-rot=(acos(transform.T(1,1)));
-ref=(acos(transform.T(1,1))/2);
-
-if (det(transform.T) < 0)
-    rotref=sprintf('Reflection: %.2f\\pi',ref);
-else
-    rotref=sprintf('Rotation: %.2f\\pi',rot);
-end
-    
-temp=sprintf('Max error: %.3fr Mean error: %.3fr, %s',...
-    result.errorsPerAnchorSet(s).max,...
-    result.errorsPerAnchorSet(s).mean,...
-    rotref);
-% xlabel(temp,'fontsize',15);
-
-%% FINISH
-hold off
-saveFigure(folder,filename,h);
-
-fprintf(' - done in %.2f seconds\n',toc(startPlotting));
-close
 end
 
 function [h]=plotAnchorTriangle(anchors,points,r,color,markerStyle,lineStyle,circleStyle)
