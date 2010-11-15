@@ -23,8 +23,6 @@ fprintf('Plotting Network Difference for Anchor Set #%i %s',s,prefix);
 mappedPoints=patchedMaps(s).mappedPoints;
 anchors=allAnchors(s,:);
 
-subplotTitle=sprintf('Anchor Set %i (Rank %i of %i)',s,j,size(allAnchors,1));
-% title({subplotTitle,prefix,result.reflect});
 hold all
 
 % Include connectivity in plots
@@ -104,7 +102,7 @@ grid on
 %     legend([pa pb pc pf pg],labels,'Location','BestOutside');
 % end
 
-textLeft=1.0;
+textLeft=0.75;
 
 if (showStats)
     
@@ -164,26 +162,37 @@ if (showStats)
         'Units','normalized ','VerticalAlignment','Top');
     
     %% Anchor Stats
-    anchorString='';
-    for a=1:size(anchors,2)
-        xDiff=realPoints(anchors(a),1)-mappedPoints(anchors(a),1);
-        yDiff=realPoints(anchors(a),2)-mappedPoints(anchors(a),2);
-        anchorString=sprintf('%sR:%.2f,%.2f M:%.2f,%.2f diff:%.2f,%.2f\n',...
-            anchorString,...
-            realPoints(anchors(a),:)',...
-            mappedPoints(anchors(a),:)',...
-            xDiff,yDiff);
-    end
-    text(textLeft,0.1,'Anchors (R=real, M=mapped)',...
-        'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
-    text(textLeft,0.06,anchorString,...
-        'Units','normalized ','VerticalAlignment','Top');
+%     anchorString='';
+%     for a=1:size(anchors,2)
+%         xDiff=realPoints(anchors(a),1)-mappedPoints(anchors(a),1);
+%         yDiff=realPoints(anchors(a),2)-mappedPoints(anchors(a),2);
+%         anchorString=sprintf('%sR:%.2f,%.2f M:%.2f,%.2f diff:%.2f,%.2f\n',...
+%             anchorString,...
+%             realPoints(anchors(a),:)',...
+%             mappedPoints(anchors(a),:)',...
+%             xDiff,yDiff);
+%     end
+%     text(textLeft,0.1,'Anchors (R=real, M=mapped)',...
+%         'Units','normalized ','VerticalAlignment','Top','FontWeight','bold');
+%     text(textLeft,0.06,anchorString,...
+%         'Units','normalized ','VerticalAlignment','Top');
     
 end
 
-temp=sprintf('Max error: %.3fr Mean error: %.3fr',...
+    transform=result.transform(s);
+    rot=(acos(transform.T(1,1)));
+    ref=(acos(transform.T(1,1))/2);
+
+if (det(transform.T) < 0)
+    rotref=sprintf('Reflection: %.2f\\pi',ref);
+else
+    rotref=sprintf('Rotation: %.2f\\pi',rot);
+end
+    
+temp=sprintf('Max error: %.3fr Mean error: %.3fr, %s',...
     result.errorsPerAnchorSet(s).max,...
-    result.errorsPerAnchorSet(s).mean);
+    result.errorsPerAnchorSet(s).mean,...
+    rotref);
 xlabel(temp,'fontsize',15);
 
 %% FINISH

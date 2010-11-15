@@ -59,22 +59,11 @@ for r=1:numRadii
         ls=sprintf('%sk',markers{d});
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
-%         plot(dataToPlot(:,1),dataToPlot(:,2),ls);
-        
-        [correlation,pvalue] = corrcoef(x,y);
-        r2=zeros(2,1);
-        fit = polyfit(x,y,1);
-        y1=polyval(fit,x);
-        r2(1) = rsquare(y, y1);
-
-        fit = polyfit(x,y,2);
-        y2=polyval(fit,x);
-        r2(2) = rsquare(y, y2);
-
-        plot(x,y,ls,x,y1,'-',x,y2,'--');
-
-        correlation=correlation(1,2);
-        pvalue=pvalue(1,2);
+        fit = polyfit(x, y, 1);
+        f = polyval(fit,x);
+        [correlation,pvalue] = corrcoef(x, y);
+        r2 = rsquare(f, y);
+        plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
         
         statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
             correlation,pvalue);
@@ -97,15 +86,18 @@ for r=1:numRadii
     end
 end
 if (iscell(labels) && ischar(labels{1}))
-    legend(labels,'Location','NorthEast','FontSize',15);
+    legend(labels,'Location','NorthEast');
 end
 
-if (numRadii == 1 && exist('dataLabels','var')==0)
-    dataName=sprintf('%s\n%s',...
-        dataName,statsString);
-end
-xlabel(dataName,'fontsize',12);
-ylabel('Mean Location Error','fontsize',12);
+xlabel(dataName);
+% if (numRadii == 1 && exist('dataLabels','var')==0)
+    label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
+        dataName,correlation(1,2),pvalue(1,2));
+% end
+label2=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
+
+legend({label1,label2});
+ylabel('Mean Location Error');
 hold off
 prefix=strrep(figName,' ','_');
 filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...
@@ -115,4 +107,11 @@ if (threshold < 100)
 end
 saveFigure(folder,filename);
 
+end
+
+
+function [r2]=rsquare(x,y)
+  r = corrcoef(x,y);   
+  R=r(1,2);
+  r2=R^2;
 end
