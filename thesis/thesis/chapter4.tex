@@ -1,9 +1,9 @@
 \chapter{Survey of Anchor Node Placements}
 
 \section{Measuring Location Error}
-Before searching for the best anchor node placement we must first define what \emph{best} means, in terms of location error.  First of all, location error is measured as a factor of radio radius (or range).  Since this study addresses range-free networks, and thus relies solely on network connectivity, the actual units of distance do not matter for general study.  What is important is how many other nodes in the network fall within the radio range of a given node.  The average numbers of nodes within range of a each node is known as connectivity.
+Before searching for the best anchor node placement we must first define what \emph{best} means, in terms of location error.  First of all, location error is measured as a factor of radio radius (or range).  Since this study addresses range-free networks, and thus relies solely on network connectivity, the actual units of distance do not matter for general study.  What is important to the protocol is how many other nodes in the network fall within the radio radius of a given node.  The average numbers of nodes within range of a each node is known as connectivity.
 
-Every network has its own application requirements, and thus there are many options for what statistics to examine for accessing the quality of locations.  The simplest criteria are to look at the mean and maximum location error across all nodes in the network.  For the most part, this is the basis for the results in this study.  However, this assumes that all nodes in the network must be used in the final results.  If the network designers know which nodes have poor locations, they may wish to exclude these nodes from the final results.  Therefore, if the economics of the network deployment allow, it may be beneficial to look at the best, for example, 80\% of nodes in the network.  In practice, the designers do not know which nodes to exclude, so this study also attempts to identify the worst areas of a network for location accuracy, depending on the anchor node placement.  
+Every network has its own application requirements, and thus there are many options for what statistics to examine for accessing the quality of locations.  The simplest criteria is to look at the mean location error across all nodes in the network.  For the most part, this is the basis for the results in this study.  However, this assumes that all nodes in the network must be used in the final results.  If the network designers know which nodes have poor locations, they may wish to exclude these nodes from the final results.  Therefore, if the economics of the network deployment allow, it may be beneficial to look at the best, for example, 80\% of nodes in the network.  In practice, the designers do not know which nodes to exclude, so this study also attempts to identify the worst areas of a network for location accuracy, depending on the anchor node placement.  
 
 \section{Coordinate Transformation}
 To understand the various hypotheses for the best anchor placement, a basic understanding of how the transformation from local to global coordinate systems must be explained.  After the local networks have been calculated and patched together into a single cohesive network, the anchor nodes are then used. Using Procrustes~\cite{procrustes-matlab} analysis, a linear transformation of translation, reflection, orthogonal rotation, and scaling is determined for the anchor nodes from the calculated to known coordinates.  The transformation is then applied to all nodes in the network.
@@ -19,7 +19,7 @@ To find all the Matlab\copyright code for simulations and plots see Appendix~\re
 \begin{figure}
 	\centering
 		\includegraphics[width=0.75\textwidth]{network1.eps}
-	\caption{The sample network, showing connectivity between nodes}
+	\caption{The sample network used in this chapter, showing connectivity between nodes}
 	\label{fig:HypothesesNetwork}
 \end{figure}
 
@@ -33,11 +33,11 @@ The first hypothesis is to choose nodes as anchors that we expect to have high l
   \centering
 	\subfloat[Number of Anchor Neighbors vs Location Error]{\label{fig:Neighbors}
 		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorNeighborsVsError.eps}}
-	\subfloat[Mean Anchor Error vs Location Error]{\label{fig:AnchorError}
-		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorSetErrorVsError.eps}}
-	\\
 	\subfloat[Number of Anchor Neighbors vs Location Error Excluding Outliers]{\label{fig:NeighborsExcluding}
 		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorNeighborsVsErrorExcluding.eps}}
+	\\
+	\subfloat[Mean Anchor Error vs Location Error]{\label{fig:AnchorError}
+		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorSetErrorVsError.eps}}
 	\subfloat[Mean Anchor Error vs Location Error Excluding Outliers]{\label{fig:AnchorErrorExcluding}
 		\includegraphics[width=0.5\textwidth]{numneighbors/AnchorSetErrorVsErrorExcluding.eps}}		
 	\caption{}	
@@ -58,11 +58,12 @@ Another seemingly obvious optimal anchor placement is to have the anchors as far
   \centering
 	\subfloat[Sum of Distance]{\label{fig:AnchorDistancesSum}
 		\includegraphics[width=0.5\textwidth]{distances/SumAnchorDistanceVsError.eps}}
-	\subfloat[Minimum Distance]{\label{fig:AnchorDistancesMinimum}
-		\includegraphics[width=0.5\textwidth]{distances/MinimumAnchorDistanceVsError.eps}}
-		\\
 	\subfloat[Sum of Distance, Excluding Outliers]{\label{fig:AnchorDistancesSumExcluding}
 		\includegraphics[width=0.5\textwidth]{distances/SumAnchorDistanceVsErrorExcluding.eps}}
+		\\
+
+	\subfloat[Minimum Distance]{\label{fig:AnchorDistancesMinimum}
+		\includegraphics[width=0.5\textwidth]{distances/MinimumAnchorDistanceVsError.eps}}
 	\subfloat[Minimum Distance, Excluding Outliers]{\label{fig:AnchorDistancesMinimumExcluding}
 		\includegraphics[width=0.5\textwidth]{distances/MinimumAnchorDistanceVsErrorExcluding.eps}}
 	\caption{Distance Between Anchors}
