@@ -1,0 +1,22 @@
+\chapter{The Worst Anchor Node Placements}
+As seen in the previous chapter, there are some anchor node placements that are significantly worse than the average case. 
+
+\section{Example}
+
+In Figure~\ref{fig:AS6}, the same anchor set is used in four random networks around it.  The figure plots a line between the real and calculated location of each node, giving a visual representation of the error of each node.  
+
+In two cases, the network errors are somewhat normal.  However, the other two cases are obviously terrible, with mean error being above three times the radio range.  With just a casual glance, the 2 outlier cases are caused by a reflection component of the linear transformation.  
+\begin{figure}
+  \centering
+	\subfloat{\label{fig:AS6NetworkDiff7}
+		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff7.eps}}
+	\subfloat{\label{AS6NetworkDiff8}
+		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff8.eps}}
+	\\
+	\subfloat{\label{fig:AS6NetworkDiff9}
+		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff9.eps}}
+	\subfloat{\label{fig:AS6NetworkDiff10}
+		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff10.eps}}		
+	\caption{4 different networks with the same anchor set}	
+	\label{fig:AS6}
+\end{figure}
