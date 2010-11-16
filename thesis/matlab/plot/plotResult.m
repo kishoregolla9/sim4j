@@ -42,6 +42,8 @@ if (size(anchors,1) > 1)
     plotAnchorDistanceVsError(results,anchors,radii,folder);
     plotAnchorDistanceVsError(results,anchors,radii,folder,2);
     
+    plotRotRef(results,anchors,radii,folder);
+    
     close all
     hold off
     % plotAnchorNeighborsVsError(results,anchors,radii,folder);

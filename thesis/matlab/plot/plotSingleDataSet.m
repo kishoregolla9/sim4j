@@ -1,10 +1,14 @@
 function plotSingleDataSet( figName,dataName,...
-    results,anchors,radii,allData,folder,threshold,dataLabels)
+    results,anchors,radii,allData,folder,threshold,doBestFit)
 % Plot number of unique anchor neighbors (unique among all anchors in the
 % set) vs location error
 
 if (exist('threshold','var')==0)
     threshold=100;
+end
+
+if (exist('doBestFit','var')==0)
+    doBestFit=true;
 end
 
 minRadius=radii(1);
@@ -59,29 +63,29 @@ for r=1:numRadii
         ls=sprintf('%sk',markers{d});
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
-        fit = polyfit(x, y, 1);
-        f = polyval(fit,x);
         [correlation,pvalue] = corrcoef(x, y);
-        r2 = rsquare(f, y);
-        plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
+        if (doBestFit)
+            fit = polyfit(x, y, 1);
+            f = polyval(fit,x);
+            r2 = rsquare(f, y);
+            plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
+        else
+            plot(dataToPlot(:,1),dataToPlot(:,2),ls);
+        end
         
         statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
             correlation,pvalue);
         
-        if (exist('dataLabels','var') == 1)
-            lab=sprintf('%s',...
-                statsString);
-            if (numRadii > 1)
-                lab=sprintf('%s: Radius=%.1f',lab,results(r).radius);
-            end
-            labels{p}=lab;
-        elseif (numRadii > 1)
+        if (numRadii > 1)
             lab=sprintf('%s: Radius=%.1f\n  ',...
                 results(r).radius,statsString);
             labels{p}=lab;
         end
-        labels{p+1}=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2(1));
-        labels{p+2}=sprintf('Line of best fit, 2nd order (r^{2}: %.2f)',r2(2));
+        
+        if (doBestFit)
+            labels{p+1}=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2(1));
+        end
+
         p=p+3;
     end
 end
@@ -90,14 +94,16 @@ if (iscell(labels) && ischar(labels{1}))
 end
 
 xlabel(dataName);
-% if (numRadii == 1 && exist('dataLabels','var')==0)
-    label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
-        dataName,correlation(1,2),pvalue(1,2));
-% end
-label2=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
+label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
+    dataName,correlation(1,2),pvalue(1,2));
+if (doBestFit)
+    label2=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
+    legend({label1,label2});
+else
+    legend({label1});
+end
 
-legend({label1,label2});
-ylabel('Mean Location Error');
+ylabel('Mean Location Error (factor of radio radius)');
 hold off
 prefix=strrep(figName,' ','_');
 filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...

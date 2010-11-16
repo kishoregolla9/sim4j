@@ -31,9 +31,10 @@ end
 
 for i=1:size(dataLabels,2)
     f=sprintf('%s %s',dataLabels{i}, figName);
-    plotSingleDataSet(f,dataName,results,anchors,radii,...
+    n=sprintf('%s %s',dataLabels{i},dataName);
+    plotSingleDataSet(f,n,results,anchors,radii,...
         distances(:,:,i),...
-        folder,threshold,{ dataLabels{i} });
+        folder,threshold);
 end
 
 end
