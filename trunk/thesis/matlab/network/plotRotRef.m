@@ -7,6 +7,9 @@ figName='RotRef vs Error';
 
 rot=zeros(1,numAnchorSets,1);
 ref=zeros(1,numAnchorSets,1);
+t1=zeros(1,numAnchorSets,1);
+t2=zeros(1,numAnchorSets,1);
+b=zeros(1,numAnchorSets,1);
 for s=1:numAnchorSets
     transform=result.transform(s);
     % +1==rotation, -1==reflection
@@ -17,6 +20,9 @@ for s=1:numAnchorSets
         ref(1,s)=NaN;
         rot(1,s)=(acos(transform.T(1,1)))*180/pi;
     end
+    t1(1,s)=transform.c(1,1);
+    t2(1,s)=transform.c(1,2);
+    b(1,s)=transform.b;
 end
 
 if (exist('threshold','var')==0)
@@ -28,7 +34,9 @@ h=plotSingleDataSet(figName,'Rotation',results,anchors,radii,...
 plotSingleDataSet(figName,'Reflection',results,anchors,radii,...
     ref,folder,threshold,false,h,{'x'});
 
-legend({'Rotation','Reflection'});
+
+legend({'Rotation','Reflection','s'});
+xlabel('Angle of Rotation or Reflection (degrees)');
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
 prefix=strrep(figName,' ','_');
