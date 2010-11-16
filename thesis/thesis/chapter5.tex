@@ -17,19 +17,19 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix.  If the determinant of that matrix is +1, then the resulting transformation has rotation.  If the determinant is -1, then the result transformation has reflection. Figure~\ref{fig:rotref} shows two different networks with 100 anchor sets each.  The figures plot the angle of rotation, as negative degrees
 
 \begin{equation}
-  \centering
-	\left( \begin{array}{c} x' \\ y' \end{array}\right)~=~\left( \begin{array}{ccc} 
-	cos~\theta & -sin~\theta \\ 
-	sin~\theta & cos~\theta \end{array}\right)
-	\left( \begin{array}{c} x \\ y \end{array}\right)
+Z = b*Y*T + c;
+\end{equation}
+
+\begin{equation}
+	\begin{bmatrix}
+	\cos~\theta & -\sin~\theta \\ 
+	\sin~\theta & \cos~\theta \end{bmatrix}
 	\label{eqn:rotmatrix} 
 \end{equation}
 \begin{equation}
-  \centering
-	\left( \begin{array}{c} x' \\ y' \end{array}\right)~=~\left( \begin{array}{ccc} 
-	cos~\theta & sin~\theta \\ 
-	sin~\theta & -cos~\theta \end{array}\right)
-	\left( \begin{array}{c} x \\ y \end{array}\right)
+	\begin{bmatrix}
+	\cos~\theta & \sin~\theta \\ 
+	\sin~\theta & -\cos~\theta \end{bmatrix}
 	\label{eqn:refmatrix} 
 \end{equation}
 
