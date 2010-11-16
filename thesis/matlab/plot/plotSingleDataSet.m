@@ -1,5 +1,5 @@
 function [h] = plotSingleDataSet( figName,dataName,...
-    results,anchors,radii,allData,folder,threshold,doBestFit,h,markers)
+    results,anchors,radii,allData,folder,threshold,doBestFit,h,markers,ax)
 % Plot number of unique anchor neighbors (unique among all anchors in the
 % set) vs location error
 
@@ -79,7 +79,11 @@ for r=1:numRadii
             statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
                 correlation,pvalue);            
         else
-            plot(dataToPlot(:,1),dataToPlot(:,2),ls);
+            if (exist('ax','var'))
+                plot(ax,dataToPlot(:,1),dataToPlot(:,2),ls);
+            else
+                plot(dataToPlot(:,1),dataToPlot(:,2),ls);
+            end
             statsString='';
         end
         
