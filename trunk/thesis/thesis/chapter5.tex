@@ -7,9 +7,9 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 \begin{figure}
   \centering
 	\subfloat[An outlier network difference]{\label{fig:outlier1}
-		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff9.eps}}
+		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff9}}
 	\subfloat[A normal network difference]{\label{fig:normal1}
-		\includegraphics[width=0.5\textwidth]{outliers/normal1.eps}}		
+		\includegraphics[width=0.5\textwidth]{outliers/normal1}}		
 	\label{fig:outliernetworkdiff}
 	\caption{}
 \end{figure}
@@ -41,11 +41,18 @@ Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two d
 \begin{figure}
   \centering
 	\subfloat[]{\label{fig:rotref1}
-		\includegraphics[width=0.5\textwidth]{rotref1.eps}}
+		\includegraphics[width=0.5\textwidth]{rotref1}}
 	\subfloat[]{\label{fig:rotref2}
-		\includegraphics[width=0.5\textwidth]{rotref2.eps}}		
+		\includegraphics[width=0.5\textwidth]{rotref2}}		
 	\caption{Rotation and Reflection versus Mean Location Error}	
 	\label{fig:rotref}
 \end{figure}
 
-Luckily,
+Further, the Procrustes algorithm itself provides a measure of the dissimilarity.  Specifically, it is the minimized value of sum of squared errors\cite{procrustes-matlab}.  As shown in Figure~\ref{fig:dissimilarity}, it is not a good indicator of the transformation as it pertains to the entire network.  This is because the Procrustes algorithm is only performed on the anchor nodes themselves and for those nodes themselves, the transformation is fine.
+
+\begin{figure}
+  \centering
+	\includegraphics[width=0.5\textwidth]{dissimilarity}}
+	\caption{Procrusted dissimilarity measure versus Mean Location Error}	
+	\label{fig:dissimilarity}
+\end{figure}
