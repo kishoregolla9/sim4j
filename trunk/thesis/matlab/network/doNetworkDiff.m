@@ -18,6 +18,7 @@ if figureExists(folder,filename) ~= 0
 end
 
 startPlotting=tic;
+
 h=figure('Name',['Network Difference' plottitle],'visible','off');
 fprintf('Plotting Network Difference for Anchor Set #%i %s',s,prefix);
 mappedPoints=patchedMaps(s).mappedPoints;

@@ -1,5 +1,5 @@
-function plotSingleDataSet( figName,dataName,...
-    results,anchors,radii,allData,folder,threshold,doBestFit)
+function [h] = plotSingleDataSet( figName,dataName,...
+    results,anchors,radii,allData,folder,threshold,doBestFit,h,markers)
 % Plot number of unique anchor neighbors (unique among all anchors in the
 % set) vs location error
 
@@ -18,7 +18,9 @@ network=results(1).network;
 numAnchorSets=size(anchors,1);
 numRadii=size(results,2);
 
-figure('Name',figName,'visible','off');
+if (~exist('h','var') || h==0)
+    h=figure('Name',figName,'visible','off');
+end
 plotTitle=sprintf('Network %s',strrep(network.shape,'-',' '));
 if (threshold < 100)
     plotTitle=sprintf('%s\nExcluding errors >%0.1f',plotTitle,threshold);
@@ -59,6 +61,9 @@ for r=1:numRadii
         
         % Remove outliers greater than threshold
         x(outliers)=[];
+        nulls=find(isnan(x));
+        x(nulls)=[];
+        y(nulls)=[];
         
         dataToPlot=[x, y];
         dataToPlot=sortrows(dataToPlot,1);
@@ -107,7 +112,7 @@ else
 end
 
 ylabel('Mean Location Error (factor of radio radius)');
-hold off
+
 prefix=strrep(figName,' ','_');
 filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...
     prefix,network.shape,minRadius,maxRadius);
