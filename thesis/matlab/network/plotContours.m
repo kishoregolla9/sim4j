@@ -1,8 +1,4 @@
-function[]=plotContours(x,y,z,cmap,a)
-
-if (~exist('a','var'))
-   a=1; 
-end
+function[]=plotContours(x,y,z,cmap)
 
 % Determine the minimum and the maximum x and y values:
 xmin = min(x); ymin = min(y);
@@ -21,5 +17,5 @@ Zinterp = griddata(x,y,z,Xinterp,Yinterp);
 colormap(cmap);
 contourf(Xinterp,Yinterp,Zinterp,'k-');
 % alpha(a);
-colorbar('location','southoutside')
+colorbar('location','eastoutside')
 end
