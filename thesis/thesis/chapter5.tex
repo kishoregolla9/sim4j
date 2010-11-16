@@ -10,28 +10,33 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 		\includegraphics[width=0.5\textwidth]{outliers/AS6/AS6NetworkDiff9.eps}}
 	\subfloat[A normal network difference]{\label{fig:normal1}
 		\includegraphics[width=0.5\textwidth]{outliers/normal1.eps}}		
-	\label{}
+	\label{fig:outliernetworkdiff}
 	\caption{}
 \end{figure}
 
-Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix.  If the determinant of that matrix is +1, then the resulting transformation has rotation.  If the determinant is -1, then the result transformation has reflection. Figure~\ref{fig:rotref} shows two different networks with 100 anchor sets each.  The figures plot the angle of rotation, as negative degrees
+\section{Detecting the Outlier}
+
+Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix.  If the determinant of that matrix is +1, then the resulting transformation has rotation, with an angle as in Equation~\ref{eqn:rotmatrix}.  
 
 \begin{equation}
-Z = b*Y*T + c;
-\end{equation}
-
-\begin{equation}
+	\det{(T)}=+1 \Rightarrow ~Rotation ~with ~T=
 	\begin{bmatrix}
-	\cos~\theta & -\sin~\theta \\ 
-	\sin~\theta & \cos~\theta \end{bmatrix}
+	\cos{\theta} & -\sin{\theta} \\ 
+	\sin{\theta} & \cos{\theta}\end{bmatrix}
 	\label{eqn:rotmatrix} 
 \end{equation}
+
+If the determinant is -1, then the resulting transformation has reflection component, across a line at angle as shown in Equation~\ref{eqn:refmatrix}. 
+
 \begin{equation}
+	\det{(T)}=-1 \Rightarrow ~Reflection ~with ~T=
 	\begin{bmatrix}
-	\cos~\theta & \sin~\theta \\ 
-	\sin~\theta & -\cos~\theta \end{bmatrix}
+	\cos{\frac{\theta}{2}} & \sin{\frac{\theta}{2}} \\ 
+	\sin{\frac{\theta}{2}} & -\cos{\frac{\theta}{2}}\end{bmatrix}
 	\label{eqn:refmatrix} 
 \end{equation}
+
+Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two different networks, for a random of set of anchor sets for each network.  In both networks, and with consistency across others, the bulk of the data points have the same angle of either rotation or reflection, while the outliers have the opposite property with a wide variance in the angle.  However, between networks, it is not consistently wither rotation or reflection.  Therefore, relying on the determinant of the transformation is not a sufficient indicator of a network planner knowing that an outlier case has been hit and thus the localization results are essentially useless.
 
 \begin{figure}
   \centering
@@ -39,6 +44,8 @@ Z = b*Y*T + c;
 		\includegraphics[width=0.5\textwidth]{rotref1.eps}}
 	\subfloat[]{\label{fig:rotref2}
 		\includegraphics[width=0.5\textwidth]{rotref2.eps}}		
+	\caption{Rotation and Reflection versus Mean Location Error}	
 	\label{fig:rotref}
-	\caption{Rotation and Reflection version Mean Location Error}
 \end{figure}
+
+Luckily,
