@@ -25,7 +25,7 @@ if (exist('threshold','var')==0)
 end
 
 plotSingleDataSet(figName,dataName,results,anchors,radii,numNeighbors,...
-    folder,threshold,{'Number of Anchor Neighbors'});
+    folder,threshold);
 
 end
 

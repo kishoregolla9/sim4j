@@ -1,5 +1,4 @@
-function []=plotNetworkContours(...
-    result,allAnchors,folder,prefix)
+function []=plotNetworkContours(result,allAnchors,folder,prefix)
 % Plot the network difference, showing the anchor nodes with green squares
 % Blue points are real point locations
 % Red points are mapped point locations

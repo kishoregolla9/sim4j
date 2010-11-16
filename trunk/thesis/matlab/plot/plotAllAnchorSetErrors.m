@@ -1,9 +1,13 @@
-function [ ] = plotAllAnchorSetErrors( results,anchors,radii,folder,threshold)
+function [ ] = plotAllAnchorSetErrors( results,anchors,radii,folder,threshold,doBestFit)
 
 % network=results.network;
 
 if (exist('threshold','var')==0)
     threshold=100;
+end
+
+if (exist('doBestFit','var')==0)
+    doBestFit=true;
 end
 
 for r=1:size(results,2)
