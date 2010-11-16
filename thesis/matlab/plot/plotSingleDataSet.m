@@ -45,7 +45,9 @@ for r=1:numRadii
     outliers=find(y>threshold);
     y(outliers)=[];
     
-    markers={ '.' 'o' 'v' };
+    if (~exist('markers','var'))
+        markers={ '.' 'o' 'v' };
+    end
     
     for d=1:numData
         if iscell(allData)
@@ -63,18 +65,18 @@ for r=1:numRadii
         ls=sprintf('%sk',markers{d});
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
-        [correlation,pvalue] = corrcoef(x, y);
         if (doBestFit)
+            [correlation,pvalue] = corrcoef(x, y);
             fit = polyfit(x, y, 1);
             f = polyval(fit,x);
             r2 = rsquare(f, y);
             plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
+            statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
+                correlation,pvalue);            
         else
             plot(dataToPlot(:,1),dataToPlot(:,2),ls);
+            statsString='';
         end
-        
-        statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
-            correlation,pvalue);
         
         if (numRadii > 1)
             lab=sprintf('%s: Radius=%.1f\n  ',...
@@ -94,13 +96,14 @@ if (iscell(labels) && ischar(labels{1}))
 end
 
 xlabel(dataName);
-label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
-    dataName,correlation(1,2),pvalue(1,2));
+
 if (doBestFit)
+    label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
+        dataName,correlation(1,2),pvalue(1,2));
     label2=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
     legend({label1,label2});
 else
-    legend({label1});
+    legend({dataName});
 end
 
 ylabel('Mean Location Error (factor of radio radius)');
