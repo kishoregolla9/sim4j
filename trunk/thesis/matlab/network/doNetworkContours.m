@@ -15,12 +15,16 @@ end
 startPlotting=tic;
 hold off
 fprintf('Plotting Network Contours for Anchor Set #%i %s',s,prefix);
-h=plotAnchorTriangles(plottitle,realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),r);
+
+h=figure('Name',['Network Contours' plottitle],'visible','off');
+hold all
 distanceVector=patchedMaps(s).distanceVector;
 x=network.points(:,1);
 y=network.points(:,2);
 z=sum(distanceVector,2);
-plotContours(x,y,z,cool(128),0.5);
+plotContours(x,y,z,summer(128));
+plotAnchorTriangles(realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),r);
+xlabel('Interpolated Mean Error');
 % saveFigure(folder,filename,h);
 % z=zeros(size(x,1),1);
 % for i=1:size(z,1)
@@ -29,15 +33,13 @@ plotContours(x,y,z,cool(128),0.5);
 % plotContours(x,y,z,summer(128),0.5);
 % hold off
 saveFigure(folder,filename,h);
-
+hold off
 fprintf(' - done in %.2f seconds\n',toc(startPlotting));
 close
 end
 
-function[h]=plotAnchorTriangles(plottitle,realPoints,mappedPoints,anchors,r)
-h=figure('Name',['Network Contours' plottitle],'visible','off');
+function[]=plotAnchorTriangles(realPoints,mappedPoints,anchors,r)
 
-hold all
 % Show a line from each real to each mapped point (red circles)
 % for i=1:size(realPoints,1)
 %     pa=plot([realPoints(i,1),mappedPoints(i,1)],...

@@ -10,7 +10,7 @@ if showStats
 else
     foldersuffix='nostats';
 end
-filename=sprintf('networkdiffs-%s/NetDiff-R%.1f-Rank%i-AnchorSet%i-%s',...
+filename=sprintf('networkdiffs-%s/NetDiff-R%.1f-Rank%i-AnchorSet%i%s',...
     foldersuffix,r,j,s,prefix);
 if figureExists(folder,filename) ~= 0
     fprintf('Plot for Network Difference for Anchor Set #%i %s already exists\n',s,prefix);
@@ -179,14 +179,14 @@ if (showStats)
     
 end
 
-    transform=result.transform(s);
-    rot=(acos(transform.T(1,1)));
-    ref=(acos(transform.T(1,1))/2);
+transform=result.transform(s);
+rot=(acos(transform.T(1,1)))*180/pi;
+ref=(acos(transform.T(1,1))/2)*180/pi;
 
 if (det(transform.T) < 0)
-    rotref=sprintf('Reflection: %.2f\\pi',ref);
+    rotref=sprintf('Reflection: %.2f%c',ref,char(176));
 else
-    rotref=sprintf('Rotation: %.2f\\pi',rot);
+    rotref=sprintf('Rotation: %.2f%c',rot,char(176));
 end
     
 temp=sprintf('Max error: %.3fr Mean error: %.3fr, %s',...
