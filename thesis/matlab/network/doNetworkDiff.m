@@ -181,15 +181,25 @@ if (showStats)
 end
 
 transform=result.transform(s);
-rot=(acos(transform.T(1,1)))*180/pi;
-ref=(acos(transform.T(1,1))/2)*180/pi;
+Td=transform.T*pi/180;
+rot=acosd(Td(1,1));
+ref=acosd(Td(1,1))/2;
 
 if (det(transform.T) < 0)
     rotref=sprintf('Reflection: %.2f%c',ref,char(176));
 else
     rotref=sprintf('Rotation: %.2f%c',rot,char(176));
 end
-    
+
+anchorPoints=realPoints(anchors,:);
+d=20;
+theta=ref;
+mid=[ mean(anchorPoints(:,1)) ; mean(anchorPoints(:,2))];
+X=[mid(1)-(d*cosd(theta)) ; mid(1)+(d*cosd(theta)) ];
+Y=[mid(2)-(d*sind(theta)) ; mid(2)+(d*sind(theta)) ];
+line(X,Y,'LineStyle','--','LineWidth',5);
+plot(mid(1),mid(2),'gs','MarkerSize',10,'MarkerEdgeColor','k','MarkerFaceColor','g');
+
 temp=sprintf('Max error: %.3fr Mean error: %.3fr, %s',...
     result.errorsPerAnchorSet(s).max,...
     result.errorsPerAnchorSet(s).mean,...

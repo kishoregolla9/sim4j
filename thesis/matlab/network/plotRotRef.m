@@ -14,11 +14,11 @@ for s=1:numAnchorSets
     transform=result.transform(s);
     % +1==rotation, -1==reflection
     if (det(transform.T) < 0)
-        ref(1,s)=(acos(transform.T(1,1))/2)*180/pi;
+        ref(1,s)=(acosd(transform.T(1,1))/2);
         rot(1,s)=NaN;
     else
         ref(1,s)=NaN;
-        rot(1,s)=(acos(transform.T(1,1)))*180/pi;
+        rot(1,s)=(acosd(transform.T(1,1)));
     end
     t1(1,s)=transform.c(1,1);
     t2(1,s)=transform.c(1,2);
@@ -34,8 +34,7 @@ h=plotSingleDataSet(figName,'Rotation',results,anchors,radii,...
 plotSingleDataSet(figName,'Reflection',results,anchors,radii,...
     ref,folder,threshold,false,h,{'x'});
 
-
-legend({'Rotation','Reflection','s'});
+legend({'Rotation','Reflection'});
 xlabel('Angle of Rotation or Reflection (degrees)');
 minRadius=radii(1);
 maxRadius=radii(size(radii,2));
