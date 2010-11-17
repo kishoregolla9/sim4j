@@ -79,6 +79,7 @@ for r=1:numRadii
             f = polyval(fit,x);
             r2 = rsquare(f, y);
             plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
+            set(gca,'XScale','log');
             statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
                 correlation,pvalue);            
         else
