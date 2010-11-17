@@ -1,4 +1,4 @@
-function[]=plotContours(x,y,z,cmap,threeD,ax)
+function[]=plotContours(x,y,z,cmap,threeD)
 
 if (~exist('threeD','var'))
     threeD=false;
@@ -28,7 +28,7 @@ Zinterp = griddata(x,y,z,Xinterp,Yinterp);
 % Generate the mesh plot (CONTOUR can also be used):
 if (threeD)
       [DX,DY] = gradient(Zinterp,.2,.2);
-      quiver(Xinterp,Yinterp,DX,DY,'k.-');
+      quiver(Xinterp,Yinterp,DX,DY,'k-');
 %      scatter(x,y,z,'EraseMode','none');
 %     colormap(ax,cmap);
 %     scatter(ax,x,y,5,z,'filled','EraseMode','none');

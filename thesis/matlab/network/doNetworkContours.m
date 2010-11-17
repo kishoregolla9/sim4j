@@ -24,16 +24,15 @@ distanceVector=patchedMaps(s).distanceVector;
 x=network.points(:,1);
 y=network.points(:,2);
 z=sum(distanceVector,2);
-plotContours(x,y,z,summer(128),false);
-hold all
-plotAnchorTriangles(realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),radius);
-hold all
-x=network.points(:,1);
-y=network.points(:,2);
-z=zeros(size(x,1),1);
+
+density=zeros(size(x,1),1);
 for i=1:size(z,1)
-    z(i,1)=size(network.nodes(i).neighbors,2);
+    density(i,1)=size(network.nodes(i).neighbors,2);
 end
+% z=z/norm(z)-density/norm(density);
+
+plotContours(x,y,z,summer(128),false);
+plotAnchorTriangles(realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),radius);
 
 % ax1=gca;
 % ax2 = axes('Position',get(ax1,'Position'),...
@@ -41,12 +40,14 @@ end
 %     'YAxisLocation','left',...
 %     'Color','none',...
 %     'XColor','k','YColor','k');
-plotContours(x,y,z,hsv,true);
+
+% plotContours(x,y,density,hsv,true);
+
 % alignGrids(ax1,10);
 % alignGrids(ax2,10);
 % xlim(ax2,xlim(ax1));
 % ylim(ax2,ylim(ax1));
-xlabel('Interpolated Mean Error');
+title('Interpolated Mean Error');
 % saveFigure(folder,filename,h);
 % z=zeros(size(x,1),1);
 % for i=1:size(z,1)

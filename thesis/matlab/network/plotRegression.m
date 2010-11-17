@@ -3,7 +3,7 @@ network=results(1).network;
 
 %% Regression of Height and Area
 
-stats=triangleStats(network,anchors);
+stats=triangleStats(network.points,anchors,network.width,network.height);
 
 if (exist('threshold','var')==0)
     threshold=100;
