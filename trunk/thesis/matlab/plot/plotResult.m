@@ -45,6 +45,7 @@ if (size(anchors,1) > 1)
     plotRotRef(results,anchors,radii,folder);
     plotDissimilarity(results,anchors,radii,folder);
     plotDirections(results,anchors,radii,folder);
+%     plotRegression(results,anchors,radii,folder,2);
     
     close all
     hold off
