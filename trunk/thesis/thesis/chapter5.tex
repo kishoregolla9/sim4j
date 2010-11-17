@@ -14,7 +14,7 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 	\caption{}
 \end{figure}
 
-\section{Detecting the Outlier}
+\section{Avoiding the Outlier}
 
 Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix.  If the determinant of that matrix is +1, then the resulting transformation has rotation, with an angle as in Equation~\ref{eqn:rotmatrix}.  
 
@@ -57,3 +57,6 @@ Further, the Procrustes algorithm itself provides a measure of the dissimilarity
 	\label{fig:dissimilarity}
 \end{figure}
 
+As shown in Figure~\ref{fig:rotref}, each network has a \emph{natural} rotation or reflection angle to provide accurate localization.  As the linear transformation moves away from that angle, the errors increase.  Unfortunately, there is no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As shown in the Section~\ref{sec:anchorTriangle}, the area and height of the triangle formed by the anchor nodes are a good indicator of the possibility of a poor transformation angle.  But how flat of a triangle is too flat?
+
+\section{Minimum Area and Height of the Anchor Triangle} 
