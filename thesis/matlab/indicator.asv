@@ -4,22 +4,46 @@ folders={...
     '2010-11-16_14_7_17-Square-Random-20x20'
 };
 
-errors=zeros(1,1);
-heights=zeros(1,1);
-for i=1:size(folders)
+errors=zeros(0,1);
+heights=zeros(0,1);
+for i=1:length(folders)
    f=sprintf('../results/%s',folders{i});
-   s=sprintf('%s/result-*',f);
-   file=dir(s);
-   file=sprintf('%s/%s',f,file.name);
-   if (~exist(file,'file'))
-       fprintf(1,'Cannot find result file in %s',f);
-       continue;
-   end
-   fprintf(1,'Loading %s\n',file);
-   load(file);
-   
+   loadFile(f,'result-*');
+   loadFile(f,'anchors*');
    errors=[ errors [result.errors.mean] ];
-   heights
+   stats=triangleStats(result.network.points,anchors,result.network.width,result.network.height);
+   heights=[ heights [stats.heights.min] ];
+   clear result anchors numAnchorSets
 end
+radius=radii(1);
+dataToPlot=[heights/radius; errors]';
+dataToPlot=sortrows(dataToPlot,1);
+x=dataToPlot(:,1);
+y=dataToPlot(:,2);
+
+figure
+plot(x,y,'.');
+
+[n,bin]=histc(x,0:0.5:max(x))
+mu=zeros(size(n));
+start=1;
+for i=1:size(n)
+    count=n(i);
+    mu(i)=mean(y(start:count));
+    start=count;
+end
+
+[ci]=getConfidenceInterval(confidence,y');
+mu=mean(dataToPlot,2);
+errorbar(mu,ci,'o');
+
+grid on
+% set(gca,'XScale','log');
+xlabel({'Minimum Anchor Triangle Height','(factor of radio radius)'});
+ylabel({'Mean Location Error';'(factor of radio radius)'});
+
+
+
+
 
 
