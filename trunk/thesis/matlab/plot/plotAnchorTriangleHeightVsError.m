@@ -7,7 +7,7 @@ maxRadius=results(end).radius;
 network=results(1).network;
 numAnchorSets=size(anchors,1);
 
-stats=triangleStats(network,anchors);
+stats=triangleStats(network.points,anchors,network.width,network.height);
 heights=zeros(numAnchorSets,4);
 for s=1:numAnchorSets
     heights(s,1)=stats.heights(s).max;

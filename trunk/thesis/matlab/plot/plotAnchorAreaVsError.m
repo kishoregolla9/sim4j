@@ -6,7 +6,7 @@ network=results(1).network;
 
 figName='Anchor Area vs Error';
 dataName='Area of Anchor Triangle';    
-stats=triangleStats(network,anchors);
+stats=triangleStats(network.points,anchors,network.width,network.height);
 
 if (exist('threshold','var')==0)
     threshold=100;

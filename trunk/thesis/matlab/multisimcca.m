@@ -92,7 +92,7 @@ for anchorSet=1:numAnchorSets
                 load(f);
             end
         end
-        stats=triangleStats(result.network,allAnchors(anchorSet,:));
+        stats=triangleStats(result.network.points,allAnchors(anchorSet,:),result.network.width,result.network.height);
         if (length(result.errors) > 1)
             meanErrors(anchorSet,i)=result.errors(anchorSet).mean;
             maxErrors(anchorSet,i)=result.errors(anchorSet).max;
