@@ -43,6 +43,8 @@ if (size(anchors,1) > 1)
     plotAnchorDistanceVsError(results,anchors,radii,folder,2);
     
     plotRotRef(results,anchors,radii,folder);
+    plotDissimilarity(results,anchors,radii,folder);
+    plotDirections(results,anchors,radii,folder);
     
     close all
     hold off

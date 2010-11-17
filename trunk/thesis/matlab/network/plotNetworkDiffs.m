@@ -32,7 +32,7 @@ else
     end
     
     m=floor(size(data,1)/2) - 4;
-    for j=m:m+10
+    for j=m:m+9
         doNetworkDiff(j,data(j,1),NUM_MAX_TO_SHOW,plottitle,patchedMaps,realPoints,...
             network,result,allAnchors,folder,prefix,showStats);
     end
