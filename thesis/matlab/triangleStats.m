@@ -14,15 +14,16 @@ heights=struct(...
 
 centroids=zeros(numAnchorSets,2);
 
-distanceMatrix=sqrt(disteusq(points,points,'x'));
+% distanceMatrix=sqrt(disteusq(points(:,1),points(:,2),'x'));
 
 for s=1:numAnchorSets
     anchorNodes=anchors(s,:);
     numAnchors=size(anchorNodes,2);
     d=zeros(numAnchors*2-1,1);
-    d(1)=distanceMatrix(anchorNodes(1),anchorNodes(2));
-    d(2)=distanceMatrix(anchorNodes(2),anchorNodes(3));
-    d(3)=distanceMatrix(anchorNodes(3),anchorNodes(1));
+    anchorPoints=points(anchorNodes,:);
+    d(1)=distance(anchorPoints(1,:),anchorPoints(2,:));
+    d(2)=distance(anchorPoints(2,:),anchorPoints(3,:));
+    d(3)=distance(anchorPoints(3,:),anchorPoints(1,:));
     areas(s,1)=heron(d(1),d(2),d(3));
     c=centroid(points(anchorNodes(:),:));
     distances(s,1)=distance([height/2 width/2],c);

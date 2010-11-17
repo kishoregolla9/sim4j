@@ -5,9 +5,9 @@ numAnchorSets=size(anchors,1);
 result=results(1);
 figName='RotRef vs Error';
 
-width=result.network.width;
-height=result.network.height;
-realstats=triangleStats(result.network.points,anchors,width,height);
+% width=result.network.width;
+% height=result.network.height;
+% realstats=triangleStats(result.network.points,anchors,width,height);
 
 rot=zeros(1,numAnchorSets,1);
 ref=zeros(1,numAnchorSets,1);

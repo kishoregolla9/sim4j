@@ -1,0 +1,25 @@
+
+folders={...    
+    '2010-11-16_14_25_47-Square-Random-20x20',...
+    '2010-11-16_14_7_17-Square-Random-20x20'
+};
+
+errors=zeros(1,1);
+heights=zeros(1,1);
+for i=1:size(folders)
+   f=sprintf('../results/%s',folders{i});
+   s=sprintf('%s/result-*',f);
+   file=dir(s);
+   file=sprintf('%s/%s',f,file.name);
+   if (~exist(file,'file'))
+       fprintf(1,'Cannot find result file in %s',f);
+       continue;
+   end
+   fprintf(1,'Loading %s\n',file);
+   load(file);
+   
+   errors=[ errors [result.errors.mean] ];
+   heights
+end
+
+
