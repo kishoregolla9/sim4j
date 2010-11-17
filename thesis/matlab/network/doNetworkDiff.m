@@ -182,8 +182,9 @@ end
 
 transform=result.transform(s);
 Td=transform.T*pi/180;
-rot=acosd(Td(1,1));
-ref=acosd(Td(1,1))/2;
+rot=acosd(transform.T(1,1));
+ref=(acosd(transform.T(1,1)));
+% ref=(acos(transform.T(1,1))/2) * pi/180;
 
 if (det(transform.T) < 0)
     rotref=sprintf('Reflection: %.2f%c',ref,char(176));

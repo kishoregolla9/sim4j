@@ -9,6 +9,9 @@ end
 
 if (exist('doBestFit','var')==0)
     doBestFit=true;
+elseif (ischar(doBestFit) || iscell(doBestFit))
+    xlab=doBestFit;
+    doBestFit=true;
 end
 
 minRadius=radii(1);
@@ -104,7 +107,11 @@ if (iscell(labels) && ischar(labels{1}))
     legend(labels,'Location','NorthEast');
 end
 
-xlabel(dataName);
+if (exist('xlab','var'))
+    xlabel(xlab);
+else
+    xlabel(dataName);
+end
 
 if (doBestFit)
     label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
@@ -115,7 +122,7 @@ else
     legend({dataName});
 end
 
-ylabel('Mean Location Error (factor of radio radius)');
+ylabel({'Mean Location Error';'(factor of radio radius)'});
 
 prefix=strrep(figName,' ','_');
 filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...

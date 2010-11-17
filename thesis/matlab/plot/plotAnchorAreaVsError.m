@@ -12,7 +12,7 @@ if (exist('threshold','var')==0)
     threshold=100;
 end
 
-plotSingleDataSet(figName,dataName,results,anchors,radii,stats.areas',...
-    folder,threshold);
+plotSingleDataSet(figName,dataName,results,anchors,radii,(stats.areas')/radii,...
+    folder,threshold,{dataName,'(factor of radio radius)'});
 
 end

@@ -1,15 +1,17 @@
-function [h]=doNetworkContours(j,s,plottitle,patchedMaps,realPoints,...
+function [h]=doNetworkContours(rank,s,plottitle,patchedMaps,realPoints,...
     network,result,allAnchors,folder,prefix)
 
 set(0,'DefaultAxesColorOrder',[0 0 0]);
 set(gca,'box','on');
 
-r=result.radius;
+radius=result.radius;
 filename=sprintf('networkcontours/NetContours-R%.1f-Rank%i-AnchorSet%i%s',...
-    r,j,s,prefix);
+    radius,rank,s,prefix);
 if figureExists(folder,filename) ~= 0
     fprintf('Plot for Network Contours for Anchor Set #%i %s already exists\n',s,prefix);
-    return;
+    if rank~=1
+        return;
+    end
 end
 
 startPlotting=tic;
@@ -22,8 +24,28 @@ distanceVector=patchedMaps(s).distanceVector;
 x=network.points(:,1);
 y=network.points(:,2);
 z=sum(distanceVector,2);
-plotContours(x,y,z,summer(128));
-plotAnchorTriangles(realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),r);
+plotContours(x,y,z,summer(128),false);
+hold all
+plotAnchorTriangles(realPoints,patchedMaps(s).mappedPoints,allAnchors(s,:),radius);
+hold all
+x=network.points(:,1);
+y=network.points(:,2);
+z=zeros(size(x,1),1);
+for i=1:size(z,1)
+    z(i,1)=size(network.nodes(i).neighbors,2);
+end
+
+% ax1=gca;
+% ax2 = axes('Position',get(ax1,'Position'),...
+%     'XAxisLocation','top',...
+%     'YAxisLocation','left',...
+%     'Color','none',...
+%     'XColor','k','YColor','k');
+plotContours(x,y,z,hsv,true);
+% alignGrids(ax1,10);
+% alignGrids(ax2,10);
+% xlim(ax2,xlim(ax1));
+% ylim(ax2,ylim(ax1));
 xlabel('Interpolated Mean Error');
 % saveFigure(folder,filename,h);
 % z=zeros(size(x,1),1);
@@ -38,7 +60,7 @@ fprintf(' - done in %.2f seconds\n',toc(startPlotting));
 close
 end
 
-function[]=plotAnchorTriangles(realPoints,mappedPoints,anchors,r)
+function[]=plotAnchorTriangles(realPoints,mappedPoints,anchors,radius)
 
 % Show a line from each real to each mapped point (red circles)
 % for i=1:size(realPoints,1)
@@ -59,9 +81,9 @@ function[]=plotAnchorTriangles(realPoints,mappedPoints,anchors,r)
 % Show a circle of the radius around each anchor point
 % and Draw the Anchor Triangle
 
-plotAnchorTriangle(anchors,realPoints,r,'','d','--','--');
+plotAnchorTriangle(anchors,realPoints,radius,'','d','--','--');
 % labels{end+1} = 'Anchor Node (real)';
-plotAnchorTriangle(anchors,mappedPoints,r,'','o',':',':');
+plotAnchorTriangle(anchors,mappedPoints,radius,'','o',':',':');
 % labels{end+1} = 'Anchor Node (mapped)';
 
 % Draw a rectangle around the "real" area
@@ -86,7 +108,7 @@ ylim([0,height]);
 grid on
 end
 
-function [h]=plotAnchorTriangle(anchors,points,r,color,markerStyle,lineStyle,circleStyle)
+function [h]=plotAnchorTriangle(anchors,points,radius,color,markerStyle,lineStyle,circleStyle)
 for a=1:size(anchors,2)
     xa=points(anchors(:,a),1);
     ya=points(anchors(:,a),2);
@@ -94,7 +116,7 @@ for a=1:size(anchors,2)
     h=plot(xa,ya,plotLineSpec,...
         'MarkerEdgeColor','black',...
         'MarkerSize',5);
-    theCircle=rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1],...
+    theCircle=rectangle('Position',[xa-radius,ya-radius,radius*2,radius*2],'Curvature',[1,1],...
         'LineStyle',circleStyle);
 
     % A line of the triangle
@@ -109,4 +131,14 @@ for a=1:size(anchors,2)
         set(l,'Color',color);
     end
 end
+end
+
+
+function alignGrids(ax, ticks)
+xlimits = get(ax,'XLim');
+ylimits = get(ax,'YLim');
+xinc = (xlimits(2)-xlimits(1))/ticks;
+yinc = (ylimits(2)-ylimits(1))/ticks;
+set(ax,'XTick',[xlimits(1):xinc:xlimits(2)],...
+        'YTick',[ylimits(1):yinc:ylimits(2)]);
 end
