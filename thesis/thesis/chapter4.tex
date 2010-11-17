@@ -75,7 +75,7 @@ When the outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesSumEx
 Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.20.  However, it does appear that the outliers are slightly more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient increases to 0.32 demonstrating that perhaps the trend in thinking through these hypotheses is correct.
 
 \subsection{Anchor Node Triangle}
-
+\label{sec:anchorTriangle}
 Continuing the trend of trying to show some increased correlation between the anchor coverage and location error, Figure~\ref{fig:AnchorArea} plots the area of the triangle formed by the three anchor nodes versus mean location error. Figure~\ref{fig:AnchorHeight} does the same for the shortest triangle height, or in other words, a measure of the collinearity of the three anchor nodes.
 
 While the correlation coefficients remain low, it is clear that the flatter the triangle, or the more collinear the anchor nodes, the higher chance of seeing outliers in the data with an extremely high location error. Further, after removing outliers, the slope of the best fit line is has a moderate r-squared value, giving an indication that network planners should make the anchor node triangle as spread apart as possible, or more generally, make sure the points are not collinear.
