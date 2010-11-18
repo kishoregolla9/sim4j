@@ -1,4 +1,5 @@
 \chapter{The Outlier Anchor Node Placements}
+\label{chap:outliers}
 As seen in the previous chapter, there are some anchor node placements that are significantly worse than the average case.   In this chapter, we explore in more detail the cause of these outliers and more importantly, is this condition detectable in the real world.
 
 \section{The Cause}
@@ -14,7 +15,7 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 	\caption{}
 \end{figure}
 
-\section{Avoiding the Outlier}
+\section{Avoid Outliers}
 
 Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix.  If the determinant of that matrix is +1, then the resulting transformation has rotation, with an angle as in Equation~\ref{eqn:rotmatrix}.  
 
@@ -57,6 +58,17 @@ Further, the Procrustes algorithm itself provides a measure of the dissimilarity
 	\label{fig:dissimilarity}
 \end{figure}
 
-As shown in Figure~\ref{fig:rotref}, each network has a \emph{natural} rotation or reflection angle to provide accurate localization.  As the linear transformation moves away from that angle, the errors increase.  Unfortunately, there is no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As shown in the Section~\ref{sec:anchorTriangle}, the area and height of the triangle formed by the anchor nodes are a good indicator of the possibility of a poor transformation angle.  But how flat of a triangle is too flat?
+As shown in Figure~\ref{fig:rotref}, each network has a \emph{natural} rotation or reflection angle to provide accurate localization.  As the linear transformation moves away from that angle, the errors increase.  Unfortunately, there is no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As shown in the Section~\ref{sec:anchorTriangle}, the minimum height of the triangle formed by the anchor nodes are a good indicator of the possibility of a poor transformation angle.  
 
-\section{Minimum Area and Height of the Anchor Triangle} 
+\section{Outlier Indicators} 
+
+This section proves that the minimum height of the anchor node triangle is a good indicator of the outlier case more rigorously then previously shown.  Further, we provide a good metric for how flat of a triangle is too flat.
+
+\begin{figure}
+  \centering
+	\includegraphics[width=0.5\textwidth]{HeightIndicator}
+	\caption{Minimum anchor triangle heights, with confidence intervals grouped in intervals of 0.1r}	
+	\label{fig:heightIndicator}
+\end{figure}
+
+

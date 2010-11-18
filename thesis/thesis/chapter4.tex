@@ -1,12 +1,48 @@
-\chapter{Survey of Anchor Node Placements}
-
+\chapter{Optimal Anchor Node Placements}
+\label{chap:placments}
 \section{Measuring Location Error}
 Before searching for the best anchor node placement we must first define what \emph{best} means, in terms of location error.  First of all, location error is measured as a factor of radio radius (or range).  Since this study addresses range-free networks, and thus relies solely on network connectivity, the actual units of distance do not matter for general study.  What is important to the protocol is how many other nodes in the network fall within the radio radius of a given node.  The average numbers of nodes within range of a each node is known as connectivity.
 
 Every network has its own application requirements, and thus there are many options for what statistics to examine for accessing the quality of locations.  The simplest criteria is to look at the mean location error across all nodes in the network.  For the most part, this is the basis for the results in this study.  However, this assumes that all nodes in the network must be used in the final results.  If the network designers know which nodes have poor locations, they may wish to exclude these nodes from the final results.  Therefore, if the economics of the network deployment allow, it may be beneficial to look at the best, for example, 80\% of nodes in the network.  In practice, the designers do not know which nodes to exclude, so this study also attempts to identify the worst areas of a network for location accuracy, depending on the anchor node placement.  
 
-\section{Coordinate Transformation}
-To understand the various hypotheses for the best anchor placement, a basic understanding of how the transformation from local to global coordinate systems must be explained.  After the local networks have been calculated and patched together into a single cohesive network, the anchor nodes are then used. Using Procrustes~\cite{procrustes-matlab} analysis, a linear transformation of translation, reflection, orthogonal rotation, and scaling is determined for the anchor nodes from the calculated to known coordinates. The transformation is then applied to all nodes in the network. Therefore, how well the anchor nodes represent the overall calculated network variability, the better the final locations will be.
+\section{Coordinate Transformation} \label{sec:procrustes}
+To understand the various hypotheses for the best anchor placement, a basic understanding of how the transformation from local to global coordinate systems must be explained.  After the local networks have been calculated and patched together into a single cohesive network, the anchor nodes are then used. Using Procrustes~\cite{procrustes-matlab} analysis, a linear transformation of translation, reflection, orthogonal rotation, and scaling is determined for the anchor nodes from the calculated to known coordinates. The transformation is chosen my minimizing the sum of squared errors for the resulting coordinates.  Specifically, given X real points and Y mapped points for the anchors, Procrustes gives a transformation as shown in Equation~\ref{eqn:procrustes} that minimizes the difference between Y and the transformed points Z.
+
+\begin{equation}\label{eqn:procrustes}
+Z = b*Y*T + c \\
+\end{equation}
+\begin{flushright}
+where \\
+$b$ is a scalar, \\
+$T$ is the rotation/reflection component, and\\
+$c$ is the translation component.
+\end{flushright}
+
+For example, take a random anchor set, as shown in Figure~\ref{fig:sampleProcrustes1}.  The figure shows the three triangles, which are the patched, local coordinates, the real global coordinates, and the transformed coordinates after applying the calculated transformation from patched to real points.  The actual transformation equation is shown in Equation~\ref{eqn:sampleProcrustes1}.  This demonstrates that the transformation calculated by Procrustes is not perfect, as the real and transformed coordinates do not align exactly.
+
+\begin{figure}
+	\centering
+		\includegraphics[width=0.75\textwidth]{SampleAnchors}
+	\caption{The sample network used in this chapter, showing connectivity between nodes}
+	\label{fig:sampleProcrustes1}
+\end{figure}
+
+\begin{equation}\label{eqn:sampleProcrustes1}
+\begin{bmatrix}$$Y$$\end{bmatrix} = 
+1.5887 
+\begin{bmatrix}$$
+	2.5714   & 14.6615 \\
+   14.6277   &  0.7151 \\
+    4.9257   &  2.8442$$\end{bmatrix}
+\begin{bmatrix}$$
+	-0.6621  & -0.7494 \\
+    0.7494   & -0.6621$$\end{bmatrix} + 
+\begin{bmatrix}$$
+16.7334 & 7.7612 \\ 
+\vdots & \vdots$$\end{bmatrix}
+\end{equation}
+
+The transformation is then applied to all nodes in the network by simply replacing $Y$ in Equation~\ref{eqn:procrustes} with the patched, local coordinates for the entire network. Therefore, how well the anchor nodes represent the overall calculated network variability, dictates how good the final locations will be.
 
 \section{Methodology}
 For the purposes of testing each hypothesis, randomly generated networks of varying sizes are used.  Unless otherwise specified, all nodes are randomly placed within a square area with an overall density of one node per unit area.  For example, a ten by ten square area will have 100 randomly placed nodes.  Anchor sets are chosen by identifying all possible sets via \emph{n choose k}, where \emph{n} is the number of nodes in the network and \emph{k} is the number of nodes per anchor set.  From the total set of possible anchor sets, a random selection is made.  This method excludes the possibility of choosing the same anchor set more than once.
@@ -50,8 +86,8 @@ In both plots, it is clear that a small subset of the anchor placements lead to 
 Even after the outliers are excluded, no pattern emerges and the correlation coefficients remain extremely low.  Further, the line of best fit has a low r-squared value of 0.02.  Higher order best fits also show no clear correlation.
 
 \subsection{Network Area Coverage}
-
-Another seemingly obvious optimal anchor placement is to have the anchors as far apart as possible.  The rationale behind this hypothesis is that if a wider area of the network is covered by the anchor nodes, then the resulting calculated transformation will take into account more network variations.  
+\label{sec:anchorcoverage}
+Another seemingly obvious optimal anchor placement is to have the anchors as far apart as possible.  The rationale behind this hypothesis is that if a wider area of the network is covered by the anchor nodes, then the resulting calculated transformation will take into account more network variations.
 
 \begin{figure}
   \centering
@@ -68,11 +104,11 @@ Another seemingly obvious optimal anchor placement is to have the anchors as far
     \label{fig:AnchorDistances}
 \end{figure}
 
-Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Further, the sum of distances scales for the case of more than three anchor nodes, whereas the meaning of perimeter will change the desired description. Regardless, the plot shows that again there is low correlation between the distance between anchors and the location calculation.  Further, the outliers are spread relatively evenly regardless of distance between anchor nodes.
+Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Further, the sum of distances scales for the case of more than three anchor nodes, whereas the meaning of perimeter will change the desired description. Regardless, the plot shows that again there is low correlation between the distance between anchors and the location calculation.  Further, the outliers are spread relatively evenly regardless of distance between anchor nodes, and thus this is not a good indicator of an outlier.
 
-When the outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesSumExcluding}, a moderate level of correlation is seen, with a much clear line of best fit.  The only moderate, 0.48, correlation coefficient can be explained by the lower bound for location error.  Clearly, at any distance between anchors, the lower bound can be reached as there is a virtually straight line across the bottom of the data.  However, as the distance increases between the anchor nodes, the probability of getting a high location error decreases.  
+When the outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesSumExcluding}, a moderate level of correlation is seen, with a much clear line of best fit.  The only moderate, 0.48, correlation coefficient can be explained by the lower bound for location error.  Clearly, at any distance between anchors, the lower bound can be reached as there is a virtually straight line across the bottom of the data.  However, as the distance increases between the anchor nodes, the probability of getting a high location error decreases.
 
-Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.20.  However, it does appear that the outliers are slightly more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient increases to 0.32 demonstrating that perhaps the trend in thinking through these hypotheses is correct.
+Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.20.  However, it does appear that the outliers are slightly more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient is 0.32, slightly lower than that of the sum of the distances.
 
 \subsection{Anchor Node Triangle}
 \label{sec:anchorTriangle}
@@ -99,3 +135,7 @@ While the correlation coefficients remain low, it is clear that the flatter the 
 	\caption{Minimum Height of Anchor Triangle vs Location Error}	    
 	\label{fig:AnchorHeight}
 \end{figure}
+
+\section{Best Anchor Node Placement}
+
+Analyzing all the metrics discusses above, the best indicator of a good anchor placement is the sum of the distance between anchor nodes, once the outliers are excluded.  How to avoid the outlier case is discussed in Chapter~\ref{chap:outliers}.  Practically speaking, this means that network planners can choose between proposed anchor placements and use the measured distance between them to provide guidance about which placement will result in the least amount of error.
