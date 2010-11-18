@@ -1,13 +1,15 @@
 function plotIndicators(errors,heights,radius)
+
+figure
 dataToPlot=[heights/radius; errors]';
 dataToPlot=sortrows(dataToPlot,1);
 x=dataToPlot(:,1);
 y=dataToPlot(:,2);
-% plot(x,y,'g^');
+plot(x,y,'g.');
 
 confidence=0.05;
 
-figure
+
 % plot(x,y,'.');
 hold all
 
@@ -27,8 +29,8 @@ for i=2:length(bins)
     criticalT=tinv(1-confidence,size(v,1));
     ci=(criticalT*std(v)/sqrt(length(v)));
     mu=mean(v);
-    plot(repmat(bins(i),length(v),1),v,'g.');
-    errorbar(bins(i),mu,ci,'-o');
+%     plot(repmat(bins(i),length(v),1),v,'g.');
+    errorbar(bins(i)-(inc/2),mu,ci,'-o');
 end
 
 end
