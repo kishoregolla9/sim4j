@@ -243,28 +243,6 @@ end
 
 end
 
-function [h]=plotAnchorTriangle(anchors,points,r,color,markerStyle,lineStyle,circleStyle)
-for a=1:size(anchors,2)
-    xa=points(anchors(:,a),1);
-    ya=points(anchors(:,a),2);
-    plotLineSpec=sprintf('%s%s',markerStyle,lineStyle);
-    h=plot(xa,ya,plotLineSpec,...
-        'MarkerEdgeColor','black',...
-        'MarkerSize',5);
-    theCircle=rectangle('Position',[xa-r,ya-r,r*2,r*2],'Curvature',[1,1],...
-        'LineStyle',circleStyle);
 
-    % A line of the triangle
-    triLine=mod(a,size(anchors,2))+1;
-    xb=points(anchors(:,triLine),1);
-    yb=points(anchors(:,triLine),2);
-    l=line([xa,xb],[ya,yb],'LineStyle',lineStyle,'LineWidth',1);
-    
-    if ~isempty(color)
-        set(h,'MarkerFaceColor',color);
-        set(theCircle,'EdgeColor',color);
-        set(l,'Color',color);
-    end
-end
 end
 
