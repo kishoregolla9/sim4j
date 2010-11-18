@@ -3,28 +3,32 @@ dataToPlot=[heights/radius; errors]';
 dataToPlot=sortrows(dataToPlot,1);
 x=dataToPlot(:,1);
 y=dataToPlot(:,2);
+% plot(x,y,'g^');
 
-confidence=0.5;
+confidence=0.05;
 
 figure
-plot(x,y,'.');
-
-[n,bin]=histc(x,0:0.5:max(x));
-mu=zeros(size(n));
-start=1;
-for i=1:size(n)
-    count=n(i);
-    mu(i)=mean(y(start:count));
-    start=count+1;
-end
-[ci]=getConfidenceInterval(confidence,y');
-% mu=mean(dataToPlot,2);
-size(mu)
-size(ci)
-errorbar(mu,ci,'o');
+% plot(x,y,'.');
+hold all
 
 grid on
-% set(gca,'XScale','log');
+set(gca,'XScale','log');
 xlabel({'Minimum Anchor Triangle Height','(factor of radio radius)'});
 ylabel({'Mean Location Error';'(factor of radio radius)'});
+
+inc=0.1;
+bins=0:inc:max(x);
+bins=[ bins bins(length(bins))+inc ];
+% n=zeros(size(bins,2),1);
+for i=2:length(bins)
+    bottom=bins(1,i-1);
+    top=bins(1,i);
+    v=y(x>bottom & x<=top);
+    criticalT=tinv(1-confidence,size(v,1));
+    ci=(criticalT*std(v)/sqrt(length(v)));
+    mu=mean(v);
+    plot(repmat(bins(i),length(v),1),v,'g.');
+    errorbar(bins(i),mu,ci,'-o');
+end
+
 end
