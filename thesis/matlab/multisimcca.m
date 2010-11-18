@@ -108,15 +108,24 @@ for anchorSet=1:numAnchorSets
         end
         
         if (i > 1)
-            source=sprintf('%s/png/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
+            source=sprintf('%s/png/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1.png',...
                 folder);
+            if(~exist(source,'file'))
+                source=sprintf('%s/png/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1-.png',...
+                folder);
+            end
             destination=sprintf('%s/AS%iNetworkDiff%i.png',...
                 folderAll,anchorSet,i);
             fprintf(1,'Copy %s\n to  %s\n',source,destination);
+
             copyfile(source,destination);
             
-            source=sprintf('%s/eps/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1-.eps',...
+            source=sprintf('%s/eps/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1.eps',...
                 folder);
+            if(~exist(source,'file'))
+                source=sprintf('%s/eps/networkdiffs-nostats/NetDiff-R2.5-Rank1-AnchorSet1-.eps',...
+                folder);
+            end            
             destination=sprintf('%s/AS%iNetworkDiff%i.eps',...
                 folderAll,anchorSet,i);
             fprintf(1,'Copy %s\n to  %s\n',source,destination);
