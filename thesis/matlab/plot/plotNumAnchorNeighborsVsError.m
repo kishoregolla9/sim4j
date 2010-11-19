@@ -15,7 +15,7 @@ for r=1:numResults
     for s=1:numAnchorSets
         % For one start node
         anchorNodes=anchors(s,:);
-        n=getNumUnique(network,anchorNodes);
+        n=getNumUniqueNeighbors(network,anchorNodes);
         numNeighbors(r,s,1)=numNeighbors(r,s,1) + n;
     end
 end
@@ -29,10 +29,4 @@ plotSingleDataSet(figName,dataName,results,anchors,radii,numNeighbors,...
 
 end
 
-function [num] = getNumUnique(network,anchorSet)
-n=[];
-for i=1:size(anchorSet,2)
-    n=[n network.nodes(anchorSet(1,i)).neighbors]; %#ok<AGROW>
-end
-num=size(unique(n),2);
-end
+
