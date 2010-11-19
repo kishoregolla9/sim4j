@@ -17,6 +17,7 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 \end{figure}
 
 \section{Avoid Outliers}
+\subsection{Transformation Reflection and Rotation}
 \label{sec:reflection}
 Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix, as discussed in Section~\ref{sec:procrustes}.  If the determinant of that matrix is +1, then the resulting transformation has a rotation, with an angle as in Equation~\ref{eqn:rotmatrix}.  
 
@@ -43,13 +44,43 @@ Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two d
 \begin{figure}
   \centering
 	\subfloat[]{\label{fig:rotref1}
-		\includegraphics[width=\figurewidth\textwidth]{rotref1}}
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/RotRefvsError}}
 \\
 	\subfloat[]{\label{fig:rotref2}
-		\includegraphics[width=\figurewidth\textwidth]{rotref2}}		
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/RotRefvsError}}
 	\caption{Rotation and reflection versus location error}	
 	\label{fig:rotref}
 \end{figure}
+
+\subsection{Transformation Scaling and Translation}
+
+For completeness, we explore the possibility that the scaling or translation component of the linear transformation is causing the issue.  In Figure~\ref{fig:scalar}, the scale component, \emph{b}, of the Procrustes analysis is plotted against the mean location error for the same two networks as shown above for rotation and reflection.  While there is an apex of the data around a particular scalar value where the minimum localization error is seen, the outliers can also have this same scalar value.  Therefore, the scaling component is not a good indicator of  extremely poor localization performance.
+
+\begin{figure}
+  \centering
+	\subfloat[]{\label{fig:scalar1}
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/TransformScalar}}
+\\
+	\subfloat[]{\label{fig:scalar2}
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/TransformScalar}}
+	\caption{Transformation scalar component versus location error}	
+	\label{fig:scalar}
+\end{figure}
+
+Likewise, Figure~\ref{fig:translate} plots the horizontal, \emph{x}, and vertical, \emph{y}, translation components, \emph{c}, against the mean location error. As with the other transformation components, there is single \emph{natural} value that gives best localization performance.  However, much like for the scaling factor, while outlier localization errors are the only values that occur away from this natural value, the outliers also occur around that value as well.  Therefore, it is not possible to classify a anchor set as one of the outlier cases based on the translation component of the linear transformation it produces.
+
+\begin{figure}
+  \centering
+	\subfloat[]{\label{fig:translate1}
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/TransformTranslate}}
+\\
+	\subfloat[]{\label{fig:translate2}
+		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/TransformTranslate}}
+	\caption{Transformation translation component versus location error}	
+	\label{fig:translate}
+\end{figure}
+
+\subsection{Procrustes Dissimilarity}
 
 The Procrustes algorithm itself provides a measure of the dissimilarity.  Specifically, it is the minimized value of sum of squared errors\cite{procrustes-matlab}.  As shown in Figure~\ref{fig:dissimilarity}, it is not a good indicator of the transformation as it pertains to the entire network.  This is because the Procrustes algorithm is only performed on the anchor nodes themselves and for those nodes themselves, the transformation is good.
 
