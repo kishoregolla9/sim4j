@@ -1,12 +1,12 @@
 \chapter{Related Work on Anchor Node Placement}
-
-While much attention has been paid to localization accuracy and computational effort, anchor node placement is often recognized, but dismissed as future study.   
+\label{chap:RelatedWork}
+While much attention has been paid to localization accuracy and computational effort, the importance of intelligent anchor node placement is often recognized, but dismissed as future study.
 
 \section{Empirical Evidence}
 
 Often, authors will come across anchor placement by accident and discuss it based on their own empirical evidence.  Shang, et al.\cite[p. 964]{MDS-MAP} and Li, et al.\cite[p. 11]{CCA-MAP07} both choose anchors at random within the network.  Although, Shang does mention that a co-linear set of anchors chosen in one example "represents a rather unlucky selection", without supporting evidence of why this is unlucky.
 
-Earlier work by Doherty, et al.\cite{Doherty} requires anchor nodes to be placed at the edges, and ideally at the corners of the network.  In this case, however, the algorithm is a simple constraint problem.  One constraint requires that all the unknown nodes be places within the convex hull of the anchors, and therefore, better results are obtained when anchors are at the corners.
+Earlier work by Doherty, et al.\cite{Doherty} requires anchor nodes to be placed at the edges, and ideally at the corners of the network.  In this case, however, the algorithm is a simple constraint problem.  One constraint requires that all the unknown nodes be placed within the convex hull of the anchors, and therefore, better results are obtained when anchors are at the corners.
 
 \section{Explicit Studies of Anchor Node Placement}
 While few, there have been a some explicit studies of anchor node placement.  Hara, et al.\cite{Hara} propose a method of choosing anchor node locations to achieve a specific accuracy target.  The proposal, however, only applies to rectangular network areas and that anchor nodes must be placed at the center of a sub-rectangle of the original rectangle when divided into equal sized rectangles.  Further, it assumes simple RSSI-based localization.  
@@ -15,8 +15,11 @@ Ash, et al.\cite{Ash} provide analytical proof that placing anchor nodes uniform
 
 Karl and Willig dedicate an, albeit short, sub-chapter to the \emph{Impact of anchor placement} in their book \cite[p. 247-248]{Karl}.  Referencing \cite{Doherty} and \cite{Savarese}, again they defer to perimeter anchor placement as the optimal choice.  Unfortunately, the technique proposed involves adaptive deployment, whereby a mobile node with absolute positioning available, like GPS, wanders through the network and attempts to determine the optimal anchor placements as it travels.  For the purposes of a priori planning, this technique is not feasible.
 
-Cheng, et all.\cite{Cheng} present a novel technique to handle the effects of adverse anchor placement, specifically in clumps.  The algorithm, \emph{HyBloc}, is a hybrid of MDS and proximity-distance map (PDM)\cite{PDM}.  It works by using MDS to add artificial, secondary anchor nodes using MDS to improve the performance of PDM, since on its own, MDS can adequately and efficiently determine the position of a few nodes based on arbitrarily place primary anchor nodes.  PDM is shown to a be good choice for anisotropic networks.
+Cheng, et all.\cite{Cheng} present a novel technique to handle the effects of adverse anchor placement, specifically in clumps.  The algorithm, \emph{HyBloc}, is a hybrid of MDS and proximity-distance map (PDM)\cite{PDM}.  HyBloc combines the two algorithms to draw the best of each. Namely, PDM is shown to have good performance in anisotropic networks, while MDS performs well even with few anchors.  HyBloc, therefore, works by using MDS to add artificial, secondary anchor nodes in specific isotropic areas of the network, and then uses PDM to complete the overall localization for the entire network.
 
-Other studies also focus on the effect of indoor conditions and anchor placement as it relates to RSSI and other radio propagation measurements\cite{Zemek}.
+Another study focus on the effect of indoor conditions and anchor placement as it relates to RSSI and other radio propagation measurements\cite{Zemek}.  The experiments were conducted in a small, enclosed space, and anchor nodes were placed either on the ceiling or the floor of the room.  The study concludes that anchor nodes on the ground are better for monitoring moving people in the room, the extension of which is that anchor nodes need to be in the same plane as the nodes they are being used to locate.
 
+\section{Summary of Related Work}
+
+Overall, the previous studies on anchor placement are limited.  Specifically, they focus on particular use cases and assumptions that are different from the ones here. The overarching theme of the studies, though, is to place the anchors at the edges of the network.  Despite the different assumptions, this idea makes sense from a purely geometric point of view, and is therefore used as the initial jump start of hypotheses in this thesis.
 
