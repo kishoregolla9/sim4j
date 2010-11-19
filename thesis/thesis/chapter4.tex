@@ -86,7 +86,18 @@ Even after the outliers are excluded, no pattern emerges and the correlation coe
 
 \subsection{Network Area Coverage}
 \label{sec:anchorcoverage}
-As suggested in previous work in Chapter~\ref{chap:RelatedWork}, optimal anchor placement is to have the anchors as far apart as possible, around the edges of the network.  The rationale behind this hypothesis is that if a wider area of the network is covered by the anchor nodes, then the resulting calculated transformation will take into account more network variations.
+As suggested in related studies in Chapter~\ref{chap:RelatedWork}, an optimal anchor placement is to have the anchors as far apart as possible, around the edges of the network.  The rationale behind this hypothesis, in the context of this study, is that if a wider area of the network is covered by the anchor nodes, then the resulting calculated transformation will take into account more network variations.
+
+One way to determine how close the anchors are to the perimeter of the network is to measure how far apart the anchors are from each other.  The further apart they are, they closer they are to the edge and the more network area they cover.  For statistical purposes, the sum of the distance between each pair of anchors is taken.  I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Further, the sum of distances scales for the case of more than three anchor nodes, whereas the meaning of perimeter will change the desired description.  Figure~\ref{SampleSumOfDistances} shows an example for both the three and four anchor node case.  For the three node case, it is equal to the perimeter of the triangle.  More generically, for more nodes, as shown here for four, it is the distance between each pair of nodes.
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\figurewidth\textwidth]{SampleSumOfDistances}
+    \caption{Sum of Distances = $\sum_{i=0}^{n} \|x_{i}\| $}
+	\label{fig:SampleSumOfDistances}
+\end{figure}
+
+Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. The plot shows that again there is low correlation between the distance between anchors and the location calculation.  Further, the outliers are spread relatively evenly regardless of distance between anchor nodes, and thus this is not a good indicator of an outlier.
 
 \begin{figure}
   \centering
@@ -109,9 +120,7 @@ As suggested in previous work in Chapter~\ref{chap:RelatedWork}, optimal anchor 
     \label{fig:MinAnchorDistances}
 \end{figure}
 
-Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anchors versus mean localization error for that anchor set. I describe this as the sum of distances of the anchors instead of the perimeter of the triangle formed because this hypothesis investigates if the further apart the anchors are from each makes a difference. Further, the sum of distances scales for the case of more than three anchor nodes, whereas the meaning of perimeter will change the desired description. Regardless, the plot shows that again there is low correlation between the distance between anchors and the location calculation.  Further, the outliers are spread relatively evenly regardless of distance between anchor nodes, and thus this is not a good indicator of an outlier.
-
-When the outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesSumExcluding}, a moderate level of correlation is seen, with a much clear line of best fit.  The only moderate, 0.48, correlation coefficient can be explained by the lower bound for location error.  Clearly, at any distance between anchors, the lower bound can be reached as there is a virtually straight line across the bottom of the data.  However, as the distance increases between the anchor nodes, the probability of getting a high location error decreases.
+When the outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesSumExcluding}, a moderate level of correlation is seen, with a much clear line of best fit.  The only moderate, 0.48, correlation coefficient can be explained by the lower bound for location error.  There is a virtually straight line across the bottom of the data indicating that, at any distance between anchors, the lower bound of mean location error can be reached.  However, as the distance increases between the anchor nodes, the probability of getting a high location error decreases.
 
 Even if the sum of distances of the anchors is high, it is possible for two anchors to be very close together and far from the third.  Therefore, the minimum distance between a pair of anchors is shown in Figure~\ref{fig:AnchorDistancesMinimum}.  Again, the correlation coefficient is low at 0.20.  However, it does appear that the outliers are slightly more likely to appear when the minimum distance between a pair of anchors is low.  Further, when outliers are excluded, as shown in Figure~\ref{fig:AnchorDistancesMinimumExcluding}, the coefficient is 0.32, slightly lower than that of the sum of the distances.
 
