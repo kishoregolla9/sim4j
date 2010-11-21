@@ -11,9 +11,9 @@ figName='RotRef vs Error';
 
 rot=zeros(1,numAnchorSets,1);
 ref=zeros(1,numAnchorSets,1);
-t1=zeros(1,numAnchorSets,1);
-t2=zeros(1,numAnchorSets,1);
+c=zeros(2,numAnchorSets,1);
 m=zeros(1,numAnchorSets,1);
+b=zeros(1,numAnchorSets,1);
 % areaDiff=zeros(1,numAnchorSets,1);
 % heightDiff=zeros(1,numAnchorSets,1);
 
@@ -27,9 +27,9 @@ for s=1:numAnchorSets
         ref(1,s)=NaN;
         rot(1,s)=(acosd(transform.T(1,1)));
     end
-    t1(1,s)=transform.c(1,1);
-    t2(1,s)=transform.c(1,2);
-
+    c(1,s)=transform.c(1,1);
+    c(2,s)=transform.c(1,2);
+    b(1,s)=transform.b;
     slopes=zeros(1,size(anchors,2));
     anchorNodes=anchors(s,:);
     anchorPoints=result.network.points(anchorNodes,:);
@@ -50,7 +50,7 @@ end
 
 h=plotSingleDataSet(figName,'Rotation',results,anchors,radii,...
     rot,folder,threshold,false,0,{'o'});
-h=plotSingleDataSet(figName,'Reflection',results,anchors,radii,...
+plotSingleDataSet(figName,'Reflection',results,anchors,radii,...
     ref,folder,threshold,false,h,{'x'});
 
 ax1=gca;
@@ -69,18 +69,24 @@ ax1=gca;
 % alignGrids(ax1,6);
 % alignGrids(ax2,6);
 
-legend(ax1,{'Rotation','Reflection','Area Diff'});
+legend(ax1,{'Rotation','Reflection'});
 % legend(ax2,{'Area Diff','Min Height Diff'});
 xlabel(ax1,'Angle of Rotation or Reflection (degrees)');
-minRadius=radii(1);
-maxRadius=radii(size(radii,2));
+xlim([0 180]);
+
 prefix=strrep(figName,' ','_');
-filename=sprintf('%s-%s-Radius%.1f-to-%.1f',...
-    prefix,result.network.shape,minRadius,maxRadius);
-if (threshold < 100)
-    filename=sprintf('%s-Excluding%0.1f',filename,threshold);
-end
-saveFigure(folder,filename);
+saveFigure(folder,prefix);
+
+
+plotSingleDataSet('TransformScalar','Transformation Scale Factor (b)',results,anchors,radii,...
+    b,folder,threshold,false,0,{'o'});
+close all
+h=plotSingleDataSet('TransformTranslate','Translation Factor (c)',results,anchors,radii,...
+    c(1,:),folder,threshold,false,0,{'x'});
+h=plotSingleDataSet('TransformTranslate','Translation Factor (c)',results,anchors,radii,...
+    c(2,:),folder,threshold,false,h,{'v'});
+legend({'X Translation Factor (c)','Y Translation Factor (c)'});
+saveFigure(folder,'TransformTranslate',h);
 
 end
 
