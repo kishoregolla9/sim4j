@@ -299,6 +299,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         end
         
         savefile=sprintf('%s/errorsAndAnchors.mat',folder);
+        errors=result.errors;
         save(savefile,'errors','anchors','network','radius');
         
         plotNetworkDiffs(result,anchors,folder,prefix,false);
