@@ -76,7 +76,7 @@ Likewise, Figure~\ref{fig:translate} plots the horizontal, \emph{x}, and vertica
 \\
 	\subfloat[]{\label{fig:translate2}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/TransformTranslate}}
-	\caption{Transformation translation component versus location error}	
+s	\caption{Transformation translation component versus location error}	
 	\label{fig:translate}
 \end{figure}
 
@@ -92,15 +92,23 @@ The Procrustes algorithm itself provides a measure of the dissimilarity.  Specif
 \end{figure}
 
 \section{Outlier Indicators} 
-
-As shown above, there unfortunately no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As demonstrated in the Section~\ref{sec:anchorTriangle}, the minimum height of the triangle formed by the anchor nodes is a good indicator of the possibility of a poor transformation angle.  This section presents a metric for how flat of a triangle is too flat.  
-
-Figure~\ref{fig:heightIndicator} plots the minimum
+\label{sec:outlierindicators}
+As shown above, there unfortunately no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network designers must avoid all anchor sets that could potentially generate such an angle.  As demonstrated in the Section~\ref{sec:anchorTriangle}, the area or height of the triangle formed by the anchor nodes is a good indicator of the possibility of a poor transformation angle.  These two metrics are explored in Figures~\ref{fig:heightIndicator} and \ref{fig:areaIndicator}, respectively.  This time, the x-axis is a log scale to better show the outlier cases. Also, the area and height itself has been adjusted as a factor of radius. Further, 95\% confidence intervals are shown for the mean of each 0.1r increment of both area and height.  A solid horizontal line is shown throw each mean, indicating the width of the increment, since it can be difficult to visualize on a log scale.  As the area and height increase, the mean expected area and height decrease, as does the confidence interval of that mean.  The horizontal dashed line indicates the cutoff for what are considered outliers, based on the large gap in data points.  The vertical dashed line indicates the first interval in which there are no outliers.  
 
 \begin{figure}
   \centering
-	\includegraphics[width=\textwidth]{HeightIndicator}
+	\includegraphics[width=\figurewidth\textwidth]{AreaIndicator_square}
+	\caption[Anchor triangle areas]{Anchor triangle areas, with confidence intervals grouped in intervals of 0.1r}	
+	\label{fig:areaIndicator}
+\end{figure}
+
+\begin{figure}
+  \centering
+	\includegraphics[width=\figurewidth\textwidth]{HeightIndicator_square}
 	\caption[Minimum anchor triangle heights]{Minimum anchor triangle heights, with confidence intervals grouped in intervals of 0.1r}	
 	\label{fig:heightIndicator}
 \end{figure}
 
+Upon comparing the two plots, it is clear that the minimum height metric is far more stable when it comes to predicting outliers than the area metric.  This is based the fact that mean minimum height is monotonically decreasing, while the mean of the area is far more erratic.  Further, there are some outlier cases after the first interval of triangle area that has no outliers.  A triangle with small area might provide a false-positive indication of an outlier.  After careful thought, this result is not unexpected since height of a triangle geometrically exposes collinearity better than simply area of a triangle.
+
+Based on the minimum height statistics, we can now give network designers a metric of how collinear is too collinear for a set of anchor nodes.  The raw statistics indicate that if the triangle formed by the anchor nodes has a minimum height greater that 0.4 times the radio range, then there is very low probability of getting an extreme outlier case were the calculated locations are actually reflected across the network.  However, also in the data shown, there are some near-outlier cases beyond this point.  While these cases are not of the extreme nature discussed, it it worthwhile to give a margin of error here to avoid these cases as well.  Therefore, we assert that the triangle formed by the anchor nodes should have a minimum height equal to the radio range of the network.
