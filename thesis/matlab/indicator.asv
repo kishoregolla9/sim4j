@@ -37,22 +37,15 @@ for i=1:length(folders)
     folder=sprintf('../results/%s',folders{i});
     vars=loadFile(folder,'errorsAndAnchors');
     if (isempty(vars))
-%         vars=loadFile(folder,'result');
-        foo=sprintf('%s/%s*',folder,'result');
-        file=dir(foo);
-        file=sprintf('%s/%s',folder,file.name);
-        fprintf(1,'Loading from %s...',file);
-        startLoad=tic;
-        vars=load(file,'-struct','radius','network','errors');
-        fprintf(1,' done in %.2f seconds\n',toc(startLoad));
-%         if ~isfield(vars,'result')
-%             fprintf(2,'Skipping %s',folder);
-%             continue;
-%         end
-%         result=vars.result;
-%         errors=result.errors;
-%         network=result.network;
-%         radius=result.radius;
+        vars=loadFile(folder,'result');
+        if ~isfield(vars,'result')
+            fprintf(2,'Skipping %s',folder);
+            continue;
+        end
+        result=vars.result;
+        errors=result.errors;
+        network=result.network;
+        radius=result.radius;
         vars=loadFile(folder,'anchors');
         anchors=vars.anchors;
         

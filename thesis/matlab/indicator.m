@@ -7,10 +7,10 @@ randomsquare={...
     '2010-11-18_9_31_50-Square-Random-20x20',...
     '2010-11-18_9_48_47-Square-Random-20x20',...
     '2010-11-18_10_7_43-Square-Random-20x20',...
-    '2010-11-18_10_25_32-Square-Random-20x20',...
-    '2010-11-19_10_53_10-Square-Random-20x20',...
-    '2010-11-19_11_21_34-Square-Random-20x20',...
-    '2010-11-19_11_50_2-Square-Random-20x20'...
+    '2010-11-18_10_25_32-Square-Random-20x20' %,...
+%     '2010-11-19_10_53_10-Square-Random-20x20',...
+%     '2010-11-19_11_21_34-Square-Random-20x20',...
+%     '2010-11-19_11_50_2-Square-Random-20x20'...
 %     '2010-11-19_12_18_52-Square-Random-20x20'
     };
 
@@ -32,7 +32,7 @@ label='square';
 allErrors=zeros(0,1);
 minHeights=zeros(0,1);
 sumDistances=zeros(0,1);
-
+areas=zeros(0,1);
 for i=1:length(folders)
     folder=sprintf('../results/%s',folders{i});
     vars=loadFile(folder,'errorsAndAnchors');
@@ -65,7 +65,7 @@ for i=1:length(folders)
     allErrors=[ allErrors [errors.mean] ]; %#ok grow
     stats=triangleStats(network.points,anchors,network.width,network.height);
     minHeights=[ minHeights [stats.heights.min] ]; %#ok grow
-    
+    areas=[ areas stats.areas' ]; %#ok grow
     sums=zeros(1,size(anchors,1));
     d=zeros(1,3);
     for s=1:size(anchors,1)
@@ -83,6 +83,13 @@ h=plotIndicators(allErrors,minHeights,radius,{'Minimum Anchor Triangle Height','
 filename=sprintf('HeightIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
-h=plotIndicators(allErrors,sumDistances,radius,{'Sum of Distance between Anchors','(factor of radio radius)'},0.25,2);
-filename=sprintf('SumOfDistanceIndicator_%s',label);
+
+% h=plotIndicators(allErrors,sumDistances,radius,{'Sum of Distance between Anchors','(factor of radio radius)'},0.25,2);
+% filename=sprintf('SumOfDistanceIndicator_%s',label);
+% saveFigure('..',filename,h);
+% hold off
+
+h=plotIndicators(allErrors,areas,radius,{'Anchor Triangle Area','(factor of radio radius)'},0.1,100);
+filename=sprintf('AreaIndicator_%s',label);
 saveFigure('..',filename,h);
+hold off
