@@ -46,7 +46,7 @@ if (size(anchors,1) > 1)
     plotDissimilarity(results,anchors,radii,folder);
     plotDirections(results,anchors,radii,folder);
 %     plotRegression(results,anchors,radii,folder,2);
-    plotAnchorErrorVsNeighbors(results,anchors,radii,folder);
+%     plotAnchorErrorVsNeighbors(results,anchors,radii,folder);
     
     close all
     hold off
