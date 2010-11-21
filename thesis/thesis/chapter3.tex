@@ -3,7 +3,7 @@
 While much attention has been paid to localization accuracy and computational effort, the importance of intelligent anchor node placement is often recognized, but dismissed as future study.
 
 \section{Empirical Evidence}
-
+\label{sec:RelatedWorkEmpirical}
 Often, authors will come across anchor placement by accident and discuss it based on their own empirical evidence.  Shang, et al.\cite[p. 964]{MDS-MAP} and Li, et al.\cite[p. 11]{CCA-MAP07} both choose anchors at random within the network.  Although, Shang does mention that a co-linear set of anchors chosen in one example "represents a rather unlucky selection", without supporting evidence of why this is unlucky.
 
 Earlier work by Doherty, et al.\cite{Doherty} requires anchor nodes to be placed at the edges, and ideally at the corners of the network.  In this case, however, the algorithm is a simple constraint problem.  One constraint requires that all the unknown nodes be placed within the convex hull of the anchors, and therefore, better results are obtained when anchors are at the corners.
