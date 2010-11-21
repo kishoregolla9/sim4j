@@ -1,9 +1,10 @@
-\chapter{The Outlier Anchor Node Placements}
+\chapter{Avoiding the Worst Anchor Node Placements}
 \label{chap:outliers}
 As seen in the previous chapter, there are some anchor node placements that are significantly worse than the average case.   In this chapter, we explore in more detail the cause of these outliers and more importantly, is this condition detectable in the real world.
 
-\section{The Cause}
-Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier anchor node placement for a random network. A line is drawn between the real location and the calculated location for each individual node.  For comparison, Figure~\ref{fig:normal1} is a randomly chosen non-outlier case, where the node difference lines are short, representing low localization error.  However, in the outlier case, the node difference lines criss-cross the network along a clear, single angle.  This representation suggests the reflection component of the final linear transformation is to blame for the extremely poor results.
+\section{Effects of Procrustes Analysis}
+
+Figure~\ref{fig:outlier1} shows a network map of an example outlier anchor node placement for a random network. A line is drawn between the real location and the calculated location for each individual node.  The length of this line is the location error.  For comparison, Figure~\ref{fig:normal1} is a randomly chosen non-outlier case, where the node difference lines are short, representing low localization error.  However, in the outlier case, the node difference lines criss-cross the network along a clear, single angle.  This visual representation suggests the reflection component of the final linear transformation is to blame for the extremely poor, outlier results.
 
 \begin{figure}
   \centering
@@ -13,10 +14,9 @@ Figure~\ref{fig:outlier1} shows a network difference plot of an example outlier 
 	\subfloat[A normal network difference]{\label{fig:normal1}
 		\includegraphics[width=\figurewidth\textwidth]{outliers/normal1}}		
 	\label{fig:outliernetworkdiff}
-	\caption{}
+	\caption{Network map of localization performance at each node}
 \end{figure}
 
-\section{Avoid Outliers}
 \subsection{Transformation Reflection and Rotation}
 \label{sec:reflection}
 Unfortunately, simply disabling the reflection component of the Procrustes transformation algorithm does not solve the problem.  The output of the Procrustes algorithm is a linear transformation which includes a rotation or reflection matrix, as discussed in Section~\ref{sec:procrustes}.  If the determinant of that matrix is +1, then the resulting transformation has a rotation, with an angle as in Equation~\ref{eqn:rotmatrix}.  
@@ -39,7 +39,7 @@ If the determinant is -1, then the resulting transformation has reflection compo
 	\label{eqn:refmatrix} 
 \end{equation}
 
-Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two different networks, for a random set of anchor sets for each network.  In both networks, and with consistency across others, the bulk of the data points have the same angle of either rotation or reflection, while the outliers have the opposite property with a wide variance in the angle.  However, between networks, it is not consistently either rotation or reflection.  Therefore, relying on the determinant of the transformation is not a sufficient indicator of a network planner knowing that an outlier case has been hit and thus the localization results are essentially useless.
+Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two different networks, for a random set of anchor sets for each network.  In both networks, and with consistency across others, the bulk of the data points have the same angle of either rotation or reflection, while the outliers have the opposite property with a wide variance in the angle.  However, in different networks, it is not consistently either rotation or reflection.  Therefore, relying on the determinant of the transformation is not a sufficient indicator for a network designer knowing that an outlier case has been detected and that the localization results are essentially useless.
 
 \begin{figure}
   \centering
@@ -91,15 +91,15 @@ The Procrustes algorithm itself provides a measure of the dissimilarity.  Specif
 	\label{fig:dissimilarity}
 \end{figure}
 
-As shown in Figure~\ref{fig:rotref}, each network has a \emph{natural} rotation or reflection angle to provide accurate localization.  As the linear transformation moves away from that angle, the errors increase.  Unfortunately, there is no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As shown in the Section~\ref{sec:anchorTriangle}, the minimum height of the triangle formed by the anchor nodes are a good indicator of the possibility of a poor transformation angle.  
-
 \section{Outlier Indicators} 
 
-This section shows that the minimum height of the anchor node triangle is a good indicator of the outlier case more rigorously then previously shown.  Further, we provide a good metric for how flat of a triangle is too flat.
+As shown above, there unfortunately no direct indicator that a particular anchor set generates a transformation with an incorrect angle.  Therefore, network planners must avoid all anchor sets that could potentially generate such an angle.  As demonstrated in the Section~\ref{sec:anchorTriangle}, the minimum height of the triangle formed by the anchor nodes is a good indicator of the possibility of a poor transformation angle.  This section presents a metric for how flat of a triangle is too flat.  
+
+Figure~\ref{fig:heightIndicator} plots the minimum
 
 \begin{figure}
   \centering
-	\includegraphics[width=\figurewidth\textwidth]{HeightIndicator}
+	\includegraphics[width=\textwidth]{HeightIndicator}
 	\caption[Minimum anchor triangle heights]{Minimum anchor triangle heights, with confidence intervals grouped in intervals of 0.1r}	
 	\label{fig:heightIndicator}
 \end{figure}
