@@ -159,7 +159,7 @@ distanceVector=resultNode.distanceVector;
 result.patchedMap(anchorSetIndex)=resultNode;
 result.dissimilarity(anchorSetIndex)=max(dissimilarity);
 result.transform(anchorSetIndex)=transform(1);
-result.reflect(anchorSetIndex)=reflect;
+result.reflect=reflect;
 % Remove the anchor node differences
 %         for i=1:size(anchorNodes,2)
 %             % Assumes anchorNodes are in order
