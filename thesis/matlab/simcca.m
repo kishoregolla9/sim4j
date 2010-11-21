@@ -291,9 +291,9 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
                 grid on
                 saveFigure(allStartsFolder,'AllStarts',h);
                 hold off
-                save(resultFilename,'result','allStarts');
+                save(resultFilename,'result','allStarts','-v7.3');
             else % end doAllStarts
-                save(resultFilename,'result');
+                save(resultFilename,'result','-v7.3');
             end 
             
         end
