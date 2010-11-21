@@ -39,7 +39,7 @@ For the purposes of testing each hypothesis, randomly generated networks of vary
 
 To view all the Matlab\copyright code for simulations and plots see Appendix~\ref{AppendixA}.
 
-\section{Sequence of Hypotheses}
+\section{Anchor Node Placement Metrics}
 \begin{figure}
 	\centering
 		\includegraphics[width=\figurewidth\textwidth]{network1}
@@ -123,18 +123,24 @@ Even if the sum of distances of the anchors is high, it is possible for two anch
 
 \subsection{Anchor Node Triangle}
 \label{sec:anchorTriangle}
-Continuing the trend of trying to show some increased correlation between the anchor coverage and location error and based on unsupported statements by Shang in \cite[p. 964]{MDS-MAP} presented in Section~\ref{sec:RelatedWorkEmpirical}, this section examines two additional metrics attempting to measure collinearity of the anchor nodes: the area and height of the anchor node triangle.  For height, we calcule the height from each edge of the triangle, and use the shortest value.  Both metrics can be extended to more anchor nodes.
+Continuing the trend of trying to show some increased correlation between the anchor coverage and location error and based on unsupported statements by Shang in \cite[p. 964]{MDS-MAP} presented in Section~\ref{sec:RelatedWorkEmpirical}, this section examines two additional metrics attempting to measure collinearity of the anchor nodes: the area and height of the anchor node triangle.  For height, we calculate the height in each direction of the triangle, and use the shortest value.  Both metrics can be extended to more anchor nodes.  Figure~\ref{fig:SampleHeights} shows a simple example of calculating the area and minimum height of a triangle.
 
-Figure~\ref{fig:AnchorArea} plots the area of the triangle formed by the three anchor nodes versus mean location error.  This metric can also be extended to more anchor nodes, by using the area of the polygon formed by the anchor nodes.  Figure~\ref{fig:AnchorHeight} does the same for the shortest triangle height, or in other words.
+\begin{figure}
+  \centering
+	\includegraphics[width=\figurewidth\textwidth]{SampleHeights}
+	\caption[Area and height of a triangle]{Area and height of a triangle \\ 
+	$Minimum~height~=~min(\| h_i \|)$}
+	\label{fig:SampleHeights}
+\end{figure}
 
-While the correlation coefficients remain low, it is clear that the flatter the triangle, or the more collinear the anchor nodes, the higher the chance of seeing outliers in the data with an extremely high location error. Further, after removing outliers, the slope of the best fit line has a moderate \emph{r-squared} value, giving an indication that network planners should make the anchor node triangle as spread apart as possible, or more generally, make sure the points are not collinear.
+Figure~\ref{fig:AnchorArea} plots the area of the triangle formed by the three anchor nodes versus mean location error.  This metric can also be extended to more anchor nodes, by using the area of the polygon formed by the anchor nodes.  Figure~\ref{fig:AnchorHeight} does the same for the shortest triangle height, or in other words. The first point of the two plots is that the outlier cases are more tightly correlated to anchor area and height than any of the other metrics, based on noticing that the outlier points are all closer to the x-axis rather then being spread across the plot. This is explored further in Section~\ref{sec:outlierindicators}.  Secondly, after removing outliers, the anchor area has a slightly higher correlation coefficient than anchor height, indicating that anchor area is a slightly better predictor than anchor height.
 
 \begin{figure}
   \centering
 	\subfloat[All anchor sets]{\label{fig:AnchorAreaAll}
 		\includegraphics[width=\figurewidth\textwidth]{areas/AnchorAreaVsError}}
 \\
-	\subfloat[Excluding oaautliers]{\label{fig:AnchorAreaExcluding}
+	\subfloat[Excluding outliers]{\label{fig:AnchorAreaExcluding}
 		\includegraphics[width=\figurewidth\textwidth]{areas/AnchorAreaVsErrorExcluding}}
 	\caption{Area of anchor triangle vs location error}	
 	\label{fig:AnchorArea}
@@ -153,4 +159,4 @@ While the correlation coefficients remain low, it is clear that the flatter the 
 
 \section{Best Anchor Node Placement}
 
-Analyzing all the metrics discusses above, the best indicator of a good anchor placement is the sum of the distance between anchor nodes, once the outliers are excluded.  How to avoid the outlier case is discussed in Chapter~\ref{chap:outliers}.  Practically speaking, this means that network planners can choose between proposed anchor placements and use the measured distance between them to provide guidance about which placement will result in the least amount of error. 
+Analyzing all the metrics discussed above, the best indicator of a good anchor placement is the sum of the distance between anchor nodes, once the outliers are excluded.  Avoiding the outlier case is discussed in Chapter~\ref{chap:outliers}.  Practically speaking, this means that network designers can choose between proposed anchor placements and use the measured distance between them to provide guidance about which placement will result in the least amount of error. 
