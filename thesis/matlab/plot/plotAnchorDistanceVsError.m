@@ -11,7 +11,6 @@ numAnchorSets=size(anchors,1);
 figName='Anchor Distance vs Error';
 dataName='Distance between Anchors';
 dataLabels={'Sum' 'Minimum' 'Mean'};
-
 distances=zeros(1,numAnchorSets,3);
 for s=1:numAnchorSets
     anchorNodes=anchors(s,:);
