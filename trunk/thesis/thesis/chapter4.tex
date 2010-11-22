@@ -104,7 +104,7 @@ Figure~\ref{fig:AnchorDistancesSum} shows the sum of distances between each anch
 	\subfloat[Excluding outliers]{\label{fig:AnchorDistancesSumExcluding}
 		\includegraphics[width=\figurewidth\textwidth]{distances/SumAnchorDistanceVsErrorExcluding}}
 	\caption{Sum of distance between anchors vs location error}
-    \label{fig:SumAnchorDistances}		
+    \label{fig:SumAnchorDistances}
 \end{figure}
 \begin{figure}
   \centering
@@ -160,3 +160,14 @@ Figure~\ref{fig:AnchorArea} plots the area of the triangle formed by the three a
 \section{Best Anchor Node Placement}
 
 Analyzing all the metrics discussed above, the best indicator of a good anchor placement is the sum of the distance between anchor nodes, once the outliers are excluded.  Avoiding the outlier case is discussed in Chapter~\ref{chap:outliers}.  Practically speaking, this means that network designers can choose between proposed anchor placements and use the measured distance between them to provide guidance about which placement will result in the least amount of error. 
+
+Figure~\ref{fig:sumOfDistanceIndicator} uses data from 20 networks, each 20x20 units with a radio range of 2.5 units.  The networks have a density of one node per unit squared, but all nodes are randomly placed in each network.  5000 anchor sets of three nodes each are chosen from the randomly placed nodes.  The outliers are then removed from the data and the sum of distance between the anchors is plotted against the mean location error.  The data is then grouped into two-unit intervals and a mean is calculated for each interval.  A horizontal bar through the mean of each interval displays the width of that interval.  Further, a 95\% confidence interval is shown for each mean value.  
+
+\begin{figure}
+  \centering
+	\includegraphics[width=\figurewidth\textwidth]{SumOfDistanceIndicator_square}
+	\caption[Sum of distance between anchors vs location error]{Sum of distance between anchors vs location error for 20 random square 20-by-20 node networks with 5000 anchor sets each and a radio range of 2.5 units, excluding outliers}
+	\label{fig:sumOfDistanceIndicator}
+\end{figure}
+
+This plot shows us that as the sum of distances between the anchors approaches ten times the radio range, the differences in location error are statistically insignificant.  Therefore, network designers can place anchors for based on other factors as long as they meet this criteria.  The actual asymptote value depends on other factors, like network density and will be discussed further in Chapter~\ref{sec:otherfactors}.
