@@ -16,7 +16,7 @@ For example, take a random anchor set, as shown in Figure~\ref{fig:sampleProcrus
 
 \begin{figure}
 	\centering
-		\includegraphics[width=\figurewidth\textwidth]{SampleAnchors}
+		\includegraphics[width=\textwidth]{SampleAnchors}
 	\caption{A sample anchor triangle Procrustes analysis}
 	\label{fig:sampleProcrustes1}
 \end{figure}
@@ -42,7 +42,7 @@ To view all the Matlab\copyright code for simulations and plots see Appendix~\re
 \section{Anchor Node Placement Metrics}
 \begin{figure}
 	\centering
-		\includegraphics[width=\figurewidth\textwidth]{network1}
+		\includegraphics[width=\textwidth]{network1}
 	\caption[The sample network used in this chapter]{The sample network used in this chapter, showing connectivity between nodes}
 	\label{fig:HypothesesNetwork}
 \end{figure}
@@ -89,7 +89,7 @@ One way to determine how close the anchors are to the perimeter of the network i
 
 \begin{figure}
   \centering
-    \includegraphics[width=\figurewidth\textwidth]{SampleSumOfDistances}
+    \includegraphics[width=\textwidth]{SampleSumOfDistances}
     \caption{Sum of Distances = $\sum_{i=0}^{n} \|x_{i}\| $}
 	\label{fig:SampleSumOfDistances}
 \end{figure}
@@ -127,7 +127,7 @@ Continuing the trend of trying to show some increased correlation between the an
 
 \begin{figure}
   \centering
-	\includegraphics[width=\figurewidth\textwidth]{SampleHeights}
+	\includegraphics[width=\textwidth]{SampleHeights}
 	\caption[Area and height of a triangle]{Area and height of a triangle \\ 
 	$Minimum~height~=~min(\| h_i \|)$}
 	\label{fig:SampleHeights}
@@ -158,7 +158,7 @@ Figure~\ref{fig:AnchorArea} plots the area of the triangle formed by the three a
 \end{figure}
 
 \section{Best Anchor Node Placement}
-
+\label{sec:bestanchornode}
 Analyzing all the metrics discussed above, the best indicator of a good anchor placement is the sum of the distance between anchor nodes, once the outliers are excluded.  Avoiding the outlier case is discussed in Chapter~\ref{chap:outliers}.  Practically speaking, this means that network designers can choose between proposed anchor placements and use the measured distance between them to provide guidance about which placement will result in the least amount of error. 
 
 Figure~\ref{fig:sumOfDistanceIndicator} uses data from 20 networks, each 20x20 units with a radio range of 2.5 units.  The networks have a density of one node per unit squared, but all nodes are randomly placed in each network.  5000 anchor sets of three nodes each are chosen from the randomly placed nodes.  The outliers are then removed from the data and the sum of distance between the anchors is plotted against the mean location error.  The data is then grouped into two-unit intervals and a mean is calculated for each interval.  A horizontal bar through the mean of each interval displays the width of that interval.  Further, a 95\% confidence interval is shown for each mean value.  
@@ -167,8 +167,8 @@ This plot shows us that as the sum of distances between the anchors approaches t
 
 \begin{figure}
   \centering
-	\includegraphics[width=\figurewidth\textwidth]{SumOfDistanceIndicator_square}
-	\caption[Sum of distance between anchors vs location error]{Sum of distance between anchors vs location error for 20 random square 20-by-20 node networks with 5000 anchor sets each and a radio range of 2.5 units, excluding outliers}
+	\includegraphics[width=\textwidth]{SumOfDistanceIndicator_square}
+	\caption[Sum of distance between anchors vs location error]{Sum of distance between anchors vs location error for 20 random square 20-by-20 unit networks with 400 nodes, 5000 anchor sets each, and a radio range of 2.5 units, excluding outliers}
 	\label{fig:sumOfDistanceIndicator}
 \end{figure}
 
