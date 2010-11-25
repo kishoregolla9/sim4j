@@ -1,19 +1,21 @@
 function plotAnchorTriangleHeightVsError( results,anchors,radii,folder,threshold )
 % Plot distance between the anchors themselves vs error
 
-minRadius=results(1).radius;
-maxRadius=results(end).radius;
-
-network=results(1).network;
+numRadii=size(results,2);
 numAnchorSets=size(anchors,1);
 
-stats=triangleStats(network.points,anchors,network.width,network.height);
-heights=zeros(numAnchorSets,4);
-for s=1:numAnchorSets
-    heights(s,1)=stats.heights(s).max;
-    heights(s,2)=stats.heights(s).median;
-    heights(s,3)=stats.heights(s).min;
-    heights(s,4)=stats.heights(s).sum;
+heights=zeros(numRadii,numAnchorSets,4);
+
+for r=1:numRadii
+    network=results(r).network;
+    stats=triangleStats(network.points,anchors,network.width,network.height);
+    radius=results(r).radius;
+    for s=1:numAnchorSets
+        heights(r,s,1)=stats.heights(s).max/radius;
+        heights(r,s,2)=stats.heights(s).median/radius;
+        heights(r,s,3)=stats.heights(s).min/radius;
+        heights(r,s,4)=stats.heights(s).sum/radius;
+    end
 end
 
 if (exist('threshold','var')==0)
@@ -27,7 +29,7 @@ for i=1:size(dataLabels,2)
     f=sprintf('%s %s',dataLabels{i}, figName);
     n=sprintf('%s %s',dataLabels{i},dataName);
     plotSingleDataSet(f,n,results,anchors,radii,...
-        heights(:,i)'/radii,...
+        heights(:,:,i),...
         folder,threshold,{dataName;'(factor of radio radius)'});
 end
 

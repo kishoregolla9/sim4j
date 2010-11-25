@@ -1,8 +1,12 @@
 
+load ../results/chapter5b/anchors3per1000sets.mat
+load ../results/chapter5b/networks.mat
+load ../results/chapter5b/result-r2.5-3per1000sets.mat
+
 s=428;
 
 anchorNodes=anchors(s,:);
-
+network=result.network;
 patchedMaps=result.patchedMap;
 transformedPoints=patchedMaps(s).mappedPoints;
 realPoints=network.points;
