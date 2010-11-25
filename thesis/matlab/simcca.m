@@ -14,11 +14,6 @@ end
 
 shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
 
-% allows for console loop to set networkScale
-if exist('networkScale','var') == 0 || networkScale == 0
-    networkScale=1.0; % do not scale by default
-end 
-
 if ~exist('name','var')
     name='';
 end
@@ -88,9 +83,6 @@ sprintf('SIMCCA STARTED %04i-%02i-%02i_%02i_%02i_%02i-%0.2d for scale: %i',...
 simccaStart=tic;
 
 doOperations=false;
-minRadius=2.5*networkScale;
-radiusStep=1.0*networkScale;
-numRadii=1;
 maxRadius=minRadius+(radiusStep*(numRadii-1));
 
 % Print some parameters to the diary
@@ -300,7 +292,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         
         savefile=sprintf('%s/errorsAndAnchors.mat',folder);
         errors=result.errors;
-        save(savefile,'errors','anchors','network','radius');
+        save(savefile,'errors','anchors','network');
         
         plotNetworkDiffs(result,anchors,folder,prefix,false);
         plotNetworkDiffs(result,anchors,folder,prefix,true);
@@ -313,7 +305,9 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         results(i)=result; %#ok        
 
     end
-    resultsByOperation(operations)=results;%#ok
+    if doOperations == true
+        resultsByOperation(operations)=results; %#ok grow
+    end
     %% PLOT RESULT
     if (size(anchors,1) > 1)
         resultFolder=sprintf('%s/%s',folder,prefix);

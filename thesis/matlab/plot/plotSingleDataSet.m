@@ -74,14 +74,14 @@ for r=1:numRadii
         x=dataToPlot(:,1);
         y=dataToPlot(:,2);
         if (doBestFit)
-            [correlation,pvalue] = corrcoef(x, y);
+            correlation = corrcoef(x, y);
             fit = polyfit(x, y, 1);
             f = polyval(fit,x);
             r2 = rsquare(f, y);
             plot(dataToPlot(:,1),dataToPlot(:,2),ls,x,f,'-');
             set(gca,'XScale','log');
-            statsString=sprintf('correlation coeff: %.2f p-value: %.2f',...
-                correlation,pvalue);            
+            statsString=sprintf('correlation coeff: %.2f',...
+                correlation);            
         else
             if (exist('ax','var'))
                 plot(ax,dataToPlot(:,1),dataToPlot(:,2),ls);
@@ -93,7 +93,7 @@ for r=1:numRadii
         
         if (numRadii > 1)
             lab=sprintf('%s: Radius=%.1f\n  ',...
-                results(r).radius,statsString);
+                statsString,results(r).radius);
             labels{p}=lab;
         end
         
@@ -105,7 +105,7 @@ for r=1:numRadii
     end
 end
 if (iscell(labels) && ischar(labels{1}))
-    legend(labels,'Location','NorthEast');
+%     legend(labels,'Location','NorthEast');
 end
 
 if (exist('xlab','var'))
@@ -115,8 +115,8 @@ else
 end
 
 if (doBestFit)
-    label1=sprintf('%s\nCorrelation Coefficient=%.2f\np-value=%.2f',...
-        dataName,correlation(1,2),pvalue(1,2));
+    label1=sprintf('%s\nCorrelation Coefficient=%.2f',...
+        dataName,correlation(1,2));
     label2=sprintf('Line of best fit, 1st order (r^{2}: %.2f)',r2);
     legend({label1,label2});
 else

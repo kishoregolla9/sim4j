@@ -6,21 +6,17 @@ if (size(results,1) > 1)
     hold off
 end
 if (size(anchors,1) > 1)
-    plotAllAnchorSetErrors(results,anchors,radii,folder);
-    plotAllAnchorSetErrors(results,anchors,radii,folder,2);
-    close all
+%     plotAllAnchorSetErrors(results,anchors,radii,folder);
+%     plotAllAnchorSetErrors(results,anchors,radii,folder,2);
     hold off
     plotAnchorErrorsVsError(results,anchors,folder);
-    close all
     hold off
     
     % plotIndependentXY(results,anchors,folder);
-    close all
     hold off
     plotSingleStartNode(results,folder);
-    close all
     hold off
-    plotAnchorSetVsError(results,anchors,radii,folder);
+%     plotAnchorSetVsError(results,anchors,radii,folder);
     close all
     hold off
     plotAnchorLocalMapErrorVsError(results,anchors,radii,folder,allMaps);
@@ -32,8 +28,8 @@ if (size(anchors,1) > 1)
     % plotHopCountVsError(results,anchors,radii,folder);
     % close all
     % hold off
-    plotAnchorAreaVsError(results,anchors,radii,folder);
-    plotAnchorAreaVsError(results,anchors,radii,folder,2);
+%     plotAnchorAreaVsError(results,anchors,radii,folder);
+%     plotAnchorAreaVsError(results,anchors,radii,folder,2);
     plotAnchorTriangleHeightVsError(results,anchors,radii,folder);
     plotAnchorTriangleHeightVsError(results,anchors,radii,folder,2);
 %     plotNumAnchorNeighborsVsError(results,anchors,radii,folder);

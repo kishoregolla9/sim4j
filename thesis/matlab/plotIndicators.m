@@ -1,10 +1,6 @@
-function [h]=plotIndicators(errors,stat,radius,label,increment,threshold)
+function [h]=plotIndicators(errors,stat,radius,label,increment,showOutliers,xscale)
 
 h=figure('Name','Outlier Indicator','visible','off');
-
-outliers=find(errors>threshold);
-errors(outliers)=[];
-stat(outliers)=[];
 
 dataToPlot=[stat/radius; errors]';
 dataToPlot=sortrows(dataToPlot,1);
@@ -19,7 +15,7 @@ confidence=0.05;
 hold all
 
 grid on
-set(gca,'XScale','log');
+set(gca,'XScale',xscale);
 xlabel(label);
 ylabel({'Location Error';'(factor of radio radius)'});
 
@@ -40,11 +36,11 @@ for i=2:length(bins)
     d=bins(i)-(increment/2);
     errorbar(d,mu(i),ci,'.k');
     d=d-(increment/2);
-    if (bottom == 0)
+    if (bottom == 0 && strcmp(xscale,'log'))
         bottom=0.0001;
     end
     line([bottom top], [ mu(i) mu(i) ],'LineStyle','-','LineWidth',1,'Color','k');
-    if (~crossed && max(v) < outlierSep)
+    if (showOutliers && ~crossed && ~isempty(v) &&  max(v) < outlierSep)
         crossed=true;
         line([d d],[0 7],'LineStyle','--','LineWidth',2);
         lastoutlier=sprintf('\\leftarrowLast Outlier %.1fr',d);
@@ -52,12 +48,16 @@ for i=2:length(bins)
     end
     
 end
-line([0.0001 d],[outlierSep + 0.2 outlierSep + 0.2],'LineStyle','--','LineWidth',2,'Color','k');
-text(d/4,2.5,'Outlier separator');
+
+if (showOutliers)
+    line([0.0001 d],[outlierSep + 0.2 outlierSep + 0.2],'LineStyle','--','LineWidth',2,'Color','k');
+    text(d/4,2.5,'Outlier separator');
+end
+
 l=ylim;
 ylim([0 l(2)])
 
-    % plot a line through the mean points
+% plot a line through the mean points
 plot(bins(2:length(bins))-(increment/2),mu(2:length(bins)),'-k');
 
 end
