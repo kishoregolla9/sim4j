@@ -51,12 +51,25 @@ pipelines={...
     '2010-11-24_20_2_31-Rectangle-Random-20x2'
     };
 
-folders=pipelines;
-label='pipeline';
+fatpipes={...
+    '2010-11-24_21_4_19-Rectangle-Random-20x4',...
+    '2010-11-24_21_54_39-Rectangle-Random-20x4',...
+    '2010-11-24_22_43_42-Rectangle-Random-20x4',...
+    '2010-11-24_23_32_19-Rectangle-Random-20x4',...
+    '2010-11-25_0_21_42-Rectangle-Random-20x4',...
+    '2010-11-25_1_10_40-Rectangle-Random-20x4'...
+    };
+
+folders=fatpipes;
+label='fatpipeline';
 
 allErrors=zeros(0,1);
 minHeights=zeros(0,1);
 sumDistances=zeros(0,1);
+meanDistances=zeros(0,1);
+medianDistances=zeros(0,1);
+
+
 areas=zeros(0,1);
 for i=1:length(folders)
     folder=sprintf('../results/%s',folders{i});
@@ -92,6 +105,8 @@ for i=1:length(folders)
     minHeights=[ minHeights [stats.heights.min] ]; %#ok grow
     areas=[ areas stats.areas' ]; %#ok grow
     sums=zeros(1,size(anchors,1));
+    means=zeros(1,size(anchors,1));
+    medians=zeros(1,size(anchors,1));
     d=zeros(1,3);
     for s=1:size(anchors,1)
         anchorNodes=anchors(s,:);
@@ -99,8 +114,12 @@ for i=1:length(folders)
         d(2)=network.distanceMatrix(anchorNodes(2),anchorNodes(3));
         d(3)=network.distanceMatrix(anchorNodes(3),anchorNodes(1));
         sums(s)=sum(d);
+        medians(s)=median(d);
+        means(s)=mean(d);
     end
     sumDistances=[ sumDistances sums  ]; %#ok grow
+    meanDistances=[ meanDistances means  ]; %#ok grow
+    medianDistances=[ medianDistances medians ]; %#ok grow
     
     clear network errors anchors numAnchorSets
 end
@@ -123,3 +142,12 @@ filename=sprintf('SumOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
+h=plotIndicators(allErrors,medianDistances,radius,{'Median of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+filename=sprintf('MedianOfDistanceIndicator_%s',label);
+saveFigure('..',filename,h);
+hold off
+
+h=plotIndicators(allErrors,meanDistances,radius,{'Mean of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+filename=sprintf('MeanOfDistanceIndicator_%s',label);
+saveFigure('..',filename,h);
+hold off

@@ -6,11 +6,11 @@ numNetworks=10 %#ok<NOPTS>
 numAnchorSets=5000 %#ok<NOPTS>
 numAnchorsPerSet=3 %#ok<NOPTS>
 doAllStarts=false;
-shape=NET.SHAPE_C;
+shape=NET.SHAPE_RECTANGLE;
 placement=NET.NODE_RANDOM;
 networkEdge=20 %#ok<NOPTS>
-networkHeight=networkEdge;
-networkWidth=networkEdge;
+networkHeight=5;
+networkWidth=100;
 numNodes=networkHeight*networkWidth; 
 
 % allows for console loop to set networkScale
