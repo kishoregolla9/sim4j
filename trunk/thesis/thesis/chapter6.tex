@@ -32,13 +32,18 @@ A C-shape network consists of a relatively square region with an empty area on o
 	\label{fig:cnetwork}
 \end{figure}
 
-To show that there is no difference, 10 random networks with, 5000 anchor sets each was simulated in the same manner as the square networks.  Figure~\ref{fig:cindicator} shows the location error relative to the sum of the distances between the anchors, as in Section~\ref{sec:bestanchornode}. 
-As expected, the mean location error flattens out as the sum of distances between anchor nodes reaches about 10 times the radio range.  There is a slight increase in the mean location error as compared with the square network, but this has to do with the performance of the CCA algorithm in the presence of the empty region of nodes in the network.  The increase in mean location error at the end of the plot, and specifically the increase in the confidence interval, is caused by the small sample size in the random selection of anchor set with a very high distance between nodes. 
+To show that there is no difference between C-shape and square network topologies, 10 random C-shape networks with 5,000 anchor sets each was simulated in the same manner as the square networks.  Figure~\ref{fig:cshapesum} shows the location error relative to the sum of the distances between the anchors, as in Section~\ref{sec:bestanchornode}.  As expected, the mean location error flattens out as the sum of distances between anchor nodes reaches about 10 times the radio range as was the case with the square network.  There is a slight increase in the floor of the mean location error as compared with the square network, but this has to do with the performance of the CCA algorithm in the presence of the empty region of nodes in the network.  The increase in mean location error at the end of the plot, and specifically the increase in the confidence interval, is caused by the small sample size in the random selection of anchor set with a very high distance between nodes.
+ 
+Similarly, the same criteria for eliminating the outlier localization results also holds for C-shape topology as it did for square in Section~\ref{sec:outlierindicators}.  Figure~\ref{fig:cshapeheight} shows that as long as the minimum height of the triangle formed by the anchors nodes is greater than one times the radio range, then the outlier case can be avoided, as is the case for a square network.
 
 \begin{figure}
   \centering
-	\includegraphics[width=\textwidth]{cshape/SumOfDistanceIndicator_cshape}
-	\caption[Sum of distance between anchors vs location error in a C-Shape topology]{Sum of distance between anchors vs location error for 10 random C-shape 20-by-20 unit networks with 400 nodes, 5000 anchor sets each, and a radio range of 2.5 units, excluding outliers}
+	\subfloat[Sum of distance between anchors vs. mean location error, excluding outliers]{\label{fig:cshapesum}
+		\includegraphics[width=\figurewidth\textwidth]{cshape/SumOfDistanceIndicator_cshape}}
+	\\
+	\subfloat[Minimum height of anchor triangle vs. mean location error]{\label{fig:cshapeheight}
+		\includegraphics[width=\figurewidth\textwidth]{cshape/HeightIndicator_cshape}}
+	\caption[Anchor metrics for a C-Shape topology]{Anchor metrics for 10 random C-shape 20-by-20 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units, excluding outliers}
 	\label{fig:cindicator}
 \end{figure}
 
@@ -50,7 +55,7 @@ However, for randomly nodes, when there is a bit of depth to the network, as sho
 
 Even worse than expected, all of the 30,000 anchor sets across the six networks are outlier cases.  Recall that in a square network, some anchor sets that did not meet the minimum height recommendation are still able to produce usable localization results.  However, here none of the anchors do.  This tells us that something about the two-dimensional nature of the square area is able to sometimes compensate for the collinearity whereas in a pipeline, the one-dimensional nature is not able to compensate.
 
-Figure~\ref{fig:pipelineindicator} shows that that the mean location error is about 20 times the radio range which is well beyond any reasonable value. Interestingly, a relatively small number of anchor sets cause the location error to increase even further when the sum of the distance between anchors is roughly equal to the length of the pipeline.  However, the mean of the mean location error actually dips, although only slightly, while the maximum errors peak.  The peak in maximum mean location errors may be explained by noticing that in order to have a sum of distance between anchors equal to the length of the pipeline, there are two basic scenarios.  First, the three anchor nodes are spread across the entire distance of the network.  This scenario likely falls in the normal range of errors.  The second scenario is when two anchors are roughly collocated, and the third anchor is half the length of the network away.  We suspect that this case causes the worst anchor sets since effectively this is equivalent to having just two anchor nodes.
+Figure~\ref{fig:pipelineindicator} shows that that the mean location error is about 20 times the radio range which is well beyond any reasonable value. Interestingly, a relatively small number of anchor sets cause the location error to increase even further when the sum of the distance between anchors is roughly equal to the length of the pipeline.  However, the mean of the mean location error actually dips, although only slightly, while the maximum errors peak.  The peak in maximum mean location errors may be explained by noticing that in order to have a sum of distance between anchors equal to the length of the pipeline, there are two basic scenarios.  First, the three anchor nodes are spread across the entire distance of the network.  This scenario likely falls in the normal range of errors.  The second scenario is when two anchors are roughly collocated, and the third anchor is half the length of the network away.  We suspect that this case causes the worst localization results since effectively this is equivalent to having just two anchor nodes.
 
 \begin{figure}
   \centering
@@ -62,19 +67,21 @@ Figure~\ref{fig:pipelineindicator} shows that that the mean location error is ab
 \begin{figure}
   \centering
 	\includegraphics[width=\textwidth]{pipeline/SumOfDistanceIndicator_pipeline}
-	\caption[Sum of distances between anchor nodes vs location error in a pipeline topology]{Sum of distances between anchor nodes vs location error for 6 random pipeline 200-by-2 unit networks with 400 nodes, 5000 anchor sets each, and a radio range of 2.5 units}
+	\caption[Sum of distances between anchor nodes vs. location error in a pipeline topology]{Sum of distances between anchor nodes vs. location error for 6 random pipeline 200-by-2 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units}
 	\label{fig:pipelineindicator}
 \end{figure}
 
-Surprisingly, when the same simulation is run on a 200 by 4 unit area pipeline network where the radio range is 2.5 units, all the anchor sets still provide extremely high location errors.  Figure~\ref{fig:fatpipelineindicator} shows the sum of the distance between anchor nodes versus the mean location error of the network.  The minimum location error in this case is roughly five times the radio range.  However, as compared with the pipeline network where the width of the network is less than the radio range, we now have the inverse relationship between the sum of the distance between anchors and location error in the overall data, but a similar relationship as compared to the mean of the data in both cases.  
+Surprisingly, when the same simulation is run on a 200 by 4 unit area pipeline network where the radio range is 2.5 units, all the anchor sets still provide extremely high location errors.  Figure~\ref{fig:fatpipelineindicator} shows the sum of the distance between anchor nodes versus the mean location error of the network.  The minimum location error in this case is roughly five times the radio range.  When comparing with the pipeline network where the width of the network is less than the radio range, two different patterns emerge.  The overall data distribution has an inverse relationship between the sum of the distance between anchors and location error.  However, there is a similar relationship when comparing to the mean of each interval of the data.  
 
-The mean location error is lowest when the sum of the distance between anchor nodes is roughly one length of the pipeline.  This can be explained by inferring that when the sum of the distance between anchors is low, the anchors must be clumped together in the pipeline.  In this scenario, only a small portion of the pipeline is covered and therefore leads to poor localization performances. As the sum of the distance between anchors approaches twice the length of the pipeline, two anchors must be at one end of the pipeline and the third anchor at the other end.  Since two of the anchors are therefore more or less collocated, the algorithm again behaves as if there are only two anchor nodes causing poor localization performance.
+The mean location error is lowest when the sum of the distance between anchor nodes is roughly one length of the pipeline.  This can be explained by inferring that when the sum of the distance between anchors is low, the anchors must be clumped together in the pipeline.  In this scenario, only a small portion of the pipeline is covered and therefore leads to poor localization performances. As the sum of the distance between anchors approaches twice the length of the pipeline, two anchors must be at one end of the pipeline and the third anchor at the other end.  Since two of the anchors are therefore more or less co-located, the algorithm again behaves as if there are only two anchor nodes, causing poor localization performance.
 
 \begin{figure}
   \centering
 	\includegraphics[width=\textwidth]{pipeline/SumOfDistanceIndicator_fatpipeline}
-	\caption[Sum of distances between anchor nodes vs location error in a pipeline topology]{Sum of distances between anchor nodes vs location error for 6 random pipeline 200-by-4 unit networks with 800 nodes, 5000 anchor sets each, and a radio range of 2.5 units}
+	\caption[Sum of distances between anchor nodes vs. location error in a pipeline topology]{Sum of distances between anchor nodes vs. location error for 6 random pipeline 200-by-4 unit networks with 800 nodes, 5,000 anchor sets each, and a radio range of 2.5 units}
 	\label{fig:fatpipelineindicator}
 \end{figure}
 
-In the end, even though the results are a bit better when the width of the pipeline is more than the radio range, the localization results are horrible using this method for pipeline network topologies.  Therefore, it is recommended to use a different class of localization algorithms that does not rely on transforming local coordinates into global coordinates with anchor nodes.
+In the end, even though the results are a bit better when the width of the pipeline is more than the radio range, the localization results are poor using this method for pipeline network topologies.  Therefore, it is recommended to use a different class of localization algorithms that does not rely on transforming local coordinates into global coordinates with anchor nodes.
+
+[TODO Is there an overall conclusion than? How comes your results are so poor when the published results for CCA in the case of a pipline network are much better? When does a pipeline network become "square enough" to allow using CCA-MAP or MDS-MAP?]
