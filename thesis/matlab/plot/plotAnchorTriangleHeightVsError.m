@@ -30,7 +30,8 @@ for i=1:size(dataLabels,2)
     n=sprintf('%s %s',dataLabels{i},dataName);
     plotSingleDataSet(f,n,results,anchors,radii,...
         heights(:,:,i),...
-        folder,threshold,{dataName;'(factor of radio radius)'});
+        folder,threshold,{dataName;'(factor of radio radius)'},...
+        0,{}  );
 end
 
 % figure('Name','Anchor Triangle Height vs Error','visible','off');
