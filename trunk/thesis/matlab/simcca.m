@@ -12,7 +12,7 @@ else
 end
 % copyfile(ccaconfigfile,folder);
 
-shapeLabel=buildNetworkShape(shape,placement,networkEdge,networkHeight,numNodes) %#ok<NOPTS>
+shapeLabel=buildNetworkShape(shape,placement,networkWidth,networkHeight,numNodes) %#ok<NOPTS>
 
 if ~exist('name','var')
     name='';
