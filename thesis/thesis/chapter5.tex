@@ -29,7 +29,7 @@ Unfortunately, simply disabling the reflection component of the Procrustes trans
 	\label{eqn:rotmatrix} 
 \end{equation}
 
-If the determinant is -1, then the resulting transformation has reflection component, across a line at an angle as shown in Equation~\ref{eqn:refmatrix}. 
+If the determinant is -1, then the resulting transformation has a reflection component across a line at an angle as shown in Equation~\ref{eqn:refmatrix}. 
 
 \begin{equation}
 	\det{(T)}=-1 \Rightarrow ~Reflection ~with ~T=
@@ -39,14 +39,14 @@ If the determinant is -1, then the resulting transformation has reflection compo
 	\label{eqn:refmatrix} 
 \end{equation}
 
-Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two different networks, for a random set of anchor sets for each network.  In both networks, and with consistency across others, the bulk of the data points have the same angle of either rotation or reflection, while the outliers have the opposite property with a wide variance in the angle.  However, in different networks, it is not consistently either rotation or reflection.  Therefore, relying on the determinant of the transformation is not a sufficient indicator for a network designer knowing that an outlier case has been detected and that the localization results are essentially useless.
+Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two different networks, for a random set of anchor sets for each network.  In both networks, and with consistency across others, the bulk of the data points have the same angle of either rotation or reflection, while the outliers have the opposite property with a wide variance in the angle.  However, in different networks, it is not consistently either rotation or reflection that leads to poor localization results.  Therefore, relying on the determinant of the transformation is not a sufficient indicator for a network designer knowing that an outlier case has been detected and that the localization results are essentially useless.
 
 \begin{figure}
   \centering
-	\subfloat[]{\label{fig:rotref1}
+	\subfloat[A network where reflection is good]{\label{fig:rotref1}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/RotRefvsError}}
 \\
-	\subfloat[]{\label{fig:rotref2}
+	\subfloat[A network where rotation is good]{\label{fig:rotref2}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/RotRefvsError}}
 	\caption{Rotation and reflection versus location error}	
 	\label{fig:rotref}
@@ -54,29 +54,29 @@ Figure~\ref{fig:rotref} shows the rotation and reflection distributions of two d
 
 \subsection{Transformation Scaling and Translation}
 
-For completeness, we explore the possibility that the scaling or translation component of the linear transformation is causing the issue.  In Figure~\ref{fig:scalar}, the scale component, \emph{b}, of the Procrustes analysis is plotted against the mean location error for the same two networks as shown above for rotation and reflection.  While there is an apex of the data around a particular scalar value where the minimum localization error is seen, the outliers can also have this same scalar value.  Therefore, the scaling component is not a good indicator of  extremely poor localization performance.
+For completeness, we explore the possibility that the scaling or translation component of the linear transformation is causing the issue.  In Figure~\ref{fig:scalar}, the scale component, \emph{b}, of the Procrustes analysis is plotted against the mean location error for the same two networks as shown above for reflection and rotation in Figure~\ref{fig:rotref}.  While there is an apex of the data around a particular scalar value where the minimum localization error is seen, the outliers can also have this same scalar value.  Therefore, the scaling component is not a good indicator of  extremely poor localization performance.
 
 \begin{figure}
   \centering
-	\subfloat[]{\label{fig:scalar1}
+	\subfloat[Corresponding to a network where reflection is good]{\label{fig:scalar1}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/TransformScalar}}
 \\
-	\subfloat[]{\label{fig:scalar2}
+	\subfloat[Corresponding to a network where rotation is good]{\label{fig:scalar2}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/TransformScalar}}
 	\caption{Transformation scalar component versus location error}	
 	\label{fig:scalar}
 \end{figure}
 
-Likewise, Figure~\ref{fig:translate} plots the horizontal, \emph{x}, and vertical, \emph{y}, translation components, \emph{c}, against the mean location error. As with the other transformation components, there is single \emph{natural} value that gives best localization performance.  However, much like for the scaling factor, while outlier localization errors are the only values that occur away from this natural value, the outliers also occur around that value as well.  Therefore, it is not possible to classify a anchor set as one of the outlier cases based on the translation component of the linear transformation it produces.
+Likewise, Figure~\ref{fig:translate} plots the horizontal, \emph{x}, and vertical, \emph{y}, translation components, \emph{c}, against the mean location error. As with the other transformation components, there is concentration around a \emph{natural} value in \emph{x} and \emph{y} that gives best localization performance.  The fact this value \emph{x} and \emph{y} overlap in Figure~\ref{fig:translate1} is a coincidence. However, much like for the scaling factor, while outlier localization errors are the only values that occur away from this natural value, the outliers also occur around that value as well.  Therefore, it is not possible to classify an anchor set as one of the outlier cases based on the translation component of the linear transformation it produces.
 
 \begin{figure}
   \centering
-	\subfloat[]{\label{fig:translate1}
+	\subfloat[Corresponding to a network where reflection is good]{\label{fig:translate1}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/a/TransformTranslate}}
 \\
-	\subfloat[]{\label{fig:translate2}
+	\subfloat[Corresponding to a network where rotation is good]{\label{fig:translate2}
 		\includegraphics[width=\figurewidth\textwidth]{chapter5/b/TransformTranslate}}
-s	\caption{Transformation translation component versus location error}	
+	\caption{Transformation translation component versus location error}	
 	\label{fig:translate}
 \end{figure}
 
@@ -109,6 +109,6 @@ As shown above, there unfortunately is no direct indicator that a particular anc
 	\label{fig:heightIndicator}
 \end{figure}
 
-Upon comparing the two plots, it is clear that the minimum height metric is far more stable when it comes to predicting outliers than the area metric.  This is based the fact that the mean localization error monotonically decreases with increased minimum height, while the mean localization error relative to area is far more erratic.  Further, there are some outlier cases after the first interval of triangle area that has no outliers.  A triangle with small area might provide a false-positive indication of an outlier.  After careful thought, this result is not unexpected since height of a triangle geometrically exposes collinearity better than simply area of a triangle.
+Upon comparing the two plots, it is clear that the minimum height metric is far more stable when it comes to predicting outliers than the area metric.  This is based on the observation that the mean localization error monotonically decreases with increased minimum height, while the mean localization error relative to area is far more erratic.  Further, there are some outlier cases after the first interval of triangle area that has no outliers.  A triangle with small area might provide a false-positive indication of an outlier.  After careful thought, this result is not unexpected since height of a triangle geometrically exposes collinearity better than simply area of a triangle.
 
-Based on the minimum height statistics, we can now give network designers a metric of how collinear is too collinear for a set of anchor nodes.  The raw statistics indicate that if the triangle formed by the anchor nodes has a minimum height greater that 0.6 times the radio range, then there is very low probability of getting an extreme outlier case were the calculated locations are actually reflected across the network.  However, also in the data shown, there are some near-outlier cases beyond this point.  While these cases are not of the extreme nature discussed, it it worthwhile to give a margin of error here to avoid these cases as well.  Therefore, we assert that the triangle formed by the anchor nodes should have a minimum height equal to the radio range of the network.
+Based on the minimum height statistics, we can now give network designers a metric of how collinear is too collinear for a set of anchor nodes.  The raw statistics indicate that if the triangle formed by the anchor nodes has a minimum height greater that 0.6 times the radio range, then there is very low probability of getting an extreme outlier case were the calculated locations are actually reflected or rotated across the network.  However, also in the data shown, there are some near-outlier cases beyond this point.  While these cases are not of the extreme nature discussed, it it worthwhile to give a margin of error here to avoid these cases as well.  Therefore, we assert that the triangle formed by the anchor nodes should have a minimum height equal to the radio range of the network.
