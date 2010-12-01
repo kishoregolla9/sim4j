@@ -84,10 +84,8 @@ if (width == 0); width = 1; end
 if (height == 0); height = 1; end
 % rectangle('Position',[0,0,width,height],'Curvature',[0,0],...
 %     'LineWidth',2,'LineStyle','--');
-
 % xlim([0,width]);
 % ylim([0,height]);
-
 
 % minX=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
 % minY=floor(min(min(realPoints(:,1),min(mappedPoints(:,1)))));
