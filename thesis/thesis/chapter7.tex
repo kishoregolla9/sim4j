@@ -3,7 +3,7 @@
 
 So far, we have examined anchor placement as the sole source of localization error.  We set out here to show that there are indeed other factors that play a significant role in determining localization performance.
 
-In the following example, the same anchor set is used in four different random networks.  Figure~\ref{fig:AS6good} shows two non-outlier cases.  The mean error for each network, despite using the same anchor set, is different.  What is surprising is the degree to which they are different: 37\%.  Further, Figure~\ref{fig:AS6bad} shows two more networks with the same anchor set.  This time, both of the plots reveal outlier cases.  While we have shown that anchor placement does play a role in the localization performance, this simple example clearly shows that there are significant other factors affecting the localization error.
+In the following example, the same anchor set is used in four different random networks.  Figure~\ref{fig:AS6good} shows two non-outlier cases.  The mean error for each network, despite using the same anchor set, is different.  What is surprising is the degree to which they are different: 37\%.  Figure~\ref{fig:AS6bad} shows two more networks with the same anchor set.  This time, both of the plots reveal outlier cases.  Despite using the same anchor set, the localization performance differs significantly.  While we have shown that anchor placement does play a role in the localization performance, these simple examples clearly show that there are significant other factors affecting the localization error.
 
 \begin{figure}
   \centering
@@ -15,8 +15,6 @@ In the following example, the same anchor set is used in four different random n
 	\caption{Good localization performance with same anchor set in two different networks}
 	\label{fig:AS6good}
 \end{figure}
-
-Further, Figures~\ref{fig:AS6bad1} and \ref{fig:AS6bad2} show two more random networks, using the same anchor set as above.  As seen in Chapter~\ref{chap:outliers}, some short anchor node triangles can cause extremely poor localization.  In this case, we see that even the same anchor set does not necessarily mean that the resulting localization results will be so poor.  
 
 \begin{figure}
   \centering
@@ -31,3 +29,4 @@ Further, Figures~\ref{fig:AS6bad1} and \ref{fig:AS6bad2} show two more random ne
 
 Based on these results, it is clear there are other factors besides anchor placement effecting the resulting location errors. A key piece of future work is to isolate and analyze these other factors.  However, since the outlier case itself is undetectable in the absence of extensive ground truth data, the best we can hope for is a way to minimize the probability beyond analyzing the height of the anchor node triangle by studying what these other factors might be.  These factors might include, but are not limited to, network density and the starting node chosen to patch local maps together.
 
+[TODO  What you need to add here is the discussion that there is a significant variation in localization results across networks, using fixed sets of networks, along the lines of what we discussed before. So more work is needed here. Also, could you speculate on what these factors MAY be?]
