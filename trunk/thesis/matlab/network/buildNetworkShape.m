@@ -26,6 +26,13 @@ switch shape
             case NET.NODE_GRID % Rectangle grid with 20% placement error
                 shape=sprintf('Rectangle-Grid(20percentError)-%ix%i',width,length);
         end
+    case NET.SHAPE_SINE
+        switch placement
+            case NET.NODE_RANDOM 
+                shape=sprintf('Sine-Random-%ix%i',width,length);
+            case NET.NODE_GRID % Rectangle grid with 20% placement error
+                shape=sprintf('Sine-Grid(20percentError)-%ix%i',width,length);
+        end        
     case NET.SHAPE_L
         switch placement
             case NET.NODE_RANDOM %L random

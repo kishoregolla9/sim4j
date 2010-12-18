@@ -223,6 +223,32 @@ switch shape
             end
         end
 
+    case NET.SHAPE_SINE
+        switch placement
+            case NET.NODE_RANDOM %Sine random. width is the width to length ratio.
+                network.shape=sprintf('Sine-Random-%ix%i',width,length);
+                network.points=zeros(N,2);
+                for j = 1:N
+                    x=rand(1,1)*width;
+                    y=(sin(j)+1)*length;
+                    network.points(j,:) = [x,y];
+                end
+                network.numberOfNodes=N;
+
+            case NET.NODE_GRID % Sine grid with 20% placement error
+                network.shape=sprintf('Sine-Grid(20error)-%ix%i',width,length);
+                network.points=zeros(N,2);
+                k=1;
+                for i=0:width-1
+                    for j=0:length-1
+                        x=i + (rand-0.5)*0.4;
+                        y=j + (rand-0.5)*0.4;
+                        network.points(k,:)=[x,y];
+                        k = k + 1;
+                    end
+                end
+                network.numberOfNodes=N;
+        end
 end
 
 network.width=width;

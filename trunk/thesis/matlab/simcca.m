@@ -294,9 +294,13 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
         errors=result.errors;
         save(savefile,'errors','anchors','network');
         
+        fprintf(1,'Plotting network differences and contours...');
+        startNetworkDiff=tic;
         plotNetworkDiffs(result,anchors,folder,prefix,false);
         plotNetworkDiffs(result,anchors,folder,prefix,true);
         plotNetworkContours(result,anchors,folder,prefix);
+        totalNetworkDiffTime=toc(startNetworkDiff);
+        fprintf(1,'Done network diffs in %.3f min\n',totalNetworkDiffTime/60)
         
         if ~exist('results','var')
             % preallocate
