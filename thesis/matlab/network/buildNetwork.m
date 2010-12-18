@@ -1,4 +1,4 @@
-function [network]=buildNetwork(shape,placement,width,length,N)
+function [network]=buildNetwork(shape,placement,width,height,N)
 
 networkconstants;
 
@@ -9,14 +9,14 @@ networkconstants;
 %network -output coordinates of the nodes deployed
 %shape - 0..5 (see networkconstants)
 %placement - 0..1 (see network constants)
-%width - edge length of a square area for deployment. e.g., if size=r, then
+%width - edge height of a square area for deployment. e.g., if size=r, then
 %  the deployment area is rxr. in the rectangle random, size is the width to
-%  length (length is taken as 10 unit) ratio
+%  height (height is taken as 10 unit) ratio
 %N - number of nodes in most cases.
 %  In square grid, N=sizexsize;
-%  In rectangle grid, Nxsize is the nubmer of nodes where width is the width and N length.
+%  In rectangle grid, Nxsize is the nubmer of nodes where width is the width and N height.
 %  In C shape grid, N is about 79 when width=10; in L-shape grid, N is about 51
-%length - length of the network, for rectangles (default 25)
+%height - height of the network, for rectangles (default 25)
 
 network=struct();
 
@@ -91,12 +91,12 @@ switch shape
 
     case NET.SHAPE_RECTANGLE
         switch placement
-            case NET.NODE_RANDOM %rectangle random. width is the width to length ratio.
-                network.shape=sprintf('Rectangle-Random-%ix%i',width,length);
+            case NET.NODE_RANDOM %rectangle random. width is the width to height ratio.
+                network.shape=sprintf('Rectangle-Random-%ix%i',width,height);
                 network.points=zeros(N,2);
                 for j = 1:N
                     x=rand(1,1)*width;
-                    y=rand(1,1)*length;
+                    y=rand(1,1)*height;
 %                     new_points = rand(1,2);
 %                     while (new_points(2) > width)
 %                         new_points = rand(1,2);
@@ -106,11 +106,11 @@ switch shape
                 network.numberOfNodes=N;
 
             case NET.NODE_GRID % Rectangle grid with 20% placement error
-                network.shape=sprintf('Rectangle-Grid(20error)-%ix%i',width,length);
+                network.shape=sprintf('Rectangle-Grid(20error)-%ix%i',width,height);
                 network.points=zeros(N,2);
                 k=1;
                 for i=0:width-1
-                    for j=0:length-1
+                    for j=0:height-1
                         x=i + (rand-0.5)*0.4;
                         y=j + (rand-0.5)*0.4;
                         network.points(k,:)=[x,y];
@@ -123,7 +123,7 @@ switch shape
         switch placement
             case NET.NODE_RANDOM %L-shape random
                 fraction = 0.3;
-                network.shape=sprintf('L-Shape-Random-%ix%i',N,length);
+                network.shape=sprintf('L-Shape-Random-%ix%i',N,height);
                 network.points=zeros(N,2);
                 for j = 1:N
                     new_points = rand(1,2);
@@ -135,7 +135,7 @@ switch shape
 
 
             case NET.NODE_GRID %In L-shape grid case, we get about 51 nodes
-                network.shape=sprintf('L-Shape-Grid-%ix%i',width,length);
+                network.shape=sprintf('L-Shape-Grid-%ix%i',width,height);
                 rawNetwork=zeros(N,2);
                 network.points=zeros(N,2);
                 for i=1:width
@@ -164,7 +164,7 @@ switch shape
     case NET.SHAPE_LOOP
         switch placement
             case NET.NODE_RANDOM %loop random
-                network.shape=sprintf('Loop-Random %ix%i',width,length);
+                network.shape=sprintf('Loop-Random %ix%i',width,height);
                 network.points=zeros(N,2);
                 fraction = 0.2;
                 for j = 1:N
@@ -178,7 +178,7 @@ switch shape
                 end
 
             case NET.NODE_GRID %In loop grid case, we get about 51-64 nodes. N is not used
-                network.shape=sprintf('Loop Grid %ix%i',width,length);
+                network.shape=sprintf('Loop Grid %ix%i',width,height);
                 network.points=zeros(N,2);
                 rawNetwork=[];
                 for i=1:width
@@ -205,7 +205,7 @@ switch shape
                 end
         end
     case NET.SHAPE_IRREGULAR  % irregular shape
-        network.shape=sprintf('Irregular-%ix%i',width,length);
+        network.shape=sprintf('Irregular-%ix%i',width,height);
         xdist = sin(pi/3);
         ydist = 1;
         network.points=zeros(N, 2);
@@ -225,22 +225,24 @@ switch shape
 
     case NET.SHAPE_SINE
         switch placement
-            case NET.NODE_RANDOM %Sine random. width is the width to length ratio.
-                network.shape=sprintf('Sine-Random-%ix%i',width,length);
+            case NET.NODE_RANDOM %Sine random. width is the width to height ratio.
+                network.shape=sprintf('Sine-Random-%ix%i',width,height);
                 network.points=zeros(N,2);
+                xInterval=width/N;
+                x=0;
                 for j = 1:N
-                    x=rand(1,1)*width;
-                    y=(sin(j)+1)*length;
+                    y=(sin(x)+1)*(height/2);
                     network.points(j,:) = [x,y];
+                    x=x+xInterval;
                 end
                 network.numberOfNodes=N;
 
             case NET.NODE_GRID % Sine grid with 20% placement error
-                network.shape=sprintf('Sine-Grid(20error)-%ix%i',width,length);
+                network.shape=sprintf('Sine-Grid(20error)-%ix%i',width,height);
                 network.points=zeros(N,2);
                 k=1;
                 for i=0:width-1
-                    for j=0:length-1
+                    for j=0:height-1
                         x=i + (rand-0.5)*0.4;
                         y=j + (rand-0.5)*0.4;
                         network.points(k,:)=[x,y];
@@ -252,6 +254,6 @@ switch shape
 end
 
 network.width=width;
-network.height=length;
+network.height=height;
 
 end
