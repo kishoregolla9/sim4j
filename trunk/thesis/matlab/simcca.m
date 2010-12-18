@@ -290,6 +290,7 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
             
         end
         
+        fprintf(1,'Saving errors and anchors to own file...');
         savefile=sprintf('%s/errorsAndAnchors.mat',folder);
         errors=result.errors;
         save(savefile,'errors','anchors','network');
