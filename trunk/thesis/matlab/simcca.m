@@ -316,11 +316,11 @@ for operations=4:-1:lastOp  % To perform the operations, 4:-1:1
     %% PLOT RESULT
     if (size(anchors,1) > 1)
         resultFolder=sprintf('%s/%s',folder,prefix);
-        plotResult(results,anchors,radii,resultFolder,allMaps);
-        plotRegressions(results,anchors,radii,resultFolder);
-        plotJackknife(results,anchors,radii,resultFolder);
-        plotHistograms(results,anchors,radii,resultFolder);
-        plotCdf(results,anchors,radii,resultFolder);
+        %plotResult(results,anchors,radii,resultFolder,allMaps);
+        %plotRegressions(results,anchors,radii,resultFolder);
+        %plotJackknife(results,anchors,radii,resultFolder);
+        %plotHistograms(results,anchors,radii,resultFolder);
+        %plotCdf(results,anchors,radii,resultFolder);
     end
 end
 
