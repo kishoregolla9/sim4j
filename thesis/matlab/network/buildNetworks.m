@@ -23,7 +23,7 @@ for i=1 : numRadii
     
     h=plotNetwork(network,zeros(0),folder,'');
     filename=sprintf('network-%i',i);
-    saveFigure(folder,filename,h);
+    saveFigure(folder,filename,h,false);
     close all;
     
     clear network;
