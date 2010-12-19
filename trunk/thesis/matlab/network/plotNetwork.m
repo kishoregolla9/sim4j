@@ -14,7 +14,7 @@ if (exist(filename,'file') ~= 0)
     set(h,'visible','off');
 else
     hold off
-    h=figure('Name',figurename,'visible','off');
+    h=figure('Name',figurename); %,'visible','off');
     if (size(anchors,1) > 0)
         zData=mean(result.patchedMap(anchorIndex).distanceVector);
     else

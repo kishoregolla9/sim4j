@@ -1,4 +1,4 @@
-function saveFigure( folder, name, h )
+function saveFigure( folder, name, h, doMaximize )
 %SAVEFIGURE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -6,7 +6,13 @@ if exist('h','var') == 0
    h=gcf; 
 end
 
-maximize(h);
+if exist('doMaximize','var') == 0
+   doMaximize=true; 
+end
+
+if doMaximize
+    maximize(h);
+end
 
 filename=sprintf('%s/png/%s.png',folder,name);
 [pathstr]=fileparts(filename);

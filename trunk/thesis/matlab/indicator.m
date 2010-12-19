@@ -42,7 +42,7 @@ cfolders={...
     ' 2010-11-21_21_44_47-C-Random-20x20'
     };
 
-pipelines={...
+pipes_20x2={...
     '2010-11-23_20_16_5-Rectangle-Random-20x2',...
     '2010-11-23_20_47_32-Rectangle-Random-20x2',...
     '2010-11-23_22_37_54-Rectangle-Random-20x2',...
@@ -50,8 +50,10 @@ pipelines={...
     '2010-11-24_20_27_30-Rectangle-Random-20x2',...
     '2010-11-24_20_2_31-Rectangle-Random-20x2'
     };
-
-fatpipes={...
+pipes_20x3={...
+    '2010-12-18_15_47_47-Rectangle-Random-25x3'
+    };
+pipes_20x4={...
     '2010-11-24_21_4_19-Rectangle-Random-20x4',...
     '2010-11-24_21_54_39-Rectangle-Random-20x4',...
     '2010-11-24_22_43_42-Rectangle-Random-20x4',...
@@ -60,70 +62,79 @@ fatpipes={...
     '2010-11-25_1_10_40-Rectangle-Random-20x4'...
     };
 
-folders=fatpipes;
-label='fatpipeline';
+folders={pipes_20x2,pipes_20x3,pipes_20x4};
+label='pipelines';
 
-allErrors=zeros(0,1);
-minHeights=zeros(0,1);
-sumDistances=zeros(0,1);
-meanDistances=zeros(0,1);
-medianDistances=zeros(0,1);
-
-
-areas=zeros(0,1);
-for i=1:length(folders)
-    folder=sprintf('../results/%s',folders{i});
-    vars=loadFile(folder,'errorsAndAnchors');
-    if (isempty(vars))
-        vars=loadFile(folder,'result');
-        if ~isfield(vars,'result')
-            fprintf(2,'Skipping %s',folder);
-            continue;
-        end
-        result=vars.result;
-        errors=result.errors;
-        network=result.network;
-        radius=result.radius;
-        vars=loadFile(folder,'anchors');
-        anchors=vars.anchors;
-        
-        savefile=sprintf('%s/errorsAndAnchors.mat',folder);
-        save(savefile,'errors','anchors','network','radius');
-        clear result
-    else
-        errors=vars.errors;
-        network=vars.network;
-        anchors=vars.anchors;
-        if (isfield(vars,'radius'))
-            radius=vars.radius;
+numsets=length(folders);
+allErrors=cell(numsets,1);
+minHeights=cell(numsets,1);
+sumDistances=cell(numsets,1);
+meanDistances=cell(numsets,1);
+medianDistances=cell(numsets,1);
+for f=1:length(folders)
+    allErrors{f}=zeros(0,1);
+    minHeights{f}=zeros(0,1);
+    sumDistances{f}=zeros(0,1);
+    meanDistances{f}=zeros(0,1);
+    medianDistances{f}=zeros(0,1);
+    areas{f}=zeros(0,1);
+end
+for f=1:length(folders)
+    for i=1:length(folders{f})
+        folder=sprintf('../results/%s',folders{f}{i});
+        vars=loadFile(folder,'errorsAndAnchors');
+        if (isempty(vars))
+            vars=loadFile(folder,'result');
+            if ~isfield(vars,'result')
+                fprintf(2,'Skipping %s',folder);
+                continue;
+            end
+            result=vars.result;
+            errors=result.errors;
+            network=result.network;
+            radius=result.radius;
+            vars=loadFile(folder,'anchors');
+            anchors=vars.anchors;
+            
+            savefile=sprintf('%s/errorsAndAnchors.mat',folder);
+            save(savefile,'errors','anchors','network','radius');
+            clear result
         else
-            radius=2.5;
+            errors=vars.errors;
+            network=vars.network;
+            anchors=vars.anchors;
+            if (isfield(vars,'radius'))
+                radius=vars.radius;
+            else
+                radius=2.5;
+            end
         end
+        allErrors{f}=[ allErrors{f} [errors.mean] ]; %#ok grow
+        stats=triangleStats(network.points,anchors,network.width,network.height);
+        minHeights{f}=[ minHeights{f} [stats.heights.min] ]; %#ok grow
+        areas{f}=[ areas{f} stats.areas' ]; %#ok grow
+        sums=zeros(1,size(anchors,1));
+        means=zeros(1,size(anchors,1));
+        medians=zeros(1,size(anchors,1));
+        d=zeros(1,3);
+        for s=1:size(anchors,1)
+            anchorNodes=anchors(s,:);
+            d(1)=network.distanceMatrix(anchorNodes(1),anchorNodes(2));
+            d(2)=network.distanceMatrix(anchorNodes(2),anchorNodes(3));
+            d(3)=network.distanceMatrix(anchorNodes(3),anchorNodes(1));
+            sums(s)=sum(d);
+            medians(s)=median(d);
+            means(s)=mean(d);
+        end
+        sumDistances{f}=[ sumDistances{f} sums  ]; %#ok grow
+        meanDistances{f}=[ meanDistances{f} means  ]; %#ok grow
+        medianDistances{f}=[ medianDistances{f} medians ]; %#ok grow
+        
+        clear network errors anchors numAnchorSets
     end
-    allErrors=[ allErrors [errors.mean] ]; %#ok grow
-    stats=triangleStats(network.points,anchors,network.width,network.height);
-    minHeights=[ minHeights [stats.heights.min] ]; %#ok grow
-    areas=[ areas stats.areas' ]; %#ok grow
-    sums=zeros(1,size(anchors,1));
-    means=zeros(1,size(anchors,1));
-    medians=zeros(1,size(anchors,1));
-    d=zeros(1,3);
-    for s=1:size(anchors,1)
-        anchorNodes=anchors(s,:);
-        d(1)=network.distanceMatrix(anchorNodes(1),anchorNodes(2));
-        d(2)=network.distanceMatrix(anchorNodes(2),anchorNodes(3));
-        d(3)=network.distanceMatrix(anchorNodes(3),anchorNodes(1));
-        sums(s)=sum(d);
-        medians(s)=median(d);
-        means(s)=mean(d);
-    end
-    sumDistances=[ sumDistances sums  ]; %#ok grow
-    meanDistances=[ meanDistances means  ]; %#ok grow
-    medianDistances=[ medianDistances medians ]; %#ok grow
-    
-    clear network errors anchors numAnchorSets
 end
 h=plotIndicators(allErrors,minHeights,radius,{'Minimum Anchor Triangle Height','(factor of radio radius)'},0.1,false,'log');
+ylim([0 20]);
 filename=sprintf('HeightIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
@@ -138,16 +149,19 @@ hold off
 % sumDistances(outliers)=[];
 
 h=plotIndicators(allErrors,sumDistances,radius,{'Sum of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+ylim(0,60);
 filename=sprintf('SumOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
 h=plotIndicators(allErrors,medianDistances,radius,{'Median of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+ylim(0,60);
 filename=sprintf('MedianOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
 h=plotIndicators(allErrors,meanDistances,radius,{'Mean of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+ylim(0,60);
 filename=sprintf('MeanOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
