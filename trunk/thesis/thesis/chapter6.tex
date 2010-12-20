@@ -43,7 +43,7 @@ Similarly, the same criteria for eliminating the outlier localization results al
 	\\
 	\subfloat[Minimum height of anchor triangle vs. mean location error]{\label{fig:cshapeheight}
 		\includegraphics[width=\figurewidth\textwidth]{cshape/HeightIndicator_cshape}}
-	\caption[Anchor metrics for a C-Shape topology]{Anchor metrics for 10 random C-shape 20-by-20 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units, excluding outliers}
+	\caption[Anchor metrics for a C-Shape topology]{Anchor metrics for 10 random C-shape 20-by-20 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units}
 	\label{fig:cindicator}
 \end{figure}
 
@@ -66,9 +66,13 @@ Figure~\ref{fig:pipelineindicator} shows that the mean location error is about 2
 
 \begin{figure}
   \centering
-	\includegraphics[width=\textwidth]{pipeline/SumOfDistanceIndicator_pipeline}
-	\caption[Sum of distances between anchor nodes vs. location error in a pipeline topology]{Sum of distances between anchor nodes vs. location error for 6 random pipeline 200-by-2 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units}
-	\label{fig:pipelineindicator}
+	\subfloat[Sum of distance between anchors vs. mean location error, excluding outliers]{\label{fig:pipessum}
+		\includegraphics[width=\figurewidth\textwidth]{pipeline/SumOfDistanceIndicator_pipes}}
+	\\
+	\subfloat[Minimum height of anchor triangle vs. mean location error]{\label{fig:pipesheight}
+		\includegraphics[width=\figurewidth\textwidth]{pipeline/HeightIndicator_pipes}}
+	\caption[Anchor metrics for a pipeline topology]{Anchor metrics for 10 random pipeline-shape 20-by-20 unit networks with 200 nodes, 1,000 anchor sets each, and a radio range of 2.0 units}
+	\label{fig:pipesindicator}
 \end{figure}
 
 Surprisingly, when the same simulation is run on a 200 by 4 unit area pipeline network where the radio range is 2.5 units, all the anchor sets still provide extremely high location errors.  Figure~\ref{fig:fatpipelineindicator} shows the sum of the distance between anchor nodes versus the mean location error of the network.  The minimum location error in this case is roughly five times the radio range.  When comparing with the pipeline network where the width of the network is less than the radio range, two different patterns emerge.  The overall data distribution has an inverse relationship between the sum of the distance between anchors and location error.  However, there is a similar relationship when comparing to the mean of each interval of the data.  
