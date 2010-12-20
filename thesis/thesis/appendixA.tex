@@ -3,5 +3,13 @@
 
 All source code used to simulate CCA-MAP and generate resulting data can be found in \href{http://code.google.com}{Google\copyright Code}.  The code was originally written by Li Li and modified for the purposes of readability and different output data and plots.
 
+The primary files are:
+\begin{itemize}
+  \item ccaconfig.m: Property file to setup the network shape, number of anchor sets, anchor placement, radio range and other simulation parameters.
+  \item simcca.m: Generate and simulate a network over the configured number of anchor sets and output a suite of statistical plots.
+  \item multisimcca.m: Generate and simulate a configured number of networks, with the same exact anchor sets and output a suite of statistical plots.
+  \item indicator.m: Outputs a suite of statistical plots for a set of previously run output directories from simcca.m.  This allows combining multiple networks and their anchor sets into a single analysis.
+\end{itemize}
+
 See \url{http://code.google.com/p/sim4j/source/browse/#svn/trunk/thesis/matlab} for details.
 
