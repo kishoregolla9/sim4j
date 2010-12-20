@@ -50,9 +50,6 @@ pipes_20x2={...
     '2010-11-24_20_27_30-Rectangle-Random-20x2',...
     '2010-11-24_20_2_31-Rectangle-Random-20x2'
     };
-pipes_20x3={...
-    '2010-12-18_15_47_47-Rectangle-Random-25x3'
-    };
 pipes_20x4={...
     '2010-11-24_21_4_19-Rectangle-Random-20x4',...
     '2010-11-24_21_54_39-Rectangle-Random-20x4',...
@@ -62,8 +59,45 @@ pipes_20x4={...
     '2010-11-25_1_10_40-Rectangle-Random-20x4'...
     };
 
-folders={pipes_20x2,pipes_20x3,pipes_20x4};
-label='pipelines';
+pipes_25x2={...
+    '
+pipes_25x3={...
+    '2010-12-18_15_47_47-Rectangle-Random-25x3',...
+'2010-12-19_10_20_27-Rectangle-Random-25x3',...
+'2010-12-19_20_6_24-Rectangle-Random-25x3',...
+'2010-12-19_21_14_18-Rectangle-Random-25x3',...
+'2010-12-19_21_21_54-Rectangle-Random-25x3',...
+'2010-12-19_21_29_23-Rectangle-Random-25x3',...
+'2010-12-19_21_37_0-Rectangle-Random-25x3',...
+'2010-12-19_21_44_26-Rectangle-Random-25x3',...
+'2010-12-19_21_52_33-Rectangle-Random-25x3',...
+'2010-12-19_21_6_47-Rectangle-Random-25x3'
+    };
+pipes_25x4={...
+    '2010-12-19_10_18_35-Rectangle-Random-25x4',...
+    '2010-12-19_10_26_8-Rectangle-Random-25x4',...
+    '2010-12-19_10_34_6-Rectangle-Random-25x4',...
+    '2010-12-19_10_42_10-Rectangle-Random-25x4',...
+    '2010-12-19_10_50_2-Rectangle-Random-25x4',...
+    '2010-12-19_10_58_5-Rectangle-Random-25x4',...
+    '2010-12-19_11_12_30-Rectangle-Random-25x4',...
+    '2010-12-19_11_19_52-Rectangle-Random-25x4',...
+    '2010-12-19_11_27_35-Rectangle-Random-25x4',...
+    '2010-12-19_11_34_55-Rectangle-Random-25x4',...
+    '2010-12-19_11_41_57-Rectangle-Random-25x4',...
+    '2010-12-19_11_49_3-Rectangle-Random-25x4',...
+    '2010-12-19_11_56_6-Rectangle-Random-25x4',...
+    '2010-12-19_11_5_15-Rectangle-Random-25x4',...
+    '2010-12-19_12_11_46-Rectangle-Random-25x4',...
+    '2010-12-19_12_18_42-Rectangle-Random-25x4',...
+    '2010-12-19_12_26_2-Rectangle-Random-25x4',...
+    '2010-12-19_12_33_17-Rectangle-Random-25x4',...
+    '2010-12-19_12_3_12-Rectangle-Random-25x4',...
+    '2010-12-19_12_40_30-Rectangle-Random-25x4',...
+    '2010-12-1_0_2_13-Rectangle-Random-25x4'
+    };
+folders={pipes_20x2};%={pipes_25x3,pipes_25x4};
+label='pipes_20x2';
 
 numsets=length(folders);
 allErrors=cell(numsets,1);
@@ -71,16 +105,16 @@ minHeights=cell(numsets,1);
 sumDistances=cell(numsets,1);
 meanDistances=cell(numsets,1);
 medianDistances=cell(numsets,1);
+areas=cell(numsets,1);
+connectivityLevels=zeros(numsets,1);
 for f=1:length(folders)
     allErrors{f}=zeros(0,1);
     minHeights{f}=zeros(0,1);
     sumDistances{f}=zeros(0,1);
     meanDistances{f}=zeros(0,1);
     medianDistances{f}=zeros(0,1);
-    areas=zeros(0,1);
+    areas{f}=zeros(0,1);
 end
-
-
 for f=1:length(folders)
     for i=1:length(folders{f})
         folder=sprintf('../results/%s',folders{f}{i});
@@ -111,13 +145,16 @@ for f=1:length(folders)
                 radius=2.5;
             end
         end
-        allErrors=[ allErrors [errors.mean] ]; %#ok grow
+        allErrors{f}=[ allErrors{f} [errors.mean] ]; %#ok grow
         stats=triangleStats(network.points,anchors,network.width,network.height);
-        minHeights=[ minHeights [stats.heights.min] ]; %#ok grow
-        areas=[ areas stats.areas' ]; %#ok grow
+        minHeights{f}=[ minHeights{f} [stats.heights.min] ]; %#ok grow
+        areas{f}=[ areas{f} stats.areas' ]; %#ok grow
         sums=zeros(1,size(anchors,1));
         means=zeros(1,size(anchors,1));
         medians=zeros(1,size(anchors,1));
+        
+        connectivityLevels(f)=network.networkConnectivityLevel;
+        
         d=zeros(1,3);
         for s=1:size(anchors,1)
             anchorNodes=anchors(s,:);
@@ -128,19 +165,21 @@ for f=1:length(folders)
             medians(s)=median(d);
             means(s)=mean(d);
         end
-        sumDistances=[ sumDistances sums  ]; %#ok grow
-        meanDistances=[ meanDistances means  ]; %#ok grow
-        medianDistances=[ medianDistances medians ]; %#ok grow
+        sumDistances{f}=[ sumDistances{f} sums  ]; %#ok grow
+        meanDistances{f}=[ meanDistances{f} means  ]; %#ok grow
+        medianDistances{f}=[ medianDistances{f} medians ]; %#ok grow
         
         clear network errors anchors numAnchorSets
     end
 end
-h=plotIndicators(allErrors,minHeights,radius,{'Minimum Anchor Triangle Height','(factor of radio radius)'},0.1,false,'log');
+subtitle=sprintf('(factor of radio radius, connectivity level=%.2f)',mean(connectivityLevels));
+h=plotIndicators(allErrors,minHeights,radius,{'Minimum Anchor Triangle Height',subtitle},0.1,false,'log');
+% ylim([0 20]);
 filename=sprintf('HeightIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
-h=plotIndicators(allErrors,areas,radius,{'Anchor Triangle Area','(factor of radio radius)'},0.1,true,'log');
+h=plotIndicators(allErrors,areas,radius,{'Anchor Triangle Area',subtitle},0.1,true,'log');
 filename=sprintf('AreaIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
@@ -149,17 +188,17 @@ hold off
 % allErrors(outliers)=[];
 % sumDistances(outliers)=[];
 
-h=plotIndicators(allErrors,sumDistances,radius,{'Sum of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+h=plotIndicators(allErrors,sumDistances,radius,{'Sum of Distance between Anchors',subtitle},2,false,'linear');
 filename=sprintf('SumOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
-h=plotIndicators(allErrors,medianDistances,radius,{'Median of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+h=plotIndicators(allErrors,medianDistances,radius,{'Median of Distance between Anchors',subtitle},2,false,'linear');
 filename=sprintf('MedianOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
 
-h=plotIndicators(allErrors,meanDistances,radius,{'Mean of Distance between Anchors','(factor of radio radius)'},2,false,'linear');
+h=plotIndicators(allErrors,meanDistances,radius,{'Mean of Distance between Anchors',subtitle},2,false,'linear');
 filename=sprintf('MeanOfDistanceIndicator_%s',label);
 saveFigure('..',filename,h);
 hold off
