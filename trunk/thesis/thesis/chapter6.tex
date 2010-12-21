@@ -49,13 +49,9 @@ Similarly, the same criteria for eliminating the outlier localization results al
 
 \subsection{Pipeline Network Topology}
 
-In some applications, that network region has very little depth to it, such as gas pipeline or along a highway or railroad line.  The extreme case is where there is a single node placed along a straight axis.  As we have shown, this is the worst possible scenario, as it is the most likely was to cause the outlier condition for localization.  In that case, it is worthwhile to explore the possibility of other localization techniques, such as GPS at each node, or recording the location as the nodes are placed.  
+In some applications, that network region has very little depth to it, such as gas pipeline or along a highway or railroad line.  The extreme case is where there is a single node placed along a straight axis.  As we have shown, this is the worst possible scenario, as it is the most likely way to cause the outlier condition for localization.  In that case, it is worthwhile to explore the possibility of other localization techniques, such as GPS at each node, or recording the location as the nodes are placed.
 
-However, for randomly nodes, when there is a bit of depth to the network, as shown in Figure~\ref{fig:pipeline} (unequal x and y scales), there is still the possibility of good localization results.  For pipeline networks with randomly placed nodes, it is much more difficult to meet the network connectivity requirements.  Therefore, the simulations are run for just six networks with 400 nodes in a 200 by 2 unit area.  Note that the width of the pipeline, 2 units, is less than the radio range, 2.5 units.  Also recall that the recommendation to avoid outliers is that the minimum height of the triangle must be a least equal to the radio range, which even the width of the network does not meet. 
-
-Even worse than expected, all of the 30,000 anchor sets across the six networks are outlier cases.  Recall that in a square network, some anchor sets that did not meet the minimum height recommendation are still able to produce usable localization results.  However, here none of the anchors do.  This tells us that something about the two-dimensional nature of the square area is able to sometimes compensate for the collinearity whereas in a pipeline, the one-dimensional nature is not able to compensate.
-
-Figure~\ref{fig:pipelineindicator} shows that the mean location error is about 20 times the radio range which is well beyond any reasonable value. Interestingly, a relatively small number of anchor sets cause the location error to increase even further when the sum of the distance between anchors is roughly equal to the length of the pipeline.  However, the mean of the mean location error actually dips, although only slightly, while the maximum errors peak.  The peak in maximum mean location errors may be explained by noticing that in order to have a sum of distance between anchors equal to the length of the pipeline, there are two basic scenarios.  First, the three anchor nodes are spread across the entire distance of the network.  This scenario likely falls in the normal range of errors.  The second scenario is when two anchors are roughly co-located, and the third anchor is half the length of the network away.  We suspect that this case causes the worst localization results since effectively this is equivalent to having just two anchor nodes.
+However, when there is a bit of depth to the network, as shown in Figure~\ref{fig:pipeline}, there is still the possibility of good localization results.  To demonstrate the importance of having an anchor node triangle height of at least the radio range, Figures~\ref{fig:pipessum} and \ref{fig:pipesheight} show mean location error for four different networks, with increasing network depth, but the same length.  
 
 \begin{figure}
   \centering
@@ -64,28 +60,34 @@ Figure~\ref{fig:pipelineindicator} shows that the mean location error is about 2
 	\label{fig:pipeline}
 \end{figure}
 
+The plots of the sum of distance between anchors in Figure~\ref{fig:pipessum} show that as the network has a larger depth, the floor of possible localization errors drops.  In particular, when the network depth is only 1, the floor is about 0.5r, whereas when the depth is 4 units, or twice the radio range, the floor drops to roughly 0.25r.  Also, as the sum of the distance increases and the network depth is greater than the radio range, the outlier cases become apparent.  
+
+Interestingly, the outlier cases have a much lower error in a pipeline topology.  Figure~\ref{fig:pipesspread} shows two sample anchor sets that demonstrate the difference in localization performance when the anchors are clumped together versus spread apart.  When the anchor nodes are clumped together, the calculated positions remain in a straight line, as the expected results due, but that algorithm cannot determine the correct angle that line should take.  However, since the lines do cross where the anchor nodes are clumped, the line is grounded to a relatively accurate level, when compared with the square networks. For this reason, the outlier case, in general, has lower error in a pipeline topology. Nonetheless, it is poor performance, and is likely not useful in most applications.
+
+The plots of minimum triangle height show that for networks with a depth less than the radio range, the separation of good and outlier cases is impossible to distinguish.  Specifically, when the network depth is 1 units, half the radio range, the mean localization error is basically flat across all triangle heights possible.  As it becomes possible to have anchor sets forming a triangle with height more than the radio range, localization performance drops down to normal levels, below 0.5r, when the triangle height is also greater than the radio range.  However, the minimum triangle height no longer appears to be a good indicator of outlier cases. 
+
 \begin{figure}
   \centering
-	\subfloat[Sum of distance between anchors vs. mean location error, excluding outliers]{\label{fig:pipessum}
-		\includegraphics[width=\figurewidth\textwidth]{pipeline/SumOfDistanceIndicator_pipes}}
+	\includegraphics[width=\textwidth]{pipeline/SumOfDistanceIndicator_pipes}
+	\caption[Sum of distance between anchors vs. mean location error]{Sum of distance between anchors vs. mean location error for random pipeline 25-by-1,2,3 and 4 unit networks with 200 nodes, 1,000 anchor sets each, and a radio range of 2.0 units}
+	\label{fig:pipessum}
+\end{figure}
+\begin{figure}
+  \centering
+	\includegraphics[width=\textwidth]{pipeline/HeightIndicator_pipes}
+	\caption[Minimum height of anchor triangle vs. mean location error]{Minimum height of anchor triangle vs. mean location error for random pipeline 25-by-1,2,3 and 4 unit networks with 200 nodes, 1,000 anchor sets each, and a radio range of 2.0 units}
+	\label{fig:pipesheight}
+\end{figure}
+
+In the end, even though the results are better when the width of the pipeline is more than the radio range, it is impossible to reliably avoid the outlier condition.  Therefore, for pipeline topology, we recommend to use a different class of localization algorithms that does not rely on transforming local coordinates into global coordinates with anchor nodes.  If no other algorithms are possible, we recommend making the network as deep as possible and to spread the anchors as apart along the length of the pipeline.  
+
+\begin{figure}
+  \centering
+	\subfloat[Pipeline with spread apart anchors]{\label{fig:pipelinespread}
+		\includegraphics[width=\figurewidth\textwidth]{pipeline/spread}}
 	\\
-	\subfloat[Minimum height of anchor triangle vs. mean location error]{\label{fig:pipesheight}
-		\includegraphics[width=\figurewidth\textwidth]{pipeline/HeightIndicator_pipes}}
-	\caption[Anchor metrics for a pipeline topology]{Anchor metrics for 10 random pipeline-shape 20-by-20 unit networks with 200 nodes, 1,000 anchor sets each, and a radio range of 2.0 units}
-	\label{fig:pipesindicator}
+	\subfloat[Pipeline with clumped anchors]{\label{fig:pipelineclumped}
+		\includegraphics[width=\figurewidth\textwidth]{pipeline/clumped}}
+	\caption{Pipeline network with anchors spread apart and clumped together}
+	\label{fig:pipesspread}
 \end{figure}
-
-Surprisingly, when the same simulation is run on a 200 by 4 unit area pipeline network where the radio range is 2.5 units, all the anchor sets still provide extremely high location errors.  Figure~\ref{fig:fatpipelineindicator} shows the sum of the distance between anchor nodes versus the mean location error of the network.  The minimum location error in this case is roughly five times the radio range.  When comparing with the pipeline network where the width of the network is less than the radio range, two different patterns emerge.  The overall data distribution has an inverse relationship between the sum of the distance between anchors and location error.  However, there is a similar relationship when comparing to the mean of each interval of the data.  
-
-The mean location error is lowest when the sum of the distance between anchor nodes is roughly one length of the pipeline.  This can be explained by inferring that when the sum of the distance between anchors is low, the anchors must be clumped together in the pipeline.  In this scenario, only a small portion of the pipeline is covered and therefore leads to poor localization performances. As the sum of the distance between anchors approaches twice the length of the pipeline, two anchors must be at one end of the pipeline and the third anchor at the other end.  Since two of the anchors are therefore more or less co-located, the algorithm again behaves as if there are only two anchor nodes, causing poor localization performance.
-
-\begin{figure}
-  \centering
-	\includegraphics[width=\textwidth]{pipeline/SumOfDistanceIndicator_fatpipeline}
-	\caption[Sum of distances between anchor nodes vs. location error in a pipeline topology]{Sum of distances between anchor nodes vs. location error for 6 random pipeline 200-by-4 unit networks with 800 nodes, 5,000 anchor sets each, and a radio range of 2.5 units}
-	\label{fig:fatpipelineindicator}
-\end{figure}
-
-In the end, even though the results are a bit better when the width of the pipeline is more than the radio range, the localization results are poor using this method for pipeline network topologies.  Therefore, it is recommended to use a different class of localization algorithms that does not rely on transforming local coordinates into global coordinates with anchor nodes.
-
-[TODO Is there an overall conclusion then? How comes your results are so poor when the published results for CCA in the case of a pipeline network are much better? When does a pipeline network become "square enough" to allow using CCA-MAP or MDS-MAP?]

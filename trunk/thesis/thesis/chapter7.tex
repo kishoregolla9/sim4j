@@ -1,4 +1,4 @@
-\chapter{Other Factors and Future Work}
+\chapter{Other Factors}
 \label{sec:otherfactors}
 
 So far, we have examined anchor placement as the sole source of localization error.  We set out here to show that there are indeed other factors that play a significant role in determining localization performance.
@@ -29,4 +29,4 @@ In the following example, the same anchor set is used in four different random n
 
 These results show that there is significant variation in localization results across networks, when the anchor set is geographically fixed.  In other words, the absolute anchor positions are not enough to predict localization errors.  Therefore, it is clear there are other factors besides anchor placement effecting the resulting location errors. A key piece of future work is to isolate and analyze these other factors.  However, since the outlier case itself is undetectable in the absence of extensive ground truth data, the best we can hope for is a way to minimize the probability beyond analyzing the height of the anchor node triangle by studying what these other factors might be.  
 
-Some of these factors have been previously explored.  Network connectivity level is highlighted in \cite{CCAMAP09}.  Connectivity level is a factor of both node density in combination with the radio range.  During this work, we discovered the node chosen to start the local map patching also has an effect on the end result, although not always significant.  
+Some of these factors have been previously explored.  Network connectivity level is highlighted in \cite{CCA-MAP09}.  Connectivity level is a factor of both node density in combination with the radio range.  During this work, we discovered the node chosen to start the local map patching also has an effect on the end result, although not always significant.  
