@@ -197,8 +197,8 @@ theta=ref;
 mid=[ mean(anchorPoints(:,1)) ; mean(anchorPoints(:,2))];
 X=[mid(1)-(d*cosd(theta)) ; mid(1)+(d*cosd(theta)) ];
 Y=[mid(2)-(d*sind(theta)) ; mid(2)+(d*sind(theta)) ];
-line(X,Y,'LineStyle','--','LineWidth',5);
-plot(mid(1),mid(2),'gs','MarkerSize',10,'MarkerEdgeColor','k','MarkerFaceColor','g');
+% line(X,Y,'LineStyle','--','LineWidth',5);
+% plot(mid(1),mid(2),'gs','MarkerSize',10,'MarkerEdgeColor','k','MarkerFaceColor','g');
 
 temp=sprintf('Max error: %.3fr Mean error: %.3fr, %s',...
     result.errorsPerAnchorSet(s).max,...
