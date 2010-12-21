@@ -57,19 +57,20 @@ confidence=0.05;
         if (showOutliers && ~crossed && ~isempty(v) &&  max(v) < outlierSep)
             crossed=true;
             line([d d],[0 7],'LineStyle','--','LineWidth',2,'HandleVisibility','off');
-            lastoutlier=sprintf('\\leftarrowLast Outlier %.1fr',d);
-            text(d,6.5,lastoutlier,'Color','k','FontSize',14,'HandleVisibility','off');
+%             lastoutlier=sprintf('\\leftarrowLast Outlier %.1fr',d);
+%             text(d,6.5,lastoutlier,'Color','k','FontSize',14,'HandleVisibility','off');
         end
         
     end
     
     if (showOutliers)
         line([0.0001 d],[outlierSep + 0.2 outlierSep + 0.2],'LineStyle','--','LineWidth',2,'Color','k','HandleVisibility','off');
-        text(d/4,2.5,'Outlier separator','HandleVisibility','off');
+%         text(d/4,2.5,'Outlier separator','HandleVisibility','off');
     end
     
     l=ylim;
-    ylim([0 l(2)])
+%     ylim([0 l(2)])
+    ylim([0 5]);
     
     % plot a line through the mean points
     s={'-k',':k','-.k','--k'};
@@ -78,7 +79,9 @@ confidence=0.05;
     if ~showOutliers
         ylim([0 3]);
     end
+%     xlim([0 25]);
     xlim([0.0001 10]);
+
     title(dn);
 %     legend('show')
 end

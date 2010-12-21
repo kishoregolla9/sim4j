@@ -3,13 +3,13 @@ numNetworks=10 %#ok<NOPTS>
 % folderpath='../results/multi-20101018_213558_Square-Random-12x12-100Sets-10Nets'
 
 % For simcca
-numAnchorSets=1000 %#ok<NOPTS>
+numAnchorSets=100 %#ok<NOPTS>
 numAnchorsPerSet=3 %#ok<NOPTS>
 doAllStarts=false;
 shape=NET.SHAPE_RECTANGLE;
 placement=NET.NODE_RANDOM;
 networkEdge=20 %#ok<NOPTS>
-networkHeight=3;
+networkHeight=1;
 networkWidth=25;
 numNodes=200; 
 
