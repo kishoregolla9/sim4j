@@ -7,7 +7,13 @@
 %
 \usepackage{graphicx}
 \usepackage{subfig}
+\usepackage{caption}
+\usepackage{wrapfig}
+
+\captionsetup{figurename=,justification=justified}
 \graphicspath{{figures/}}
+
+
 
 %\usepackage{bm} % For typesetting bold math (not \mathbold)
 %\logo{\includegraphics[height=0.6cm]{yourlogo.eps}}
@@ -32,14 +38,24 @@ Electrical and Computer Engineering \\
 \end{frame}
 %
 \begin{frame}{Motivation}
-\begin{block}
-{Why Wireless Sensor Networks?}
-\begin{figure}
-  \centering
-	\subfloat[Great Duck Island]{\includegraphics[width=0.4\textwidth]{0404birdf4_123}}
-\;
-	\subfloat[]{\includegraphics[width=0.1\textwidth]{runes_logo}}
-\end{figure}
+\begin{block}{Why Wireless Sensor Networks?}
+\begin{columns}
+	\begin{column}{0.5\textwidth}
+		\begin{figure}
+			\centering
+				\includegraphics[width=\textwidth]{0404birdf4_123}
+				\caption{Great Duck Island}
+		\end{figure}
+		\vfil
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		\begin{figure}
+			\centering
+				\includegraphics[width=0.4\textwidth]{runes_logo}
+		\end{figure}
+		\vfil
+	\end{column}
+\end{columns}
 \end{block}
 \end{frame}
 %
@@ -56,41 +72,88 @@ Electrical and Computer Engineering \\
 
 \begin{frame}{The Basics}
 \begin{block}{What are we actually doing?}
-\begin{figure}
-	\centering	
-		\includegraphics[width=0.7\textwidth]{SampleAnchors}
-		\caption{Procrustes Analysis}
-\end{figure}
+\begin{columns}
+	\begin{column}{0.3\textwidth}
+		\begin{itemize}
+		\item Local to Global Coordinates
+		\item Find best linear transformation
+		\item $Z = b*Y*T + c$
+		\end{itemize}
+		\vfil
+	\end{column}
+	\begin{column}{0.7\textwidth}
+		\begin{figure}
+			\centering	
+				\includegraphics[width=0.9\textwidth]{SampleAnchors}
+				\caption{Procrustes Analysis}
+		\end{figure}
+	\end{column}
+\end{columns}
 \end{block}
 \end{frame}
 
 \begin{frame}{The Worst Case}
 \begin{block}{What does it look like}
-\begin{figure}
-	\centering
-		\includegraphics[width=0.7\textwidth]{AS6NetworkDiff9}
-		\caption{A really bad result}
-\end{figure}
+\begin{columns}
+	\begin{column}{0.3\textwidth}
+		\begin{itemize}
+		\item Criss-cross effect
+		\item Anchor nodes themselves are not affected
+		\item Could keep points inside known region, but does not help that much
+		\end{itemize}
+		\vfil
+	\end{column}
+	\begin{column}{0.7\textwidth}
+		\begin{figure}
+			\centering
+				\includegraphics[width=0.7\textwidth]{AS6NetworkDiff9}
+		\end{figure}
+	\end{column}
+\end{columns}
 \end{block}
 \end{frame}
 
 \begin{frame}{The Worst Case}
 \begin{block}{Avoiding it}
-\begin{figure}
-  \centering
-	\includegraphics[width=0.6\textwidth]{HeightIndicator_square}
-	\caption{Minimum anchor triangle heights, with confidence intervals grouped in intervals of 0.1r}	
-\end{figure}
+\begin{columns}
+	\begin{column}{0.3\textwidth}
+		\begin{itemize}
+			\item Minimum anchor triangle heights
+			\item Large height is sufficient for exclusion, but not necessary
+			\item Height must be at least the radio range
+		\end{itemize}
+		\vfil
+	\end{column}
+	\begin{column}{0.7\textwidth}
+		\begin{figure}
+			  \centering
+				\includegraphics[width=\textwidth]{HeightIndicator_square}
+				\caption{with confidence intervals grouped in intervals of 0.1r}	
+		\end{figure}
+	\end{column}
+\end{columns}
 \end{block}
 \end{frame}
 
 \begin{frame}{The Normal Case}
 \begin{block}{Making the best of it}
-\begin{figure}
-  \centering
-	\includegraphics[width=0.6\textwidth]{SumOfDistanceIndicator_square}
-	\caption[Sum of distance between anchors vs. location error]{Sum of distance between anchors vs. location error for 20 random square 20-by-20 unit networks with 400 nodes, 5,000 anchor sets each, and a radio range of 2.5 units, excluding outliers}
-\end{figure}
+\begin{columns}
+	\begin{column}{0.3\textwidth}
+		\begin{itemize}
+			\item Sum of distance between anchor nodes
+			\item Large height is sufficient for exclusion, but not necessary
+			\item Sum must be at least 10 times the radio range
+		\end{itemize}
+		\vfil
+	\end{column}
+	\begin{column}{0.7\textwidth}
+		\begin{figure}
+		  \centering
+			\includegraphics[width=0.7\textwidth]{SumOfDistanceIndicator_square}
+			\caption{excluding outliers}
+		\end{figure}
+	\end{column}
+\end{columns}
 \end{block}
 \end{frame}
 
