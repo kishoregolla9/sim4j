@@ -1,4 +1,4 @@
-del *.aux *.dvi *.lof *.ps *.toc *.tmp *.blg
+del *.aux *.dvi *.lof *.ps *.toc *.tmp *.blg *.out *.WSave *.synctex *.bbl *.log
 @rem call copyHypotheses.bat ..\results\2010-9-20_23_46_41-Square-Random-20x20
 @rem call copyOutliers.bat
 latex thesis
