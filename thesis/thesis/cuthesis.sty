@@ -73,7 +73,7 @@
 \DeclareOption{manuscript}{\def\@wantmanuscript{true}}
 \DeclareOption{standard}{}
 
-\DeclareOption{phd}{\def\@phddissertation{true}}
+\DeclareOption{phd}{\def\@phddissertation{false}}
 \DeclareOption{masters}{}
 
 \DeclareOption{nocopy}{\def\@nolibraryrights{true}}
@@ -368,7 +368,10 @@
 \def\fourthcommittee#1{\gdef\@fourthcommittee{#1}}
 \def\departmentchair#1{\gdef\@departmentchair{#1}}
 \def\copyrightyear#1{\gdef\@copyrightyear{#1}} % \author, \title in report
-\def\@title{}\def\@author{}\def\@dept{Systems and Computer Engineering}
+\def\@title{}
+\def\@author{}
+\def\degrees#1{\gdef\degrees{#1}}
+\def\@dept{Systems and Computer Engineering}
 \def\@supervisor{} \def\@firstcommittee{} \def\@secondcommittee{}
 \def\@thirdcommittee{} \def\@fourthcommittee{} \def\@departmentchair{}
 \def\@copyrightyear{\number\the\year}
@@ -419,23 +422,14 @@
         \mbox{}\\
         by\\
         \mbox{}\\
-        {\textbf{\@author}}\\
+        {\textbf{\@author, \degrees}}\\
     \end{center}
     \mbox{}
     \begin{center}
-        A \@ifundefined{@phddissertation}{
-      Thesis
-    }{
-       Dissertation
-    } submitted to \\
-    the Faculty of Graduate Studies and Research\\
-    in partial fulfilment of\\
-    the requirements for the degree of\\
-    \@ifundefined{@phddissertation}{
- \bf{Master of Applied Science}\\
-}{
- \bf{Master of Applied Science}\\
-}
+        A thesis submitted to \\
+    the Faculty of Graduate and Postdoctoral Affairs\\
+    in partial fulfilment of the requirements for the degree of\\
+ \bf{Master of Applied Science in Electrical and Computer Engineering}\\
     \end{center}
     \mbox{}
     \begin{center}
@@ -451,8 +445,7 @@
     \end{center}
     \mbox{}
     \begin{center}
-        Copyright \copyright\\
-        \@copyrightyear\ - \@author
+        \copyright\ Copyright \@copyrightyear\ - \@author
     \end{center}\clearpage}
 
 
@@ -465,13 +458,7 @@
 \def\comprof{%
 \begin{minipage}[t]{1.5in}
   \begin{flushright}
-    \@ifundefined{@phddissertation}{
-      Thesis
-    }{
-       Dissertation
-    }
-    Committee\\
-    Supervisor
+    Thesis Supervisor
   \end{flushright}
 \end{minipage}}
 
@@ -480,12 +467,8 @@
 \thispagestyle{plain}%
 \begin{center}
     The undersigned recommend to\\
-    the Faculty of Graduate Studies and Research\\
-    acceptance of the \@ifundefined{@phddissertation}{
-      Thesis
-    }{
-       Dissertation
-    }\\
+    the Faculty of Graduate and Research\\
+    acceptance of the thesis\\
 \end{center}
 \mbox{}
 \begin{center}
@@ -493,48 +476,20 @@
 \end{center}
 \mbox{}
 \begin{center}
-    Submitted by \textbf{\@author}\\
-    in partial fulfilment of the requirements for the degree of\\
-        \@ifundefined{@phddissertation}{
- \textbf{\bf{Master of Applied Science}}\\
-}{
- \textbf{\bf{Master of Applied Science}}\\
-}
+    submitted by\\\textbf{\@author, \degrees}\\
+    in partial fulfilment of the requirements for\\
+    the degree of Master of Applied Science in Electrical and Computer Engineering\\
 \end{center}
 \vfill
 \begin{center}
-  \begin{tabular}{rl}
-      & \signature{\@supervisor}\\
-    \@ifundefined{@twocommittee}{}
-    {
-      & \signature\@firstcommittee\\
-    }
-    \@ifundefined{@threecommittee}{}
-    {
-      & \signature\@firstcommittee\\
-      & \signature\@secondcommittee\\
-    }
-    \@ifundefined{@fourcommittee}{}
-    {
-      & \signature\@firstcommittee\\
-      & \signature\@secondcommittee\\
-      & \signature\@thirdcommittee\\
-    }
-    \@ifundefined{@fivecommittee}{}
-    {
-      & \signature\@firstcommittee\\
-      & \signature\@secondcommittee\\
-      & \signature\@thirdcommittee\\
-      & \signature\@fourthcommittee\\
-    }
-     & \signature{\@departmentchair}
-\\
-\end{tabular}
+    \signature{\@departmentchair}
+\newline \newline
+    \signature{\@supervisor}
 \end{center}
 \vfill
 \begin{center}{
   Carleton University\\
-  \@copyrightyear}
+  \submitdate}
 \end{center}}
 
 \def\startingpages{%
